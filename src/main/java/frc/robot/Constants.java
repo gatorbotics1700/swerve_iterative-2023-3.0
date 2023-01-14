@@ -57,4 +57,6 @@ public final class Constants {
     public static final double WHEEL_DIAMETER= 4; //inches
     public static final double TICKS_PER_REV = 2048;
     public static final double TICKS_PER_INCH = TICKS_PER_REV*GEAR_RATIO/WHEEL_DIAMETER/Math.PI; //talonfx drive encoder
+
+    public static final int ARM_MOTOR_ID = 7;
 }
