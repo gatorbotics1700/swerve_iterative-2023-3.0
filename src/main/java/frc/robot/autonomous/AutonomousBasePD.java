@@ -14,7 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 public class AutonomousBasePD extends AutonomousBase{
-    public static final double turnKP= 0.004;
+    public static final double turnKP= 0.002;
     public static final double turnKI= 0.0;
     public static final double turnKD= 0.0;
     public static final double driveKP= 0.00004;
@@ -45,6 +45,7 @@ public class AutonomousBasePD extends AutonomousBase{
 
     @Override
     public void init(){
+        drivetrainSubsystem.resetOdometry();
         directionController.setTolerance(DEADBAND); 
         distanceController.setTolerance(DEADBAND*Constants.TICKS_PER_INCH);
         directionController.reset();
@@ -82,12 +83,12 @@ public class AutonomousBasePD extends AutonomousBase{
             System.out.println("inside drive state! pose: " + drivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + " " + drivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
             if (distanceController.atSetpoint()){
                 preTDA(turnSetpoint1);
-                setState(States.STOP);
+                setState(States.TURN);
             }
         } else if(states==States.TURN){
             turnDesiredAngle(turnSetpoint1);
             if(directionController.atSetpoint()){
-                setState(States.DRIVE2);
+                setState(States.STOP);
             }
         } else if(states == States.DRIVE2){
             driveDesiredDistance(goalCoordinate2);

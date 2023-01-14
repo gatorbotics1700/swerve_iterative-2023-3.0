@@ -204,7 +204,7 @@ public class DrivetrainSubsystem {
                 m_frontRightModule.getSwerveModulePosition(),
                 m_backRightModule.getSwerveModulePosition(),
                 m_backLeftModule.getSwerveModulePosition() };
-            m_odometry.resetPosition(getGyroscopeRotation(), positionArray, m_pose);
+            m_odometry.resetPosition(getGyroscopeRotation(), positionArray, new Pose2d());
             System.out.println("#resetodometry! new pose: " + m_pose.getX()/TICKS_PER_INCH + " y: " + m_pose.getY()/TICKS_PER_INCH);
   }
 
