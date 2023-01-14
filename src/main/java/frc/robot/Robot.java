@@ -89,6 +89,10 @@ public class Robot extends TimedRobot {
         // Put default auto code here
         break;
     }
+
+    if (OI.m_controller.getBButton()){
+      m_drivetrainSubsystem.resetOdometry();
+    }
     
     autonomousBasePD.periodic();
     m_drivetrainSubsystem.drive();
