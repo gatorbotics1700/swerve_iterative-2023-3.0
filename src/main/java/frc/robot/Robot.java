@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  private final AutonomousBase autonomousBasePD = new AutonomousBasePD(new Pose2d(0*Constants.TICKS_PER_INCH, -20*Constants.TICKS_PER_INCH, new Rotation2d(0)), 180.0, new Pose2d(), 0.0);
+  private final AutonomousBase autonomousBasePD = new AutonomousBasePD(new Pose2d(0*Constants.TICKS_PER_INCH, -20*Constants.TICKS_PER_INCH, new Rotation2d(0)), 0.0, new Pose2d(), 0.0);
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
 
 
@@ -39,8 +39,9 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    m_drivetrainSubsystem.zeroGyroscope();
-    m_drivetrainSubsystem.zeroDriveEncoder();
+    m_drivetrainSubsystem.resetOdometry();
+    // m_drivetrainSubsystem.zeroGyroscope();
+    // m_drivetrainSubsystem.zeroDriveEncoder();
   }
 
   /**
@@ -67,8 +68,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     autonomousBasePD.init();
-    m_drivetrainSubsystem.zeroGyroscope();
-    m_drivetrainSubsystem.zeroDriveEncoder();
     m_autoSelected = m_chooser.getSelected();
     m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
@@ -95,7 +94,7 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    m_drivetrainSubsystem.zeroGyroscope();
+    m_drivetrainSubsystem.resetOdometry();
   }
 
   /** This function is called periodically during operator control. */

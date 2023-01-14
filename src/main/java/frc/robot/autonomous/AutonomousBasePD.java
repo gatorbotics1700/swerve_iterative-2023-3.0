@@ -46,11 +46,12 @@ public class AutonomousBasePD extends AutonomousBase{
     @Override
     public void init(){
         drivetrainSubsystem.resetOdometry();
-        directionController.setTolerance(DEADBAND); 
-        distanceController.setTolerance(DEADBAND*Constants.TICKS_PER_INCH);
         directionController.reset();
         distanceController.reset();
+        directionController.setTolerance(DEADBAND); 
+        distanceController.setTolerance(DEADBAND*Constants.TICKS_PER_INCH);
         states = States.FIRST;
+        System.out.println("init!");
     }
 
     public static enum States{
@@ -110,7 +111,6 @@ public class AutonomousBasePD extends AutonomousBase{
     public void preDDD(Pose2d coordinate){
         drivetrainSubsystem.resetOdometry();
         hypotenuse = Math.hypot(coordinate.getX(), coordinate.getY());
-        distanceController.reset();
         distanceController.setSetpoint(hypotenuse);
     }
 
@@ -121,7 +121,6 @@ public class AutonomousBasePD extends AutonomousBase{
         double directY = coordinate.getY() / Math.sqrt(Math.pow(coordinate.getX(),2) + Math.pow(coordinate.getY(),2));
         
         drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speed * directX, speed * directY, 0, drivetrainSubsystem.getGyroscopeRotation()));  
-        drivetrainSubsystem.drive(); 
     }
 
     //pre turn desired angle

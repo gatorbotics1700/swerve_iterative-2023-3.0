@@ -199,12 +199,14 @@ public class DrivetrainSubsystem {
   }
 
   public void resetOdometry(){
+        zeroGyroscope();
+        zeroDriveEncoder();
         SwerveModulePosition [] positionArray =  new SwerveModulePosition[] {
                 m_frontLeftModule.getSwerveModulePosition(),
                 m_frontRightModule.getSwerveModulePosition(),
                 m_backRightModule.getSwerveModulePosition(),
                 m_backLeftModule.getSwerveModulePosition() };
-            m_odometry.resetPosition(getGyroscopeRotation(), positionArray, new Pose2d());
+            m_odometry.resetPosition(getGyroscopeRotation(), positionArray, new Pose2d(0,0,new Rotation2d(0)));
             System.out.println("#resetodometry! new pose: " + m_pose.getX()/TICKS_PER_INCH + " y: " + m_pose.getY()/TICKS_PER_INCH);
   }
 
@@ -253,7 +255,7 @@ public class DrivetrainSubsystem {
   public void drive() { //runs periodically
 
     m_pose = m_odometry.update(getGyroscopeRotation(), new SwerveModulePosition[] {m_frontLeftModule.getSwerveModulePosition(), m_frontRightModule.getSwerveModulePosition(), m_backLeftModule.getSwerveModulePosition(), m_backRightModule.getSwerveModulePosition()});
-    System.out.println("new pose: " + m_pose.getX()/TICKS_PER_INCH + "and y: " + m_pose.getY()/TICKS_PER_INCH);
+    System.out.println("new pose: " + m_pose.getX()/TICKS_PER_INCH + " and y: " + m_pose.getY()/TICKS_PER_INCH);
     
     //array of states filled with the speed and angle for each module (made from linear and angular motion for the whole robot) 
     SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
