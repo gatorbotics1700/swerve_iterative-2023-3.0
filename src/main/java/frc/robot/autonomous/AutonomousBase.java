@@ -1,7 +1,8 @@
 package frc.robot.autonomous;
+import edu.wpi.first.math.geometry.*;
 
 public class AutonomousBase{
-    public void driveDesiredDistance(){
+    public void driveDesiredDistance(Pose2d coordinate){
 
     }
 
