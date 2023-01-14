@@ -67,10 +67,12 @@ public class AutonomousBasePD extends AutonomousBase{
         //System.out.println("state: "+states);
         if (states == States.FIRST){
             preDDD();
+            System.out.println("we've reset to this pose: " + drivetrainSubsystem.m_pose);
             setState(States.DRIVE);
         }
         if (states == States.DRIVE){
             driveDesiredDistance();
+            System.out.println("inside drive state! pose: " + drivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + " " + drivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
             if (distanceController.atSetpoint()){
                 preTDA(turnSetpoint1);
                 setState(States.STOP);
@@ -87,13 +89,7 @@ public class AutonomousBasePD extends AutonomousBase{
 
     //predrivedesiredistance
     public void preDDD(){
-        SwerveModulePosition [] positionArray =  new SwerveModulePosition[] {
-            drivetrainSubsystem.m_frontLeftModule.getSwerveModulePosition(),
-            drivetrainSubsystem.m_frontRightModule.getSwerveModulePosition(),
-            drivetrainSubsystem.m_backRightModule.getSwerveModulePosition(),
-            drivetrainSubsystem.m_backLeftModule.getSwerveModulePosition() };
-
-        drivetrainSubsystem.getOdometry().resetPosition(drivetrainSubsystem.getGyroscopeRotation(), positionArray, drivetrainSubsystem.getCurrentPose());
+        drivetrainSubsystem.resetOdometry();
         hypotenuse = Math.sqrt(Math.pow(goalCoordinate.getX(), 2) + Math.pow(goalCoordinate.getY(), 2));
         distanceController.reset();
         distanceController.setSetpoint(hypotenuse);
@@ -101,7 +97,7 @@ public class AutonomousBasePD extends AutonomousBase{
 
     @Override
     public void driveDesiredDistance(){      
-        double speed = distanceController.calculate(Math.sqrt(Math.pow(drivetrainSubsystem.getCurrentPose().getX(), 2)+Math.pow(drivetrainSubsystem.getCurrentPose().getY(), 2)), hypotenuse );
+        double speed = distanceController.calculate(Math.sqrt(Math.pow(drivetrainSubsystem.m_pose.getX(), 2)+Math.pow(drivetrainSubsystem.m_pose.getY(), 2)), hypotenuse );
         double directX = goalCoordinate.getX() / Math.sqrt(Math.pow(goalCoordinate.getX(),2) + Math.pow(goalCoordinate.getY(),2));
         double directY = goalCoordinate.getY() / Math.sqrt(Math.pow(goalCoordinate.getX(),2) + Math.pow(goalCoordinate.getY(),2));
         
