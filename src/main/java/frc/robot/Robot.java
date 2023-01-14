@@ -26,12 +26,12 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  private final AutonomousBase autonomousBasePD = new AutonomousBasePD(new Pose2d(0*Constants.TICKS_PER_INCH, -20*Constants.TICKS_PER_INCH, new Rotation2d(0)), 0.0, new Pose2d(), 0.0);
-  private static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
+  private final AutonomousBase autonomousBasePD = new AutonomousBasePD(new Pose2d(0*Constants.TICKS_PER_INCH, 20*Constants.TICKS_PER_INCH, new Rotation2d(0)), 0.0, new Pose2d(), 0.0);
+  public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
 
-  public static DrivetrainSubsystem getDrivetrainSubsystem(){
-    return m_drivetrainSubsystem;
-  }
+  // public static DrivetrainSubsystem getDrivetrainSubsystem(){
+  //   return m_drivetrainSubsystem;
+  // }
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -91,7 +91,7 @@ public class Robot extends TimedRobot {
     }
     
     autonomousBasePD.periodic();
-    //m_drivetrainSubsystem.drive();
+    m_drivetrainSubsystem.drive();
   }
 
   /** This function is called once when teleop is enabled. */

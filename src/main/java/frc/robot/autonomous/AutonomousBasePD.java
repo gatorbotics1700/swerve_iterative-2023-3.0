@@ -30,7 +30,7 @@ public class AutonomousBasePD extends AutonomousBase{
     private double turnSetpoint1;
     private double turnSetpoint2; 
 
-    DrivetrainSubsystem drivetrainSubsystem = Robot.getDrivetrainSubsystem();
+    DrivetrainSubsystem drivetrainSubsystem = Robot.m_drivetrainSubsystem;
 
     //pids
     private PIDController directionController = new PIDController(turnKP, turnKI, turnKD);
@@ -51,7 +51,8 @@ public class AutonomousBasePD extends AutonomousBase{
         directionController.setTolerance(DEADBAND); 
         distanceController.setTolerance(DEADBAND*Constants.TICKS_PER_INCH);
         states = States.FIRST;
-        System.out.println("init!");
+        System.out.println("INIT!\nINIT!\nINIT!");
+
     }
 
     public static enum States{
@@ -72,7 +73,7 @@ public class AutonomousBasePD extends AutonomousBase{
     @Override
     public void periodic()
     {
-        //System.out.println("setpoint: " + driveSetpoint);
+       
         //System.out.println("state: "+states);
         if (states == States.FIRST){
             preDDD(goalCoordinate1); 

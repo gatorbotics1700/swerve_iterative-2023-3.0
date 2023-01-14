@@ -85,8 +85,8 @@ public class DrivetrainSubsystem {
   private double tareRFEncoder = 0.0;
   private double tareRBEncoder = 0.0;
 
-  public SwerveDriveOdometry m_odometry; 
-  public Pose2d m_pose = new Pose2d(20, 30, new Rotation2d(Math.PI/4));
+  public static SwerveDriveOdometry m_odometry; 
+  public static Pose2d m_pose = new Pose2d();
 
   //ChassisSpeeds takes in y velocity, x velocity, speed of rotation
   private ChassisSpeeds m_chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
@@ -163,8 +163,7 @@ public class DrivetrainSubsystem {
             BACK_RIGHT_MODULE_STEER_OFFSET
     );
     
-    m_odometry = new SwerveDriveOdometry(m_kinematics, getGyroscopeRotation(), new SwerveModulePosition[] {m_frontLeftModule.getSwerveModulePosition(), m_frontRightModule.getSwerveModulePosition(), m_backRightModule.getSwerveModulePosition(), m_backLeftModule.getSwerveModulePosition()}, new Pose2d(20, 30, new Rotation2d(Math.PI/4)));
-    
+    m_odometry = new SwerveDriveOdometry(m_kinematics, getGyroscopeRotation(), new SwerveModulePosition[] {m_frontLeftModule.getSwerveModulePosition(), m_frontRightModule.getSwerveModulePosition(), m_backRightModule.getSwerveModulePosition(), m_backLeftModule.getSwerveModulePosition()}, new Pose2d());
   }
 
    /**
@@ -207,10 +206,11 @@ public class DrivetrainSubsystem {
                 m_backRightModule.getSwerveModulePosition(),
                 m_backLeftModule.getSwerveModulePosition() };
         m_pose = new Pose2d();
-        System.out.println("position array: " + positionArray);
+        System.out.println("position array: " + positionArray.toString());
         System.out.println("m_pose: " + m_pose);
         m_odometry.resetPosition(getGyroscopeRotation(), positionArray, m_pose);
         System.out.println("#resetodometry! new pose: " + m_pose.getX()/TICKS_PER_INCH + " y: " + m_pose.getY()/TICKS_PER_INCH);
+        System.out.println("inputs for the reset: " + getGyroscopeRotation() + m_frontLeftModule.getSwerveModulePosition().distanceMeters + m_frontRightModule.getSwerveModulePosition().distanceMeters + m_backLeftModule.getSwerveModulePosition().distanceMeters + m_backRightModule.getSwerveModulePosition().distanceMeters);
   }
 
   public void zeroDriveEncoder(){
@@ -218,7 +218,7 @@ public class DrivetrainSubsystem {
         tareLFEncoder = m_frontLeftModule.getPosition();
         tareRFEncoder = m_frontRightModule.getPosition();
         tareRBEncoder = m_backRightModule.getPosition();
-        System.out.print("tared...  " + getDistance());
+        System.out.println("tared...  " + getDistance());
   }
 
   public void zeroGyroscope() {
@@ -256,9 +256,12 @@ public class DrivetrainSubsystem {
   }
 
   public void drive() { //runs periodically
-    System.out.print("pose meters: " + m_odometry.getPoseMeters());
-    m_pose = m_odometry.update(getGyroscopeRotation(), new SwerveModulePosition[] {m_frontLeftModule.getSwerveModulePosition(), m_frontRightModule.getSwerveModulePosition(), m_backLeftModule.getSwerveModulePosition(), m_backRightModule.getSwerveModulePosition()});
-    System.out.println("new pose: " + m_pose.getX()/TICKS_PER_INCH + " and y: " + m_pose.getY()/TICKS_PER_INCH);
+        System.out.println("pose before update: " + m_pose.getX()/TICKS_PER_INCH + " and y: " + m_pose.getY()/TICKS_PER_INCH);
+
+        System.out.println("inputs for the update: " + getGyroscopeRotation() + m_frontLeftModule.getSwerveModulePosition().distanceMeters + m_frontRightModule.getSwerveModulePosition().distanceMeters + m_backLeftModule.getSwerveModulePosition().distanceMeters + m_backRightModule.getSwerveModulePosition().distanceMeters);
+        m_pose = m_odometry.update(getGyroscopeRotation(), new SwerveModulePosition[] {m_frontLeftModule.getSwerveModulePosition(), m_frontRightModule.getSwerveModulePosition(), m_backLeftModule.getSwerveModulePosition(), m_backRightModule.getSwerveModulePosition()});
+    
+    System.out.println("new pose after update: " + m_pose.getX()/TICKS_PER_INCH + " and y: " + m_pose.getY()/TICKS_PER_INCH);
     
     //array of states filled with the speed and angle for each module (made from linear and angular motion for the whole robot) 
     SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
