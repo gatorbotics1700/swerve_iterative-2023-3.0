@@ -86,7 +86,7 @@ public class DrivetrainSubsystem {
   private double tareRBEncoder = 0.0;
 
   public SwerveDriveOdometry m_odometry; 
-  public Pose2d m_pose = new Pose2d();
+  public Pose2d m_pose = new Pose2d(20, 30, new Rotation2d(Math.PI/4));
 
   //ChassisSpeeds takes in y velocity, x velocity, speed of rotation
   private ChassisSpeeds m_chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
@@ -199,15 +199,18 @@ public class DrivetrainSubsystem {
   }
 
   public void resetOdometry(){
-        zeroGyroscope();
-        zeroDriveEncoder();
+        zeroGyroscope(); //truly resets gyro
+        //zeroDriveEncoder(); //finds the tare
         SwerveModulePosition [] positionArray =  new SwerveModulePosition[] {
                 m_frontLeftModule.getSwerveModulePosition(),
                 m_frontRightModule.getSwerveModulePosition(),
                 m_backRightModule.getSwerveModulePosition(),
                 m_backLeftModule.getSwerveModulePosition() };
-            m_odometry.resetPosition(getGyroscopeRotation(), positionArray, new Pose2d(0,0,new Rotation2d(0)));
-            System.out.println("#resetodometry! new pose: " + m_pose.getX()/TICKS_PER_INCH + " y: " + m_pose.getY()/TICKS_PER_INCH);
+        m_pose = new Pose2d();
+        System.out.println("position array: " + positionArray);
+        System.out.println("m_pose: " + m_pose);
+        m_odometry.resetPosition(getGyroscopeRotation(), positionArray, m_pose);
+        System.out.println("#resetodometry! new pose: " + m_pose.getX()/TICKS_PER_INCH + " y: " + m_pose.getY()/TICKS_PER_INCH);
   }
 
   public void zeroDriveEncoder(){
@@ -253,7 +256,7 @@ public class DrivetrainSubsystem {
   }
 
   public void drive() { //runs periodically
-
+    System.out.print("pose meters: " + m_odometry.getPoseMeters());
     m_pose = m_odometry.update(getGyroscopeRotation(), new SwerveModulePosition[] {m_frontLeftModule.getSwerveModulePosition(), m_frontRightModule.getSwerveModulePosition(), m_backLeftModule.getSwerveModulePosition(), m_backRightModule.getSwerveModulePosition()});
     System.out.println("new pose: " + m_pose.getX()/TICKS_PER_INCH + " and y: " + m_pose.getY()/TICKS_PER_INCH);
     

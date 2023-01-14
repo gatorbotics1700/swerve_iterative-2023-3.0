@@ -27,8 +27,11 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   private final AutonomousBase autonomousBasePD = new AutonomousBasePD(new Pose2d(0*Constants.TICKS_PER_INCH, -20*Constants.TICKS_PER_INCH, new Rotation2d(0)), 0.0, new Pose2d(), 0.0);
-  public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
+  private static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
 
+  public static DrivetrainSubsystem getDrivetrainSubsystem(){
+    return m_drivetrainSubsystem;
+  }
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -88,7 +91,7 @@ public class Robot extends TimedRobot {
     }
     
     autonomousBasePD.periodic();
-    m_drivetrainSubsystem.drive();
+    //m_drivetrainSubsystem.drive();
   }
 
   /** This function is called once when teleop is enabled. */
@@ -118,14 +121,14 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
+    m_drivetrainSubsystem.m_pose = new Pose2d(20, 30, new Rotation2d(Math.PI/4));
+    System.out.println("m_pose: " + m_drivetrainSubsystem.m_pose);
+    autonomousBasePD.init();
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.3, 0.0, m_drivetrainSubsystem.getGyroscopeRotation()));
-    m_drivetrainSubsystem.drive();
-    System.out.println("distance: " + m_drivetrainSubsystem.getDistance());
   }
 
   /** This function is called once when the robot is first started up. */
