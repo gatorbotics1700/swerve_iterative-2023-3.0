@@ -9,11 +9,15 @@ import frc.robot.subsystems.*;
 import frc.robot.OI;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.*;
+import edu.wpi.first.util.sendable.SendableBuilder.*;
+import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.autonomous.*;
 import frc.robot.Constants;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.math.geometry.Rotation2d;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -37,6 +41,9 @@ public class Robot extends TimedRobot {
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
+
+
+   //NOTE TO L: ORDER IS TURN, DRIVE, PITCH, VELO
   @Override
   public void robotInit() {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
@@ -124,6 +131,17 @@ public class Robot extends TimedRobot {
     m_drivetrainSubsystem.m_pose = new Pose2d(20, 30, new Rotation2d(Math.PI/4));
     System.out.println("m_pose: " + m_drivetrainSubsystem.m_pose);
     autonomousBasePD.init();
+
+    ShuffleboardTab pidTab = Shuffleboard.getTab("PID Controllers");//creates a new tab for pid controllers
+
+    //following code via https://docs.wpilib.org/en/stable/docs/software/dashboards/shuffleboard/layouts-with-code/organizing-widgets.html
+    ShuffleboardLayout turnPID = pidTab.getLayout("Turn PID", BuiltInLayouts.kList)//change this layout to support input
+    .withSize(2, 2));
+    turnPID.add(new ElevatorDownCommand());//what should we put here instead of the commands?
+    turnPID.add(new ElevatorUpCommand());
+
+    //following code via https://docs.wpilib.org/en/stable/docs/software/dashboards/shuffleboard/advanced-usage/shuffleboard-tuning-pid.html
+    NetworkTableEntry turnWidget = pidTab.add("Turn PID", 1).getEntry();//TODO FIX THIS
   }
 
   /** This function is called periodically during test mode. */
@@ -138,4 +156,9 @@ public class Robot extends TimedRobot {
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {}
+
+  @Override
+  public void initSendable(SendableBuilder builder){ //via https://docs.wpilib.org/en/stable/docs/software/telemetry/writing-sendable-classes.html
+    builder.addDoubleProperty("turnPIDk", this::getSetpoint, this::setSetpoint);//TODO finish adding these, and verify that this works
+  }
 }

@@ -20,6 +20,13 @@ public class AutonomousBasePD extends AutonomousBase{
     public static final double driveKP= 0.00004;
     public static final double driveKI= 0.0;
     public static final double driveKD= 0.0;
+    public static final double pitchKP= 0.00005; //arbitrary placeholder #
+    public static final double pitchKI= 0.0;
+    public static final double pitchKD= 0.5; //^
+    public static final double veloKP = 0.25;
+    public static final double veloKI = 0.3; 
+    public static final double veloKD = 0.35;
+
     private final double DEADBAND = 3;
     private double xdirection;
     private double ydirection;
@@ -35,6 +42,8 @@ public class AutonomousBasePD extends AutonomousBase{
     //pids
     private PIDController directionController = new PIDController(turnKP, turnKI, turnKD);
     private PIDController distanceController = new PIDController(driveKP, driveKI, driveKD);
+    private PIDController pitchController = new PIDController(pitchKP, pitchKI, pitchKD);
+    private PIDController velocityController = new PIDController(veloKP, veloKI, veloKD);
     
     public AutonomousBasePD(Pose2d goalCoordinate1, double turnSetpoint1, Pose2d goalCoordinate2, double turnSetpoint2){
         this.goalCoordinate1 = goalCoordinate1;
@@ -142,5 +151,22 @@ public class AutonomousBasePD extends AutonomousBase{
         );
         System.out.println("error: " + directionController.getPositionError());
     }
+
+    public void pitchBalance(double pitchSetpoint){
+        pitchController.setSetpoint(pitchSetpoint); 
+        double error = pitchController.calculate(drivetrainSubsystem.m_pigeon.getPitch(), pitchSetpoint); 
+        drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(pitchKP*error, 0 , 0, drivetrainSubsystem.getGyroscopeRotation()));
+        
+        if (Math.abs(drivetrainSubsystem.m_pigeon.getPitch()) - pitchSetpoint < 2.5){
+            drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0, drivetrainSubsystem.getGyroscopeRotation()));
+            //velocityPD(0);
+        }
+    }
+
+    // public void velocityPD(double velocitySetpoint){
+    //     velocityController.setSetpoint(velocitySetpoint);
+    //     double veloDiff = velocityController.calculate(drivetrainSubsystem.getAverage(), velocitySetpoint);
+    //     drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(veloKP*veloDiff, 0 , 0, drivetrainSubsystem.getGyroscopeRotation()));
+    // }
 
 }
