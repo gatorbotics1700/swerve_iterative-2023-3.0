@@ -14,18 +14,18 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 public class AutonomousBasePD extends AutonomousBase{
-    public static final double turnKP= 0.002;
-    public static final double turnKI= 0.0;
-    public static final double turnKD= 0.0;
-    public static final double driveKP= 0.00004;
-    public static final double driveKI= 0.0;
-    public static final double driveKD= 0.0;
-    public static final double pitchKP= 0.00005; //arbitrary placeholder #
-    public static final double pitchKI= 0.0;
-    public static final double pitchKD= 0.5; //^
-    public static final double veloKP = 0.25;
-    public static final double veloKI = 0.3; 
-    public static final double veloKD = 0.35;
+    public static double turnKP= 0.002;//deleted final to make them changable in shuffleboard
+    public static double turnKI= 0.0;
+    public static double turnKD= 0.0;
+    public static double driveKP= 0.00004;
+    public static double driveKI= 0.0;
+    public static double driveKD= 0.0;
+    public static double pitchKP= 0.00005; //arbitrary placeholder #
+    public static double pitchKI= 0.0;
+    public static double pitchKD= 0.5; //^
+    public static double veloKP = 0.25;
+    public static double veloKI = 0.3; 
+    public static double veloKD = 0.35;
 
     private final double DEADBAND = 3;
     private double xdirection;
@@ -115,6 +115,39 @@ public class AutonomousBasePD extends AutonomousBase{
             drivetrainSubsystem.stopDrive();
         }
     }
+
+    //getters and setters for shuffleboard pid tab
+    public double getTurnKP(){return turnKP;}
+    public double getTurnKI(){return turnKI;}
+    public double getTurnKD(){return turnKD;}
+
+    public double getDriveKP(){return driveKP;}
+    public double getDriveKI(){return driveKI;}
+    public double getDriveKD(){return driveKD;}
+
+    public double getPitchKP(){return pitchKP;}//arbitrary placeholder #
+    public double getPitchKI(){return pitchKI;}
+    public double getPitchKD(){return pitchKD;}//^^
+
+    public double getVeloKP(){return veloKP;}
+    public double getVeloKI(){return veloKI;}
+    public double getVeloKD(){return veloKD;}
+
+    public void setTurnKP(double value){turnKP = value;}
+    public void setTurnKI(double value){turnKI = value;}
+    public void setTurnKD(double value){turnKD = value;}
+
+    public void setDriveKP(double value){driveKP = value;}
+    public void setDriveKI(double value){driveKI = value;}
+    public void setDriveKD(double value){driveKD = value;}
+
+    public void setPitchKP(double value){pitchKP = value;}
+    public void setPitchKI(double value){pitchKI = value;}
+    public void setPitchKD(double value){pitchKD = value;}
+
+    public void setVeloKP(double value){veloKP = value;}
+    public void setVeloKI(double value){veloKI = value;}
+    public void setVeloKD(double value){veloKD = value;}
 
     //predrivedesiredistance
     public void preDDD(Pose2d coordinate){
