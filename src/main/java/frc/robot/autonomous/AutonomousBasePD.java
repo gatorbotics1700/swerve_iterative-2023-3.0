@@ -20,7 +20,7 @@ public class AutonomousBasePD extends AutonomousBase{
     public static final double driveKP= 0.00004;
     public static final double driveKI= 0.0;
     public static final double driveKD= 0.0;
-    private final double DEADBAND = 3;
+    private final double DEADBAND = 7;
     private double xdirection;
     private double ydirection;
     private double hypotenuse;
@@ -127,8 +127,9 @@ public class AutonomousBasePD extends AutonomousBase{
     //pre turn desired angle
     public void preTDA(double setpoint){
         directionController.reset();
+        System.out.println("Preturning");
         directionController.setSetpoint(setpoint);
-        drivetrainSubsystem.zeroGyroscope();
+        drivetrainSubsystem.resetOdometry();
     }
 
     @Override

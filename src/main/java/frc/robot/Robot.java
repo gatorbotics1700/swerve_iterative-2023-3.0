@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.*;
 import frc.robot.OI;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
@@ -26,9 +27,9 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  private final AutonomousBase autonomousBasePD = new AutonomousBasePD(new Pose2d(0*Constants.TICKS_PER_INCH, 20*Constants.TICKS_PER_INCH, new Rotation2d(0)), 0.0, new Pose2d(), 0.0);
+  private final AutonomousBase autonomousBasePD = new AutonomousBasePD(new Pose2d(0*Constants.TICKS_PER_INCH, 20*Constants.TICKS_PER_INCH, new Rotation2d()), Math.PI/2, new Pose2d(), 0.0);
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
-
+  private final Field2d m_field = new Field2d();
   // public static DrivetrainSubsystem getDrivetrainSubsystem(){
   //   return m_drivetrainSubsystem;
   // }
@@ -42,7 +43,7 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    m_drivetrainSubsystem.resetOdometry();
+    //m_drivetrainSubsystem.resetOdometry();
     // m_drivetrainSubsystem.zeroGyroscope();
     // m_drivetrainSubsystem.zeroDriveEncoder();
   }
@@ -56,6 +57,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH);
+    SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
+    m_field.setRobotPose(DrivetrainSubsystem.m_odometry.getPoseMeters());
   }
 
   /**
@@ -71,31 +75,17 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     autonomousBasePD.init();
-    m_autoSelected = m_chooser.getSelected();
-    m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+     //m_drivetrainSubsystem.driveTeleop();
+     autonomousBasePD.periodic();
+     m_drivetrainSubsystem.drive();
+ 
+     //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
     
-    switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
-        break;
-      case kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
-    }
-
-    if (OI.m_controller.getBButton()){
-      m_drivetrainSubsystem.resetOdometry();
-    }
-    
-    autonomousBasePD.periodic();
-    m_drivetrainSubsystem.drive();
   }
 
   /** This function is called once when teleop is enabled. */
@@ -109,9 +99,16 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     m_drivetrainSubsystem.driveTeleop();
 
+
     if (OI.m_controller.getBButton()){
       m_drivetrainSubsystem.stopDrive();
     }
+
+    if(OI.m_controller.getAButton()){
+      m_drivetrainSubsystem.resetOdometry();
+    }
+
+    System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
   }
 
   /** This function is called once when the robot is disabled. */
@@ -125,14 +122,21 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-    m_drivetrainSubsystem.m_pose = new Pose2d(20, 30, new Rotation2d(Math.PI/4));
-    System.out.println("m_pose: " + m_drivetrainSubsystem.m_pose);
     autonomousBasePD.init();
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
+    //m_drivetrainSubsystem.driveTeleop();
+    autonomousBasePD.periodic();
+    m_drivetrainSubsystem.drive();
+
+    if(OI.m_controller.getAButton()){
+      m_drivetrainSubsystem.resetOdometry();
+    }
+
+    System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
   }
 
   /** This function is called once when the robot is first started up. */
