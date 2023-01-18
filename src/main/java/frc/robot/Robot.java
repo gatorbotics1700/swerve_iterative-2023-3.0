@@ -87,12 +87,17 @@ public class Robot extends TimedRobot {
     return angleTurn;
   }
 
-  autopath 2:
-  goal coordinate 1: (222.103, 19.903)
-  goal coordinate 2: (221.877, -2.614)
-  goal coordinate 3: (221.877, 45.386)
-  goal corrdinate 4(final): (125.542, 0) 
-  + amount from moving charging station
+  autopath 1: INCOMPLETE
+  goal coordinate 1: (221.313, 15.010)
+  goal coordinate 2: (0, 21.225)
+  goal coordinate 3: (133.914, 24.081)
+
+  autopath 2: THESE ARE WRONG TO BE FIXED
+  goal coordinate 1: (226.403, 19.903)
+  goal coordinate 2: (226.277, -2.614)
+  goal coordinate 3: (226.277, 45.386)
+  goal corrdinate 4(final): (127.692, 0) 
+  + amount from moving charging station which is 4.3 when going over both sides
 */
   }
 
