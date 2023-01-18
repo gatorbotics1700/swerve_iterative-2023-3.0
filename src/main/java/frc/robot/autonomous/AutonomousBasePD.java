@@ -30,7 +30,7 @@ public class AutonomousBasePD extends AutonomousBase{
     private double turnSetpoint1;
     private double turnSetpoint2; 
 
-    DrivetrainSubsystem drivetrainSubsystem = Robot.getDrivetrainSubsystem();
+    DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
 
     //pids
     private PIDController directionController = new PIDController(turnKP, turnKI, turnKD);
