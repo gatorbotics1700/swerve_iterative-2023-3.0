@@ -20,6 +20,8 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
+import edu.wpi.first.math.controller.PIDController;
+
 import java.util.Arrays;
 import java.util.function.DoubleSupplier;
 
@@ -84,6 +86,15 @@ public class DrivetrainSubsystem {
   private double tareLFEncoder = 0.0;
   private double tareRFEncoder = 0.0;
   private double tareRBEncoder = 0.0;
+
+  public static double pitchKP= 0.00005; //arbitrary placeholder #
+    public static double pitchKI= 0.0;
+    public static double pitchKD= 0.5; //^
+    public static double veloKP = 0.25;
+    public static double veloKI = 0.3; 
+    public static double veloKD = 0.35;
+    private PIDController pitchController = new PIDController(pitchKP, pitchKI, pitchKD);
+    private PIDController velocityController = new PIDController(veloKP, veloKI, veloKD);
 
   public SwerveDriveOdometry m_odometry; 
   public Pose2d m_pose = new Pose2d(20, 30, new Rotation2d(Math.PI/4));
@@ -313,4 +324,22 @@ public class DrivetrainSubsystem {
         setSpeed(new ChassisSpeeds(0.0, 0.0, 0.0));
         drive();
    }
+
+   public void pitchBalance(double pitchSetpoint){
+        pitchController.setSetpoint(pitchSetpoint); 
+        double error = pitchController.calculate(m_pigeon.getPitch(), pitchSetpoint);
+        System.out.println("error: " + error); 
+        setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(pitchKP*error, 0 , 0, getGyroscopeRotation()));
+        
+        if (Math.abs(m_pigeon.getPitch()) - pitchSetpoint < 2.5){
+            setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0,getGyroscopeRotation()));
+            //velocityPD(0);
+        }
+    }
+
+    public void velocityPD(double velocitySetpoint){
+        velocityController.setSetpoint(velocitySetpoint);
+        double veloDiff = velocityController.calculate(getAverage(), velocitySetpoint);
+        setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(veloKP*veloDiff, 0 , 0, getGyroscopeRotation()));
+    }
 }
