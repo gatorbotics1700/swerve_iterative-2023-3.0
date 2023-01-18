@@ -29,7 +29,7 @@ import frc.robot.OI;
 public class DrivetrainSubsystem {
 
   /**
-   * The maximum voltage that will be delivered to the drive motors.
+   * The maximum voltage that will be delivered to the motors.
    * <p>
    * This can be reduced to cap the robot's maximum speed. Typically, this is useful during initial testing of the robot.
    */

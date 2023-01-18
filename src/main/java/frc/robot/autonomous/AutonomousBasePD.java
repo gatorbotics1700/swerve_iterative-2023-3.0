@@ -20,7 +20,8 @@ public class AutonomousBasePD extends AutonomousBase{
     public static final double driveKP= 0.00004;
     public static final double driveKI= 0.0;
     public static final double driveKD= 0.0;
-    private final double DEADBAND = 7;
+    private final double DRIVE_DEADBAND = 7;
+    private final double TURN_DEADBAND = 0.5;
     private double xdirection;
     private double ydirection;
     private double hypotenuse;
@@ -48,9 +49,9 @@ public class AutonomousBasePD extends AutonomousBase{
         drivetrainSubsystem.resetOdometry();
         directionController.reset();
         distanceController.reset();
-        directionController.setTolerance(DEADBAND); 
-        distanceController.setTolerance(DEADBAND*Constants.TICKS_PER_INCH);
-        states = States.FIRST;
+        directionController.setTolerance(TURN_DEADBAND); 
+        distanceController.setTolerance(DRIVE_DEADBAND*Constants.TICKS_PER_INCH);
+        states = States.TURN;
         System.out.println("INIT!\nINIT!\nINIT!");
 
     }
@@ -64,7 +65,7 @@ public class AutonomousBasePD extends AutonomousBase{
         STOP;
     }
 
-    private static States states = States.FIRST;
+    private static States states = States.TURN;
 
     public void setState(States newState){
         states = newState;
@@ -82,14 +83,16 @@ public class AutonomousBasePD extends AutonomousBase{
         }
         if (states == States.DRIVE){
             driveDesiredDistance(goalCoordinate1);
-            System.out.println("inside drive state! pose: " + drivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + " " + drivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
+            //System.out.println("inside drive state! pose: " + drivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + " " + drivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
             if (distanceController.atSetpoint()){
                 preTDA(turnSetpoint1);
                 setState(States.TURN);
             }
         } else if(states==States.TURN){
+            System.out.println("turning");
             turnDesiredAngle(turnSetpoint1);
             if(directionController.atSetpoint()){
+                System.out.println("a print statement that says 'we're stopping'");
                 setState(States.STOP);
             }
         } else if(states == States.DRIVE2){
