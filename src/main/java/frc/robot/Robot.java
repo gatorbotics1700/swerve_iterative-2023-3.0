@@ -77,16 +77,20 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    
     autonomousBasePD.init();
+    /* 
     m_autoSelected = m_chooser.getSelected();
     m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
+
+    */
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    
+  /* 
     switch (m_autoSelected) {
       case kCustomAuto:
         // Put custom auto code here
@@ -99,6 +103,9 @@ public class Robot extends TimedRobot {
     
     autonomousBasePD.periodic();
     //m_drivetrainSubsystem.drive();
+*/
+    m_drivetrainSubsystem.pitchBalance(0.0);
+
   }
 
   /** This function is called once when teleop is enabled. */
@@ -163,7 +170,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-    autonomousBasePD.pitchBalance(0.0);
   }
 
   /** This function is called once when the robot is first started up. */

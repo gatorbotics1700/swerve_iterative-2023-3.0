@@ -1,6 +1,8 @@
 package frc.robot.autonomous;
 
 import javax.naming.spi.DirStateFactory;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.*;
 import frc.robot.Robot;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -10,21 +12,16 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import frc.com.swervedrivespecialties.swervelib.*;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.controller.PIDController;
 
 public class AutonomousBasePD extends AutonomousBase{
-    public static double turnKP= 0.002;//deleted final to make them changable in shuffleboard
-    public static double turnKI= 0.0;
-    public static double turnKD= 0.0;
-    public static double driveKP= 0.00004;
-    public static double driveKI= 0.0;
-    public static double driveKD= 0.0;
-    
-    public static double veloKP = 0.25;
-    public static double veloKI = 0.3; 
-    public static double veloKD = 0.35;
-
-    private final double DEADBAND = 3;
+    public static final double turnKP= 0.0002;
+    public static final double turnKI= 0.0;
+    public static final double turnKD= 0.0;
+    public static final double driveKP= 0.00004;
+    public static final double driveKI= 0.0;
+    public static final double driveKD= 0.0;
+    private final double DRIVE_DEADBAND = 7;
+    private final double TURN_DEADBAND = 0.3;
     private double xdirection;
     private double ydirection;
     private double hypotenuse;
@@ -39,7 +36,6 @@ public class AutonomousBasePD extends AutonomousBase{
     //pids
     private PIDController directionController = new PIDController(turnKP, turnKI, turnKD);
     private PIDController distanceController = new PIDController(driveKP, driveKI, driveKD);
-    private PIDController velocityController = new PIDController(veloKP, veloKI, veloKD);
     
     public AutonomousBasePD(Pose2d goalCoordinate1, double turnSetpoint1, Pose2d goalCoordinate2, double turnSetpoint2){
         this.goalCoordinate1 = goalCoordinate1;
@@ -53,10 +49,11 @@ public class AutonomousBasePD extends AutonomousBase{
         drivetrainSubsystem.resetOdometry();
         directionController.reset();
         distanceController.reset();
-        directionController.setTolerance(DEADBAND); 
-        distanceController.setTolerance(DEADBAND*Constants.TICKS_PER_INCH);
-        states = States.FIRST;
-        System.out.println("init!");
+        directionController.setTolerance(TURN_DEADBAND); 
+        distanceController.setTolerance(DRIVE_DEADBAND*Constants.TICKS_PER_INCH);
+        states = States.TURN;
+        System.out.println("INIT!\nINIT!\nINIT!");
+
     }
 
     public static enum States{
@@ -68,7 +65,7 @@ public class AutonomousBasePD extends AutonomousBase{
         STOP;
     }
 
-    private static States states = States.FIRST;
+    private static States states = States.TURN;
 
     public void setState(States newState){
         states = newState;
@@ -77,7 +74,7 @@ public class AutonomousBasePD extends AutonomousBase{
     @Override
     public void periodic()
     {
-        //System.out.println("setpoint: " + driveSetpoint);
+       
         //System.out.println("state: "+states);
         if (states == States.FIRST){
             preDDD(goalCoordinate1); 
@@ -86,14 +83,18 @@ public class AutonomousBasePD extends AutonomousBase{
         }
         if (states == States.DRIVE){
             driveDesiredDistance(goalCoordinate1);
-            System.out.println("inside drive state! pose: " + drivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + " " + drivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
+            //System.out.println("inside drive state! pose: " + drivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + " " + drivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
             if (distanceController.atSetpoint()){
                 preTDA(turnSetpoint1);
                 setState(States.TURN);
             }
         } else if(states==States.TURN){
+            System.out.println("turning. we are currently at: " + drivetrainSubsystem.getGyroscopeRotation().getDegrees());
             turnDesiredAngle(turnSetpoint1);
+
             if(directionController.atSetpoint()){
+                
+                System.out.println("a print statement that says 'we're stopping'");
                 setState(States.STOP);
             }
         } else if(states == States.DRIVE2){
@@ -111,39 +112,6 @@ public class AutonomousBasePD extends AutonomousBase{
             drivetrainSubsystem.stopDrive();
         }
     }
-
-    //getters and setters for shuffleboard pid tab
-    public double getTurnKP(){return turnKP;}
-    public double getTurnKI(){return turnKI;}
-    public double getTurnKD(){return turnKD;}
-
-    public double getDriveKP(){return driveKP;}
-    public double getDriveKI(){return driveKI;}
-    public double getDriveKD(){return driveKD;}
-
-    // public double getPitchKP(){return pitchKP;}//arbitrary placeholder #
-    // public double getPitchKI(){return pitchKI;}
-    // public double getPitchKD(){return pitchKD;}//^^
-
-    public double getVeloKP(){return veloKP;}
-    public double getVeloKI(){return veloKI;}
-    public double getVeloKD(){return veloKD;}
-
-    public void setTurnKP(double value){turnKP = value;}
-    public void setTurnKI(double value){turnKI = value;}
-    public void setTurnKD(double value){turnKD = value;}
-
-    public void setDriveKP(double value){driveKP = value;}
-    public void setDriveKI(double value){driveKI = value;}
-    public void setDriveKD(double value){driveKD = value;}
-
-    // public void setPitchKP(double value){pitchKP = value;}
-    // public void setPitchKI(double value){pitchKI = value;}
-    // public void setPitchKD(double value){pitchKD = value;}
-
-    public void setVeloKP(double value){veloKP = value;}
-    public void setVeloKI(double value){veloKI = value;}
-    public void setVeloKD(double value){veloKD = value;}
 
     //predrivedesiredistance
     public void preDDD(Pose2d coordinate){
@@ -164,8 +132,9 @@ public class AutonomousBasePD extends AutonomousBase{
     //pre turn desired angle
     public void preTDA(double setpoint){
         directionController.reset();
+        System.out.println("Preturning");
         directionController.setSetpoint(setpoint);
-        drivetrainSubsystem.zeroGyroscope();
+        drivetrainSubsystem.resetOdometry();
     }
 
     @Override
@@ -180,23 +149,5 @@ public class AutonomousBasePD extends AutonomousBase{
         );
         System.out.println("error: " + directionController.getPositionError());
     }
-
-    // public void pitchBalance(double pitchSetpoint){
-    //     pitchController.setSetpoint(pitchSetpoint); 
-    //     double error = pitchController.calculate(drivetrainSubsystem.m_pigeon.getPitch(), pitchSetpoint);
-    //     System.out.println("error: " + error); 
-    //     drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(pitchKP*error, 0 , 0, drivetrainSubsystem.getGyroscopeRotation()));
-        
-    //     if (Math.abs(drivetrainSubsystem.m_pigeon.getPitch()) - pitchSetpoint < 2.5){
-    //         drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0, drivetrainSubsystem.getGyroscopeRotation()));
-    //         //velocityPD(0);
-    //     }
-    // }
-
-    // public void velocityPD(double velocitySetpoint){
-    //     velocityController.setSetpoint(velocitySetpoint);
-    //     double veloDiff = velocityController.calculate(drivetrainSubsystem.getAverage(), velocitySetpoint);
-    //     drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(veloKP*veloDiff, 0 , 0, drivetrainSubsystem.getGyroscopeRotation()));
-    // }
 
 }

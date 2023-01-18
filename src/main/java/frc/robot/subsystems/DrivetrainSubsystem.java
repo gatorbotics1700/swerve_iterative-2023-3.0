@@ -86,10 +86,11 @@ public class DrivetrainSubsystem {
   private double tareLFEncoder = 0.0;
   private double tareRFEncoder = 0.0;
   private double tareRBEncoder = 0.0;
+  public double error1;
 
-  public static double pitchKP= 0.00005; //arbitrary placeholder #
+  public static double pitchKP= 0.05; //arbitrary placeholder #
     public static double pitchKI= 0.0;
-    public static double pitchKD= 0.5; //^
+    public static double pitchKD= 0.01; //^
     public static double veloKP = 0.25;
     public static double veloKI = 0.3; 
     public static double veloKD = 0.35;
@@ -326,12 +327,14 @@ public class DrivetrainSubsystem {
    }
 
    public void pitchBalance(double pitchSetpoint){
+        System.out.println("pitch: " + m_pigeon.getPitch());
         pitchController.setSetpoint(pitchSetpoint); 
         double error = pitchController.calculate(m_pigeon.getPitch(), pitchSetpoint);
         System.out.println("error: " + error); 
-        setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(pitchKP*error, 0 , 0, getGyroscopeRotation()));
+        setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(error, 0 , 0, getGyroscopeRotation()));
+        drive();
         
-        if (Math.abs(m_pigeon.getPitch()) - pitchSetpoint < 2.5){
+        if (Math.abs(m_pigeon.getPitch()) - pitchSetpoint < 1.5){
             setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0,getGyroscopeRotation()));
             //velocityPD(0);
         }
