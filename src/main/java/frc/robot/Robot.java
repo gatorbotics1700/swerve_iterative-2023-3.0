@@ -133,7 +133,7 @@ public class Robot extends TimedRobot {
     autonomousBasePD.init();
 
     ShuffleboardTab pidTab = Shuffleboard.getTab("PID Controllers");//creates a new tab for pid controllers
-
+  /* 
     //following code via https://docs.wpilib.org/en/stable/docs/software/dashboards/shuffleboard/layouts-with-code/organizing-widgets.html
     ShuffleboardLayout turnPID = pidTab.getLayout("Turn PID", BuiltInLayouts.kList)//change this layout to support input
     .withSize(2, 2);
@@ -157,11 +157,13 @@ public class Robot extends TimedRobot {
 
     //following code via https://docs.wpilib.org/en/stable/docs/software/dashboards/shuffleboard/advanced-usage/shuffleboard-tuning-pid.html
     //NetworkTableEntry turnWidget = pidTab.add("Turn PID", 1).getEntry();//NOTE: i think this is an alternative way to create a widget as opposed to what's shown above
+  */
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
+    autonomousBasePD.pitchBalance(0.0);
   }
 
   /** This function is called once when the robot is first started up. */
@@ -172,8 +174,10 @@ public class Robot extends TimedRobot {
   @Override
   public void simulationPeriodic() {}
 
+  /* 
   @Override
   public void initSendable(SendableBuilder builder){ //via https://docs.wpilib.org/en/stable/docs/software/telemetry/writing-sendable-classes.html
     builder.addDoubleProperty("turnPIDk", this::getSetpoint, this::setSetpoint);//TODO finish adding these, and verify that this works
   }
+  */
 }

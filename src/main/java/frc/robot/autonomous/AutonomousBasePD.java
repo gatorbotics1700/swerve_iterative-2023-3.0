@@ -1,8 +1,6 @@
 package frc.robot.autonomous;
 
 import javax.naming.spi.DirStateFactory;
-
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.*;
 import frc.robot.Robot;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -12,6 +10,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import frc.com.swervedrivespecialties.swervelib.*;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.controller.PIDController;
 
 public class AutonomousBasePD extends AutonomousBase{
     public static double turnKP= 0.002;//deleted final to make them changable in shuffleboard
@@ -20,9 +19,7 @@ public class AutonomousBasePD extends AutonomousBase{
     public static double driveKP= 0.00004;
     public static double driveKI= 0.0;
     public static double driveKD= 0.0;
-    public static double pitchKP= 0.00005; //arbitrary placeholder #
-    public static double pitchKI= 0.0;
-    public static double pitchKD= 0.5; //^
+    
     public static double veloKP = 0.25;
     public static double veloKI = 0.3; 
     public static double veloKD = 0.35;
@@ -42,7 +39,6 @@ public class AutonomousBasePD extends AutonomousBase{
     //pids
     private PIDController directionController = new PIDController(turnKP, turnKI, turnKD);
     private PIDController distanceController = new PIDController(driveKP, driveKI, driveKD);
-    private PIDController pitchController = new PIDController(pitchKP, pitchKI, pitchKD);
     private PIDController velocityController = new PIDController(veloKP, veloKI, veloKD);
     
     public AutonomousBasePD(Pose2d goalCoordinate1, double turnSetpoint1, Pose2d goalCoordinate2, double turnSetpoint2){
@@ -125,9 +121,9 @@ public class AutonomousBasePD extends AutonomousBase{
     public double getDriveKI(){return driveKI;}
     public double getDriveKD(){return driveKD;}
 
-    public double getPitchKP(){return pitchKP;}//arbitrary placeholder #
-    public double getPitchKI(){return pitchKI;}
-    public double getPitchKD(){return pitchKD;}//^^
+    // public double getPitchKP(){return pitchKP;}//arbitrary placeholder #
+    // public double getPitchKI(){return pitchKI;}
+    // public double getPitchKD(){return pitchKD;}//^^
 
     public double getVeloKP(){return veloKP;}
     public double getVeloKI(){return veloKI;}
@@ -141,9 +137,9 @@ public class AutonomousBasePD extends AutonomousBase{
     public void setDriveKI(double value){driveKI = value;}
     public void setDriveKD(double value){driveKD = value;}
 
-    public void setPitchKP(double value){pitchKP = value;}
-    public void setPitchKI(double value){pitchKI = value;}
-    public void setPitchKD(double value){pitchKD = value;}
+    // public void setPitchKP(double value){pitchKP = value;}
+    // public void setPitchKI(double value){pitchKI = value;}
+    // public void setPitchKD(double value){pitchKD = value;}
 
     public void setVeloKP(double value){veloKP = value;}
     public void setVeloKI(double value){veloKI = value;}
@@ -185,16 +181,17 @@ public class AutonomousBasePD extends AutonomousBase{
         System.out.println("error: " + directionController.getPositionError());
     }
 
-    public void pitchBalance(double pitchSetpoint){
-        pitchController.setSetpoint(pitchSetpoint); 
-        double error = pitchController.calculate(drivetrainSubsystem.m_pigeon.getPitch(), pitchSetpoint); 
-        drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(pitchKP*error, 0 , 0, drivetrainSubsystem.getGyroscopeRotation()));
+    // public void pitchBalance(double pitchSetpoint){
+    //     pitchController.setSetpoint(pitchSetpoint); 
+    //     double error = pitchController.calculate(drivetrainSubsystem.m_pigeon.getPitch(), pitchSetpoint);
+    //     System.out.println("error: " + error); 
+    //     drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(pitchKP*error, 0 , 0, drivetrainSubsystem.getGyroscopeRotation()));
         
-        if (Math.abs(drivetrainSubsystem.m_pigeon.getPitch()) - pitchSetpoint < 2.5){
-            drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0, drivetrainSubsystem.getGyroscopeRotation()));
-            //velocityPD(0);
-        }
-    }
+    //     if (Math.abs(drivetrainSubsystem.m_pigeon.getPitch()) - pitchSetpoint < 2.5){
+    //         drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0, drivetrainSubsystem.getGyroscopeRotation()));
+    //         //velocityPD(0);
+    //     }
+    // }
 
     // public void velocityPD(double velocitySetpoint){
     //     velocityController.setSetpoint(velocitySetpoint);
