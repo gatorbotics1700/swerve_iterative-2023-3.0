@@ -86,6 +86,13 @@ public class Robot extends TimedRobot {
     double angleTurn = targetPose.getRotation().getDegrees()  - nextanglePose;
     return angleTurn;
   }
+
+  autopath 2:
+  goal coordinate 1: (222.103, 19.903)
+  goal coordinate 2: (221.877, -2.614)
+  goal coordinate 3: (221.877, 45.386)
+  goal corrdinate 4(final): (125.542, 0) 
+  + amount from moving charging station
 */
   }
 
