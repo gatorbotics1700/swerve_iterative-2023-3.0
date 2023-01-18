@@ -14,14 +14,14 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 public class AutonomousBasePD extends AutonomousBase{
-    public static final double turnKP= 0.002;
+    public static final double turnKP= 0.0002;
     public static final double turnKI= 0.0;
     public static final double turnKD= 0.0;
     public static final double driveKP= 0.00004;
     public static final double driveKI= 0.0;
     public static final double driveKD= 0.0;
     private final double DRIVE_DEADBAND = 7;
-    private final double TURN_DEADBAND = 0.5;
+    private final double TURN_DEADBAND = 6;
     private double xdirection;
     private double ydirection;
     private double hypotenuse;
@@ -89,9 +89,11 @@ public class AutonomousBasePD extends AutonomousBase{
                 setState(States.TURN);
             }
         } else if(states==States.TURN){
-            System.out.println("turning");
+            System.out.println("turning. we are currently at: " + drivetrainSubsystem.getGyroscopeRotation().getDegrees());
             turnDesiredAngle(turnSetpoint1);
+
             if(directionController.atSetpoint()){
+                
                 System.out.println("a print statement that says 'we're stopping'");
                 setState(States.STOP);
             }
