@@ -70,19 +70,20 @@ public class AutonomousBasePD extends AutonomousBase{
     public void setState(States newState){
         states = newState;
     }
-
+    Translation2d desiredTranslation;
     @Override
+
     public void periodic()
     {
-       
+        
         //System.out.println("state: "+states);
         if (states == States.FIRST){
-            preDDD(goalCoordinate1); 
+            desiredTranslation = preDDD(new Pose2d(), goalCoordinate1); 
             System.out.println("we've reset to this pose: " + drivetrainSubsystem.m_pose);
             setState(States.DRIVE);
         }
         if (states == States.DRIVE){
-            driveDesiredDistance(goalCoordinate1);
+            driveDesiredDistance(desiredTranslation);
             //System.out.println("inside drive state! pose: " + drivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + " " + drivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
             if (distanceController.atSetpoint()){
                 preTDA(turnSetpoint1);
@@ -93,12 +94,12 @@ public class AutonomousBasePD extends AutonomousBase{
             turnDesiredAngle(turnSetpoint1);
 
             if(directionController.atSetpoint()){
-                
+                desiredTranslation = preDDD(goalCoordinate1, goalCoordinate2); 
                 System.out.println("a print statement that says 'we're stopping'");
                 setState(States.STOP);
             }
         } else if(states == States.DRIVE2){
-            driveDesiredDistance(goalCoordinate2);
+            driveDesiredDistance(desiredTranslation);
             if(distanceController.atSetpoint()){
                 preTDA(turnSetpoint2); 
                 setState(States.TURN2); 
@@ -114,19 +115,24 @@ public class AutonomousBasePD extends AutonomousBase{
     }
 
     //predrivedesiredistance
-    public void preDDD(Pose2d coordinate){
-        drivetrainSubsystem.resetOdometry();
-        hypotenuse = Math.hypot(coordinate.getX(), coordinate.getY());
+    public Translation2d preDDD(Pose2d cCoordinate, Pose2d dCoordinate){
+        double xDDistance = dCoordinate.getX() - cCoordinate.getX();
+        double yDDistance = dCoordinate.getY() - cCoordinate.getY();
+        hypotenuse = Math.hypot(xDDistance, yDDistance);
         distanceController.setSetpoint(hypotenuse);
+        return new Translation2d (xDDistance, yDDistance);    
     }
 
+    //d is desired coordinate
+    //c is current coordinate
     @Override
-    public void driveDesiredDistance(Pose2d coordinate){      
-        double speed = distanceController.calculate(Math.hypot(drivetrainSubsystem.m_pose.getX(), drivetrainSubsystem.m_pose.getY()), hypotenuse);
-        double directX = coordinate.getX() / Math.sqrt(Math.pow(coordinate.getX(),2) + Math.pow(coordinate.getY(),2));
-        double directY = coordinate.getY() / Math.sqrt(Math.pow(coordinate.getX(),2) + Math.pow(coordinate.getY(),2));
+    public void driveDesiredDistance(Translation2d dTranslation){      
         
-        drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speed * directX, speed * directY, 0, drivetrainSubsystem.getGyroscopeRotation()));  
+        double speed = distanceController.calculate(Math.hypot(drivetrainSubsystem.m_pose.getX(), drivetrainSubsystem.m_pose.getY()), hypotenuse);
+        double directionX = dTranslation.getX() / Math.sqrt(Math.pow(dTranslation.getX(),2) + Math.pow(dTranslation.getY(),2));
+        double directionY = dTranslation.getY() / Math.sqrt(Math.pow(dTranslation.getX(),2) + Math.pow(dTranslation.getY(),2));
+        
+        drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speed * directionX, speed * directionY, 0, drivetrainSubsystem.getGyroscopeRotation()));  
     }
 
     //pre turn desired angle
@@ -134,7 +140,7 @@ public class AutonomousBasePD extends AutonomousBase{
         directionController.reset();
         System.out.println("Preturning");
         directionController.setSetpoint(setpoint);
-        drivetrainSubsystem.resetOdometry();
+        //drivetrainSubsystem.resetOdometry();
     }
 
     @Override
