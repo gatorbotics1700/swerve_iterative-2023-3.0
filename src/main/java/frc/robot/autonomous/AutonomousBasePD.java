@@ -156,4 +156,14 @@ public class AutonomousBasePD extends AutonomousBase{
         System.out.println("error: " + directionController.getPositionError());
     }
 
+    public double autopathCalculatorDistance(Pose2d initPose, Pose2d targetPose){
+        double distancePose = Math.hypot(targetPose.getX() - initPose.getX(), targetPose.getY() - initPose.getY());
+        return distancePose;
+      }
+      public double autopathCalculatorAngle(Pose2d initPose, Pose2d targetPose){
+        double nextanglePose = (Math.acos(targetPose.getX() - initPose.getX()))/(Math.hypot(targetPose.getX() - initPose.getX(), targetPose.getY() - initPose.getY()));
+        double angleTurn = targetPose.getRotation().getDegrees()  - (nextanglePose)*180/Math.PI;
+        return angleTurn;
+      }
+
 }
