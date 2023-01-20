@@ -18,4 +18,14 @@ public class AutonomousBase{
 
     }
 
+    public static enum Paths{ //rename paths later
+        TIMEDPATH,
+        A,
+        B,
+        C,
+        D,
+        E,
+        F;
+    }
+
 }

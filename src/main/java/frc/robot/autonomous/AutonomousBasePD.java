@@ -37,7 +37,7 @@ public class AutonomousBasePD extends AutonomousBase{
     private PIDController directionController = new PIDController(turnKP, turnKI, turnKD);
     private PIDController distanceController = new PIDController(driveKP, driveKI, driveKD);
     
-    public AutonomousBasePD(Pose2d goalCoordinate1, double turnSetpoint1, Pose2d goalCoordinate2, double turnSetpoint2){
+    public AutonomousBasePD(Pose2d goalCoordinate1, Pose2d goalCoordinate2){
         this.goalCoordinate1 = goalCoordinate1;
         this.goalCoordinate2 = goalCoordinate2;
         this.turnSetpoint1 = turnSetpoint1; 

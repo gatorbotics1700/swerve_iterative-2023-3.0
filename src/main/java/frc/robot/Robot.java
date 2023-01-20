@@ -27,7 +27,8 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  private final AutonomousBase autonomousBasePD = new AutonomousBasePD(new Pose2d(0*Constants.TICKS_PER_INCH, 20*Constants.TICKS_PER_INCH, new Rotation2d()), 90, new Pose2d(), 0.0);
+  private AutonomousBase autonomousBase = new AutonomousBase();
+  // = new AutonomousBasePD(new Pose2d(0*Constants.TICKS_PER_INCH, 20*Constants.TICKS_PER_INCH, new Rotation2d()), 90, new Pose2d(), 0.0);
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   private final Field2d m_field = new Field2d();
   // public static DrivetrainSubsystem getDrivetrainSubsystem(){
@@ -40,8 +41,16 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+
+    System.out.println("#I'm Awake");
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("My Auto", kCustomAuto);
+    m_chooser.addOption("My Auto 1", kCustomAuto);
+    m_chooser.addOption("My Auto 2", kCustomAuto);
+    m_chooser.addOption("My Auto 3", kCustomAuto);
+    m_chooser.addOption("My Auto 4", kCustomAuto);
+    m_chooser.addOption("My Auto 5", kCustomAuto);
+    m_chooser.addOption("My Auto timed", kCustomAuto);
+
     SmartDashboard.putData("Auto choices", m_chooser);
     //m_drivetrainSubsystem.resetOdometry();
     // m_drivetrainSubsystem.zeroGyroscope();
@@ -74,7 +83,14 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    autonomousBasePD.init();
+
+    /* m_autoSelected = m_chooser.getSelected();
+    // AutonomousBasePD = m_autoSelected;
+    if(){
+      autonomousBase = new AutonomousBasePD(new Pose2d(), new Pose2d());
+      } else if blah {}
+      autonomousBase.init(); */
+
 
   
   /*
@@ -98,7 +114,7 @@ public class Robot extends TimedRobot {
      //m_drivetrainSubsystem.driveTeleop();
      autonomousBasePD.periodic();
      m_drivetrainSubsystem.drive();
- 
+
      //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
     
   }
