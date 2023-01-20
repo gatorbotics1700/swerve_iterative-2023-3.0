@@ -201,7 +201,8 @@ public class AutonomousBasePD extends AutonomousBase{
         } else if (targetPose.getX() >= initPose.getX() && targetPose.getY() <= initPose.getY()){ //if targetpose is in quadrant IV
             return 360 - theta;
         }
-            return 0.0;
+        System.out.println("Something wrong w/ angle calculation :(");
+        return 0.0;
       }
 
 }
