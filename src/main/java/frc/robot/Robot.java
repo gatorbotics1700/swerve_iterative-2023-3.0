@@ -105,17 +105,8 @@ public class Robot extends TimedRobot {
 
       autonomousBase.init();
 
-    /*
-  public double autopathCalculatorDistance(Pose2d initPose, Pose2d targetPose){
-    double distancePose = Math.hypot(targetPose.getX() - initPose.getX(), targetPose.getY() - initPose.getY());
-    return distancePose;
-  }
-  public double autopathCalculatorAngle(Pose2d initPose, Pose2d targetPose){
-    double nextanglePose = (Math.acos(targetPose.getX() - initPose.getX()))/(Math.hypot(targetPose.getX() - initPose.getX(), targetPose.getY() - initPose.getY()));
-    double angleTurn = targetPose.getRotation().getDegrees()  - nextanglePose;
-    return angleTurn;
-  }
-
+  
+  /*
   autopath 1: INCOMPLETE
   goal coordinate 1: (221.313, 15.010)
   goal coordinate 2: (0, 21.225)
