@@ -189,10 +189,19 @@ public class AutonomousBasePD extends AutonomousBase{
         System.out.println("error: " + directionController.getPositionError());
     }
 
-      public double autoCalculateAngle(Translation2d initPose, Translation2d targetPose){ //NEEDS TO BE CHANGED
-        double nextanglePose = (Math.acos(targetPose.getX() - initPose.getX()))/(Math.hypot(targetPose.getX() - initPose.getX(), targetPose.getY() - initPose.getY()));
-        double angleTurn = 180 - drivetrainSubsystem.getGyroscopeRotation().getDegrees()  - (nextanglePose)*180/Math.PI;
-        return angleTurn;
+      public double autoCalculateAngle(Translation2d initPose, Translation2d targetPose){ 
+        double theta = ((Math.acos(Math.abs(targetPose.getX() - initPose.getX())))/(Math.hypot(targetPose.getX() - initPose.getX(), targetPose.getY() - initPose.getY())))*180/Math.PI;
+        //theta = angle calculated according horizontal distance between initpose and targetpose, as well as hypotenuse
+        if(targetPose.getX() >= initPose.getX() && targetPose.getY() >= initPose.getY()){ //if initpose is considered (0,0), targetpose is in quadrant I
+            return theta;
+        } else if (targetPose.getX() <= initPose.getX() && targetPose.getY() >= initPose.getY()){ //if targetpose is in quadrant II
+            return 180 - theta;
+        } else if (targetPose.getX() <= initPose.getX() && targetPose.getY() <= initPose.getY()){ //if targetpose is in quadrant III
+            return 180 + theta;
+        } else if (targetPose.getX() >= initPose.getX() && targetPose.getY() <= initPose.getY()){ //if targetpose is in quadrant IV
+            return 360 - theta;
+        }
+            return 0.0;
       }
 
 }
