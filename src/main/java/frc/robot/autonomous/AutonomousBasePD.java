@@ -77,7 +77,7 @@ public class AutonomousBasePD extends AutonomousBase{
     
     }
 
-    private static States states = States.TURN;
+    private static States states = States.TURN; //change later
 
     public void setState(States newState){
         states = newState;
@@ -152,7 +152,7 @@ public class AutonomousBasePD extends AutonomousBase{
         double xDDistance = dCoordinate.getX() - cCoordinate.getX();
         double yDDistance = dCoordinate.getY() - cCoordinate.getY();
         hypotenuse = Math.hypot(xDDistance, yDDistance);
-        distanceController.setSetpoint(hypotenuse);
+        distanceController.setSetpoint(hypotenuse); 
         return new Translation2d (xDDistance, yDDistance);    
     }
 
@@ -172,7 +172,7 @@ public class AutonomousBasePD extends AutonomousBase{
     public void preTDA(Translation2d uno, Translation2d dos){
         directionController.reset();
         System.out.println("Preturning");
-        drivetrainSubsystem.resetOdometry(); //come back to fix me!!!! >:D
+        // drivetrainSubsystem.resetOdometry(); //come back to fix me!!!! >:D
         desiredTurn = autoCalculateAngle(uno, dos); 
     }
 
@@ -189,12 +189,7 @@ public class AutonomousBasePD extends AutonomousBase{
         System.out.println("error: " + directionController.getPositionError());
     }
 
-    public double autoCalculateDistance(Translation2d initPose, Translation2d targetPose){
-        double distancePose = Math.hypot(targetPose.getX() - initPose.getX(), targetPose.getY() - initPose.getY());
-        return distancePose;
-
-      }
-      public double autoCalculateAngle(Translation2d initPose, Translation2d targetPose){
+      public double autoCalculateAngle(Translation2d initPose, Translation2d targetPose){ //NEEDS TO BE CHANGED
         double nextanglePose = (Math.acos(targetPose.getX() - initPose.getX()))/(Math.hypot(targetPose.getX() - initPose.getX(), targetPose.getY() - initPose.getY()));
         double angleTurn = 180 - drivetrainSubsystem.getGyroscopeRotation().getDegrees()  - (nextanglePose)*180/Math.PI;
         return angleTurn;

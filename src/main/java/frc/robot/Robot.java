@@ -25,8 +25,6 @@ import edu.wpi.first.math.geometry.Translation2d;
  * project.
  */
 public class Robot extends TimedRobot {
-  private static final String kDefaultAuto = "Default";
-  private static final String kCustomAuto = "My Auto";
   private AutonomousBase m_autoSelected;
   private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<AutonomousBase>();
   private AutonomousBase autonomousBase = new AutonomousBase();
@@ -37,12 +35,8 @@ public class Robot extends TimedRobot {
   private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
   private AutonomousBasePD testPath = new AutonomousBasePD(new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20));
   
-  // = new AutonomousBasePD(new Pose2d(0*Constants.TICKS_PER_INCH, 20*Constants.TICKS_PER_INCH, new Rotation2d()), 90, new Pose2d(), 0.0);
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   private final Field2d m_field = new Field2d();
-  // public static DrivetrainSubsystem getDrivetrainSubsystem(){
-  //   return m_drivetrainSubsystem;
-  // }
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -109,7 +103,7 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    m_drivetrainSubsystem.resetOdometry();
+
   }
 
   /** This function is called periodically during operator control. */
@@ -122,11 +116,9 @@ public class Robot extends TimedRobot {
       m_drivetrainSubsystem.stopDrive();
     }
 
-    if(OI.m_controller.getAButton()){
+    if(OI.m_controller.getAButton()){ //Katherine is skeptical whether this button work :/
       m_drivetrainSubsystem.resetOdometry();
     }
-
-    System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
   }
 
   /** This function is called once when the robot is disabled. */

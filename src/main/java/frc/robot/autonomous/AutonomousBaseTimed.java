@@ -12,7 +12,6 @@ public class AutonomousBaseTimed extends AutonomousBase{
     @Override
     public void init(){
         drivetrainSubsystem.resetOdometry();
-
         timeStart = System.currentTimeMillis(); 
     }
 
