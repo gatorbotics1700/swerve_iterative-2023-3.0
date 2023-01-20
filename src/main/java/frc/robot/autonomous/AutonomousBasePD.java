@@ -31,12 +31,10 @@ public class AutonomousBasePD extends AutonomousBase{
     private Translation2d goalCoordinate3; 
     private Translation2d goalCoordinate4; 
     private Translation2d goalCoordinate5;
+    private Translation2d goalCoordinate6;
 
-    private double turnSetpoint1;
-    private double turnSetpoint2; 
-    private double turnSetpoint3; 
-    private double turnSetpoint4; 
-    private double turnSetpoint5; 
+    public double desiredTurn;
+    private Translation2d desiredTranslation;
 
     DrivetrainSubsystem drivetrainSubsystem = Robot.m_drivetrainSubsystem;
 
@@ -50,13 +48,7 @@ public class AutonomousBasePD extends AutonomousBase{
         this.goalCoordinate3 = goalCoordinate3;
         this.goalCoordinate4 = goalCoordinate4;
         this.goalCoordinate5 = goalCoordinate5;
-        this.goalCoordinate5 = goalCoordinate6;
-
-        this.turnSetpoint1 = turnSetpoint1; 
-        this.turnSetpoint2 = turnSetpoint2; 
-        this.turnSetpoint3 = turnSetpoint3; 
-        this.turnSetpoint4 = turnSetpoint4;
-        this.turnSetpoint4 = turnSetpoint5;
+        this.goalCoordinate6 = goalCoordinate6;
     }
 
     @Override
@@ -90,9 +82,8 @@ public class AutonomousBasePD extends AutonomousBase{
     public void setState(States newState){
         states = newState;
     }
-    Translation2d desiredTranslation;
-    @Override
 
+    @Override
     public void periodic()
     {
         
@@ -111,7 +102,7 @@ public class AutonomousBasePD extends AutonomousBase{
             }
         } else if(states==States.TURN){
             System.out.println("turning. we are currently at: " + drivetrainSubsystem.getGyroscopeRotation().getDegrees());
-            turnDesiredAngle(turnSetpoint1);
+            turnDesiredAngle(desiredTurn);
 
             if(directionController.atSetpoint()){
                 desiredTranslation = preDDD(goalCoordinate1, goalCoordinate2); 
@@ -125,9 +116,9 @@ public class AutonomousBasePD extends AutonomousBase{
                 setState(States.TURN2); 
             }
         } else if(states==States.TURN2){
-            turnDesiredAngle(turnSetpoint2);
+            turnDesiredAngle(desiredTurn);
             if(directionController.atSetpoint()){
-                setState(States.STOP); 
+                setState(States.DRIVE3); 
             }
         } else if(states == States.DRIVE3){
             driveDesiredDistance(desiredTranslation);
@@ -136,18 +127,18 @@ public class AutonomousBasePD extends AutonomousBase{
                 setState(States.TURN2); 
             }
         } else if(states==States.TURN3){
-            turnDesiredAngle(turnSetpoint3);
+            turnDesiredAngle(desiredTurn);
             if(directionController.atSetpoint()){
-                setState(States.STOP); 
+                setState(States.DRIVE4); 
             }
         } else if(states == States.DRIVE4){
             driveDesiredDistance(desiredTranslation);
             if(distanceController.atSetpoint()){
                 preTDA(goalCoordinate4, goalCoordinate5); 
-                setState(States.TURN2); 
+                setState(States.TURN4); 
             }
         } else if(states==States.TURN4){
-            turnDesiredAngle(turnSetpoint4);
+            turnDesiredAngle(desiredTurn);
             if(directionController.atSetpoint()){
                 setState(States.STOP); 
             }
@@ -181,15 +172,14 @@ public class AutonomousBasePD extends AutonomousBase{
     public void preTDA(Translation2d uno, Translation2d dos){
         directionController.reset();
         System.out.println("Preturning");
-        //directionController.setSetpoint(setpoint);
-        //drivetrainSubsystem.resetOdometry();
-        autoCalculateAngle(uno, dos); 
+        drivetrainSubsystem.resetOdometry(); //come back to fix me!!!! >:D
+        desiredTurn = autoCalculateAngle(uno, dos); 
     }
 
     @Override
-    public void turnDesiredAngle(double turnSetpoint){
+    public void turnDesiredAngle(double desiredTurn){
         directionController.enableContinuousInput(0, 360); //so it goes shortest angle to get to correct
-        double pidturnval = directionController.calculate(drivetrainSubsystem.getGyroscopeRotation().getDegrees(), turnSetpoint);
+        double pidturnval = directionController.calculate(drivetrainSubsystem.getGyroscopeRotation().getDegrees(), desiredTurn);
         System.out.println("pid val: " + pidturnval);
         drivetrainSubsystem.setSpeed(
             ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 
