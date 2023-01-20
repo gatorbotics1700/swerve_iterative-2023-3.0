@@ -36,6 +36,7 @@ public class AutonomousBasePD extends AutonomousBase{
     private double turnSetpoint2; 
     private double turnSetpoint3; 
     private double turnSetpoint4; 
+    private double turnSetpoint5; 
 
     DrivetrainSubsystem drivetrainSubsystem = Robot.m_drivetrainSubsystem;
 
@@ -43,17 +44,19 @@ public class AutonomousBasePD extends AutonomousBase{
     private PIDController directionController = new PIDController(turnKP, turnKI, turnKD);
     private PIDController distanceController = new PIDController(driveKP, driveKI, driveKD);
     
-    public AutonomousBasePD(Translation2d goalCoordinate1, Translation2d goalCoordinate2, Translation2d goalCoordinate3, Translation2d goalCoordinate4, Translation2d goalCoordinate5){
+    public AutonomousBasePD(Translation2d goalCoordinate1, Translation2d goalCoordinate2, Translation2d goalCoordinate3, Translation2d goalCoordinate4, Translation2d goalCoordinate5, Translation2d goalCoordinate6){
         this.goalCoordinate1 = goalCoordinate1;
         this.goalCoordinate2 = goalCoordinate2;
         this.goalCoordinate3 = goalCoordinate3;
         this.goalCoordinate4 = goalCoordinate4;
         this.goalCoordinate5 = goalCoordinate5;
+        this.goalCoordinate5 = goalCoordinate6;
 
         this.turnSetpoint1 = turnSetpoint1; 
         this.turnSetpoint2 = turnSetpoint2; 
         this.turnSetpoint3 = turnSetpoint3; 
         this.turnSetpoint4 = turnSetpoint4;
+        this.turnSetpoint4 = turnSetpoint5;
     }
 
     @Override

@@ -19,13 +19,12 @@ public class AutonomousBase{
     }
 
     public static enum Paths{ //rename paths later
-        TIMEDPATH,
-        AMELIA,
-        BIRD,
-        CHRISTINE,
-        DOBBY,
-        EGG,
-        FAN;
+        TEST,
+        BLUE_CHARGE,
+        RED_CHARGE,
+        ANTICHARGE,
+        M_SCORE,
+        TIMEDPATH;
     }
 
 }

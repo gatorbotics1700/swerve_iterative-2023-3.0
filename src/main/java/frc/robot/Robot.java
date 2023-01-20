@@ -27,9 +27,16 @@ import edu.wpi.first.math.geometry.Translation2d;
 public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
-  private Paths m_autoSelected;
-  private final SendableChooser<Paths> m_chooser = new SendableChooser<Paths>();
+  private AutonomousBase m_autoSelected;
+  private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<AutonomousBase>();
   private AutonomousBase autonomousBase = new AutonomousBase();
+  private AutonomousBasePD blueCharge = new AutonomousBasePD(new Translation2d(221.353, 23.720), new Translation2d(0, 21.574), new Translation2d(96.902, 21.574), new Translation2d(96.902, 21.574), new Translation2d(96.902, 21.574), new Translation2d(96.902, 21.574));
+  private AutonomousBasePD redCharge = new AutonomousBasePD(new Translation2d(222.624, 15.665), new Translation2d(0, 21.886), new Translation2d(221.671, 67.260), new Translation2d(97.188, 67.260), new Translation2d(97.188, 67.260), new Translation2d(97.188, 67.260));
+  private AutonomousBasePD antiCharge = new AutonomousBasePD(new Translation2d(86.840, -45.282), new Translation2d(221.978, 19.463), new Translation2d(135.091, -19.421), new Translation2d(0, -22.277), new Translation2d(222.491, -28.492), new Translation2d(0, -43.502));
+  private AutonomousBasePD mScore = new AutonomousBasePD(new Translation2d(222.037, 0), new Translation2d(135.091, -41.307), new Translation2d(0, -44.163), new Translation2d(222.894, -50.377), new Translation2d(0, -65.388), new Translation2d(0, -65.388));
+  private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
+  private AutonomousBasePD testPath = new AutonomousBasePD(new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20));
+  
   // = new AutonomousBasePD(new Pose2d(0*Constants.TICKS_PER_INCH, 20*Constants.TICKS_PER_INCH, new Rotation2d()), 90, new Pose2d(), 0.0);
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   private final Field2d m_field = new Field2d();
@@ -45,13 +52,12 @@ public class Robot extends TimedRobot {
   public void robotInit() { //creates options for different autopaths, names are placeholders
  
     System.out.println("#I'm Awake");
-    m_chooser.setDefaultOption("Default Auto", Paths.TEST);
-    m_chooser.addOption("My Auto 1", Paths.BLUE_CHARGE);
-    m_chooser.addOption("My Auto 2", Paths.RED_CHARGE);
-    m_chooser.addOption("My Auto 3", Paths.ANTICHARGE);
-    m_chooser.addOption("My Auto 4", Paths.M_SCORE);
-    m_chooser.addOption("My Auto 5", Paths.BLACKWIDOW);
-    m_chooser.addOption("My Auto timed", Paths.TIMEDPATH);
+    m_chooser.setDefaultOption("Default Auto", testPath);
+    m_chooser.addOption("My Auto 1", blueCharge);
+    m_chooser.addOption("My Auto 2", redCharge);
+    m_chooser.addOption("My Auto 3", antiCharge);
+    m_chooser.addOption("My Auto 4", mScore);
+    m_chooser.addOption("My Auto timed", timedPath);
 
     SmartDashboard.putData("Auto choices", m_chooser);
     //m_drivetrainSubsystem.resetOdometry();
@@ -85,47 +91,15 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-
     m_autoSelected = m_chooser.getSelected();
-
-    if(m_autoSelected==Paths.BLUE_CHARGE) {
-      autonomousBase = new AutonomousBasePD(new Translation2d(221.353, 23.720), new Translation2d(0, 21.574), new Translation2d(96.902, 21.574));
-      } else if (m_autoSelected==Paths.RED_CHARGE) {
-        autonomousBase = new AutonomousBasePD(new Translation2d(222.624, 15.665), new Translation2d(0, 21.886), new Translation2d(221.671, 67.260), new Translation2d(97.188, 67.260));
-      } else if (m_autoSelected==Paths.ANTICHARGE) {
-        autonomousBase = new AutonomousBasePD(new Translation2d(86.840, -45.282), new Translation2d(221.978, 19.463), new Translation2d(135.091, -19.421), new Translation2d(0, -22.277), new Translation2d(222.491, -28.492), new Translation2d(0, -43.502));
-      } else if (m_autoSelected==Paths.M_SCORE) {
-        autonomousBase = new AutonomousBasePD(new Translation2d(222.037, 0), new Translation2d(135.091, -41.307), new Translation2d(0, -44.163), new Translation2d(222.894, -50.377), new Translation2d(0, -65.388));
-      } else if (m_autoSelected==Paths.BLACKWIDOW) {
-        autonomousBase = new AutonomousBasePD(new Translation2d(135.662, 2.856), new Translation2d(220.167, 41.243), new Translation2d(135.662, 2.856), new Translation2d(0, -21.225), new Translation2d(223.062, -6.214), new Translation2d(0, 0));
-      } else if (m_autoSelected==Paths.TIMEDPATH) {
-        autonomousBase = new AutonomousBaseTimed();
-      }
-      
-
-      autonomousBase.init();
-
-  
-  /*
-  autopath 1: INCOMPLETE
-  goal coordinate 1: (221.313, 15.010)
-  goal coordinate 2: (0, 21.225)
-  goal coordinate 3: (133.914, 24.081)
-
-  autopath 2: THESE ARE WRONG TO BE FIXED
-  goal coordinate 1: (226.403, 19.903)
-  goal coordinate 2: (226.277, -2.614)
-  goal coordinate 3: (226.277, 45.386)
-  goal corrdinate 4(final): (127.692, 0) 
-  + amount from moving charging station which is 4.3 when going over both sides
-*/
+    m_autoSelected.init();
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
      //m_drivetrainSubsystem.driveTeleop();
-     autonomousBase.periodic();
+     m_autoSelected.periodic();
      m_drivetrainSubsystem.drive();
 
      //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
