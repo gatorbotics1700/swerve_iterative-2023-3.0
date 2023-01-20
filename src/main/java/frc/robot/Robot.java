@@ -11,11 +11,13 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
+import frc.robot.autonomous.AutonomousBase.Paths;
 import frc.robot.Constants;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -25,8 +27,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
-  private String m_autoSelected;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  private Paths m_autoSelected;
+  private final SendableChooser<Paths> m_chooser = new SendableChooser<Paths>();
   private AutonomousBase autonomousBase = new AutonomousBase();
   // = new AutonomousBasePD(new Pose2d(0*Constants.TICKS_PER_INCH, 20*Constants.TICKS_PER_INCH, new Rotation2d()), 90, new Pose2d(), 0.0);
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
@@ -40,16 +42,16 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
   @Override
-  public void robotInit() {
-
+  public void robotInit() { //creates options for different autopaths, names are placeholders
+ 
     System.out.println("#I'm Awake");
-    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("My Auto 1", kCustomAuto);
-    m_chooser.addOption("My Auto 2", kCustomAuto);
-    m_chooser.addOption("My Auto 3", kCustomAuto);
-    m_chooser.addOption("My Auto 4", kCustomAuto);
-    m_chooser.addOption("My Auto 5", kCustomAuto);
-    m_chooser.addOption("My Auto timed", kCustomAuto);
+    m_chooser.setDefaultOption("Default Auto", Paths.TEST);
+    m_chooser.addOption("My Auto 1", Paths.BLUE_CHARGE);
+    m_chooser.addOption("My Auto 2", Paths.RED_CHARGE);
+    m_chooser.addOption("My Auto 3", Paths.ANTICHARGE);
+    m_chooser.addOption("My Auto 4", Paths.M_SCORE);
+    m_chooser.addOption("My Auto 5", Paths.BLACKWIDOW);
+    m_chooser.addOption("My Auto timed", Paths.TIMEDPATH);
 
     SmartDashboard.putData("Auto choices", m_chooser);
     //m_drivetrainSubsystem.resetOdometry();
@@ -84,13 +86,24 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
 
-    /* m_autoSelected = m_chooser.getSelected();
-    // AutonomousBasePD = m_autoSelected;
-    if(){
-      autonomousBase = new AutonomousBasePD(new Pose2d(), new Pose2d());
-      } else if blah {}
-      autonomousBase.init(); */
+    m_autoSelected = m_chooser.getSelected();
 
+    if(m_autoSelected==Paths.BLUE_CHARGE) {
+      autonomousBase = new AutonomousBasePD(new Translation2d(221.353, 23.720), new Translation2d(0, 21.574), new Translation2d(96.902, 21.574));
+      } else if (m_autoSelected==Paths.RED_CHARGE) {
+        autonomousBase = new AutonomousBasePD(new Translation2d(222.624, 15.665), new Translation2d(0, 21.886), new Translation2d(221.671, 67.260), new Translation2d(97.188, 67.260));
+      } else if (m_autoSelected==Paths.ANTICHARGE) {
+        autonomousBase = new AutonomousBasePD(new Translation2d(86.840, -45.282), new Translation2d(221.978, 19.463), new Translation2d(135.091, -19.421), new Translation2d(0, -22.277), new Translation2d(222.491, -28.492), new Translation2d(0, -43.502));
+      } else if (m_autoSelected==Paths.M_SCORE) {
+        autonomousBase = new AutonomousBasePD(new Translation2d(222.037, 0), new Translation2d(135.091, -41.307), new Translation2d(0, -44.163), new Translation2d(222.894, -50.377), new Translation2d(0, -65.388));
+      } else if (m_autoSelected==Paths.BLACKWIDOW) {
+        autonomousBase = new AutonomousBasePD(new Translation2d(135.662, 2.856), new Translation2d(220.167, 41.243), new Translation2d(135.662, 2.856), new Translation2d(0, -21.225), new Translation2d(223.062, -6.214), new Translation2d(0, 0));
+      } else if (m_autoSelected==Paths.TIMEDPATH) {
+        autonomousBase = new AutonomousBaseTimed();
+      }
+      
+
+      autonomousBase.init();
 
   
   /*
@@ -112,7 +125,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
      //m_drivetrainSubsystem.driveTeleop();
-     autonomousBasePD.periodic();
+     autonomousBase.periodic();
      m_drivetrainSubsystem.drive();
 
      //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
@@ -153,14 +166,14 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-    autonomousBasePD.init();
+    autonomousBase.init();
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
     //m_drivetrainSubsystem.driveTeleop();
-    autonomousBasePD.periodic();
+    autonomousBase.periodic();
     m_drivetrainSubsystem.drive();
 
     if(OI.m_controller.getAButton()){
