@@ -135,7 +135,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
      //m_drivetrainSubsystem.driveTeleop();
-     autonomousBasePD.periodic();
+     autonomousBase.periodic();
      m_drivetrainSubsystem.drive();
 
      //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
@@ -176,14 +176,14 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-    autonomousBasePD.init();
+    autonomousBase.init();
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
     //m_drivetrainSubsystem.driveTeleop();
-    autonomousBasePD.periodic();
+    autonomousBase.periodic();
     m_drivetrainSubsystem.drive();
 
     if(OI.m_controller.getAButton()){
