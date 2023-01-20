@@ -17,6 +17,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -44,12 +45,12 @@ public class Robot extends TimedRobot {
   public void robotInit() { //creates options for different autopaths, names are placeholders
  
     System.out.println("#I'm Awake");
-    m_chooser.setDefaultOption("Default Auto", Paths.FAN);
-    m_chooser.addOption("My Auto 1", Paths.AMELIA);
-    m_chooser.addOption("My Auto 2", Paths.BIRD);
-    m_chooser.addOption("My Auto 3", Paths.CHRISTINE);
-    m_chooser.addOption("My Auto 4", Paths.DOBBY);
-    m_chooser.addOption("My Auto 5", Paths.EGG);
+    m_chooser.setDefaultOption("Default Auto", Paths.TEST);
+    m_chooser.addOption("My Auto 1", Paths.BLUE_CHARGE);
+    m_chooser.addOption("My Auto 2", Paths.RED_CHARGE);
+    m_chooser.addOption("My Auto 3", Paths.ANTICHARGE);
+    m_chooser.addOption("My Auto 4", Paths.M_SCORE);
+    m_chooser.addOption("My Auto 5", Paths.BLACKWIDOW);
     m_chooser.addOption("My Auto timed", Paths.TIMEDPATH);
 
     SmartDashboard.putData("Auto choices", m_chooser);
@@ -87,18 +88,16 @@ public class Robot extends TimedRobot {
 
     m_autoSelected = m_chooser.getSelected();
 
-    if(m_autoSelected==Paths.AMELIA) {
-      autonomousBase = new AutonomousBasePD(new Pose2d(), new Pose2d());
-      } else if (m_autoSelected==Paths.BIRD) {
-        autonomousBase = new AutonomousBasePD(new Pose2d(), new Pose2d());
-      } else if (m_autoSelected==Paths.CHRISTINE) {
-        autonomousBase = new AutonomousBasePD(new Pose2d(), new Pose2d());
-      } else if (m_autoSelected==Paths.DOBBY) {
-        autonomousBase = new AutonomousBasePD(new Pose2d(), new Pose2d());
-      } else if (m_autoSelected==Paths.EGG) {
-        autonomousBase = new AutonomousBasePD(new Pose2d(), new Pose2d());
-      } else if (m_autoSelected==Paths.FAN) {
-        autonomousBase = new AutonomousBasePD(new Pose2d(), new Pose2d());
+    if(m_autoSelected==Paths.BLUE_CHARGE) {
+      autonomousBase = new AutonomousBasePD(new Translation2d(221.353, 23.720), new Translation2d(0, 21.574), new Translation2d(96.902, 21.574));
+      } else if (m_autoSelected==Paths.RED_CHARGE) {
+        autonomousBase = new AutonomousBasePD(new Translation2d(222.624, 15.665), new Translation2d(0, 21.886), new Translation2d(221.671, 67.260), new Translation2d(97.188, 67.260));
+      } else if (m_autoSelected==Paths.ANTICHARGE) {
+        autonomousBase = new AutonomousBasePD(new Translation2d(86.840, -45.282), new Translation2d(221.978, 19.463), new Translation2d(135.091, -19.421), new Translation2d(0, -22.277), new Translation2d(222.491, -28.492), new Translation2d(0, -43.502));
+      } else if (m_autoSelected==Paths.M_SCORE) {
+        autonomousBase = new AutonomousBasePD(new Translation2d(222.037, 0), new Translation2d(135.091, -41.307), new Translation2d(0, -44.163), new Translation2d(222.894, -50.377), new Translation2d(0, -65.388));
+      } else if (m_autoSelected==Paths.BLACKWIDOW) {
+        autonomousBase = new AutonomousBasePD(new Translation2d(135.662, 2.856), new Translation2d(220.167, 41.243), new Translation2d(135.662, 2.856), new Translation2d(0, -21.225), new Translation2d(223.062, -6.214), new Translation2d(0, 0));
       } else if (m_autoSelected==Paths.TIMEDPATH) {
         autonomousBase = new AutonomousBaseTimed();
       }
