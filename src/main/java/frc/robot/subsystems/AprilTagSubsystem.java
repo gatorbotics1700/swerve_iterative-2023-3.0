@@ -28,6 +28,10 @@ public class AprilTagSubsystem {
     CvSink cvSink;
     AprilTagDetection[] detectedAprilTags; 
     VideoSink server;
+    int aprilTagIds[];
+    float decisionMargin[];
+    double centerX[];
+    double centerY[];
     //CvSource outputStream;
 
     private static AprilTagDetector aprilTagDetector = new AprilTagDetector();
@@ -66,6 +70,16 @@ public class AprilTagSubsystem {
         detectedAprilTags = aprilTagDetector.detect(grayMat);
 
         
+
+        for(int i = 0; i < detectedAprilTags.length; i++){
+            aprilTagIds[i] = detectedAprilTags[i].getId();
+            decisionMargin[i] = detectedAprilTags[i].getDecisionMargin();
+            centerX[i] = detectedAprilTags[i].getCenterX();
+            centerY[i] = detectedAprilTags[i].getCenterY();
+        }
+
+        
+
         System.out.println("Detected Apriltags: " + detectedAprilTags);
 
     }
