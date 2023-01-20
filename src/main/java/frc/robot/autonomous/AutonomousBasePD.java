@@ -14,22 +14,27 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 public class AutonomousBasePD extends AutonomousBase{
-    public static final double turnKP= 0.002;
+    public static final double turnKP= 0.0002;
     public static final double turnKI= 0.0;
     public static final double turnKD= 0.0;
     public static final double driveKP= 0.00004;
     public static final double driveKI= 0.0;
     public static final double driveKD= 0.0;
     private final double DRIVE_DEADBAND = 7;
-    private final double TURN_DEADBAND = 0.5;
+    private final double TURN_DEADBAND = 6;
     private double xdirection;
     private double ydirection;
     private double hypotenuse;
 
-    private Pose2d goalCoordinate1;
-    private Pose2d goalCoordinate2; 
-    private double turnSetpoint1;
-    private double turnSetpoint2; 
+    private Translation2d goalCoordinate1;
+    private Translation2d goalCoordinate2; 
+    private Translation2d goalCoordinate3; 
+    private Translation2d goalCoordinate4; 
+    private Translation2d goalCoordinate5;
+    private Translation2d goalCoordinate6;
+
+    public double desiredTurn;
+    private Translation2d desiredTranslation;
 
     DrivetrainSubsystem drivetrainSubsystem = Robot.m_drivetrainSubsystem;
 
@@ -37,11 +42,13 @@ public class AutonomousBasePD extends AutonomousBase{
     private PIDController directionController = new PIDController(turnKP, turnKI, turnKD);
     private PIDController distanceController = new PIDController(driveKP, driveKI, driveKD);
     
-    public AutonomousBasePD(Pose2d goalCoordinate1, double turnSetpoint1, Pose2d goalCoordinate2, double turnSetpoint2){
+    public AutonomousBasePD(Translation2d goalCoordinate1, Translation2d goalCoordinate2, Translation2d goalCoordinate3, Translation2d goalCoordinate4, Translation2d goalCoordinate5, Translation2d goalCoordinate6){
         this.goalCoordinate1 = goalCoordinate1;
         this.goalCoordinate2 = goalCoordinate2;
-        this.turnSetpoint1 = turnSetpoint1; 
-        this.turnSetpoint2 = turnSetpoint2; 
+        this.goalCoordinate3 = goalCoordinate3;
+        this.goalCoordinate4 = goalCoordinate4;
+        this.goalCoordinate5 = goalCoordinate5;
+        this.goalCoordinate6 = goalCoordinate6;
     }
 
     @Override
@@ -62,10 +69,15 @@ public class AutonomousBasePD extends AutonomousBase{
         TURN,
         DRIVE2, 
         TURN2,
+        DRIVE3,
+        TURN3,
+        DRIVE4,
+        TURN4,
         STOP;
+    
     }
 
-    private static States states = States.TURN;
+    private static States states = States.TURN; //change later
 
     public void setState(States newState){
         states = newState;
@@ -74,35 +86,59 @@ public class AutonomousBasePD extends AutonomousBase{
     @Override
     public void periodic()
     {
-       
+        
         //System.out.println("state: "+states);
         if (states == States.FIRST){
-            preDDD(goalCoordinate1); 
+            desiredTranslation = preDDD(new Translation2d(), goalCoordinate1); 
             System.out.println("we've reset to this pose: " + drivetrainSubsystem.m_pose);
             setState(States.DRIVE);
         }
         if (states == States.DRIVE){
-            driveDesiredDistance(goalCoordinate1);
+            driveDesiredDistance(desiredTranslation);
             //System.out.println("inside drive state! pose: " + drivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + " " + drivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
             if (distanceController.atSetpoint()){
-                preTDA(turnSetpoint1);
+                preTDA(goalCoordinate1, goalCoordinate2);
                 setState(States.TURN);
             }
         } else if(states==States.TURN){
-            System.out.println("turning");
-            turnDesiredAngle(turnSetpoint1);
+            System.out.println("turning. we are currently at: " + drivetrainSubsystem.getGyroscopeRotation().getDegrees());
+            turnDesiredAngle(desiredTurn);
+
             if(directionController.atSetpoint()){
+                desiredTranslation = preDDD(goalCoordinate1, goalCoordinate2); 
                 System.out.println("a print statement that says 'we're stopping'");
                 setState(States.STOP);
             }
         } else if(states == States.DRIVE2){
-            driveDesiredDistance(goalCoordinate2);
+            driveDesiredDistance(desiredTranslation);
             if(distanceController.atSetpoint()){
-                preTDA(turnSetpoint2); 
+                preTDA(goalCoordinate2, goalCoordinate3); 
                 setState(States.TURN2); 
             }
         } else if(states==States.TURN2){
-            turnDesiredAngle(turnSetpoint2);
+            turnDesiredAngle(desiredTurn);
+            if(directionController.atSetpoint()){
+                setState(States.DRIVE3); 
+            }
+        } else if(states == States.DRIVE3){
+            driveDesiredDistance(desiredTranslation);
+            if(distanceController.atSetpoint()){
+                preTDA(goalCoordinate3, goalCoordinate4); 
+                setState(States.TURN2); 
+            }
+        } else if(states==States.TURN3){
+            turnDesiredAngle(desiredTurn);
+            if(directionController.atSetpoint()){
+                setState(States.DRIVE4); 
+            }
+        } else if(states == States.DRIVE4){
+            driveDesiredDistance(desiredTranslation);
+            if(distanceController.atSetpoint()){
+                preTDA(goalCoordinate4, goalCoordinate5); 
+                setState(States.TURN4); 
+            }
+        } else if(states==States.TURN4){
+            turnDesiredAngle(desiredTurn);
             if(directionController.atSetpoint()){
                 setState(States.STOP); 
             }
@@ -112,33 +148,38 @@ public class AutonomousBasePD extends AutonomousBase{
     }
 
     //predrivedesiredistance
-    public void preDDD(Pose2d coordinate){
-        drivetrainSubsystem.resetOdometry();
-        hypotenuse = Math.hypot(coordinate.getX(), coordinate.getY());
-        distanceController.setSetpoint(hypotenuse);
+    public Translation2d preDDD(Translation2d cCoordinate, Translation2d dCoordinate){
+        double xDDistance = dCoordinate.getX() - cCoordinate.getX();
+        double yDDistance = dCoordinate.getY() - cCoordinate.getY();
+        hypotenuse = Math.hypot(xDDistance, yDDistance);
+        distanceController.setSetpoint(hypotenuse); 
+        return new Translation2d (xDDistance, yDDistance);    
     }
 
+    //d is desired coordinate
+    //c is current coordinate
     @Override
-    public void driveDesiredDistance(Pose2d coordinate){      
-        double speed = distanceController.calculate(Math.hypot(drivetrainSubsystem.m_pose.getX(), drivetrainSubsystem.m_pose.getY()), hypotenuse);
-        double directX = coordinate.getX() / Math.sqrt(Math.pow(coordinate.getX(),2) + Math.pow(coordinate.getY(),2));
-        double directY = coordinate.getY() / Math.sqrt(Math.pow(coordinate.getX(),2) + Math.pow(coordinate.getY(),2));
+    public void driveDesiredDistance(Translation2d dTranslation){      
         
-        drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speed * directX, speed * directY, 0, drivetrainSubsystem.getGyroscopeRotation()));  
+        double speed = distanceController.calculate(Math.hypot(drivetrainSubsystem.m_pose.getX(), drivetrainSubsystem.m_pose.getY()), hypotenuse);
+        double directionX = dTranslation.getX() / Math.sqrt(Math.pow(dTranslation.getX(),2) + Math.pow(dTranslation.getY(),2));
+        double directionY = dTranslation.getY() / Math.sqrt(Math.pow(dTranslation.getX(),2) + Math.pow(dTranslation.getY(),2));
+        
+        drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speed * directionX, speed * directionY, 0, drivetrainSubsystem.getGyroscopeRotation()));  
     }
 
     //pre turn desired angle
-    public void preTDA(double setpoint){
+    public void preTDA(Translation2d uno, Translation2d dos){
         directionController.reset();
         System.out.println("Preturning");
-        directionController.setSetpoint(setpoint);
-        drivetrainSubsystem.resetOdometry();
+        // drivetrainSubsystem.resetOdometry(); //come back to fix me!!!! >:D
+        desiredTurn = autoCalculateAngle(uno, dos); 
     }
 
     @Override
-    public void turnDesiredAngle(double turnSetpoint){
+    public void turnDesiredAngle(double desiredTurn){
         directionController.enableContinuousInput(0, 360); //so it goes shortest angle to get to correct
-        double pidturnval = directionController.calculate(drivetrainSubsystem.getGyroscopeRotation().getDegrees(), turnSetpoint);
+        double pidturnval = directionController.calculate(drivetrainSubsystem.getGyroscopeRotation().getDegrees(), desiredTurn);
         System.out.println("pid val: " + pidturnval);
         drivetrainSubsystem.setSpeed(
             ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 
@@ -147,5 +188,11 @@ public class AutonomousBasePD extends AutonomousBase{
         );
         System.out.println("error: " + directionController.getPositionError());
     }
+
+      public double autoCalculateAngle(Translation2d initPose, Translation2d targetPose){ //NEEDS TO BE CHANGED
+        double nextanglePose = (Math.acos(targetPose.getX() - initPose.getX()))/(Math.hypot(targetPose.getX() - initPose.getX(), targetPose.getY() - initPose.getY()));
+        double angleTurn = 180 - drivetrainSubsystem.getGyroscopeRotation().getDegrees()  - (nextanglePose)*180/Math.PI;
+        return angleTurn;
+      }
 
 }
