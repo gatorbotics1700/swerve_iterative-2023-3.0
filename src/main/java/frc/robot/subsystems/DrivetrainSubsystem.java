@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import frc.robot.Robot;
 
 import edu.wpi.first.math.controller.PIDController;
 
@@ -328,13 +329,16 @@ public class DrivetrainSubsystem {
 
    public void pitchBalance(double pitchSetpoint){
         System.out.println("pitch: " + m_pigeon.getPitch());
+        System.out.println("universal pitch: " + Robot.universalPitch);
+        double pitchAfterCorrection = m_pigeon.getPitch()-Robot.universalPitch;
+        System.out.println("pitch after correcting for universalPitch: " + pitchAfterCorrection);
         pitchController.setSetpoint(pitchSetpoint); 
-        double error = pitchController.calculate(m_pigeon.getPitch(), pitchSetpoint);
+        double error = pitchController.calculate(pitchAfterCorrection, pitchSetpoint);
         System.out.println("error: " + error); 
-        setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(error, 0 , 0, getGyroscopeRotation()));
-        drive();
+        //setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(error, 0 , 0, getGyroscopeRotation()));
+        //drive();
         
-        if (Math.abs(m_pigeon.getPitch()) - pitchSetpoint < 1.5){
+        if (Math.abs(pitchAfterCorrection - pitchSetpoint) < 1.5){
             setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0,getGyroscopeRotation()));
             //velocityPD(0);
         }

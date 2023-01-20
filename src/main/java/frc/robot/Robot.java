@@ -32,6 +32,7 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   private final AutonomousBase autonomousBasePD = new AutonomousBasePD(new Pose2d(0*Constants.TICKS_PER_INCH, -20*Constants.TICKS_PER_INCH, new Rotation2d(0)), 0.0, new Pose2d(), 0.0);
   private static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
+  public static double universalPitch=0;
 
   public static DrivetrainSubsystem getDrivetrainSubsystem(){
     return m_drivetrainSubsystem;
@@ -50,6 +51,8 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
     m_drivetrainSubsystem.resetOdometry();
+    universalPitch = m_drivetrainSubsystem.m_pigeon.getPitch();
+    System.out.println("universal pitch from robot init: " + universalPitch);
     // m_drivetrainSubsystem.zeroGyroscope();
     // m_drivetrainSubsystem.zeroDriveEncoder();
   }
