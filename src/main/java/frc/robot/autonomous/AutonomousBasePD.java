@@ -22,8 +22,6 @@ public class AutonomousBasePD extends AutonomousBase{
     public static final double driveKD= 0.0;
     private final double DRIVE_DEADBAND = 7;
     private final double TURN_DEADBAND = 6;
-    private double xdirection;
-    private double ydirection;
     private double hypotenuse;
 
     private Translation2d goalCoordinate1;
@@ -103,7 +101,6 @@ public class AutonomousBasePD extends AutonomousBase{
         } else if(states==States.TURN){
             System.out.println("turning. we are currently at: " + drivetrainSubsystem.getGyroscopeRotation().getDegrees());
             turnDesiredAngle(desiredTurn);
-
             if(directionController.atSetpoint()){
                 desiredTranslation = preDDD(goalCoordinate1, goalCoordinate2); 
                 System.out.println("a print statement that says 'we're stopping'");
@@ -118,6 +115,7 @@ public class AutonomousBasePD extends AutonomousBase{
         } else if(states==States.TURN2){
             turnDesiredAngle(desiredTurn);
             if(directionController.atSetpoint()){
+                //preDDD
                 setState(States.DRIVE3); 
             }
         } else if(states == States.DRIVE3){
@@ -129,6 +127,7 @@ public class AutonomousBasePD extends AutonomousBase{
         } else if(states==States.TURN3){
             turnDesiredAngle(desiredTurn);
             if(directionController.atSetpoint()){
+                //preDDD
                 setState(States.DRIVE4); 
             }
         } else if(states == States.DRIVE4){
@@ -142,6 +141,7 @@ public class AutonomousBasePD extends AutonomousBase{
             if(directionController.atSetpoint()){
                 setState(States.STOP); 
             }
+            //one more drive, one more turn needed (final turn should bring you toooo facing wall to deposit!)
         }else{
             drivetrainSubsystem.stopDrive();
         }
@@ -156,19 +156,23 @@ public class AutonomousBasePD extends AutonomousBase{
         return new Translation2d (xDDistance, yDDistance);    
     }
 
-    //d is desired coordinate
-    //c is current coordinate
+    /** 
+    @param dTranslation is desired coordinate
+    */
     @Override
     public void driveDesiredDistance(Translation2d dTranslation){      
-        
         double speed = distanceController.calculate(Math.hypot(drivetrainSubsystem.m_pose.getX(), drivetrainSubsystem.m_pose.getY()), hypotenuse);
         double directionX = dTranslation.getX() / Math.sqrt(Math.pow(dTranslation.getX(),2) + Math.pow(dTranslation.getY(),2));
         double directionY = dTranslation.getY() / Math.sqrt(Math.pow(dTranslation.getX(),2) + Math.pow(dTranslation.getY(),2));
-        
+
         drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speed * directionX, speed * directionY, 0, drivetrainSubsystem.getGyroscopeRotation()));  
     }
 
-    //pre turn desired angle
+    /**
+    pre turn desired angle 
+    @param uno is current coordinate
+    @param dos is past coordinate 
+    */
     public void preTDA(Translation2d uno, Translation2d dos){
         directionController.reset();
         System.out.println("Preturning");
