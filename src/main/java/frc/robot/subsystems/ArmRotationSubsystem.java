@@ -2,22 +2,28 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import frc.robot.Constants;
+import frc.robot.Gains;//i think this means we do not need to have our own gains file
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.math.controller.PIDController;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.BaseMotorController.*;
 
 
 public class ArmRotationSubsystem {
-    //variables go here
-    //double armLengthKP = 0.04; //actual vals to be determined
-    //double armLengthKI = 0.000002;
-    //double armLengthKD = 0.005;
-    //PIDController armLengthController = new PIDController(armLengthKP, armLengthKI, armLengthKD);
+    //these values are to be determined (untested)
+    double _kP = 1.0;
+    double _kI = 0.0;
+    double _kD = 0.0;
+    double _kF = 0.0;
+    int _kIzone = 0;
+    double _kPeakOutput = 0.0;
+    
     public static ArmRotationStates rState = ArmRotationStates.ZERO;//should this be retracted or mid? what is the equivalent to off?
 
     TalonFX armRotationMotor = new TalonFX(Constants.ARM_ROTATION_MOTOR_ID);//maybe this motor should be renamed to make it more descriptive
 
-    //armMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx, Constants.kTimeoutMs);//determine what these values would be for us
+    Gains armRotationGains = new Gains(_kP, _kI, _kD, _kF, _kIzone, _kPeakOutput);
 
 
     public static enum ArmRotationStates{
@@ -38,7 +44,16 @@ public class ArmRotationSubsystem {
         armRotationMotor.setInverted(false);
         armRotationMotor.setNeutralMode(NeutralMode.Brake);
         //need to confirm with kim that we can zero motor when arm is vertical, then have negative 90 and 90 respectively when it rotates
+
+        //configuring deadband
+        armRotationMotor.configAllowableClosedloopError(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+		/* Config Position Closed Loop gains in slot0, tsypically kF stays zero. */
+		armRotationMotor.config_kF(Constants.kPIDLoopIdx, armRotationGains.kF, Constants.kTimeoutMs);
+		armRotationMotor.config_kP(Constants.kPIDLoopIdx, armRotationGains.kP, Constants.kTimeoutMs);
+		armRotationMotor.config_kI(Constants.kPIDLoopIdx, armRotationGains.kI, Constants.kTimeoutMs);
+		armRotationMotor.config_kD(Constants.kPIDLoopIdx, armRotationGains.kD, Constants.kTimeoutMs);
     }
+
 
     public void periodic(){
         if (rState == ArmRotationStates.ZERO){
@@ -68,5 +83,10 @@ public class ArmRotationSubsystem {
     public double getRotationAngle(){
         return ticksToDegrees(armRotationMotor.getSelectedSensorPosition());//returns current rotation angle
     }    
+
+    //potentiometer? flight sensor?
+    //AD worried about slipping with encoder and gravity
+    //absolute tick count
+    //KBR says no worries
 
 }

@@ -63,6 +63,9 @@ public final class Constants {
     public static final int ARM_ROTATION_MOTOR_ID = 8;
     public static final int ELEVATOR_CAN_ID = 9;
 
+    public static final int kTimeoutMs = 1000;
+    public static final int kPIDLoopIdx = 0;//not sure what this value does or if this value should be diff for rotation, telescoping, elevator
+
     /**
 	 * Gains used in Positon Closed Loop, to be adjusted accordingly
      * Gains(kp, ki, kd, kf, izone, peak output);

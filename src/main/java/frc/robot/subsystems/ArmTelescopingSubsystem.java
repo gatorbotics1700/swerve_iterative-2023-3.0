@@ -2,18 +2,25 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import frc.robot.Constants;
+import frc.robot.Gains;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 public class ArmTelescopingSubsystem {
 
-    //variables go here
-    //double armLengthKP = 0.04; //actual vals to be determined
-    //double armLengthKI = 0.000002;
-    //double armLengthKD = 0.005;
-    //PIDController armLengthController = new PIDController(armLengthKP, armLengthKI, armLengthKD);
+    //these values are to be determined (untested)
+    double _kP = 1.0;
+    double _kI = 0.0;
+    double _kD = 0.0;
+    double _kF = 0.0;
+    int _kIzone = 0;
+    double _kPeakOutput = 0.0;
+
     public static TelescopingStates tState = TelescopingStates.RETRACTED;//should this be retracted or mid? what is the equivalent to off?
 
     TalonFX telescopingMotor = new TalonFX(Constants.TELESCOPING_MOTOR_ID);//maybe this motor should be renamed to make it more descriptive
+
+    Gains armTelescopingGains = new Gains(_kP, _kI, _kD, _kF, _kIzone, _kPeakOutput);
 
     //armMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx, Constants.kTimeoutMs);//determine what these values would be for us
 
@@ -43,6 +50,14 @@ public class ArmTelescopingSubsystem {
 
     public void init(){
         telescopingMotor.setInverted(false);
+
+        //configuring deadband
+        telescopingMotor.configAllowableClosedloopError(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+		/* Config Position Closed Loop gains in slot0, tsypically kF stays zero. */
+		telescopingMotor.config_kF(Constants.kPIDLoopIdx, armTelescopingGains.kF, Constants.kTimeoutMs);
+		telescopingMotor.config_kP(Constants.kPIDLoopIdx, armTelescopingGains.kP, Constants.kTimeoutMs);
+		telescopingMotor.config_kI(Constants.kPIDLoopIdx, armTelescopingGains.kI, Constants.kTimeoutMs);
+		telescopingMotor.config_kD(Constants.kPIDLoopIdx, armTelescopingGains.kD, Constants.kTimeoutMs);
     }
 
     public void periodic(){//sam requests that we can operate arm length by stick on xbox
