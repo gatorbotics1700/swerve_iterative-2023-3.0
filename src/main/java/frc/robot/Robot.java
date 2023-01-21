@@ -34,7 +34,8 @@ public class Robot extends TimedRobot {
   private AutonomousBasePD mScore = new AutonomousBasePD(new Translation2d(222.037, 0), new Translation2d(135.091, -41.307), new Translation2d(0, -44.163), new Translation2d(222.894, -50.377), new Translation2d(0, -65.388), new Translation2d(0, -65.388));
   private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
   private AutonomousBasePD testPath = new AutonomousBasePD(new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20));
-  
+  private AutonomousBaseMP motionProfiling = new AutonomousBaseMP(new Pose2d(), new Pose2d(20, 23, 0), new Translation2d(2, 5), new Translation2d(9, 17), new Translation2d(15, 20));
+
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   private final Field2d m_field = new Field2d();
 
@@ -52,6 +53,7 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto 3", antiCharge);
     m_chooser.addOption("My Auto 4", mScore);
     m_chooser.addOption("My Auto timed", timedPath);
+    m_chooser.addOption("Motion profiling path", motionProfiling);
 
     SmartDashboard.putData("Auto choices", m_chooser);
     //m_drivetrainSubsystem.resetOdometry();
