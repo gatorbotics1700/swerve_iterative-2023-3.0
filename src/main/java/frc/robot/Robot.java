@@ -18,6 +18,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -33,10 +34,12 @@ public class Robot extends TimedRobot {
   private AutonomousBasePD antiCharge = new AutonomousBasePD(new Translation2d(86.840, -45.282), new Translation2d(221.978, 19.463), new Translation2d(135.091, -19.421), new Translation2d(0, -22.277), new Translation2d(222.491, -28.492), new Translation2d(0, -43.502));
   private AutonomousBasePD mScore = new AutonomousBasePD(new Translation2d(222.037, 0), new Translation2d(135.091, -41.307), new Translation2d(0, -44.163), new Translation2d(222.894, -50.377), new Translation2d(0, -65.388), new Translation2d(0, -65.388));
   private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
-  private AutonomousBasePD testPath = new AutonomousBasePD(new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20));
+  private AutonomousBasePD testPath = new AutonomousBasePD(new Translation2d(0, 20), new Translation2d(20, 20), new Translation2d(20, 20), new Translation2d(20, 20), new Translation2d(20, 20), new Translation2d(20, 20));
   
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   private final Field2d m_field = new Field2d();
+  ChassisSpeeds m_ChassisSpeeds;
+
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -132,15 +135,19 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-    autonomousBase.init();
+    
+    //autonomousBase.init();
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-    //m_drivetrainSubsystem.driveTeleop();
-    autonomousBase.periodic();
-    m_drivetrainSubsystem.drive();
+    m_drivetrainSubsystem.setSpeed(
+            ChassisSpeeds.fromFieldRelativeSpeeds(1, 0, 
+            0, 
+            m_drivetrainSubsystem.getGyroscopeRotation())
+        ); 
+        m_drivetrainSubsystem.drive();
 
     if(OI.m_controller.getAButton()){
       m_drivetrainSubsystem.resetOdometry();
