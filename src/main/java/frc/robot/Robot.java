@@ -16,6 +16,7 @@ import frc.robot.Constants;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 /**
@@ -27,14 +28,13 @@ import edu.wpi.first.math.geometry.Translation2d;
 public class Robot extends TimedRobot {
   private AutonomousBase m_autoSelected;
   private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<AutonomousBase>();
-  private AutonomousBase autonomousBase = new AutonomousBase();
   private AutonomousBasePD blueCharge = new AutonomousBasePD(new Translation2d(221.353, 23.720), new Translation2d(0, 21.574), new Translation2d(96.902, 21.574), new Translation2d(96.902, 21.574), new Translation2d(96.902, 21.574), new Translation2d(96.902, 21.574));
   private AutonomousBasePD redCharge = new AutonomousBasePD(new Translation2d(222.624, 15.665), new Translation2d(0, 21.886), new Translation2d(221.671, 67.260), new Translation2d(97.188, 67.260), new Translation2d(97.188, 67.260), new Translation2d(97.188, 67.260));
   private AutonomousBasePD antiCharge = new AutonomousBasePD(new Translation2d(86.840, -45.282), new Translation2d(221.978, 19.463), new Translation2d(135.091, -19.421), new Translation2d(0, -22.277), new Translation2d(222.491, -28.492), new Translation2d(0, -43.502));
   private AutonomousBasePD mScore = new AutonomousBasePD(new Translation2d(222.037, 0), new Translation2d(135.091, -41.307), new Translation2d(0, -44.163), new Translation2d(222.894, -50.377), new Translation2d(0, -65.388), new Translation2d(0, -65.388));
   private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
   private AutonomousBasePD testPath = new AutonomousBasePD(new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20));
-  private AutonomousBaseMP motionProfiling = new AutonomousBaseMP(new Pose2d(), new Pose2d(20, 23, 0), new Translation2d(2, 5), new Translation2d(9, 17), new Translation2d(15, 20));
+  private AutonomousBaseMP motionProfiling = new AutonomousBaseMP(Trajectories.uno, Trajectories.dos, Trajectories.tres);
 
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   private final Field2d m_field = new Field2d();

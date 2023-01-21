@@ -56,7 +56,7 @@ public class DrivetrainSubsystem {
   public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND /
           Math.hypot(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0);
 
-  private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
+  public final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
           // Setting up location of modules relative to the center of the robot
           // Front left
           new Translation2d(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0),
