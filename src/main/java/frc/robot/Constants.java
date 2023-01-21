@@ -61,4 +61,16 @@ public final class Constants {
 
     public static final int TELESCOPING_MOTOR_ID = 7;
     public static final int ARM_ROTATION_MOTOR_ID = 8;
+    public static final int ELEVATOR_CAN_ID = 9;
+
+    /**
+	 * Gains used in Positon Closed Loop, to be adjusted accordingly
+     * Gains(kp, ki, kd, kf, izone, peak output);
+     */
+    static final Gains kGains = new Gains(0.15, 0.0, 1.0, 0, 1.0);
+
+	/* Choose so that Talon does not report sensor out of phase */
+    public static boolean kSensorPhase = true; //Sensor phase describes the relationship between the motor output direction (positive vs negative) and sensor velocity (positive vs negative). For soft-limits and closed-loop features to function correctly, the sensor measurement and motor output must be “in-phase”.
+
+    public static double deadband = 0.5; //arbitrary
 }
