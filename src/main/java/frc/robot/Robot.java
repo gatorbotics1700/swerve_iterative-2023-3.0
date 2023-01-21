@@ -132,14 +132,14 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-    autonomousBase.init();
+    m_autoSelected.init();
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
     //m_drivetrainSubsystem.driveTeleop();
-    autonomousBase.periodic();
+    m_autoSelected.periodic();
     m_drivetrainSubsystem.drive();
 
     if(OI.m_controller.getAButton()){

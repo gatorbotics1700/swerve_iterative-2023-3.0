@@ -1,7 +1,5 @@
 package frc.robot.autonomous;
 
-import javax.naming.spi.DirStateFactory;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.*;
 import frc.robot.Robot;
@@ -52,8 +50,8 @@ public class AutonomousBasePD extends AutonomousBase{
     @Override
     public void init(){
         drivetrainSubsystem.resetOdometry();
-        directionController.reset();
-        distanceController.reset();
+        // directionController.reset();
+        // distanceController.reset();
         directionController.setTolerance(TURN_DEADBAND); 
         distanceController.setTolerance(DRIVE_DEADBAND*Constants.TICKS_PER_INCH);
         states = States.TURN;
@@ -88,7 +86,7 @@ public class AutonomousBasePD extends AutonomousBase{
         //System.out.println("state: "+states);
         if (states == States.FIRST){
             desiredTranslation = preDDD(new Translation2d(), goalCoordinate1); 
-            System.out.println("we've reset to this pose: " + drivetrainSubsystem.m_pose);
+            System.out.println("we've reset to this pose: " + DrivetrainSubsystem.m_pose);
             setState(States.DRIVE);
         }
         if (states == States.DRIVE){
@@ -161,7 +159,7 @@ public class AutonomousBasePD extends AutonomousBase{
     */
     @Override
     public void driveDesiredDistance(Translation2d dTranslation){      
-        double speed = distanceController.calculate(Math.hypot(drivetrainSubsystem.m_pose.getX(), drivetrainSubsystem.m_pose.getY()), hypotenuse);
+        double speed = distanceController.calculate(Math.hypot(DrivetrainSubsystem.m_pose.getX(), DrivetrainSubsystem.m_pose.getY()), hypotenuse);
         double directionX = dTranslation.getX() / Math.sqrt(Math.pow(dTranslation.getX(),2) + Math.pow(dTranslation.getY(),2));
         double directionY = dTranslation.getY() / Math.sqrt(Math.pow(dTranslation.getX(),2) + Math.pow(dTranslation.getY(),2));
 
@@ -176,7 +174,6 @@ public class AutonomousBasePD extends AutonomousBase{
     public void preTDA(Translation2d uno, Translation2d dos){
         directionController.reset();
         System.out.println("Preturning");
-        // drivetrainSubsystem.resetOdometry(); //come back to fix me!!!! >:D
         desiredTurn = autoCalculateAngle(uno, dos); 
     }
 
