@@ -6,8 +6,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 public class AutonomousBaseTimed extends AutonomousBase{
     DrivetrainSubsystem drivetrainSubsystem = Robot.m_drivetrainSubsystem;
-    private long timeStart;
-    private long timeElapsed = 0;
+    private double timeStart;
+    private double timeElapsed = 0;
     final double target = 5.0; //units in seconds
 
     @Override
