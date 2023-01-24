@@ -141,8 +141,8 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-    m_autoSelected.init();
-
+    //m_autoSelected.init();
+    intakeSubsystem.init();
   }
 
   /** This function is called periodically during test mode. */
@@ -157,7 +157,8 @@ public class Robot extends TimedRobot {
 
     // System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
     if(OI.m_controller.getAButton()){
-      intakeSubsystem.runMotors();
+      intakeSubsystem.runMotorsForward();
+      //intakeSubsystem.runMotorsBackward(); // sara you can choose which one depending on if the motors are inverted correctly in init() - janet :)
     }
     if(OI.m_controller.getXButton()){
       IntakeSubsystem.intakeMotor.set(ControlMode.PercentOutput, 0.0);
