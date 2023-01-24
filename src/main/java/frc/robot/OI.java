@@ -7,4 +7,6 @@ public class OI {
     public static final XboxController m_controller = new XboxController(0);
 
     public static Button stop = Button.kB;
+
+    public static Button intakeOnOff = Button.kA; // second xbox controller
 }

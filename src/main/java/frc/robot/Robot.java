@@ -41,6 +41,8 @@ public class Robot extends TimedRobot {
   private final Field2d m_field = new Field2d();
   ChassisSpeeds m_ChassisSpeeds;
 
+  IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -138,23 +140,24 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     m_autoSelected.init();
+
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-    m_drivetrainSubsystem.setSpeed(
-            ChassisSpeeds.fromFieldRelativeSpeeds(1, 0, 
-            0, 
-            m_drivetrainSubsystem.getGyroscopeRotation())
-        ); 
-        m_drivetrainSubsystem.drive();
+    // m_drivetrainSubsystem.setSpeed(
+    //         ChassisSpeeds.fromFieldRelativeSpeeds(1, 0, 
+    //         0, 
+    //         m_drivetrainSubsystem.getGyroscopeRotation())
+    //     ); 
+    //     m_drivetrainSubsystem.drive();
 
+    // System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
     if(OI.m_controller.getAButton()){
-      m_drivetrainSubsystem.resetOdometry();
+      intakeSubsystem.runMotors();
     }
-
-    System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
+    
   }
 
   /** This function is called once when the robot is first started up. */
