@@ -5,6 +5,7 @@ import frc.robot.Constants;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+//karys did this!
 public class IntakeSubsystem {
     public static TalonFX intakeMotor = new TalonFX(Constants.INTAKE_MOTOR_ID);
 
@@ -37,6 +38,5 @@ public class IntakeSubsystem {
     public void runMotors(){
         intakeMotor.set(ControlMode.PercentOutput, -0.5);
     }
-
 
 }

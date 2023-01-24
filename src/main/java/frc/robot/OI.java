@@ -8,5 +8,7 @@ public class OI {
 
     public static Button stop = Button.kB;
 
-    public static Button intakeOnOff = Button.kA; // second xbox controller
+    public static Button intakeOn = Button.kA; // second xbox controller -- need to figure out how to map this to a certain xbox controller
+
+    public static Button intakeOff = Button.kX; // second xbox controller
 }

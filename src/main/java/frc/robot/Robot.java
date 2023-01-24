@@ -20,6 +20,8 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -157,7 +159,10 @@ public class Robot extends TimedRobot {
     if(OI.m_controller.getAButton()){
       intakeSubsystem.runMotors();
     }
-    
+    if(OI.m_controller.getXButton()){
+      IntakeSubsystem.intakeMotor.set(ControlMode.PercentOutput, 0.0);
+    }
+
   }
 
   /** This function is called once when the robot is first started up. */
