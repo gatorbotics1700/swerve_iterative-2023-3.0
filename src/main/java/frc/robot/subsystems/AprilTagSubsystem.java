@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
-
 import org.opencv.imgproc.Imgproc;
-
+import java.nio.file.Path;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoSink;
@@ -10,6 +10,10 @@ import edu.wpi.first.apriltag.*;
 import java.util.Arrays;
 import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
+import edu.wpi.first.apriltag.AprilTagFields;
+
+
+//import frc.robot.subsystems.AprilTagFieldEnum;
 
 public class AprilTagSubsystem {
     static{
@@ -20,6 +24,10 @@ public class AprilTagSubsystem {
     //System.setProperty("java.library.path","C:\\Users\\Gatorbotics\\Downloads\\opencv\\build\\java\\x64")
     //System.load("C:\\Users\\Gatorbotics\\Downloads\\opencv\\build\\java\\x64");
     
+    /*public enum AprilTagFields { 
+        k2023ChargedUp("2023-chargedup.json");
+    }*/
+
     public static UsbCamera camera0;
     //public static VideoSink sink;
     private String family = "tag16h5";
@@ -32,10 +40,17 @@ public class AprilTagSubsystem {
     float decisionMargin[];
     double centerX[];
     double centerY[];
+    //Path path = Filesystem.getDefault().getPath("2023-chargedup.json");
+    //public final String m_resourceFile;
+
     //CvSource outputStream;
 
     private static AprilTagDetector aprilTagDetector = new AprilTagDetector();
-    
+    //AprilTagFieldLayout aprilTagFieldLayout = new AprilTagFieldLayout("src/main/deploy/2023-chargedup.json");
+    //AprilTagFieldLayout secondAprilTagFieldLayout = new AprilTagFieldLayout(AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile));
+    AprilTagFieldLayout thirdAprilTagFieldLayout = new AprilTagFieldLayout("/edu/wpi/first/apriltag/2023-chargedup.json");
+    //Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectory);
+
     public void init(){
         System.loadLibrary("opencv_java460");
         //camera0 = new UsbCamera("USB Camera 0", 0);
