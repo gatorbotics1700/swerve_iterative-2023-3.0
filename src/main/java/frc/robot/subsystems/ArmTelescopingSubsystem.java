@@ -12,7 +12,6 @@ public class ArmTelescopingSubsystem {
     double _kP = 1.0;
     double _kI = 0.0;
     double _kD = 0.0;
-    double _kF = 0.0;
     int _kIzone = 0;
     double _kPeakOutput = 0.0;
 
@@ -20,17 +19,9 @@ public class ArmTelescopingSubsystem {
 
     TalonFX telescopingMotor = new TalonFX(Constants.TELESCOPING_MOTOR_ID);//maybe this motor should be renamed to make it more descriptive
 
-    Gains armTelescopingGains = new Gains(_kP, _kI, _kD, _kF, _kIzone, _kPeakOutput);
+    Gains armTelescopingGains = new Gains(_kP, _kI, _kD, _kIzone, _kPeakOutput);
 
     //armMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx, Constants.kTimeoutMs);//determine what these values would be for us
-
-    /*public static enum ArmStates{
-        OFF, //fully retracted
-        FULLY_EXTENDED,
-        LOW_ARM_LENGTH, // arm length when scoring on low node
-        MID_ARM_LENGTH, // also shelf height
-        HIGH_ARM_LENGTH;
-    }*/
 
     double extensionVal = 56.26;//this value should be the full extension length of the arm minus the length of it at zero
 
@@ -54,7 +45,6 @@ public class ArmTelescopingSubsystem {
         //configuring deadband
         telescopingMotor.configAllowableClosedloopError(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
 		/* Config Position Closed Loop gains in slot0, tsypically kF stays zero. */
-		telescopingMotor.config_kF(Constants.kPIDLoopIdx, armTelescopingGains.kF, Constants.kTimeoutMs);
 		telescopingMotor.config_kP(Constants.kPIDLoopIdx, armTelescopingGains.kP, Constants.kTimeoutMs);
 		telescopingMotor.config_kI(Constants.kPIDLoopIdx, armTelescopingGains.kI, Constants.kTimeoutMs);
 		telescopingMotor.config_kD(Constants.kPIDLoopIdx, armTelescopingGains.kD, Constants.kTimeoutMs);

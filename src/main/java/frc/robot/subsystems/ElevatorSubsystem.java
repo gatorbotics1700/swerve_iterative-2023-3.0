@@ -8,23 +8,23 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 public class ElevatorSubsystem {
 
-    public ElevatorSubsystem(){}
-
     //these values are to be determined (untested)
-    double _kP = 1.0;
-    double _kI = 0.0;
-    double _kD = 0.0;
-    double _kF = 0.0;
-    int _kIzone = 0;
-    double _kPeakOutput = 0.0;
+    public double _kP = 1.0;
+    public double _kI = 0.0;
+    public double _kD = 0.0;
+    public int _kIzone = 0;
+    public double _kPeakOutput = 1.0;
+
+
+    public ElevatorSubsystem(){}
 
     public static TalonFX elevatorMotor = new TalonFX(Constants.ELEVATOR_CAN_ID);
     public static ElevatorStates elevatorState = ElevatorStates.MID_ELEVATOR_HEIGHT; //why is this here?
     
-    Gains elevatorGains = new Gains(_kP, _kI, _kD, _kF, _kIzone, _kPeakOutput);
-    
+    public Gains elevatorGains = new Gains(_kP, _kI, _kD, _kIzone, _kPeakOutput);
+
     public static enum ElevatorStates{
-        ZERO, 
+        ZERO,  //janet doesn't know if we need this b/c low elevator height seems like the shortest one we'd need
         LOW_ELEVATOR_HEIGHT,
         MID_ELEVATOR_HEIGHT,
         HIGH_ELEVATOR_HEIGHT;
@@ -37,7 +37,6 @@ public class ElevatorSubsystem {
         //configuring deadband
         elevatorMotor.configAllowableClosedloopError(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
 		/* Config Position Closed Loop gains in slot0, tsypically kF stays zero. */
-		elevatorMotor.config_kF(Constants.kPIDLoopIdx, elevatorGains.kF, Constants.kTimeoutMs);
 		elevatorMotor.config_kP(Constants.kPIDLoopIdx, elevatorGains.kP, Constants.kTimeoutMs);
 		elevatorMotor.config_kI(Constants.kPIDLoopIdx, elevatorGains.kI, Constants.kTimeoutMs);
 		elevatorMotor.config_kD(Constants.kPIDLoopIdx, elevatorGains.kD, Constants.kTimeoutMs);
@@ -46,7 +45,7 @@ public class ElevatorSubsystem {
     public void periodic(){
         if (elevatorState == ElevatorStates.ZERO){
             elevatorMotor.set(ControlMode.Position, 0);
-            elevatorMotor.set(ControlMode.PercentOutput, 0);
+            //elevatorMotor.set(ControlMode.PercentOutput, 0); //pretty sure ControlMode.Position stops motor right when we get to setpoint
         } else if (elevatorState == ElevatorStates.LOW_ELEVATOR_HEIGHT){
             elevatorMotor.set(ControlMode.Position, 100); //change value once we know robot dimensions
         } else if (elevatorState == ElevatorStates.MID_ELEVATOR_HEIGHT){
