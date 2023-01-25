@@ -17,9 +17,13 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTable.*;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -41,6 +45,9 @@ public class Robot extends TimedRobot {
   private final Field2d m_field = new Field2d();
   ChassisSpeeds m_ChassisSpeeds;
 
+  public static GenericEntry kP; 
+  public static GenericEntry kI; 
+  public static GenericEntry kD; 
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -62,6 +69,17 @@ public class Robot extends TimedRobot {
     //m_drivetrainSubsystem.resetOdometry();
     // m_drivetrainSubsystem.zeroGyroscope();
     // m_drivetrainSubsystem.zeroDriveEncoder();
+
+    ShuffleboardTab tab = DrivetrainSubsystem.tab;
+     kP = tab.add("Auto kP", 0.1).getEntry(); 
+     kI = tab.add("Auto kI", 0.0).getEntry();
+     kD = tab.add("Auto kD", 0.0).getEntry();
+
+    
+      //Change 1 to something else, 1 is placeholder
+    //ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
+   
+
   }
 
   /**

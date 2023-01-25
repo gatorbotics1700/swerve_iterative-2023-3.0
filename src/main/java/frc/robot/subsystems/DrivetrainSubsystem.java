@@ -87,12 +87,12 @@ public class DrivetrainSubsystem {
 
   public static SwerveDriveOdometry m_odometry; 
   public static Pose2d m_pose = new Pose2d();
+  public static ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain"); 
 
   //ChassisSpeeds takes in y velocity, x velocity, speed of rotation
   private ChassisSpeeds m_chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
 
   public DrivetrainSubsystem() {
-    ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
 
     // There are 4 methods you can call to create your swerve modules.
     // The method you use depends on what motors you are using.

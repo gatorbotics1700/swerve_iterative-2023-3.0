@@ -15,9 +15,9 @@ public class AutonomousBasePD extends AutonomousBase{
     public static final double turnKP= 0.0002;
     public static final double turnKI= 0.0;
     public static final double turnKD= 0.0;
-    public static final double driveKP= 0.00006;
-    public static final double driveKI= 0.0;
-    public static final double driveKD= 0.0;
+    public static final double driveKP= Robot.kP.getDouble(1.0);//0.00006;
+    public static final double driveKI= Robot.kI.getDouble(0.0);//0.0;
+    public static final double driveKD= Robot.kD.getDouble(2.0);//0.0;
     private final double DRIVE_DEADBAND = 3;
     private final double TURN_DEADBAND = 6;
     private double hypotenuse;
@@ -110,7 +110,7 @@ public class AutonomousBasePD extends AutonomousBase{
                 preTDA(goalCoordinate4, goalCoordinate5);
                 setState(States.STOP); 
             }
-            //one more drive, one more turn needed (final turn should bring you toooo facing wall to deposit!)
+            //one more drive needed (final turn should bring you toooo facing wall to deposit!)
         }else{
             drivetrainSubsystem.stopDrive();
         }

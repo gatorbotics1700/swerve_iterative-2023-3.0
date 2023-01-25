@@ -23,7 +23,7 @@ public class AutonomousBaseMP extends AutonomousBase{
     private Trajectory trajectory2;
     private Trajectory trajectory3;
     private HolonomicDriveController controller = new HolonomicDriveController(
-            new PIDController(1, 0, 0), new PIDController(1, 0, 0),
+            new PIDController(1, 0, 0), new PIDController(1, 0, 0), //TODO: CHANGE KP
             new ProfiledPIDController(1, 0, 0,
                 new TrapezoidProfile.Constraints(6.28, Math.PI)));
         // trapezoid profile takes in max rotation velocity and max rotation acceleration 
@@ -75,7 +75,7 @@ public class AutonomousBaseMP extends AutonomousBase{
     public boolean trajectoryDone(Trajectory trajectory){
         double timeCheck = trajectory.getTotalTimeSeconds();
         Trajectory.State end = trajectory.sample(timeCheck);
-        if(Math.abs(end.poseMeters.getX() - DrivetrainSubsystem.m_pose.getX()) < 2 && 
+        if(Math.abs(end.poseMeters.getX() - DrivetrainSubsystem.m_pose.getX()) < 2 && //TODO: CHANGE DEADBAND
         Math.abs(end.poseMeters.getY() - DrivetrainSubsystem.m_pose.getY()) < 2 &&
         Math.abs(end.poseMeters.getRotation().getDegrees() - DrivetrainSubsystem.m_pose.getRotation().getDegrees()) < 2){
             return true;
@@ -122,7 +122,8 @@ public class AutonomousBaseMP extends AutonomousBase{
 
     public void followTrajectory(Trajectory trajectory){
         Trajectory.State goal = trajectory.sample(timeElapsed);
-
+        //TRY: run at just goal speed to see if pose is wrong 
+        
         ChassisSpeeds adjustedSpeeds = controller.calculate(
             DrivetrainSubsystem.m_pose, goal, Rotation2d.fromDegrees(0));
         
