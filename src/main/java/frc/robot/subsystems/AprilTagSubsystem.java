@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 import org.opencv.imgproc.Imgproc;
+
+import java.io.IOException;
 import java.nio.file.Path;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.cameraserver.CameraServer;
@@ -60,10 +62,16 @@ public class AprilTagSubsystem {
     private static AprilTagDetector aprilTagDetector = new AprilTagDetector();
     //AprilTagFieldLayout aprilTagFieldLayout = new AprilTagFieldLayout("src/main/deploy/2023-chargedup.json");
     //AprilTagFieldLayout secondAprilTagFieldLayout = new AprilTagFieldLayout(AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile));
-    AprilTagFieldLayout thirdAprilTagFieldLayout = new AprilTagFieldLayout("/edu/wpi/first/apriltag/2023-chargedup.json");
-    //Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectory);
+    
 
     public void init(){
+        Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve("2023-chargedup.json");
+        AprilTagFieldLayout thirdAprilTagFieldLayout;
+        try{
+            thirdAprilTagFieldLayout = new AprilTagFieldLayout(trajectoryPath);
+        } catch(IOException e){
+            System.out.println("Couldn't fine file");
+        }
         System.loadLibrary("opencv_java460");
         //camera0 = new UsbCamera("USB Camera 0", 0);
         aprilTagDetector.addFamily(family, 0); //added 0
@@ -109,38 +117,38 @@ public class AprilTagSubsystem {
 
         System.out.println("Detected Apriltags: " + detectedAprilTags);
 
-    }
 
-    if(iD == IDS.IDONE){
+        if(iD == IDS.IDONE){
 
-    }
+        }
 
-    if(iD == IDS.IDTWO){
+        if(iD == IDS.IDTWO){
 
-    }
+        }
 
-    if(iD == IDS.IDTHREE){
+        if(iD == IDS.IDTHREE){
 
-    }
+        }
 
-    if(iD == IDS.IDFOUR){
+        if(iD == IDS.IDFOUR){
 
-    }
+        }
 
-    if(iD == IDS.IDFIVE){
+        if(iD == IDS.IDFIVE){
 
-    }
+        }
 
-    if(iD == IDS.IDSIX){
+        if(iD == IDS.IDSIX){
 
-    }
+        }
 
-    if(iD ==IDS.IDSEVEN){
+        if(iD ==IDS.IDSEVEN){
 
-    }
+        }
 
-    if(iD == IDS.IDEIGHT){
+        if(iD == IDS.IDEIGHT){
 
+        }
     }
 
 }
