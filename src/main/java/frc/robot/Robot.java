@@ -157,6 +157,7 @@ public class Robot extends TimedRobot {
 
     // System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
     if(OI.m_controller.getAButton()){
+      System.out.println("we are running away");
       intakeSubsystem.runMotorsForward();
       //intakeSubsystem.runMotorsBackward(); // sara you can choose which one depending on if the motors are inverted correctly in init() - janet :)
     }
