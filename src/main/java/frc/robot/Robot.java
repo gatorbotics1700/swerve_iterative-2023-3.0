@@ -51,8 +51,8 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
     m_drivetrainSubsystem.resetOdometry();
-    universalPitch = m_drivetrainSubsystem.m_pigeon.getPitch();
-    System.out.println("universal pitch from robot init: " + universalPitch);
+    // universalPitch = m_drivetrainSubsystem.m_pigeon.getPitch();
+    // System.out.println("universal pitch from robot init: " + universalPitch);
     // m_drivetrainSubsystem.zeroGyroscope();
     // m_drivetrainSubsystem.zeroDriveEncoder();
   }
@@ -107,7 +107,9 @@ public class Robot extends TimedRobot {
     autonomousBasePD.periodic();
     //m_drivetrainSubsystem.drive();
 */
-    m_drivetrainSubsystem.pitchBalance(0.0);
+//m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0, 0, m_drivetrainSubsystem.getGyroscopeRotation()));
+//m_drivetrainSubsystem.drive();
+m_drivetrainSubsystem.pitchBalance(0.0);
 
   }
 
