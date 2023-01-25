@@ -45,6 +45,18 @@ public class AprilTagSubsystem {
 
     //CvSource outputStream;
 
+    public static enum IDS{
+        IDONE,
+        IDTWO,
+        IDTHREE,
+        IDFOUR,
+        IDFIVE,
+        IDSIX,
+        IDSEVEN,
+        IDEIGHT
+    }
+
+    private static IDS iD;
     private static AprilTagDetector aprilTagDetector = new AprilTagDetector();
     //AprilTagFieldLayout aprilTagFieldLayout = new AprilTagFieldLayout("src/main/deploy/2023-chargedup.json");
     //AprilTagFieldLayout secondAprilTagFieldLayout = new AprilTagFieldLayout(AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile));
@@ -93,9 +105,41 @@ public class AprilTagSubsystem {
             centerY[i] = detectedAprilTags[i].getCenterY();
         }
 
-        
+    
 
         System.out.println("Detected Apriltags: " + detectedAprilTags);
+
+    }
+
+    if(iD == IDS.IDONE){
+
+    }
+
+    if(iD == IDS.IDTWO){
+
+    }
+
+    if(iD == IDS.IDTHREE){
+
+    }
+
+    if(iD == IDS.IDFOUR){
+
+    }
+
+    if(iD == IDS.IDFIVE){
+
+    }
+
+    if(iD == IDS.IDSIX){
+
+    }
+
+    if(iD ==IDS.IDSEVEN){
+
+    }
+
+    if(iD == IDS.IDEIGHT){
 
     }
 
