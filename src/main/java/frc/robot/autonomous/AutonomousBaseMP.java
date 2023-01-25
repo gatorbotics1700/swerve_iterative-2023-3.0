@@ -22,6 +22,7 @@ public class AutonomousBaseMP extends AutonomousBase{
     private Trajectory trajectory1;
     private Trajectory trajectory2;
     private Trajectory trajectory3;
+    private Trajectory.State end;
     private HolonomicDriveController controller = new HolonomicDriveController(
             new PIDController(1, 0, 0), new PIDController(1, 0, 0),
             new ProfiledPIDController(1, 0, 0,
@@ -41,15 +42,23 @@ public class AutonomousBaseMP extends AutonomousBase{
     @Override
     public void init(){
         timeStart = System.currentTimeMillis();
+        timeElapsed = 0;
+
+        double timeCheck = trajectory1.getTotalTimeSeconds();
+        end = trajectory1.sample(timeCheck);
+        System.out.println("total time: " + timeCheck);
     }
     
     @Override
     public void periodic(){
-        timeElapsed = System.currentTimeMillis() - timeStart;
-        if (doing == Doing.TRAJECTORY1){
+        if (doing == Doing.FIRST){
+            timeStart = System.currentTimeMillis();
+            setDoing(Doing.TRAJECTORY1);
+        } else if (doing == Doing.TRAJECTORY1){
             followTrajectory(trajectory1);
             if (trajectoryDone(trajectory1)){
-                setDoing(Doing.TRAJECTORY2);
+                System.out.println("STOP");
+                setDoing(Doing.STOP);
             }
         } else if (doing == Doing.TRAJECTORY2){
             followTrajectory(trajectory2);
@@ -70,14 +79,20 @@ public class AutonomousBaseMP extends AutonomousBase{
         } else {
             drivetrainSubsystem.stopDrive();
         }
+
+        timeElapsed = System.currentTimeMillis() - timeStart;
     }
 
     public boolean trajectoryDone(Trajectory trajectory){
-        double timeCheck = trajectory.getTotalTimeSeconds();
-        Trajectory.State end = trajectory.sample(timeCheck);
-        if(Math.abs(end.poseMeters.getX() - DrivetrainSubsystem.m_pose.getX()) < 2 && 
+         /*
+        double timeCheck = trajectory1.getTotalTimeSeconds();
+        end = trajectory1.sample(timeCheck);
+        System.out.println(timeCheck);
+         */
+
+        if(Math.abs(end.poseMeters.getX() - DrivetrainSubsystem.m_pose.getX()) < 0.5 /*/&& 
         Math.abs(end.poseMeters.getY() - DrivetrainSubsystem.m_pose.getY()) < 2 &&
-        Math.abs(end.poseMeters.getRotation().getDegrees() - DrivetrainSubsystem.m_pose.getRotation().getDegrees()) < 2){
+        Math.abs(end.poseMeters.getRotation().getDegrees() - DrivetrainSubsystem.m_pose.getRotation().getDegrees()) < 2 */){
             return true;
         }
         return false;
@@ -90,9 +105,10 @@ public class AutonomousBaseMP extends AutonomousBase{
         PLACEHIGH, 
         PICKUP, 
         BALANCE,
-        STOP;  
+        STOP,
+        FIRST; 
     }
-    public Doing doing = Doing.TRAJECTORY1; 
+    public Doing doing = Doing.FIRST; 
 
     public void setDoing(Doing newDoing){
         doing = newDoing;
@@ -104,10 +120,10 @@ public class AutonomousBaseMP extends AutonomousBase{
         interiorWaypoints.add(interior2);
         interiorWaypoints.add(interior3);
 
-        SwerveDriveKinematicsConstraint swerveDriveKinematicsConstraint = new SwerveDriveKinematicsConstraint(drivetrainSubsystem.m_kinematics, DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND);
-        MaxVelocityConstraint maxVelocityConstraint = new MaxVelocityConstraint(DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND);
+        SwerveDriveKinematicsConstraint swerveDriveKinematicsConstraint = new SwerveDriveKinematicsConstraint(drivetrainSubsystem.m_kinematics, DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND*.75);
+        MaxVelocityConstraint maxVelocityConstraint = new MaxVelocityConstraint(DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND*.75);
 
-        TrajectoryConfig config = new TrajectoryConfig(4.96, 2.8); //we should maybe look into this further
+        TrajectoryConfig config = new TrajectoryConfig(DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND*0.75, 1); //4.96, 2.8 //we should maybe look into this further
         config.addConstraint(swerveDriveKinematicsConstraint);
         config.addConstraint(maxVelocityConstraint);
 
@@ -121,12 +137,14 @@ public class AutonomousBaseMP extends AutonomousBase{
     }
 
     public void followTrajectory(Trajectory trajectory){
-        Trajectory.State goal = trajectory.sample(timeElapsed);
-
+        //timeElapsed = System.currentTimeMillis() - timeStart; //TAKE OUT LATER
+        Trajectory.State goal = trajectory.sample(timeElapsed/1000);
+        
         ChassisSpeeds adjustedSpeeds = controller.calculate(
             DrivetrainSubsystem.m_pose, goal, Rotation2d.fromDegrees(0));
         
         drivetrainSubsystem.setSpeed(adjustedSpeeds);
+        System.out.println("Actual time elapsed: " + timeElapsed/1000 + "\n" + "Speed: " + adjustedSpeeds.vxMetersPerSecond + ", " + adjustedSpeeds.vyMetersPerSecond + ", " + adjustedSpeeds.omegaRadiansPerSecond + " Goal endpoint: " + goal);
     }
 
     

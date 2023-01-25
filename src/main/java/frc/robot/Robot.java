@@ -137,24 +137,15 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-    m_autoSelected.init();
+    System.out.println("Trajectory: " + Trajectories.uno);
+    motionProfiling.init();
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-    m_drivetrainSubsystem.setSpeed(
-            ChassisSpeeds.fromFieldRelativeSpeeds(1, 0, 
-            0, 
-            m_drivetrainSubsystem.getGyroscopeRotation())
-        ); 
-        m_drivetrainSubsystem.drive();
-
-    if(OI.m_controller.getAButton()){
-      m_drivetrainSubsystem.resetOdometry();
-    }
-
-    System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
+    motionProfiling.periodic();
+    m_drivetrainSubsystem.drive();
   }
 
   /** This function is called once when the robot is first started up. */
