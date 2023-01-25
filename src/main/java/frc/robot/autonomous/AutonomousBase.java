@@ -18,13 +18,4 @@ public class AutonomousBase{
 
     }
 
-    public static enum Paths{ //rename paths later
-        TEST,
-        BLUE_CHARGE,
-        RED_CHARGE,
-        ANTICHARGE,
-        M_SCORE,
-        TIMEDPATH;
-    }
-
 }

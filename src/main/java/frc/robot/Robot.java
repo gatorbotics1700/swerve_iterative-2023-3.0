@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
-import frc.robot.autonomous.AutonomousBase.Paths;
 import frc.robot.Constants;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -156,13 +155,18 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     System.out.println("Trajectory: " + Trajectories.uno);
-    motionProfiling.init();
+    //motionProfiling.init();
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-    motionProfiling.periodic();
+    /*motion profiling*/
+    //motionProfiling.periodic();
+
+    /*intial test!*/
+    m_drivetrainSubsystem.setSpeed(new ChassisSpeeds(0.2, 0, 0));
+    
     m_drivetrainSubsystem.drive();
   }
 
