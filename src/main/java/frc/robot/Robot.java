@@ -21,6 +21,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTable.*;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 /**
@@ -43,7 +44,7 @@ public class Robot extends TimedRobot {
   private AutonomousBasePD engageCharge = new AutonomousBasePD(new Translation2d(97.759, 0), new Translation2d(97.759, 0), new Translation2d(97.759, 0), new Translation2d(97.759, 0), new Translation2d(97.759, 0), new Translation2d(97.759, 0));
   private AutonomousBasePD placeTwoEngage = new AutonomousBasePD(new Translation2d(223.014, 16.468), new Translation2d(0, 22.683), new Translation2d(135.615, 25.539), new Translation2d(222.191, 64.230), new Translation2d(97.711, 64.230), new Translation2d(97.711, 64.230));
   private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
-  private AutonomousBasePD testPath = new AutonomousBasePD(new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20));
+  private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)));
   private AutonomousBaseMP motionProfiling = new AutonomousBaseMP(Trajectories.uno, Trajectories.dos, Trajectories.tres);
 
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
