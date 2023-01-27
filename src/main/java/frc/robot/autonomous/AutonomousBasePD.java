@@ -65,6 +65,7 @@ public class AutonomousBasePD extends AutonomousBase{
         DRIVE2,
         DRIVE3,
         DRIVE4,
+        DRIVE5,
         STOP;
     
     }
@@ -89,28 +90,32 @@ public class AutonomousBasePD extends AutonomousBase{
             driveDesiredDistance(desiredTranslation);
             System.out.println("inside drive state! pose: " + drivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + " " + drivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
             if (distanceController.atSetpoint()){
-                preTDA(goalCoordinate1, goalCoordinate2);
+                desiredTranslation = preDDD(goalCoordinate1, goalCoordinate2);
                 setState(States.DRIVE2);
             }
         } else if(states == States.DRIVE2){
             driveDesiredDistance(desiredTranslation);
             if(distanceController.atSetpoint()){
-                preTDA(goalCoordinate2, goalCoordinate3); 
+                desiredTranslation = preDDD(goalCoordinate2, goalCoordinate3); 
                 setState(States.DRIVE3);  
             }
         } else if(states == States.DRIVE3){
             driveDesiredDistance(desiredTranslation);
             if(distanceController.atSetpoint()){
-                preTDA(goalCoordinate3, goalCoordinate4); 
+                desiredTranslation = preDDD(goalCoordinate3, goalCoordinate4); 
                 setState(States.DRIVE4); 
             }
         } else if(states == States.DRIVE4){
             driveDesiredDistance(desiredTranslation);
             if(distanceController.atSetpoint()){
-                preTDA(goalCoordinate4, goalCoordinate5);
-                setState(States.STOP); 
+                desiredTranslation = preDDD(goalCoordinate4, goalCoordinate5);
+                setState(States.DRIVE5); 
             }
-            //one more drive, one more turn needed (final turn should bring you toooo facing wall to deposit!)
+        } else if(states==States.DRIVE5){
+            driveDesiredDistance(desiredTranslation);
+            if(distanceController.atSetpoint()){
+                setState(States.STOP);
+            }
         }else{
             drivetrainSubsystem.stopDrive();
         }
