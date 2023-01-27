@@ -116,10 +116,6 @@ public class AutonomousBasePD extends AutonomousBase{
             if(distanceController.atSetpoint()){
                 setState(States.STOP);
             }
-<<<<<<< HEAD
-=======
-            //one more drive needed (final turn should bring you toooo facing wall to deposit!)
->>>>>>> c68ce9e9b7ea421521cb9d79b4f6120763fe2723
         }else{
             drivetrainSubsystem.stopDrive();
         }
