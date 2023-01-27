@@ -29,13 +29,19 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
+
+
+//private AutonomousBasePD mScore = new AutonomousBasePD(new Translation2d(222.037, 0), new Translation2d(135.091, -41.307), new Translation2d(0, -44.163), new Translation2d(222.894, -50.377), new Translation2d(0, -65.388), new Translation2d(0, -65.388));
+
 public class Robot extends TimedRobot {
   private AutonomousBase m_autoSelected;
   private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<AutonomousBase>();
-  private AutonomousBasePD blueCharge = new AutonomousBasePD(new Translation2d(221.353, 23.720), new Translation2d(0, 21.574), new Translation2d(96.902, 21.574), new Translation2d(96.902, 21.574), new Translation2d(96.902, 21.574), new Translation2d(96.902, 21.574));
-  private AutonomousBasePD redCharge = new AutonomousBasePD(new Translation2d(222.624, 15.665), new Translation2d(0, 21.886), new Translation2d(221.671, 67.260), new Translation2d(97.188, 67.260), new Translation2d(97.188, 67.260), new Translation2d(97.188, 67.260));
+  private AutonomousBasePD noGo = new AutonomousBasePD(new Translation2d(0, 0), new Translation2d(0, 0), new Translation2d(0, 0), new Translation2d(0,0), new Translation2d(0, 0), new Translation2d(0,0));
+  private AutonomousBasePD placeNLeave = new AutonomousBasePD(new Translation2d(0, 0), new Translation2d(160.0, 0), new Translation2d(160.0, 0), new Translation2d(160.0, 0), new Translation2d(160.0, 0), new Translation2d(160.0, 0));
   private AutonomousBasePD antiCharge = new AutonomousBasePD(new Translation2d(86.840, -45.282), new Translation2d(221.978, 19.463), new Translation2d(135.091, -19.421), new Translation2d(0, -22.277), new Translation2d(222.491, -28.492), new Translation2d(0, -43.502));
-  private AutonomousBasePD mScore = new AutonomousBasePD(new Translation2d(222.037, 0), new Translation2d(135.091, -41.307), new Translation2d(0, -44.163), new Translation2d(222.894, -50.377), new Translation2d(0, -65.388), new Translation2d(0, -65.388));
+  private AutonomousBasePD antiChargeOpposite = new AutonomousBasePD(new Translation2d(86.840, 45.282), new Translation2d(221.978, -19.463), new Translation2d(135.091, 19.421), new Translation2d(0, 22.277), new Translation2d(222.491, 28.492), new Translation2d(0, 43.502));
+  private AutonomousBasePD engageCharge = new AutonomousBasePD(new Translation2d(97.759, 0), new Translation2d(97.759, 0), new Translation2d(97.759, 0), new Translation2d(97.759, 0), new Translation2d(97.759, 0), new Translation2d(97.759, 0));
+  private AutonomousBasePD placeTwoEngage = new AutonomousBasePD(new Translation2d(223.014, 16.468), new Translation2d(0, 22.683), new Translation2d(135.615, 25.539), new Translation2d(222.191, 64.230), new Translation2d(97.711, 64.230), new Translation2d(97.711, 64.230));
   private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
   private AutonomousBasePD testPath = new AutonomousBasePD(new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20));
   private AutonomousBaseMP motionProfiling = new AutonomousBaseMP(Trajectories.uno, Trajectories.dos, Trajectories.tres);
@@ -57,11 +63,13 @@ public class Robot extends TimedRobot {
  
     System.out.println("#I'm Awake");
     m_chooser.setDefaultOption("Default Auto", testPath);
-    m_chooser.addOption("My Auto 1", blueCharge);
-    m_chooser.addOption("My Auto 2", redCharge);
+    m_chooser.addOption("My Auto 1", noGo);
+    m_chooser.addOption("My Auto 2",placeNLeave);
     m_chooser.addOption("My Auto 3", antiCharge);
-    m_chooser.addOption("My Auto 4", mScore);
-    m_chooser.addOption("My Auto timed", timedPath);
+    m_chooser.addOption("My Auto 4", antiChargeOpposite);
+    //m_chooser.addOption(name: "My Auto 5", engageCharge);
+   // m_chooser.addOption(name: "My Auto 6",placeTwoEngage);
+    m_chooser.addOption(name: "My Auto timed", timedPath)
     m_chooser.addOption("Motion profiling path", motionProfiling);
 
     SmartDashboard.putData("Auto choices", m_chooser);
