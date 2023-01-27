@@ -28,6 +28,7 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   private final AutonomousBase autonomousBasePD = new AutonomousBasePD(new Pose2d(0*Constants.TICKS_PER_INCH, -20*Constants.TICKS_PER_INCH, new Rotation2d(0)), 0.0, new Pose2d(), 0.0);
   private static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
+  private static ArmTelescopingSubsystem armTelescopingSubsystem = new ArmTelescopingSubsystem();
 
   public static DrivetrainSubsystem getDrivetrainSubsystem(){
     return m_drivetrainSubsystem;
@@ -121,14 +122,16 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-    m_drivetrainSubsystem.m_pose = new Pose2d(20, 30, new Rotation2d(Math.PI/4));
-    System.out.println("m_pose: " + m_drivetrainSubsystem.m_pose);
-    autonomousBasePD.init();
+    // m_drivetrainSubsystem.m_pose = new Pose2d(20, 30, new Rotation2d(Math.PI/4));
+    // System.out.println("m_pose: " + m_drivetrainSubsystem.m_pose);
+    // autonomousBasePD.init();
+    armTelescopingSubsystem.init();
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
+    armTelescopingSubsystem.timedMoveArm(5, true); //you can change forwards to be false to go backwards; time is in seconds
   }
 
   /** This function is called once when the robot is first started up. */
