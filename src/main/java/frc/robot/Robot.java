@@ -177,7 +177,7 @@ public class Robot extends TimedRobot {
     //motionProfiling.periodic();
 
     /*intial test!*/
-    m_drivetrainSubsystem.setSpeed(new ChassisSpeeds(0.2, 0, 0));
+    m_drivetrainSubsystem.setSpeed(new ChassisSpeeds(-0.2, -0.2, 0));
     
     m_drivetrainSubsystem.drive();
   }
