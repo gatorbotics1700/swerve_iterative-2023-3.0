@@ -16,4 +16,6 @@ public class OI {
     public static Button intakeOn = Button.kA; // second xbox controller -- need to figure out how to map this to a certain xbox controller
 
     public static Button intakeOff = Button.kX; // second xbox controller
+
+    /*two total xbox controllers, one for driver, one for co-driver. 4 buttons on each, 2 joysticks, 2 triggers, 2 bumbers, 2 buttons at the back of the contoller, and possibly 4 directional arrow keys. All can be programmed for different settings as desired. */
 }
