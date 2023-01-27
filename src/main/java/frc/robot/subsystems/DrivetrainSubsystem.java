@@ -89,7 +89,7 @@ public class DrivetrainSubsystem {
   private double tareRBEncoder = 0.0;
   public double error1;
 
-  public static double pitchKP= 0.07; //arbitrary placeholder #
+  public static double pitchKP= 0.041; //arbitrary placeholder #
     public static double pitchKI= 0.0;
     public static double pitchKD= 0.01; //^
     public static double veloKP = 0.25;
@@ -335,10 +335,10 @@ public class DrivetrainSubsystem {
         pitchController.setSetpoint(pitchSetpoint); 
         double error = pitchController.calculate(pitchAfterCorrection, pitchSetpoint);
         System.out.println("error: " + error); 
-        setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(error, 0, 0, getGyroscopeRotation()));
+        setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, error, 0, getGyroscopeRotation()));
         drive();
         
-        if (Math.abs(pitchAfterCorrection - pitchSetpoint) < 1.5){
+        if (Math.abs(pitchAfterCorrection - pitchSetpoint) < 1.0){
             setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0,getGyroscopeRotation()));
             //velocityPD(0);
         }
