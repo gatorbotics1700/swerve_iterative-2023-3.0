@@ -42,10 +42,11 @@ public class ArmTelescopingSubsystem {
     public ArmTelescopingSubsystem(){}
 
     public void init(){
-        telescopingMotor.setInverted(false);
+        telescopingMotor.setInverted(false); //sets the forward direction of the motor to counter clockwise
     }
 
     public void periodic(){//sam requests that we can operate arm length by stick on xbox
+        //all of the motor values need to be changed to ticks
         if (tState == TelescopingStates.RETRACTED){
             telescopingMotor.set(ControlMode.Position, 0);
             telescopingMotor.set(ControlMode.PercentOutput, 0);
