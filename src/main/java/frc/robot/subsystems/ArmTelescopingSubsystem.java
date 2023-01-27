@@ -69,7 +69,24 @@ public class ArmTelescopingSubsystem {
 
     public double getArmPosition(){
         return telescopingMotor.getSelectedSensorPosition();
-    }    
+    }
+    
+    public void timedMoveArm(double time, boolean forwards){ //time in seconds
+        double startTime = System.currentTimeMillis();
+        int milliTime = (int) time * 1000;
+        if(forwards == true){
+            while(System.currentTimeMillis() - startTime <= milliTime){
+                telescopingMotor.set(ControlMode.PercentOutput,0.2);
+            }
+            telescopingMotor.set(ControlMode.PercentOutput,0);
+        }else{
+            while(System.currentTimeMillis() - startTime <= milliTime){
+                telescopingMotor.set(ControlMode.PercentOutput,-0.2);
+            }
+            telescopingMotor.set(ControlMode.PercentOutput,0);
+        }
+        
+    }
 
     //public void armPID(double armLengthSetpoint){
        // armLengthController.setSetpoint(armLengthSetpoint);
