@@ -24,7 +24,7 @@ public class AutonomousBaseMP extends AutonomousBase{
     private Trajectory trajectory3;
     private Trajectory.State end;
     private HolonomicDriveController controller = new HolonomicDriveController(
-            new PIDController(1, 0, 0), new PIDController(1, 0, 0),
+            new PIDController(1, 0, 0), new PIDController(1, 0, 0), //TODO: CHANGE KP
             new ProfiledPIDController(1, 0, 0,
                 new TrapezoidProfile.Constraints(6.28, Math.PI)));
         // trapezoid profile takes in max rotation velocity and max rotation acceleration 

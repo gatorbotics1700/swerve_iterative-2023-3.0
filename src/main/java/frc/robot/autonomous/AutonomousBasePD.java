@@ -6,31 +6,31 @@ import frc.robot.Robot;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.Constants;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
-import frc.com.swervedrivespecialties.swervelib.*;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
+// import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+// import frc.com.swervedrivespecialties.swervelib.*;
+// import edu.wpi.first.math.kinematics.SwerveModuleState;
+// import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 public class AutonomousBasePD extends AutonomousBase{
     public static final double turnKP= 0.0002;
     public static final double turnKI= 0.0;
     public static final double turnKD= 0.0;
-    public static final double driveKP= 0.00006;
-    public static final double driveKI= 0.0;
-    public static final double driveKD= 0.0;
+    public static final double driveKP= Robot.kP.getDouble(1.0);//0.00006;
+    public static final double driveKI= Robot.kI.getDouble(0.0);//0.0;
+    public static final double driveKD= Robot.kD.getDouble(2.0);//0.0;
     private final double DRIVE_DEADBAND = 3;
     private final double TURN_DEADBAND = 6;
     private double hypotenuse;
 
-    private Translation2d goalCoordinate1;
-    private Translation2d goalCoordinate2; 
-    private Translation2d goalCoordinate3; 
-    private Translation2d goalCoordinate4; 
-    private Translation2d goalCoordinate5;
-    private Translation2d goalCoordinate6;
+    private Pose2d goalCoordinate1;
+    private Pose2d goalCoordinate2; 
+    private Pose2d goalCoordinate3; 
+    private Pose2d goalCoordinate4; 
+    private Pose2d goalCoordinate5;
+    private Pose2d goalCoordinate6;
 
     public double desiredTurn;
-    private Translation2d desiredTranslation;
+    private Pose2d desiredTranslation;
 
     DrivetrainSubsystem drivetrainSubsystem = Robot.m_drivetrainSubsystem;
 
@@ -38,7 +38,7 @@ public class AutonomousBasePD extends AutonomousBase{
     private PIDController directionController = new PIDController(turnKP, turnKI, turnKD);
     private PIDController distanceController = new PIDController(driveKP, driveKI, driveKD);
     
-    public AutonomousBasePD(Translation2d goalCoordinate1, Translation2d goalCoordinate2, Translation2d goalCoordinate3, Translation2d goalCoordinate4, Translation2d goalCoordinate5, Translation2d goalCoordinate6){
+    public AutonomousBasePD(Pose2d goalCoordinate1, Pose2d goalCoordinate2, Pose2d goalCoordinate3, Pose2d goalCoordinate4, Pose2d goalCoordinate5, Pose2d goalCoordinate6){
         this.goalCoordinate1 = goalCoordinate1;
         this.goalCoordinate2 = goalCoordinate2;
         this.goalCoordinate3 = goalCoordinate3;
@@ -82,13 +82,13 @@ public class AutonomousBasePD extends AutonomousBase{
         
         //System.out.println("state: "+states);
         if (states == States.FIRST){
-            desiredTranslation = preDDD(new Translation2d(), goalCoordinate1); 
+            desiredTranslation = preDDD(new Pose2d(), goalCoordinate1); 
             System.out.println("we've reset to this pose: " + DrivetrainSubsystem.m_pose);
             setState(States.DRIVE);
         }
         if (states == States.DRIVE){
             driveDesiredDistance(desiredTranslation);
-            System.out.println("inside drive state! pose: " + drivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + " " + drivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
+            System.out.println("inside drive state! pose: " + DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
             if (distanceController.atSetpoint()){
                 desiredTranslation = preDDD(goalCoordinate1, goalCoordinate2);
                 setState(States.DRIVE2);
@@ -116,30 +116,35 @@ public class AutonomousBasePD extends AutonomousBase{
             if(distanceController.atSetpoint()){
                 setState(States.STOP);
             }
+<<<<<<< HEAD
+=======
+            //one more drive needed (final turn should bring you toooo facing wall to deposit!)
+>>>>>>> c68ce9e9b7ea421521cb9d79b4f6120763fe2723
         }else{
             drivetrainSubsystem.stopDrive();
         }
     }
 
     //predrivedesiredistance
-    public Translation2d preDDD(Translation2d cCoordinate, Translation2d dCoordinate){
+    public Pose2d preDDD(Pose2d cCoordinate, Pose2d dCoordinate){
         double xDDistance = Constants.TICKS_PER_INCH*(dCoordinate.getX() - cCoordinate.getX());
         double yDDistance = Constants.TICKS_PER_INCH*(dCoordinate.getY() - cCoordinate.getY());
+        Rotation2d zDDistance = new Rotation2d(Constants.TICKS_PER_INCH*(dCoordinate.getRotation().getDegrees() - cCoordinate.getRotation().getDegrees()));
         hypotenuse = Math.hypot(xDDistance, yDDistance);
         distanceController.setSetpoint(hypotenuse); 
         System.out.println("preDDDing: " + xDDistance + ", " + yDDistance);    
-        return new Translation2d (xDDistance, yDDistance);
+        return new Pose2d (xDDistance, yDDistance, zDDistance);
     }
 
     /** 
     @param dTranslation is desired 
     */
     @Override
-    public void driveDesiredDistance(Translation2d dTranslation){      
-        System.out.println("where we are rn: " + drivetrainSubsystem.m_pose.getX() + " and " + drivetrainSubsystem.m_pose.getY());
-        double speed = distanceController.calculate(Math.hypot(drivetrainSubsystem.m_pose.getX(), drivetrainSubsystem.m_pose.getY()), hypotenuse);
-        double directionX = dTranslation.getX() / Math.sqrt(Math.pow(dTranslation.getX(),2) + Math.pow(dTranslation.getY(),2));
-        double directionY = dTranslation.getY() / Math.sqrt(Math.pow(dTranslation.getX(),2) + Math.pow(dTranslation.getY(),2));
+    public void driveDesiredDistance(Pose2d dPose){      
+        System.out.println("where we are rn: " + DrivetrainSubsystem.m_pose.getX() + " and " + DrivetrainSubsystem.m_pose.getY());
+        double speed = distanceController.calculate(Math.hypot(DrivetrainSubsystem.m_pose.getX(), DrivetrainSubsystem.m_pose.getY()), hypotenuse);
+        double directionX = dPose.getX() / Math.sqrt(Math.pow(dPose.getX(),2) + Math.pow(dPose.getY(),2));
+        double directionY = dPose.getY() / Math.sqrt(Math.pow(dPose.getX(),2) + Math.pow(dPose.getY(),2));
         System.out.println("DDDing");    
         drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speed * directionX, speed * directionY, 0, drivetrainSubsystem.getGyroscopeRotation()));  
 
@@ -151,7 +156,7 @@ public class AutonomousBasePD extends AutonomousBase{
     @param uno is current coordinate
     @param dos is past coordinate 
     */
-    public void preTDA(Translation2d uno, Translation2d dos){
+    public void preTDA(Pose2d uno, Pose2d dos){
         //directionController.reset();
         System.out.println("Preturning");
         desiredTurn = autoCalculateAngle(uno, dos); 
@@ -171,7 +176,7 @@ public class AutonomousBasePD extends AutonomousBase{
         System.out.println("error: " + directionController.getPositionError());
     }
 
-      public double autoCalculateAngle(Translation2d initPose, Translation2d targetPose){ 
+      public double autoCalculateAngle(Pose2d initPose, Pose2d targetPose){ 
         double xleg = Math.abs(targetPose.getX() - initPose.getX());
         double hypo = Math.hypot(targetPose.getX() - initPose.getX(), targetPose.getY() - initPose.getY());
         double theta = Math.toDegrees(Math.acos(xleg/hypo));

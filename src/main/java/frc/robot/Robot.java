@@ -11,15 +11,19 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
-import frc.robot.autonomous.AutonomousBase.Paths;
 import frc.robot.Constants;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTable.*;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -29,18 +33,21 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 public class Robot extends TimedRobot {
   private AutonomousBase m_autoSelected;
   private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<AutonomousBase>();
-  private AutonomousBasePD blueCharge = new AutonomousBasePD(new Translation2d(221.353, 23.720), new Translation2d(0, 21.574), new Translation2d(96.902, 21.574), new Translation2d(96.902, 21.574), new Translation2d(96.902, 21.574), new Translation2d(96.902, 21.574));
-  private AutonomousBasePD redCharge = new AutonomousBasePD(new Translation2d(222.624, 15.665), new Translation2d(0, 21.886), new Translation2d(221.671, 67.260), new Translation2d(97.188, 67.260), new Translation2d(97.188, 67.260), new Translation2d(97.188, 67.260));
-  private AutonomousBasePD antiCharge = new AutonomousBasePD(new Translation2d(86.840, -45.282), new Translation2d(221.978, 19.463), new Translation2d(135.091, -19.421), new Translation2d(0, -22.277), new Translation2d(222.491, -28.492), new Translation2d(0, -43.502));
-  private AutonomousBasePD mScore = new AutonomousBasePD(new Translation2d(222.037, 0), new Translation2d(135.091, -41.307), new Translation2d(0, -44.163), new Translation2d(222.894, -50.377), new Translation2d(0, -65.388), new Translation2d(0, -65.388));
+  private AutonomousBasePD blueCharge = new AutonomousBasePD(new Pose2d(221.353, 23.720, new Rotation2d(0)), new Pose2d(0, 21.574, new Rotation2d(0)), new Pose2d(96.902, 21.574, new Rotation2d(0)), new Pose2d(96.902, 21.574, new Rotation2d(0)), new Pose2d(96.902, 21.574, new Rotation2d(0)), new Pose2d(96.902, 21.574, new Rotation2d(0)));
+  private AutonomousBasePD redCharge = new AutonomousBasePD(new Pose2d(222.624, 15.665, new Rotation2d(0)), new Pose2d(0, 21.886, new Rotation2d(0)), new Pose2d(221.671, 67.260, new Rotation2d(0)), new Pose2d(97.188, 67.260, new Rotation2d(0)), new Pose2d(97.188, 67.260, new Rotation2d(0)), new Pose2d(97.188, 67.260, new Rotation2d(0)));
+  private AutonomousBasePD antiCharge = new AutonomousBasePD(new Pose2d(86.840, -45.282, new Rotation2d(0)), new Pose2d(221.978, 19.463, new Rotation2d(0)), new Pose2d(135.091, -19.421, new Rotation2d(0)), new Pose2d(0, -22.277, new Rotation2d(0)), new Pose2d(222.491, -28.492, new Rotation2d(0)), new Pose2d(0, -43.502, new Rotation2d(0)));
+  private AutonomousBasePD mScore = new AutonomousBasePD(new Pose2d(222.037, 0, new Rotation2d(0)), new Pose2d(135.091, -41.307, new Rotation2d(0)), new Pose2d(0, -44.163, new Rotation2d(0)), new Pose2d(222.894, -50.377, new Rotation2d(0)), new Pose2d(0, -65.388, new Rotation2d(0)), new Pose2d(0, -65.388, new Rotation2d(0)));
   private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
-  private AutonomousBasePD testPath = new AutonomousBasePD(new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20));
+  private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)));
   private AutonomousBaseMP motionProfiling = new AutonomousBaseMP(Trajectories.uno, Trajectories.dos, Trajectories.tres);
 
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   private final Field2d m_field = new Field2d();
   ChassisSpeeds m_ChassisSpeeds;
 
+  public static GenericEntry kP; 
+  public static GenericEntry kI; 
+  public static GenericEntry kD; 
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -62,6 +69,17 @@ public class Robot extends TimedRobot {
     //m_drivetrainSubsystem.resetOdometry();
     // m_drivetrainSubsystem.zeroGyroscope();
     // m_drivetrainSubsystem.zeroDriveEncoder();
+
+    ShuffleboardTab tab = DrivetrainSubsystem.tab;
+     kP = tab.add("Auto kP", 0.1).getEntry(); 
+     kI = tab.add("Auto kI", 0.0).getEntry();
+     kD = tab.add("Auto kD", 0.0).getEntry();
+
+    
+      //Change 1 to something else, 1 is placeholder
+    //ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
+   
+
   }
 
   /**
@@ -138,13 +156,18 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     System.out.println("Trajectory: " + Trajectories.uno);
-    motionProfiling.init();
+    //motionProfiling.init();
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-    motionProfiling.periodic();
+    /*motion profiling*/
+    //motionProfiling.periodic();
+
+    /*intial test!*/
+    m_drivetrainSubsystem.setSpeed(new ChassisSpeeds(0.2, 0, 0));
+    
     m_drivetrainSubsystem.drive();
   }
 
