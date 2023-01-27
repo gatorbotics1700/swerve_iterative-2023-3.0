@@ -21,6 +21,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTable.*;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 /**
@@ -32,12 +33,12 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 public class Robot extends TimedRobot {
   private AutonomousBase m_autoSelected;
   private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<AutonomousBase>();
-  private AutonomousBasePD blueCharge = new AutonomousBasePD(new Translation2d(221.353, 23.720), new Translation2d(0, 21.574), new Translation2d(96.902, 21.574), new Translation2d(96.902, 21.574), new Translation2d(96.902, 21.574), new Translation2d(96.902, 21.574));
-  private AutonomousBasePD redCharge = new AutonomousBasePD(new Translation2d(222.624, 15.665), new Translation2d(0, 21.886), new Translation2d(221.671, 67.260), new Translation2d(97.188, 67.260), new Translation2d(97.188, 67.260), new Translation2d(97.188, 67.260));
-  private AutonomousBasePD antiCharge = new AutonomousBasePD(new Translation2d(86.840, -45.282), new Translation2d(221.978, 19.463), new Translation2d(135.091, -19.421), new Translation2d(0, -22.277), new Translation2d(222.491, -28.492), new Translation2d(0, -43.502));
-  private AutonomousBasePD mScore = new AutonomousBasePD(new Translation2d(222.037, 0), new Translation2d(135.091, -41.307), new Translation2d(0, -44.163), new Translation2d(222.894, -50.377), new Translation2d(0, -65.388), new Translation2d(0, -65.388));
+  private AutonomousBasePD blueCharge = new AutonomousBasePD(new Pose2d(221.353, 23.720, new Rotation2d(0)), new Pose2d(0, 21.574, new Rotation2d(0)), new Pose2d(96.902, 21.574, new Rotation2d(0)), new Pose2d(96.902, 21.574, new Rotation2d(0)), new Pose2d(96.902, 21.574, new Rotation2d(0)), new Pose2d(96.902, 21.574, new Rotation2d(0)));
+  private AutonomousBasePD redCharge = new AutonomousBasePD(new Pose2d(222.624, 15.665, new Rotation2d(0)), new Pose2d(0, 21.886, new Rotation2d(0)), new Pose2d(221.671, 67.260, new Rotation2d(0)), new Pose2d(97.188, 67.260, new Rotation2d(0)), new Pose2d(97.188, 67.260, new Rotation2d(0)), new Pose2d(97.188, 67.260, new Rotation2d(0)));
+  private AutonomousBasePD antiCharge = new AutonomousBasePD(new Pose2d(86.840, -45.282, new Rotation2d(0)), new Pose2d(221.978, 19.463, new Rotation2d(0)), new Pose2d(135.091, -19.421, new Rotation2d(0)), new Pose2d(0, -22.277, new Rotation2d(0)), new Pose2d(222.491, -28.492, new Rotation2d(0)), new Pose2d(0, -43.502, new Rotation2d(0)));
+  private AutonomousBasePD mScore = new AutonomousBasePD(new Pose2d(222.037, 0, new Rotation2d(0)), new Pose2d(135.091, -41.307, new Rotation2d(0)), new Pose2d(0, -44.163, new Rotation2d(0)), new Pose2d(222.894, -50.377, new Rotation2d(0)), new Pose2d(0, -65.388, new Rotation2d(0)), new Pose2d(0, -65.388, new Rotation2d(0)));
   private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
-  private AutonomousBasePD testPath = new AutonomousBasePD(new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20));
+  private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)));
   private AutonomousBaseMP motionProfiling = new AutonomousBaseMP(Trajectories.uno, Trajectories.dos, Trajectories.tres);
 
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
