@@ -12,6 +12,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
 import frc.robot.Constants;
+
+import com.fasterxml.jackson.core.sym.Name;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -37,12 +40,12 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 public class Robot extends TimedRobot {
   private AutonomousBase m_autoSelected;
   private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<AutonomousBase>();
-  private AutonomousBasePD noGo = new AutonomousBasePD(new Translation2d(0, 0), new Translation2d(0, 0), new Translation2d(0, 0), new Translation2d(0,0), new Translation2d(0, 0), new Translation2d(0,0));
-  private AutonomousBasePD placeNLeave = new AutonomousBasePD(new Translation2d(0, 0), new Translation2d(160.0, 0), new Translation2d(160.0, 0), new Translation2d(160.0, 0), new Translation2d(160.0, 0), new Translation2d(160.0, 0));
-  private AutonomousBasePD antiCharge = new AutonomousBasePD(new Translation2d(86.840, -45.282), new Translation2d(221.978, 19.463), new Translation2d(135.091, -19.421), new Translation2d(0, -22.277), new Translation2d(222.491, -28.492), new Translation2d(0, -43.502));
-  private AutonomousBasePD antiChargeOpposite = new AutonomousBasePD(new Translation2d(86.840, 45.282), new Translation2d(221.978, -19.463), new Translation2d(135.091, 19.421), new Translation2d(0, 22.277), new Translation2d(222.491, 28.492), new Translation2d(0, 43.502));
-  private AutonomousBasePD engageCharge = new AutonomousBasePD(new Translation2d(97.759, 0), new Translation2d(97.759, 0), new Translation2d(97.759, 0), new Translation2d(97.759, 0), new Translation2d(97.759, 0), new Translation2d(97.759, 0));
-  private AutonomousBasePD placeTwoEngage = new AutonomousBasePD(new Translation2d(223.014, 16.468), new Translation2d(0, 22.683), new Translation2d(135.615, 25.539), new Translation2d(222.191, 64.230), new Translation2d(97.711, 64.230), new Translation2d(97.711, 64.230));
+  private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
+  private AutonomousBasePD placeNLeave = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)));
+  private AutonomousBasePD antiCharge = new AutonomousBasePD(new Pose2d(86.840, -45.282, new Rotation2d(0)), new Pose2d(221.978, 19.463, new Rotation2d(0)), new Pose2d(135.091, -19.421, new Rotation2d(0)), new Pose2d(0, -22.277, new Rotation2d(0)), new Pose2d(222.491, -28.492, new Rotation2d(0)), new Pose2d(0, -43.502, new Rotation2d(0)));
+  private AutonomousBasePD antiChargeOpposite = new AutonomousBasePD(new Pose2d(86.840, 45.282, new Rotation2d(0)), new Pose2d(221.978, -19.463, new Rotation2d(0)), new Pose2d(135.091, 19.421, new Rotation2d(0)), new Pose2d(0, 22.277, new Rotation2d(0)), new Pose2d(222.491, 28.492, new Rotation2d(0)), new Pose2d(0, 43.502, new Rotation2d(0)));
+  private AutonomousBasePD engageCharge = new AutonomousBasePD(new Pose2d(97.759, 0, new Rotation2d(0)), new Pose2d(97.759, 0, new Rotation2d(0)), new Pose2d(97.759, 0, new Rotation2d(0)), new Pose2d(97.759, 0, new Rotation2d(0)), new Pose2d(97.759, 0, new Rotation2d(0)), new Pose2d(97.759, 0, new Rotation2d(0)));
+  private AutonomousBasePD placeTwoEngage = new AutonomousBasePD(new Pose2d(223.014, 16.468, new Rotation2d(0)), new Pose2d(0, 22.683, new Rotation2d(0)), new Pose2d(135.615, 25.539, new Rotation2d(0)), new Pose2d(222.191, 64.230, new Rotation2d(0)), new Pose2d(97.711, 64.230, new Rotation2d(0)), new Pose2d(97.711, 64.230, new Rotation2d(0)));
   private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
   private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)));
   private AutonomousBaseMP motionProfiling = new AutonomousBaseMP(Trajectories.uno, Trajectories.dos, Trajectories.tres);
@@ -70,7 +73,7 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto 4", antiChargeOpposite);
     //m_chooser.addOption(name: "My Auto 5", engageCharge);
    // m_chooser.addOption(name: "My Auto 6",placeTwoEngage);
-    m_chooser.addOption(name: "My Auto timed", timedPath)
+    m_chooser.addOption("My Auto timed", timedPath);
     m_chooser.addOption("Motion profiling path", motionProfiling);
 
     SmartDashboard.putData("Auto choices", m_chooser);
