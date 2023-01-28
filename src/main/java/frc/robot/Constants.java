@@ -49,6 +49,12 @@ public final class Constants {
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 3; 
     public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(79.45); // FIXME Measure and set back right steer offset
 
+    public static final int TELESCOPING_MOTOR_ID = 7;
+    public static final int ARM_ROTATION_MOTOR_ID = 8;
+    public static final int ELEVATOR_CAN_ID = 9;
+    public static final int LEFT_LINK_CAN_ID = 10;
+    public static final int RIGHT_LINK_CAN_ID = 11;
+
     public static final double DRIVE_MOTOR_MIN_VOLTAGE = 0.19;
     public static final double DRIVE_MOTOR_MAX_VOLTAGE = 0.8;
     public static final double STEER_MOTOR_MIN_VOLTAGE = 0.02; 
@@ -59,13 +65,11 @@ public final class Constants {
     public static final double TICKS_PER_INCH = TICKS_PER_REV*GEAR_RATIO/WHEEL_DIAMETER/Math.PI; //talonfx drive encoder
     public static final double ARM_ROTATION_GEAR_RATIO = 0.0;//this is undecided as of Jan 20th
 
-    public static final int TELESCOPING_MOTOR_ID = 7;
-    public static final int ARM_ROTATION_MOTOR_ID = 8;
-    public static final int ELEVATOR_CAN_ID = 9;
+    
 
     public static final int kTimeoutMs = 1000;
     public static final int kPIDLoopIdx = 0;//not sure what this value does or if this value should be diff for rotation, telescoping, elevator
-
+    
 	/* Choose so that Talon does not report sensor out of phase */
     public static boolean kSensorPhase = true; //Sensor phase describes the relationship between the motor output direction (positive vs negative) and sensor velocity (positive vs negative). For soft-limits and closed-loop features to function correctly, the sensor measurement and motor output must be “in-phase”.
 
