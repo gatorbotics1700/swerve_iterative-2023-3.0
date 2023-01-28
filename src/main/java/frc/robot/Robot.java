@@ -55,9 +55,9 @@ public class Robot extends TimedRobot {
   ChassisSpeeds m_ChassisSpeeds;
 
   static ShuffleboardTab tab = DrivetrainSubsystem.tab;
-  public static GenericEntry kP = tab.add("Auto kP", 0.1).getEntry(); 
-  public static GenericEntry kI = tab.add("Auto kI", 0.0).getEntry(); 
-  public static GenericEntry kD = tab.add("Auto kD", 0.0).getEntry();
+  //public static GenericEntry kP = tab.add("Auto kP", 0.1).getEntry(); 
+  //public static GenericEntry kI = tab.add("Auto kI", 0.0).getEntry(); 
+  //public static GenericEntry kD = tab.add("Auto kD", 0.0).getEntry();
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -65,9 +65,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() { //creates options for different autopaths, names are placeholders
-    kP = tab.add("Auto kP", 0.1).getEntry(); 
-    kI = tab.add("Auto kI", 0.0).getEntry(); 
-    kD = tab.add("Auto kD", 0.0).getEntry();
+    //kP = tab.add("Auto kP", 0.1).getEntry(); 
+    //kI = tab.add("Auto kI", 0.0).getEntry(); 
+    //kD = tab.add("Auto kD", 0.0).getEntry();
 
     System.out.println("#I'm Awake");
     m_chooser.setDefaultOption("Default Auto", testPath);
