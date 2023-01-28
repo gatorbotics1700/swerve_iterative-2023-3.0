@@ -3,11 +3,11 @@ package frc.robot.subsystems;
 import frc.robot.Constants;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 //karys did this!
 public class IntakeSubsystem {
-    public static TalonSRX intakeMotor = new TalonSRX(Constants.INTAKE_MOTOR_ID);
+    public static TalonFX intakeMotor = new TalonFX(Constants.INTAKE_MOTOR_ID);
 
     IntakeStates intakeState = IntakeStates.STOP;
 
@@ -33,6 +33,10 @@ public class IntakeSubsystem {
         } else {
             intakeMotor.set(ControlMode.PercentOutput, -0.5);
         }
+    }
+
+    public void setState(IntakeStates newIntakeState){
+        intakeState = newIntakeState;
     }
 
     public void runMotorsForward(){
