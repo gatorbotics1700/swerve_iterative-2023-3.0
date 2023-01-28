@@ -15,11 +15,8 @@ public class ElevatorSubsystem {
     public int _kIzone = 0;
     public double _kPeakOutput = 1.0;
 
-
-    public ElevatorSubsystem(){}
-
     public static TalonFX elevatorMotor = new TalonFX(Constants.ELEVATOR_CAN_ID);
-    public static ElevatorStates elevatorState = ElevatorStates.MID_ELEVATOR_HEIGHT; //why is this here?
+    public static ElevatorStates elevatorState = ElevatorStates.MID_ELEVATOR_HEIGHT;
     
     public Gains elevatorGains = new Gains(_kP, _kI, _kD, _kIzone, _kPeakOutput);
 
@@ -45,7 +42,6 @@ public class ElevatorSubsystem {
     public void periodic(){
         if (elevatorState == ElevatorStates.ZERO){
             elevatorMotor.set(ControlMode.Position, 0);
-            //elevatorMotor.set(ControlMode.PercentOutput, 0); //pretty sure ControlMode.Position stops motor right when we get to setpoint
         } else if (elevatorState == ElevatorStates.LOW_ELEVATOR_HEIGHT){
             elevatorMotor.set(ControlMode.Position, 100); //change value once we know robot dimensions
         } else if (elevatorState == ElevatorStates.MID_ELEVATOR_HEIGHT){

@@ -15,7 +15,6 @@ public class ArmRotationSubsystem {
     double _kP = 1.0;
     double _kI = 0.0;
     double _kD = 0.0;
-    double _kF = 0.0;
     int _kIzone = 0;
     double _kPeakOutput = 0.0;
     
@@ -23,7 +22,7 @@ public class ArmRotationSubsystem {
 
     TalonFX armRotationMotor = new TalonFX(Constants.ARM_ROTATION_MOTOR_ID);//maybe this motor should be renamed to make it more descriptive
 
-    Gains armRotationGains = new Gains(_kP, _kI, _kD, _kF, _kIzone, _kPeakOutput);
+    Gains armRotationGains = new Gains(_kP, _kI, _kD, _kIzone, _kPeakOutput);
 
 
     public static enum ArmRotationStates{
@@ -48,7 +47,6 @@ public class ArmRotationSubsystem {
         //configuring deadband
         armRotationMotor.configAllowableClosedloopError(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
 		/* Config Position Closed Loop gains in slot0, tsypically kF stays zero. */
-		armRotationMotor.config_kF(Constants.kPIDLoopIdx, armRotationGains.kF, Constants.kTimeoutMs);
 		armRotationMotor.config_kP(Constants.kPIDLoopIdx, armRotationGains.kP, Constants.kTimeoutMs);
 		armRotationMotor.config_kI(Constants.kPIDLoopIdx, armRotationGains.kI, Constants.kTimeoutMs);
 		armRotationMotor.config_kD(Constants.kPIDLoopIdx, armRotationGains.kD, Constants.kTimeoutMs);
