@@ -73,9 +73,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH);
-    SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
-    m_field.setRobotPose(DrivetrainSubsystem.m_odometry.getPoseMeters());
+    // SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH);
+    // SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
+    // m_field.setRobotPose(DrivetrainSubsystem.m_odometry.getPoseMeters());
   }
 
   /**
@@ -154,7 +154,7 @@ public class Robot extends TimedRobot {
       m_drivetrainSubsystem.resetOdometry();
     }
 
-    System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
+    //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
   }
 
   /** This function is called once when the robot is first started up. */
