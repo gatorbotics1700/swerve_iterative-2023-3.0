@@ -5,17 +5,21 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoSink;
+import edu.wpi.first.math.geometry.Pose2d;
+
 import org.opencv.core.Mat;
 import edu.wpi.first.apriltag.*;
 import java.util.Arrays;
 import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.apriltag.AprilTagFields;
-
+import frc.robot.subsystems.*;
+import frc.robot.Robot;
 
 //import frc.robot.subsystems.AprilTagFieldEnum;
 
 public class AprilTagSubsystem {
+
     static{
         //Loader.load(opencv_java.class);
         // System.loadLibrary("opencv_java470");
@@ -35,34 +39,26 @@ public class AprilTagSubsystem {
     Mat grayMat;
     CvSink cvSink;
     AprilTagDetection[] detectedAprilTags; 
+    double XError[];
     VideoSink server;
     int aprilTagIds[];
     float decisionMargin[];
     double centerX[];
     double centerY[];
+    double drivetrainXPosition;
     //Path path = Filesystem.getDefault().getPath("2023-chargedup.json");
     //public final String m_resourceFile;
 
     //CvSource outputStream;
 
-    public static enum IDS{
-        IDONE,
-        IDTWO,
-        IDTHREE,
-        IDFOUR,
-        IDFIVE,
-        IDSIX,
-        IDSEVEN,
-        IDEIGHT
-    }
-
-    private static IDS iD;
+    
+    
     private static AprilTagDetector aprilTagDetector = new AprilTagDetector();
     //AprilTagFieldLayout aprilTagFieldLayout = new AprilTagFieldLayout("src/main/deploy/2023-chargedup.json");
     //AprilTagFieldLayout secondAprilTagFieldLayout = new AprilTagFieldLayout(AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile));
     AprilTagFieldLayout thirdAprilTagFieldLayout = new AprilTagFieldLayout("/edu/wpi/first/apriltag/2023-chargedup.json");
     //Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectory);
-
+    
     public void init(){
         System.loadLibrary("opencv_java460");
         //camera0 = new UsbCamera("USB Camera 0", 0);
@@ -82,6 +78,9 @@ public class AprilTagSubsystem {
     
     public void periodic(){
         
+    }
+
+    private void detectTag(){
         long time = cvSink.grabFrame(source);
         if(time ==0){
             System.out.println("failed to grab a frame");
@@ -105,42 +104,18 @@ public class AprilTagSubsystem {
             centerY[i] = detectedAprilTags[i].getCenterY();
         }
 
-    
+        
 
         System.out.println("Detected Apriltags: " + detectedAprilTags);
 
     }
 
-    if(iD == IDS.IDONE){
-
+    private void getError(){
+        drivetrainXPosition = Robot.m_drivetrainSubsystem.m_pose.getX();
+        for(int i = 0; i < aprilTagIds.length; i++){
+            XError[i] = aprilTagIds[i];
+            
+            //AprilTagLocation
+        }
     }
-
-    if(iD == IDS.IDTWO){
-
-    }
-
-    if(iD == IDS.IDTHREE){
-
-    }
-
-    if(iD == IDS.IDFOUR){
-
-    }
-
-    if(iD == IDS.IDFIVE){
-
-    }
-
-    if(iD == IDS.IDSIX){
-
-    }
-
-    if(iD ==IDS.IDSEVEN){
-
-    }
-
-    if(iD == IDS.IDEIGHT){
-
-    }
-
 }
