@@ -36,7 +36,8 @@ public final class Constants {
     */
 
     //swervo
-    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(279.316); 
+    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(279.316);
+    //front right offset should be rechecked, is maybe wrong  
     public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(75.938);
     public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(320.098); 
     public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(250.183);
