@@ -13,8 +13,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
 import frc.robot.Constants;
 
-import com.fasterxml.jackson.core.sym.Name;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -115,10 +113,12 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto 2",placeNLeave);
     m_chooser.addOption("My Auto 3", antiCharge);
     m_chooser.addOption("My Auto 4", antiChargeOpposite);
-    //m_chooser.addOption(name: "My Auto 5", engageCharge);
-   // m_chooser.addOption(name: "My Auto 6",placeTwoEngage);
+    m_chooser.addOption("My Auto 5", engageCharge);
+    m_chooser.addOption("My Auto 6",placeTwoEngage);
     m_chooser.addOption("My Auto timed", timedPath);
     m_chooser.addOption("Motion profiling path", motionProfiling);
+    m_chooser.addOption("three under charge station", threeUnderChargeStation);
+    m_chooser.addOption("three above charge station", threeAboveChargeStation);
 
     SmartDashboard.putData("Auto choices", m_chooser);
 
@@ -139,7 +139,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH);
     SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
     
-    m_field.setRobotPose(DrivetrainSubsystem.m_odometry.getPoseMeters());
+    m_field.setRobotPose(DrivetrainSubsystem.m_odometry.getEstimatedPosition());
     
   }
 
