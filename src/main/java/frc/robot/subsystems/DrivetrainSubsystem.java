@@ -335,7 +335,7 @@ public class DrivetrainSubsystem {
         pitchController.setSetpoint(pitchSetpoint); 
         double error = pitchController.calculate(pitchAfterCorrection, pitchSetpoint);
         System.out.println("error: " + error); 
-        setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, error, 0, getGyroscopeRotation()));
+        setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(error, 0, 0, getGyroscopeRotation()));
         drive();
         
         if (Math.abs(pitchAfterCorrection - pitchSetpoint) < 1.0){

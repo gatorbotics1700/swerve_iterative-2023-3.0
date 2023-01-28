@@ -158,7 +158,7 @@ m_drivetrainSubsystem.pitchBalance(0.0);
     drivePID.add(new ElevatorUpCommand());
 
     ShuffleboardLayout pitchPID = pidTab.getLayout("Pitch PID", BuiltInLayouts.kList)//change this layout to support input
-    .withSize(2, 2);
+    .withSize(2, 2);riodic
     pitchPID.add(new ElevatorDownCommand());//what should we put here instead of the commands? i think this is where we should write the info and ask user for input?
     pitchPID.add(new ElevatorUpCommand());
 
@@ -175,6 +175,9 @@ m_drivetrainSubsystem.pitchBalance(0.0);
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
+    m_drivetrainSubsystem.setSpeed(new ChassisSpeeds(0.2, 0, 0));
+    
+    m_drivetrainSubsystem.drive();
   }
 
   /** This function is called once when the robot is first started up. */
