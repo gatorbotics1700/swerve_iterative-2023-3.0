@@ -54,9 +54,10 @@ public class Robot extends TimedRobot {
   private final Field2d m_field = new Field2d();
   ChassisSpeeds m_ChassisSpeeds;
 
-  public static GenericEntry kP; 
-  public static GenericEntry kI; 
-  public static GenericEntry kD; 
+  static ShuffleboardTab tab = DrivetrainSubsystem.tab;
+  public static GenericEntry kP = tab.add("Auto kP", 0.1).getEntry(); 
+  public static GenericEntry kI = tab.add("Auto kI", 0.0).getEntry(); 
+  public static GenericEntry kD = tab.add("Auto kD", 0.0).getEntry();
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -64,7 +65,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() { //creates options for different autopaths, names are placeholders
- 
+    kP = tab.add("Auto kP", 0.1).getEntry(); 
+    kI = tab.add("Auto kI", 0.0).getEntry(); 
+    kD = tab.add("Auto kD", 0.0).getEntry();
+
     System.out.println("#I'm Awake");
     m_chooser.setDefaultOption("Default Auto", testPath);
     m_chooser.addOption("My Auto 1", noGo);
@@ -81,10 +85,7 @@ public class Robot extends TimedRobot {
     // m_drivetrainSubsystem.zeroGyroscope();
     // m_drivetrainSubsystem.zeroDriveEncoder();
 
-    ShuffleboardTab tab = DrivetrainSubsystem.tab;
-     kP = tab.add("Auto kP", 0.1).getEntry(); 
-     kI = tab.add("Auto kI", 0.0).getEntry();
-     kD = tab.add("Auto kD", 0.0).getEntry();
+  
 
     
       //Change 1 to something else, 1 is placeholder
@@ -104,6 +105,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH);
     SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
+    
     m_field.setRobotPose(DrivetrainSubsystem.m_odometry.getPoseMeters());
   }
 
