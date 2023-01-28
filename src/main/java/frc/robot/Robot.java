@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.IntakeSubsystem.IntakeStates;
 import frc.robot.OI;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -38,6 +39,7 @@ public class Robot extends TimedRobot {
   private AutonomousBaseMP motionProfiling = new AutonomousBaseMP(Trajectories.uno, Trajectories.dos, Trajectories.tres);
 
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
+  public static final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final Field2d m_field = new Field2d();
   ChassisSpeeds m_ChassisSpeeds;
 
@@ -127,6 +129,14 @@ public class Robot extends TimedRobot {
     
     if(OI.m_controller_two.getYButton()){ 
       m_drivetrainSubsystem.trueNorth(); // lauren did this!!!
+    }
+
+    if(OI.intakeOn >= 0.5) {
+      intakeSubsystem.setState(IntakeStates.FORWARD);
+    }
+
+    if (OI.intakeOff >= 0.5){
+      intakeSubsystem.setState(IntakeStates.STOP);
     }
   }
 
