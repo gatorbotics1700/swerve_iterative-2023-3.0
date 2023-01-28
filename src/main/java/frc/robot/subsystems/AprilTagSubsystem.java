@@ -113,7 +113,7 @@ public class AprilTagSubsystem {
     private void getError(){
         drivetrainXPosition = Robot.m_drivetrainSubsystem.m_pose.getX();
         for(int i = 0; i < aprilTagIds.length; i++){
-            XError[i] = aprilTagIds[i];
+            XError[i] = AprilTagLocation.aprilTagPoses[aprilTagIds[i]].getX() - drivetrainXPosition;
             
             //AprilTagLocation
         }
