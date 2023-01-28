@@ -199,7 +199,8 @@ public class DrivetrainSubsystem {
 
   public void resetOdometry(){
         zeroGyroscope(); //truly resets gyro
-        //zeroDriveEncoder(); //finds the tare
+        //zeroDriveEncoder(); 
+        //finds the tare
         SwerveModulePosition [] positionArray =  new SwerveModulePosition[] {
                 m_frontLeftModule.getSwerveModulePosition(),
                 m_frontRightModule.getSwerveModulePosition(),

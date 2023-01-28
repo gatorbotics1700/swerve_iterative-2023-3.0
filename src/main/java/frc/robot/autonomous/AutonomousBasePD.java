@@ -6,10 +6,6 @@ import frc.robot.Robot;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.Constants;
-// import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
-// import frc.com.swervedrivespecialties.swervelib.*;
-// import edu.wpi.first.math.kinematics.SwerveModuleState;
-// import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 public class AutonomousBasePD extends AutonomousBase{
     public static final double turnKP= 0.0002;
@@ -70,7 +66,7 @@ public class AutonomousBasePD extends AutonomousBase{
     
     }
 
-    private static States states = States.FIRST; //change later
+    private static States states = States.FIRST; 
 
     public void setState(States newState){
         states = newState;
@@ -153,7 +149,6 @@ public class AutonomousBasePD extends AutonomousBase{
     @param dos is past coordinate 
     */
     public void preTDA(Pose2d uno, Pose2d dos){
-        //directionController.reset();
         System.out.println("Preturning");
         desiredTurn = autoCalculateAngle(uno, dos); 
     }

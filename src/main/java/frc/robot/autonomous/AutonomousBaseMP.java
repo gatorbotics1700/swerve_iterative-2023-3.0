@@ -84,11 +84,6 @@ public class AutonomousBaseMP extends AutonomousBase{
     }
 
     public boolean trajectoryDone(Trajectory trajectory){
-         /*
-        double timeCheck = trajectory1.getTotalTimeSeconds();
-        end = trajectory1.sample(timeCheck);
-        System.out.println(timeCheck);
-         */
 
         if(Math.abs(end.poseMeters.getX() - DrivetrainSubsystem.m_pose.getX()) < 0.5 /*/&& 
         Math.abs(end.poseMeters.getY() - DrivetrainSubsystem.m_pose.getY()) < 2 &&
@@ -137,7 +132,6 @@ public class AutonomousBaseMP extends AutonomousBase{
     }
 
     public void followTrajectory(Trajectory trajectory){
-        //timeElapsed = System.currentTimeMillis() - timeStart; //TAKE OUT LATER
         Trajectory.State goal = trajectory.sample(timeElapsed/1000);
         
         ChassisSpeeds adjustedSpeeds = controller.calculate(
