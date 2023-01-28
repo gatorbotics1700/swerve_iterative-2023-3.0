@@ -6,10 +6,6 @@ import frc.robot.Robot;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.Constants;
-// import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
-// import frc.com.swervedrivespecialties.swervelib.*;
-// import edu.wpi.first.math.kinematics.SwerveModuleState;
-// import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 public class AutonomousBasePD extends AutonomousBase{
     public static final double turnKP= 0.0002;
@@ -22,6 +18,8 @@ public class AutonomousBasePD extends AutonomousBase{
     private final double TURN_DEADBAND = 6;
     private double hypotenuse;
 
+    
+    private Pose2d startingCoordinate;
     private Pose2d goalCoordinate1;
     private Pose2d goalCoordinate2; 
     private Pose2d goalCoordinate3; 
@@ -38,7 +36,8 @@ public class AutonomousBasePD extends AutonomousBase{
     private PIDController directionController = new PIDController(turnKP, turnKI, turnKD);
     private PIDController distanceController = new PIDController(driveKP, driveKI, driveKD);
     
-    public AutonomousBasePD(Pose2d goalCoordinate1, Pose2d goalCoordinate2, Pose2d goalCoordinate3, Pose2d goalCoordinate4, Pose2d goalCoordinate5, Pose2d goalCoordinate6){
+    public AutonomousBasePD(Pose2d startingCoordinate, Pose2d goalCoordinate1, Pose2d goalCoordinate2, Pose2d goalCoordinate3, Pose2d goalCoordinate4, Pose2d goalCoordinate5, Pose2d goalCoordinate6){
+        this.startingCoordinate = startingCoordinate;
         this.goalCoordinate1 = goalCoordinate1;
         this.goalCoordinate2 = goalCoordinate2;
         this.goalCoordinate3 = goalCoordinate3;
@@ -49,7 +48,7 @@ public class AutonomousBasePD extends AutonomousBase{
 
     @Override
     public void init(){
-        drivetrainSubsystem.resetOdometry();
+        drivetrainSubsystem.resetOdometry(startingCoordinate);
         // directionController.reset();
         // distanceController.reset();
         directionController.setTolerance(TURN_DEADBAND); 
@@ -71,7 +70,7 @@ public class AutonomousBasePD extends AutonomousBase{
     
     }
 
-    private static States states = States.FIRST; //change later
+    private static States states = States.FIRST; 
 
     public void setState(States newState){
         states = newState;
@@ -83,7 +82,7 @@ public class AutonomousBasePD extends AutonomousBase{
         
         //System.out.println("state: "+states);
         if (states == States.FIRST){
-            desiredTranslation = preDDD(new Pose2d(), goalCoordinate1); 
+            desiredTranslation = preDDD(startingCoordinate, goalCoordinate1); 
             System.out.println("we've reset to this pose: " + DrivetrainSubsystem.m_pose);
             setState(States.DRIVE);
         }
@@ -119,6 +118,12 @@ public class AutonomousBasePD extends AutonomousBase{
                 setState(States.DRIVE6); 
             }
         }else if(states==States.DRIVE6){
+            driveDesiredDistance(desiredTranslation);
+            if(distanceController.atSetpoint()){
+                desiredTranslation = preDDD(goalCoordinate5, goalCoordinate6);
+                setState(States.DRIVE6);
+            }
+        } else if(states==States.DRIVE6){
             driveDesiredDistance(desiredTranslation);
             if(distanceController.atSetpoint()){
                 setState(States.STOP);
@@ -160,7 +165,6 @@ public class AutonomousBasePD extends AutonomousBase{
     @param dos is past coordinate 
     */
     public void preTDA(Pose2d uno, Pose2d dos){
-        //directionController.reset();
         System.out.println("Preturning");
         desiredTurn = autoCalculateAngle(uno, dos); 
     }
