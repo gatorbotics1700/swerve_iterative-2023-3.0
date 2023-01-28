@@ -2,6 +2,7 @@ package frc.robot.autonomous;
 
 import frc.robot.Robot;
 import frc.robot.subsystems.*;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 public class AutonomousBaseTimed extends AutonomousBase{
@@ -12,7 +13,7 @@ public class AutonomousBaseTimed extends AutonomousBase{
 
     @Override
     public void init(){
-        drivetrainSubsystem.resetOdometry();
+        drivetrainSubsystem.resetOdometry(new Pose2d());
         timeStart = System.currentTimeMillis(); 
     }
 

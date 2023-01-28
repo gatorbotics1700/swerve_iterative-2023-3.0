@@ -199,15 +199,16 @@ public class DrivetrainSubsystem {
         return getMedian(positions);
   }
 
-  public void resetOdometry(){
+  public void resetOdometry(Pose2d start){
         zeroGyroscope(); //truly resets gyro
-        //zeroDriveEncoder(); //finds the tare
+        //zeroDriveEncoder(); 
+        //finds the tare
         SwerveModulePosition [] positionArray =  new SwerveModulePosition[] {
                 m_frontLeftModule.getSwerveModulePosition(),
                 m_frontRightModule.getSwerveModulePosition(),
                 m_backRightModule.getSwerveModulePosition(),
                 m_backLeftModule.getSwerveModulePosition() };
-        m_pose = new Pose2d();
+        m_pose = start;
         System.out.println("position array: " + positionArray.toString());
         System.out.println("m_pose: " + m_pose);
         m_odometry.resetPosition(getGyroscopeRotation(), positionArray, m_pose);
