@@ -78,16 +78,16 @@ public class Robot extends TimedRobot {
    
     
   //}
- }
+ 
 
- private ShuffleboardTab tab = DrivetrainSubsystem.tab;
-    private GenericEntry kP =
+ public static ShuffleboardTab tab = DrivetrainSubsystem.tab;
+    public static GenericEntry kP =
         tab.add("Auto kP", 0.1)
           .getEntry();
-    private GenericEntry kI =
+    public static GenericEntry kI =
     tab.add("Auto kI", 0.0)
       .getEntry();
-    private GenericEntry kD =
+    public static GenericEntry kD =
         tab.add("Auto kD", 0.0)
           .getEntry();
   
