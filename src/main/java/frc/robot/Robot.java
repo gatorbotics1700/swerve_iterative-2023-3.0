@@ -50,12 +50,16 @@ public class Robot extends TimedRobot {
   private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)));
   private AutonomousBaseMP motionProfiling = new AutonomousBaseMP(Trajectories.uno, Trajectories.dos, Trajectories.tres);
 
+  //new path 3 balls, requires 7 Pose2ds
+  //private AutonomousBasePD antiCharge = new AutonomousBasePD(new Pose2d(86.840, -45.282, new Rotation2d(0)), new Pose2d(221.978, 19.463, new Rotation2d(0)), new Pose2d(135.091, -19.421, new Rotation2d(0)), new Pose2d(0, -22.277, new Rotation2d(0)), new Pose2d(222.491, -28.492, new Rotation2d(0)), new Pose2d(0, -43.502, new Rotation2d(0)));
+
+
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   private final Field2d m_field = new Field2d();
   ChassisSpeeds m_ChassisSpeeds;
 
   static ShuffleboardTab tab = DrivetrainSubsystem.tab;
-  //public static GenericEntry kP = tab.add("Auto kP", 0.1).getEntry(); 
+  //sprivate static NetworkTableEntry kP = tab.add("Auto kP", 0.1).getEntry(); 
   //public static GenericEntry kI = tab.add("Auto kI", 0.0).getEntry(); 
   //public static GenericEntry kD = tab.add("Auto kD", 0.0).getEntry();
 
