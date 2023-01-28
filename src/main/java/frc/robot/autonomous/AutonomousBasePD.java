@@ -15,9 +15,9 @@ public class AutonomousBasePD extends AutonomousBase{
     public static final double turnKP= 0.0002;
     public static final double turnKI= 0.0;
     public static final double turnKD= 0.0;
-    public static final double driveKP= Robot.kP.getDouble(1.0);//0.00006;
+    public static final double driveKP= Robot.kP.getDouble(0.00006);//0.00006;
     public static final double driveKI= Robot.kI.getDouble(0.0);//0.0;
-    public static final double driveKD= Robot.kD.getDouble(2.0);//0.0;
+    public static final double driveKD= Robot.kD.getDouble(0.0);//0.0;
     private final double DRIVE_DEADBAND = 3;
     private final double TURN_DEADBAND = 6;
     private double hypotenuse;
@@ -66,6 +66,7 @@ public class AutonomousBasePD extends AutonomousBase{
         DRIVE3,
         DRIVE4,
         DRIVE5,
+        DRIVE6,
         STOP;
     
     }
@@ -111,7 +112,13 @@ public class AutonomousBasePD extends AutonomousBase{
                 desiredTranslation = preDDD(goalCoordinate4, goalCoordinate5);
                 setState(States.DRIVE5); 
             }
-        } else if(states==States.DRIVE5){
+        } else if(states == States.DRIVE5){
+            driveDesiredDistance(desiredTranslation);
+            if(distanceController.atSetpoint()){
+                desiredTranslation = preDDD(goalCoordinate5, goalCoordinate6);
+                setState(States.DRIVE6); 
+            }
+        }else if(states==States.DRIVE6){
             driveDesiredDistance(desiredTranslation);
             if(distanceController.atSetpoint()){
                 setState(States.STOP);
