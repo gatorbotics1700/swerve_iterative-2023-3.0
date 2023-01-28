@@ -27,6 +27,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -63,7 +65,7 @@ public class Robot extends TimedRobot {
   private final Field2d m_field = new Field2d();
   ChassisSpeeds m_ChassisSpeeds;
 
-  static ShuffleboardTab tab = DrivetrainSubsystem.tab;
+  // static ShuffleboardTab tab = DrivetrainSubsystem.tab;
   //sprivate static NetworkTableEntry kP = tab.add("Auto kP", 0.1).getEntry(); 
   //public static GenericEntry kI = tab.add("Auto kI", 0.0).getEntry(); 
   //public static GenericEntry kD = tab.add("Auto kD", 0.0).getEntry();
@@ -72,11 +74,40 @@ public class Robot extends TimedRobot {
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
+  //class AutoPID{
+   
+    
+  //}
+ }
+
+ private ShuffleboardTab tab = DrivetrainSubsystem.tab;
+    private GenericEntry kP =
+        tab.add("Auto kP", 0.1)
+          .getEntry();
+    private GenericEntry kI =
+    tab.add("Auto kI", 0.0)
+      .getEntry();
+    private GenericEntry kD =
+        tab.add("Auto kD", 0.0)
+          .getEntry();
+  
   @Override
   public void robotInit() { //creates options for different autopaths, names are placeholders
-    //kP = tab.add("Auto kP", 0.1).getEntry(); 
+   // kP = tab.add("Auto kP", 0.1).getEntry(); 
     //kI = tab.add("Auto kI", 0.0).getEntry(); 
     //kD = tab.add("Auto kD", 0.0).getEntry();
+
+      // private ShuffleboardTab tab = Shuffleboard.getTab("Drive");
+      // private NetworkTableEntry kP = tab.add("Auto kP", 0.1).getEntry();
+   
+      // private DifferentialDrive robotDrive = ...;
+   
+      // public void drive(double left, double right) {
+      //   // Retrieve the maximum speed from the dashboard
+      //   double max = maxSpeed.getDouble(1.0);
+      //   robotDrive.tankDrive(left * max, right * max);
+      // }
+  
 
     System.out.println("#I'm Awake");
     m_chooser.setDefaultOption("Default Auto", testPath);
@@ -91,10 +122,7 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putData("Auto choices", m_chooser);
 
-    //ShuffleboardTab tab = DrivetrainSubsystem.tab;
-     //kP = tab.add("Auto kP", 0.1).getEntry(); 
-     //kI = tab.add("Auto kI", 0.0).getEntry();
-     //kD = tab.add("Auto kD", 0.0).getEntry();
+    
    
 
   }
@@ -112,6 +140,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
     
     m_field.setRobotPose(DrivetrainSubsystem.m_odometry.getPoseMeters());
+    
   }
 
   /**
