@@ -89,9 +89,9 @@ public class DrivetrainSubsystem {
   private double tareRBEncoder = 0.0;
   public double error1;
 
-  public static double pitchKP= 0.041; //arbitrary placeholder #
+    public static double pitchKP= 0.04; //arbitrary placeholder #
     public static double pitchKI= 0.0;
-    public static double pitchKD= 0.01; //^
+    public static double pitchKD= 0.001; //^
     public static double veloKP = 0.25;
     public static double veloKI = 0.3; 
     public static double veloKD = 0.35;
@@ -333,9 +333,10 @@ public class DrivetrainSubsystem {
         double pitchAfterCorrection = m_pigeon.getPitch()-Robot.universalPitch;
         System.out.println("pitch after correcting for universalPitch: " + pitchAfterCorrection);
         pitchController.setSetpoint(pitchSetpoint); 
-        double error = pitchController.calculate(pitchAfterCorrection, pitchSetpoint);
-        System.out.println("error: " + error); 
-        setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(error, 0, 0, getGyroscopeRotation()));
+        double output = pitchController.calculate(pitchAfterCorrection, pitchSetpoint);
+        System.out.println("output: " + output); 
+        System.out.println("error: " + (pitchSetpoint-pitchAfterCorrection));
+        setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, output, 0, getGyroscopeRotation()));
         drive();
         
         if (Math.abs(pitchAfterCorrection - pitchSetpoint) < 1.0){
@@ -346,7 +347,9 @@ public class DrivetrainSubsystem {
 
     public void velocityPD(double velocitySetpoint){
         velocityController.setSetpoint(velocitySetpoint);
-        double veloDiff = velocityController.calculate(getAverage(), velocitySetpoint);
-        setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(veloKP*veloDiff, 0 , 0, getGyroscopeRotation()));
+        double outputVelo = velocityController.calculate(getAverage(), velocitySetpoint);
+        System.out.println("outputVelo is: " + outputVelo);
+        System.out.println("error is: " + (velocitySetpoint - outputVelo));
+        setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(outputVelo, 0, 0, getGyroscopeRotation()));
     }
 }

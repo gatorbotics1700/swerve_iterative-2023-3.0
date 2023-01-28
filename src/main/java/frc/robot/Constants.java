@@ -41,10 +41,10 @@ public final class Constants {
     // public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(341.904);
 
     //1/28 new swervo 
-    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(0);
-    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(0);
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(0);
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(0);
+    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(9.580);
+    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(256.358);
+    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(137.637);
+    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(72.949);
 
     //even can ids are drive, odd can ids are steer
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 26;
