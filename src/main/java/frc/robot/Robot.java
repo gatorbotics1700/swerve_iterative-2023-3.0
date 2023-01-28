@@ -77,18 +77,11 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("Motion profiling path", motionProfiling);
 
     SmartDashboard.putData("Auto choices", m_chooser);
-    //m_drivetrainSubsystem.resetOdometry();
-    // m_drivetrainSubsystem.zeroGyroscope();
-    // m_drivetrainSubsystem.zeroDriveEncoder();
 
     ShuffleboardTab tab = DrivetrainSubsystem.tab;
      kP = tab.add("Auto kP", 0.1).getEntry(); 
      kI = tab.add("Auto kI", 0.0).getEntry();
      kD = tab.add("Auto kD", 0.0).getEntry();
-
-    
-      //Change 1 to something else, 1 is placeholder
-    //ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
    
 
   }
@@ -126,10 +119,9 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-     //m_drivetrainSubsystem.driveTeleop();
+    
      m_autoSelected.periodic();
      m_drivetrainSubsystem.drive();
-
      //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
     
   }
@@ -150,9 +142,6 @@ public class Robot extends TimedRobot {
       m_drivetrainSubsystem.stopDrive();
     }
 
-    if(OI.m_controller.getAButton()){ //Katherine is skeptical whether this button work :/
-      m_drivetrainSubsystem.resetOdometry();
-    }
   }
 
   /** This function is called once when the robot is disabled. */
@@ -167,14 +156,11 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     System.out.println("Trajectory: " + Trajectories.uno);
-    //motionProfiling.init();
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-    /*motion profiling*/
-    //motionProfiling.periodic();
 
     /*intial test!*/
     m_drivetrainSubsystem.setSpeed(new ChassisSpeeds(-0.2, -0.2, 0));
