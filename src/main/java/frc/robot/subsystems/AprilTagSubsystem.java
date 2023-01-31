@@ -53,7 +53,7 @@ public class AprilTagSubsystem {
 
     public static enum AprilTagSequence{
         DETECT,
-        CORRECTX;
+        CORRECTPOSITION;
     }
 
     private static AprilTagSequence states = AprilTagSequence.DETECT; 
@@ -90,8 +90,8 @@ public class AprilTagSubsystem {
     public void periodic(){
         if(states == AprilTagSequence.DETECT){
             detectTag();
-            setState(AprilTagSequence.CORRECTX);
-        }else if(states == AprilTagSequence.CORRECTX){
+            setState(AprilTagSequence.CORRECTPOSITION);
+        }else if(states == AprilTagSequence.CORRECTPOSITION){
             correctPosition();
         }
     }
@@ -128,7 +128,7 @@ public class AprilTagSubsystem {
 
 
     private void correctPosition(){
-        Pose2d prePose = autonomousBasePD.preDDD(Robot.m_drivetrainSubsystem.m_pose, AprilTagLocation.aprilTagPoses[detectedAprilTag.getId()].toPose2d()); 
+        Pose2d prePose = autonomousBasePD.preDDD(DrivetrainSubsystem.m_pose, AprilTagLocation.aprilTagPoses[detectedAprilTag.getId()].toPose2d()); 
         autonomousBasePD.driveDesiredDistance(prePose);
     }
     
