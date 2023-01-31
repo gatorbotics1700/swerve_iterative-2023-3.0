@@ -96,7 +96,7 @@ public class AprilTagSubsystem {
         }
     }
 
-    private void detectTag(){
+    public void detectTag(){
         long time = cvSink.grabFrame(source);
         if(time ==0){
             System.out.println("failed to grab a frame");
@@ -122,7 +122,7 @@ public class AprilTagSubsystem {
 
         
 
-        System.out.println("Detected Apriltag: " + detectedAprilTag);
+        System.out.println("Detected Apriltag: " + detectedAprilTag.getId());
 
     }
 
