@@ -201,7 +201,7 @@ public class DrivetrainSubsystem {
   }
 
   public void resetOdometry(Pose2d start){
-        zeroGyroscope(); //truly resets gyro
+        //zeroGyroscope(); //truly resets gyro
         //zeroDriveEncoder(); 
         //finds the tare
         SwerveModulePosition [] positionArray =  new SwerveModulePosition[] {
@@ -209,13 +209,13 @@ public class DrivetrainSubsystem {
                 m_frontRightModule.getSwerveModulePosition(),
                 m_backRightModule.getSwerveModulePosition(),
                 m_backLeftModule.getSwerveModulePosition() };
-        m_pose = start;
         System.out.println("position array: " + positionArray.toString());
         System.out.println("m_pose: " + m_pose);
         m_odometry.resetPosition(getGyroscopeRotation(), positionArray, m_pose);
+        
         System.out.println("#resetodometry! new pose: " + m_pose.getX()/TICKS_PER_INCH + " y: " + m_pose.getY()/TICKS_PER_INCH);
-        System.out.println("inputs for the reset: " + getGyroscopeRotation() + m_frontLeftModule.getSwerveModulePosition().distanceMeters + m_frontRightModule.getSwerveModulePosition().distanceMeters + m_backLeftModule.getSwerveModulePosition().distanceMeters + m_backRightModule.getSwerveModulePosition().distanceMeters);
-  }
+        System.out.println("inputs for the reset: " + getGyroscopeRotation() + " " + m_frontLeftModule.getSwerveModulePosition().distanceMeters + " " + m_frontRightModule.getSwerveModulePosition().distanceMeters + " " + m_backLeftModule.getSwerveModulePosition().distanceMeters + " " + m_backRightModule.getSwerveModulePosition().distanceMeters);
+}
 
   public void zeroDriveEncoder(){
         tareLBEncoder = m_backLeftModule.getPosition();
@@ -271,7 +271,7 @@ public class DrivetrainSubsystem {
         SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
         //desaturatewheelspeeds checks and fixes if any module's wheel speed is above the max
         SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
-
+        /*
         double frontLeftSpeed= appliedDrivePID(states[0], m_frontLeftModule);
         double frontRightSpeed= appliedDrivePID(states[1], m_frontRightModule);
         double backLeftSpeed= appliedDrivePID(states[2], m_backLeftModule);
@@ -281,13 +281,19 @@ public class DrivetrainSubsystem {
         double frontRightAngle= appliedAnglePID(states[1], m_frontRightModule);
         double backLeftAngle= appliedAnglePID(states[2], m_backLeftModule);
         double backRightAngle= appliedAnglePID(states[3], m_backRightModule);
-
+        
         //parameters are double driveVoltage, double steerAngle
         m_frontLeftModule.set(frontLeftSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, frontLeftAngle);
         m_frontRightModule.set(frontRightSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, frontRightAngle);
         m_backLeftModule.set(backLeftSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, backLeftAngle);
         m_backRightModule.set(backRightSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, backRightAngle);
-  }
+        */
+        m_frontLeftModule.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getRadians());
+        m_frontRightModule.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());
+        m_backLeftModule.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getRadians());
+        m_backRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
+
+}
 
   private double appliedDrivePID(SwerveModuleState state, SwerveModule module){
         double goalDriveVelocity= state.speedMetersPerSecond;

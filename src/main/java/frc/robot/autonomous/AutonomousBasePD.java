@@ -8,10 +8,10 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.Constants;
 
 public class AutonomousBasePD extends AutonomousBase{
-    public static final double turnKP= 0.0002;
+    public static final double turnKP= 0.002;
     public static final double turnKI= 0.0;
     public static final double turnKD= 0.0;
-    public static final double driveKP= Robot.kP.getDouble(0.00006);//0.00006;
+    public static final double driveKP= 0.0001;//Robot.kP.getDouble(0.00006);//0.00006;
     public static final double driveKI= Robot.kI.getDouble(0.0);//0.0;
     public static final double driveKD= Robot.kD.getDouble(0.0);//0.0;
     private final double DRIVE_DEADBAND = 3;
@@ -49,8 +49,8 @@ public class AutonomousBasePD extends AutonomousBase{
     @Override
     public void init(){
         drivetrainSubsystem.resetOdometry(startingCoordinate);
-        // directionController.reset();
-        // distanceController.reset();
+        directionController.reset();
+        distanceController.reset();
         directionController.setTolerance(TURN_DEADBAND); 
         distanceController.setTolerance(DRIVE_DEADBAND*Constants.TICKS_PER_INCH);
         states = States.FIRST;
@@ -80,7 +80,7 @@ public class AutonomousBasePD extends AutonomousBase{
     public void periodic()
     {
         
-        //System.out.println("state: "+states);
+        System.out.println("state: " + states);
         if (states == States.FIRST){
             desiredTranslation = preDDD(startingCoordinate, goalCoordinate1); 
             System.out.println("we've reset to this pose: " + DrivetrainSubsystem.m_pose);
@@ -90,8 +90,8 @@ public class AutonomousBasePD extends AutonomousBase{
             driveDesiredDistance(desiredTranslation);
             System.out.println("inside drive state! pose: " + DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
             if (distanceController.atSetpoint()){
-                desiredTranslation = preDDD(goalCoordinate1, goalCoordinate2);
-                setState(States.DRIVE2);
+                //desiredTranslation = preDDD(goalCoordinate1, goalCoordinate2);
+                setState(States.STOP);
             }
         } else if(states == States.DRIVE2){
             driveDesiredDistance(desiredTranslation);
