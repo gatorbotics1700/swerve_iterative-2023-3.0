@@ -110,7 +110,12 @@ public class AprilTagSubsystem {
         //outputStream.putFrame(source);
         
         detectedAprilTagsArray = aprilTagDetector.detect(grayMat);
-        detectedAprilTag = detectedAprilTagsArray[0];
+        if(detectedAprilTagsArray.length == 0){
+            return;
+        } else {
+            detectedAprilTag = detectedAprilTagsArray[0];
+        }
+        
         
 
         /*for(int i = 0; i < detectedAprilTags.length; i++){
