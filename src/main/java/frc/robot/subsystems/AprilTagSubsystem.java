@@ -92,7 +92,7 @@ public class AprilTagSubsystem {
             detectTag();
             setState(AprilTagSequence.CORRECTX);
         }else if(states == AprilTagSequence.CORRECTX){
-            correctXPosition();
+            correctPosition();
         }
     }
 
@@ -127,11 +127,10 @@ public class AprilTagSubsystem {
     }
 
 
-    private void correctXPosition(){
+    private void correctPosition(){
         Pose2d prePose = autonomousBasePD.preDDD(Robot.m_drivetrainSubsystem.m_pose, AprilTagLocation.aprilTagPoses[detectedAprilTag.getId()].toPose2d()); 
         autonomousBasePD.driveDesiredDistance(prePose);
     }
-
     
 
     /*private void getError(){
