@@ -49,7 +49,7 @@ public class Robot extends TimedRobot {
   private AutonomousBasePD engageCharge = new AutonomousBasePD(new Pose2d(97.759, 0, new Rotation2d(0)), new Pose2d(97.759, 0, new Rotation2d(0)), new Pose2d(97.759, 0, new Rotation2d(0)), new Pose2d(97.759, 0, new Rotation2d(0)), new Pose2d(97.759, 0, new Rotation2d(0)), new Pose2d(97.759, 0, new Rotation2d(0)), new Pose2d(97.759, 0, new Rotation2d(0)));
   private AutonomousBasePD placeTwoEngage = new AutonomousBasePD(new Pose2d(223.014, 16.468, new Rotation2d(0)), new Pose2d(0, 22.683, new Rotation2d(0)), new Pose2d(135.615, 25.539, new Rotation2d(0)), new Pose2d(222.191, 64.230, new Rotation2d(0)), new Pose2d(97.711, 64.230, new Rotation2d(0)), new Pose2d(97.711, 64.230, new Rotation2d(0)), new Pose2d(97.711, 64.230, new Rotation2d(0)));
   private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
-  private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 2, new Rotation2d(0)), new Pose2d(0, 2, new Rotation2d(0)), new Pose2d(0, 2, new Rotation2d(0)), new Pose2d(0, 2, new Rotation2d(0)));
+  private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0))); //first is starting position, second is where we want to go
   private AutonomousBaseMP motionProfiling = new AutonomousBaseMP(Trajectories.uno, Trajectories.dos, Trajectories.tres);
   
   //above coordinates didn't work
@@ -166,7 +166,6 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     
      m_autoSelected.periodic();
-     m_drivetrainSubsystem.drive();
      //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
     
   }
