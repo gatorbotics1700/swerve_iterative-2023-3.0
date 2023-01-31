@@ -201,7 +201,7 @@ public class DrivetrainSubsystem {
   }
 
   public void resetOdometry(Pose2d start){
-        zeroGyroscope(); //truly resets gyro
+        //zeroGyroscope(); //truly resets gyro
         //zeroDriveEncoder(); 
         //finds the tare
         SwerveModulePosition [] positionArray =  new SwerveModulePosition[] {
