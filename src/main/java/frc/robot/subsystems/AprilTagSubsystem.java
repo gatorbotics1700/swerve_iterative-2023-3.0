@@ -15,16 +15,13 @@ import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.apriltag.AprilTagFields;
 import frc.robot.subsystems.*;
 import frc.robot.Robot;
+import frc.robot.autonomous.*;
 
 //import frc.robot.subsystems.AprilTagFieldEnum;
 
 public class AprilTagSubsystem {
 
-    static{
-        //Loader.load(opencv_java.class);
-        // System.loadLibrary("opencv_java470");
-        //System.load("C:\\Users\\Gatorbotics\\Downloads\\opencv\\build\\java\\x64\\opencv_java470.dll");
-    }
+
     //System.setProperty("java.library.path","C:\\Users\\Gatorbotics\\Downloads\\opencv\\build\\java\\x64")
     //System.load("C:\\Users\\Gatorbotics\\Downloads\\opencv\\build\\java\\x64");
     
@@ -38,25 +35,39 @@ public class AprilTagSubsystem {
     Mat source;
     Mat grayMat;
     CvSink cvSink;
-    AprilTagDetection[] detectedAprilTags; 
-    double XError[];
+    AprilTagDetection[] detectedAprilTagsArray;
+    AprilTagDetection detectedAprilTag;
     VideoSink server;
-    int aprilTagIds[];
+    /*int aprilTagIds[];
+    
     float decisionMargin[];
     double centerX[];
-    double centerY[];
+    double centerY[];*/
     double drivetrainXPosition;
     //Path path = Filesystem.getDefault().getPath("2023-chargedup.json");
     //public final String m_resourceFile;
 
     //CvSource outputStream;
 
-    
+
+
+    public static enum AprilTagSequence{
+        DETECT,
+        CORRECTX;
+    }
+
+    private static AprilTagSequence states = AprilTagSequence.DETECT; 
+
+    public void setState(AprilTagSequence newState){
+        states = newState;
+    }
     
     private static AprilTagDetector aprilTagDetector = new AprilTagDetector();
+
+    private static AutonomousBasePD autonomousBasePD = new AutonomousBasePD();
     //AprilTagFieldLayout aprilTagFieldLayout = new AprilTagFieldLayout("src/main/deploy/2023-chargedup.json");
     //AprilTagFieldLayout secondAprilTagFieldLayout = new AprilTagFieldLayout(AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile));
-    AprilTagFieldLayout thirdAprilTagFieldLayout = new AprilTagFieldLayout("/edu/wpi/first/apriltag/2023-chargedup.json");
+    //AprilTagFieldLayout thirdAprilTagFieldLayout = new AprilTagFieldLayout("/edu/wpi/first/apriltag/2023-chargedup.json");
     //Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectory);
     
     public void init(){
@@ -77,7 +88,12 @@ public class AprilTagSubsystem {
     }
     
     public void periodic(){
-        
+        if(states == AprilTagSequence.DETECT){
+            detectTag();
+            setState(AprilTagSequence.CORRECTX);
+        }else if(states == AprilTagSequence.CORRECTX){
+            correctXPosition();
+        }
     }
 
     private void detectTag(){
@@ -93,29 +109,37 @@ public class AprilTagSubsystem {
         System.out.println(grayMat.height());
         //outputStream.putFrame(source);
         
-        detectedAprilTags = aprilTagDetector.detect(grayMat);
-
+        detectedAprilTagsArray = aprilTagDetector.detect(grayMat);
+        detectedAprilTag = detectedAprilTagsArray[0];
         
 
-        for(int i = 0; i < detectedAprilTags.length; i++){
+        /*for(int i = 0; i < detectedAprilTags.length; i++){
             aprilTagIds[i] = detectedAprilTags[i].getId();
             decisionMargin[i] = detectedAprilTags[i].getDecisionMargin();
             centerX[i] = detectedAprilTags[i].getCenterX();
             centerY[i] = detectedAprilTags[i].getCenterY();
-        }
+        }*/
 
         
 
-        System.out.println("Detected Apriltags: " + detectedAprilTags);
+        System.out.println("Detected Apriltag: " + detectedAprilTag);
 
     }
 
-    private void getError(){
+
+    private void correctXPosition(){
+        Pose2d prePose = autonomousBasePD.preDDD(Robot.m_drivetrainSubsystem.m_pose, AprilTagLocation.aprilTagPoses[detectedAprilTag.getId()].toPose2d()); 
+        autonomousBasePD.driveDesiredDistance(prePose);
+    }
+
+    
+
+    /*private void getError(){
         drivetrainXPosition = Robot.m_drivetrainSubsystem.m_pose.getX();
         for(int i = 0; i < aprilTagIds.length; i++){
             XError[i] = AprilTagLocation.aprilTagPoses[aprilTagIds[i]].getX() - drivetrainXPosition;
             
             //AprilTagLocation
         }
-    }
+    }*/
 }
