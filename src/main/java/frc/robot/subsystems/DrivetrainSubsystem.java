@@ -283,26 +283,15 @@ public class DrivetrainSubsystem {
         double backRightAngle= appliedAnglePID(states[3], m_backRightModule);*/
 
         //parameters are double driveVoltage, double steerAngle
-<<<<<<< HEAD
         m_frontLeftModule.set(frontLeftSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, frontLeftAngle);
         m_frontRightModule.set(frontRightSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, frontRightAngle);
         m_backLeftModule.set(backLeftSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, backLeftAngle);
         m_backRightModule.set(backRightSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, backRightAngle);
-=======
-       /* m_frontLeftModule.set(states[0].frontLeftSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].frontLeftAngle);
-        m_frontRightModule.set(states[1].frontRightSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].frontRightAngle);
-        m_backLeftModule.set(states[2].backLeftSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].backLeftAngle);
-        m_backRightModule.set(states[3].backRightSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].backRightAngle);*/
->>>>>>> ce50641ea8b0b1fed6931a10357304f96dc6d9d1
   }
 
   /*private double appliedDrivePID(SwerveModuleState state, SwerveModule module){
         double goalDriveVelocity= state.speedMetersPerSecond;
-<<<<<<< HEAD
         double currentDriveVelocity= module.getDriveVelocity();
-=======
-        //double currentDriveVelocity= module.getStateVelocity();
->>>>>>> ce50641ea8b0b1fed6931a10357304f96dc6d9d1
         PIDController pid = new PIDController(0.001, 0.0, 0.0);
         pid.setTolerance(0.1);
         return pid.calculate(currentDriveVelocity, goalDriveVelocity);
@@ -310,11 +299,7 @@ public class DrivetrainSubsystem {
 
   /*private double appliedAnglePID(SwerveModuleState state, SwerveModule module){
         double goalAngle= state.angle.getRadians();
-<<<<<<< HEAD
         double currentAngle= module.getSteerAngle();
-=======
-        //double currentAngle= module.getStateAngle();
->>>>>>> ce50641ea8b0b1fed6931a10357304f96dc6d9d1
         PIDController pid = new PIDController(0.001, 0.0, 0.0);
         pid.setTolerance(Math.toRadians(1));
         //return pid.calculate(goalAngle, currentAngle);
