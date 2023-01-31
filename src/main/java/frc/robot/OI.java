@@ -8,6 +8,5 @@ public class OI {
 
     public static Button stop = Button.kB;
     public static Button armExtended  = Button.kY;//button to fully extend to 90 degrees
-    public static Button swingThrough  = Button.kX;//button to go through
     public static Button armControl  = Button.kLeftStick;//stick to control arm length (any length from fully retracted to extended)
 }

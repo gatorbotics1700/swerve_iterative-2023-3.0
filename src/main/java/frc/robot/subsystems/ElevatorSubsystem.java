@@ -21,7 +21,7 @@ public class ElevatorSubsystem {
     public Gains elevatorGains = new Gains(_kP, _kI, _kD, _kIzone, _kPeakOutput);
 
     public static enum ElevatorStates{
-        ZERO,  //janet doesn't know if we need this b/c low elevator height seems like the shortest one we'd need
+        ZERO,
         LOW_ELEVATOR_HEIGHT,
         MID_ELEVATOR_HEIGHT,
         HIGH_ELEVATOR_HEIGHT;
@@ -33,7 +33,7 @@ public class ElevatorSubsystem {
 
         //configuring deadband
         elevatorMotor.configAllowableClosedloopError(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
-		/* Config Position Closed Loop gains in slot0, tsypically kF stays zero. */
+		/* Config Position Closed Loop gains in slot0, typically kF stays zero. */
 		elevatorMotor.config_kP(Constants.kPIDLoopIdx, elevatorGains.kP, Constants.kTimeoutMs);
 		elevatorMotor.config_kI(Constants.kPIDLoopIdx, elevatorGains.kI, Constants.kTimeoutMs);
 		elevatorMotor.config_kD(Constants.kPIDLoopIdx, elevatorGains.kD, Constants.kTimeoutMs);
@@ -45,7 +45,7 @@ public class ElevatorSubsystem {
         } else if (elevatorState == ElevatorStates.LOW_ELEVATOR_HEIGHT){
             elevatorMotor.set(ControlMode.Position, 100); //change value once we know robot dimensions
         } else if (elevatorState == ElevatorStates.MID_ELEVATOR_HEIGHT){
-            elevatorMotor.set(ControlMode.Position, 200); //change value once we know robot dimensions
+            elevatorMotor.set(ControlMode.Position, 24.5); //change value once we know robot dimensions
         } else {
             elevatorMotor.set(ControlMode.Position, 300); //change value once we know robot dimensions
         }

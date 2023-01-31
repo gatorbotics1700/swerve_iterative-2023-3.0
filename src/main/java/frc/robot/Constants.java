@@ -62,13 +62,13 @@ public final class Constants {
     public static final double GEAR_RATIO = 6.75;
     public static final double WHEEL_DIAMETER= 4; //inches
     public static final double TICKS_PER_REV = 2048;
-    public static final double TICKS_PER_INCH = TICKS_PER_REV*GEAR_RATIO/WHEEL_DIAMETER/Math.PI; //talonfx drive encoder
-    public static final double ARM_ROTATION_GEAR_RATIO = 0.0;//this is undecided as of Jan 20th
+    public static final double TICKS_PER_INCH = TICKS_PER_REV*GEAR_RATIO/WHEEL_DIAMETER/Math.PI; // check if this is right //talonfx drive encoder
+    public static final double ELEVATOR_GEAR_RATIO = 100.0; //says arya on jan 30th
 
     
 
     public static final int kTimeoutMs = 1000;
-    public static final int kPIDLoopIdx = 0;//not sure what this value does or if this value should be diff for rotation, telescoping, elevator
+    public static final int kPIDLoopIdx = 0; //not sure what this value does or if this value should be diff for rotation, telescoping, elevator
     
 	/* Choose so that Talon does not report sensor out of phase */
     public static boolean kSensorPhase = true; //Sensor phase describes the relationship between the motor output direction (positive vs negative) and sensor velocity (positive vs negative). For soft-limits and closed-loop features to function correctly, the sensor measurement and motor output must be “in-phase”.
