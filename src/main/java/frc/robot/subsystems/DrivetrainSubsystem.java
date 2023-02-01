@@ -76,6 +76,8 @@ public class DrivetrainSubsystem {
   // The important thing about how you configure your gyroscope is that rotating the robot counter-clockwise should
   // cause the angle reading to increase until it wraps back over to zero.
 
+  public double MINOUTPUT = 0.1; 
+
   public final PigeonIMU m_pigeon = new PigeonIMU(DRIVETRAIN_PIGEON_ID);
   // These are our modules. We initialize them in the constructor.
   public final SwerveModule m_frontLeftModule;
@@ -342,6 +344,10 @@ public class DrivetrainSubsystem {
         if (Math.abs(pitchAfterCorrection - pitchSetpoint) < 1.0){
             setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0,getGyroscopeRotation()));
             //velocityPD(0);
+        } else{
+                if(output < MINOUTPUT){
+                   output = MINOUTPUT;
+                }
         }
     }
 
