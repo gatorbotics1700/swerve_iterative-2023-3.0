@@ -92,14 +92,14 @@ public class AutonomousBasePD extends AutonomousBase{
                 driveDesiredDistance(desiredTranslation);
                 System.out.println("inside drive state! pose: " + DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
                 if (distanceController.atSetpoint()){
-                    //desiredTranslation = preDDD(goalCoordinate1, goalCoordinate2);
-                    setState(States.STOP);
+                    desiredTranslation = preDDD(goalCoordinate1, goalCoordinate2);
+                    setState(States.DRIVE2);
                 }
             } else if(states == States.DRIVE2){
                 driveDesiredDistance(desiredTranslation);
                 if(distanceController.atSetpoint()){
-                    desiredTranslation = preDDD(goalCoordinate2, goalCoordinate3); 
-                    setState(States.DRIVE3);  
+                    //desiredTranslation = preDDD(goalCoordinate2, goalCoordinate3); 
+                    setState(States.STOP);  
                 }
             } else if(states == States.DRIVE3){
                 driveDesiredDistance(desiredTranslation);
@@ -154,9 +154,10 @@ public class AutonomousBasePD extends AutonomousBase{
     public void driveDesiredDistance(Pose2d dPose){      
         System.out.println("where we are rn: " + DrivetrainSubsystem.m_pose.getX() + " and " + DrivetrainSubsystem.m_pose.getY());
         double speed = distanceController.calculate(Math.hypot(DrivetrainSubsystem.m_pose.getX(), DrivetrainSubsystem.m_pose.getY()), hypotenuse);
-        double directionX = dPose.getX() / Math.sqrt(Math.pow(dPose.getX(),2) + Math.pow(dPose.getY(),2));
-        double directionY = dPose.getY() / Math.sqrt(Math.pow(dPose.getX(),2) + Math.pow(dPose.getY(),2));
+        double directionX = dPose.getX() / Math.hypot(dPose.getX(), dPose.getY());
+        double directionY = dPose.getY() / Math.hypot(dPose.getX(), dPose.getY());
         System.out.println("DDDing");    
+        speed = Math.min(Constants.DRIVE_MOTOR_MAX_VOLTAGE, speed);
         drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speed * directionX, speed * directionY, 0, drivetrainSubsystem.getGyroscopeRotation()));  
 
         System.out.println("current speed: " + speed);
