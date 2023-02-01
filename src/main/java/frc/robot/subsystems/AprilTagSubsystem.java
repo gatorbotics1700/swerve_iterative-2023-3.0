@@ -11,9 +11,11 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoSink;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.autonomous.AutonomousBasePD;
 
 //import frc.robot.subsystems.AprilTagFieldEnum;
@@ -53,6 +55,7 @@ public class AprilTagSubsystem {
     private static double fy;//need to add value
     private static double cx;//need to add value
     private static double cy;//need to add value
+    private static SwerveDrivePoseEstimator swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(null, null, null, null); //what arguments go here?
 
     public static enum AprilTagSequence{
         DETECT,
@@ -100,6 +103,7 @@ public class AprilTagSubsystem {
         Pose2d aprilTagPose2D = AprilTagLocation.aprilTagPoses[detectedAprilTag.getId()-1].toPose2d();//pose 2d of the actual april tag
         Rotation2d robotSubtractedAngle =  Rotation2d.fromDegrees(aprilTagPose2D.getRotation().getDegrees()-aprilTagError.getRotation().toRotation2d().getDegrees());//angle needed to create pose 2d of robot position, don't know if toRotatation2D converts Rotation3D properly
         Pose2d robotPost2DAprilTag = new Pose2d(aprilTagPose2D.getX()-aprilTagError.getX(), aprilTagPose2D.getY()-aprilTagError.getY(), robotSubtractedAngle);
+        swerveDrivePoseEstimator.addVisionMeasurement(robotPost2DAprilTag, Timer.getFPGATimestamp());
     }
     
     public void periodic(){
