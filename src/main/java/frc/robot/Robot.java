@@ -179,9 +179,11 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     m_drivetrainSubsystem.driveTeleop();
 
-
     if (OI.m_controller.getBButton()){
       m_drivetrainSubsystem.stopDrive();
+    }
+    if(OI.m_controller.getAButton()){
+      m_drivetrainSubsystem.resetOdometry(new Pose2d());
     }
 
   }
