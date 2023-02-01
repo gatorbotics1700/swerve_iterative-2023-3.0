@@ -91,9 +91,9 @@ public class DrivetrainSubsystem {
   private double tareRBEncoder = 0.0;
   public double error1;
 
-    public static double pitchKP= 0.04; //arbitrary placeholder #
+    public static double pitchKP= 0.025; //arbitrary placeholder # ^0.04
     public static double pitchKI= 0.0;
-    public static double pitchKD= 0.001; //^
+    public static double pitchKD= 0.001; //^0.001
     public static double veloKP = 0.25;
     public static double veloKI = 0.3; 
     public static double veloKD = 0.35;
@@ -345,8 +345,8 @@ public class DrivetrainSubsystem {
             setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0,getGyroscopeRotation()));
             //velocityPD(0);
         } else{
-                if(output < MINOUTPUT){
-                   output = MINOUTPUT;
+                if(Math.abs(output) < MINOUTPUT){
+                   output = Math.signum(output) * MINOUTPUT;
                 }
         }
     }

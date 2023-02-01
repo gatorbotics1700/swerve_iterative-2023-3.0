@@ -29,10 +29,10 @@ public final class Constants {
     public static final int DRIVETRAIN_PIGEON_ID = 6; 
 
     //green
-    // public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(71.807+180);
-    // public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(202.148+180);
-    // public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(73.916+180);
-    // public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(114.609+180);
+    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(193.36);
+    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(305.24);
+    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(276.86);
+    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(122.87);
 
     //swervo
     // public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(185.713); 
@@ -41,10 +41,10 @@ public final class Constants {
     // public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(341.904);
 
     //1/28 new swervo 
-    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(9.580);
-    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(256.358);
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(137.637);
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(72.949);
+    // public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(9.580);
+    // public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(256.358);
+    // public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(137.637);
+    // public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(72.949);
 
     //even can ids are drive, odd can ids are steer
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 26;
