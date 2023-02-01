@@ -40,6 +40,8 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 public class Robot extends TimedRobot {
   private AutonomousBase m_autoSelected;
   private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<AutonomousBase>();
+
+  //COORDINATES IN INCHES
   private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
   private AutonomousBasePD placeNLeave = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)));
  
@@ -173,9 +175,11 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     m_drivetrainSubsystem.driveTeleop();
 
-
     if (OI.m_controller.getBButton()){
       m_drivetrainSubsystem.stopDrive();
+    }
+    if(OI.m_controller.getAButton()){
+      m_drivetrainSubsystem.resetOdometry(new Pose2d());
     }
 
   }
