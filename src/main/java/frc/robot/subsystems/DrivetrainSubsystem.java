@@ -25,6 +25,7 @@ import java.util.function.DoubleSupplier;
 
 import static frc.robot.Constants.*;
 import frc.robot.OI;
+import frc.robot.subsystems.ElevatorSubsystem.ElevatorStates;
 
 public class DrivetrainSubsystem {
 
@@ -90,6 +91,7 @@ public class DrivetrainSubsystem {
 
   //ChassisSpeeds takes in y velocity, x velocity, speed of rotation
   private ChassisSpeeds m_chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
+  private static ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
 
   public DrivetrainSubsystem() {
     ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
@@ -229,6 +231,8 @@ public class DrivetrainSubsystem {
         m_chassisSpeeds = chassisSpeeds;
   }
 
+
+
 //   public Pose2d getCurrentPose(){
 //         return m_pose;
 //   }
@@ -243,6 +247,16 @@ public class DrivetrainSubsystem {
         DoubleSupplier m_rotationSupplier = () -> -modifyAxis(OI.m_controller.getRightX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
         
         //setting speed
+        if (elevatorSubsystem.elevatorState == ElevatorStates.HIGH_ELEVATOR_HEIGHT){
+                setSpeed(
+                ChassisSpeeds.fromFieldRelativeSpeeds(
+                        m_translationXSupplier.getAsDouble(),
+                        m_translationYSupplier.getAsDouble(),
+                        m_rotationSupplier.getAsDouble(),
+                        getGyroscopeRotation()
+                )
+        );
+        }       
         setSpeed(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
                         m_translationXSupplier.getAsDouble(),
