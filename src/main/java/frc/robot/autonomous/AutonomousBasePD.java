@@ -157,7 +157,7 @@ public class AutonomousBasePD extends AutonomousBase{
         double directionX = dPose.getX() / Math.hypot(dPose.getX(), dPose.getY());
         double directionY = dPose.getY() / Math.hypot(dPose.getX(), dPose.getY());
         System.out.println("DDDing");    
-        speed = Math.min(Constants.DRIVE_MOTOR_MAX_VOLTAGE, speed);
+        speed = Math.signum(speed)*Math.min(Constants.DRIVE_MOTOR_MAX_VOLTAGE, Math.abs(speed));
         drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speed * directionX, speed * directionY, 0, drivetrainSubsystem.getGyroscopeRotation()));  
 
         System.out.println("current speed: " + speed);

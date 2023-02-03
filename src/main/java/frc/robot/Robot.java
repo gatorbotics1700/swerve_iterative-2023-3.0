@@ -26,6 +26,13 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+//Sam's Imports Below This
+/**import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
+//SAM below this
+import com.revrobotics.ColorSensorV3; */
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -195,7 +202,8 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-    System.out.println("Trajectory: " + Trajectories.uno);
+    //System.out.println("Trajectory: " + Trajectories.uno);
+    m_drivetrainSubsystem.zeroGyroscope();
   }
 
   /** This function is called periodically during test mode. */
@@ -206,6 +214,8 @@ public class Robot extends TimedRobot {
     m_drivetrainSubsystem.setSpeed(new ChassisSpeeds(0, 0.2, 0));
     
     m_drivetrainSubsystem.drive();
+    
+    System.out.println(m_drivetrainSubsystem.getGyroscopeRotation());
   }
 
   /** This function is called once when the robot is first started up. */
@@ -215,4 +225,5 @@ public class Robot extends TimedRobot {
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {}
+  
 }
