@@ -16,7 +16,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.Robot;
 import frc.robot.autonomous.AutonomousBasePD;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 //import frc.robot.subsystems.AprilTagFieldEnum;
 
@@ -55,7 +57,7 @@ public class AprilTagSubsystem {
     private static double fy;//need to add value
     private static double cx;//need to add value
     private static double cy;//need to add value
-    private static SwerveDrivePoseEstimator swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(null, null, null, null); //what arguments go here?
+    private static SwerveDrivePoseEstimator swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(Robot.m_drivetrainSubsystem.m_kinematics, Robot.m_drivetrainSubsystem.getGyroscopeRotation(), new SwerveModulePosition[] {Robot.m_drivetrainSubsystem.m_frontLeftModule.getSwerveModulePosition(),Robot.m_drivetrainSubsystem.m_frontRightModule.getSwerveModulePosition(), Robot.m_drivetrainSubsystem.m_backRightModule.getSwerveModulePosition(), Robot.m_drivetrainSubsystem.m_backLeftModule.getSwerveModulePosition()}, new Pose2d(0.0, 0.0,Robot.m_drivetrainSubsystem.getGyroscopeRotation())); //what arguments go here?
 
     public static enum AprilTagSequence{
         DETECT,
@@ -102,8 +104,8 @@ public class AprilTagSubsystem {
         Transform3d aprilTagError = aprilTagPoseEstimator.estimate(detectedAprilTag);//april tag pose estimator in Transform 3d
         Pose2d aprilTagPose2D = AprilTagLocation.aprilTagPoses[detectedAprilTag.getId()-1].toPose2d();//pose 2d of the actual april tag
         Rotation2d robotSubtractedAngle =  Rotation2d.fromDegrees(aprilTagPose2D.getRotation().getDegrees()-aprilTagError.getRotation().toRotation2d().getDegrees());//angle needed to create pose 2d of robot position, don't know if toRotatation2D converts Rotation3D properly
-        Pose2d robotPost2DAprilTag = new Pose2d(aprilTagPose2D.getX()-aprilTagError.getX(), aprilTagPose2D.getY()-aprilTagError.getY(), robotSubtractedAngle);
-        swerveDrivePoseEstimator.addVisionMeasurement(robotPost2DAprilTag, Timer.getFPGATimestamp());
+        Pose2d robotPose2DAprilTag = new Pose2d(aprilTagPose2D.getX()-aprilTagError.getX(), aprilTagPose2D.getY()-aprilTagError.getY(), robotSubtractedAngle);
+        swerveDrivePoseEstimator.addVisionMeasurement(robotPose2DAprilTag, Timer.getFPGATimestamp());
     }
     
     public void periodic(){
