@@ -16,18 +16,19 @@ public class ElevatorSubsystem {
     public double _kPeakOutput = 1.0;
 
     public static TalonFX elevatorMotor = new TalonFX(Constants.ELEVATOR_CAN_ID);
-    public static ElevatorStates elevatorState = ElevatorStates.MID_ELEVATOR_HEIGHT;
+    public static ElevatorStates elevatorState = ElevatorStates.ZERO;
     
     public Gains elevatorGains = new Gains(_kP, _kI, _kD, _kIzone, _kPeakOutput);
 
     public static enum ElevatorStates{
-        ZERO,
+        ZERO, 
         LOW_ELEVATOR_HEIGHT,
         MID_ELEVATOR_HEIGHT,
         HIGH_ELEVATOR_HEIGHT;
     }
 
     public void init(){
+        System.out.println("elevvator init!!!!");
         elevatorMotor.setInverted(false);
         elevatorMotor.setNeutralMode(NeutralMode.Brake);
 
@@ -40,7 +41,8 @@ public class ElevatorSubsystem {
     }
 
     public void periodic(){
-        if (elevatorState == ElevatorStates.ZERO){
+        System.out.println("periodicQ!!!!!!!");
+        if (elevatorState == ElevatorStates.ZERO){ //facing forward, turning clockwise = going down
             elevatorMotor.set(ControlMode.Position, 0);
         } else if (elevatorState == ElevatorStates.LOW_ELEVATOR_HEIGHT){
             elevatorMotor.set(ControlMode.Position, 100); //change value once we know robot dimensions

@@ -15,12 +15,14 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.subsystems.ElevatorSubsystem.ElevatorStates;;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
+
 public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
@@ -28,6 +30,8 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   private final AutonomousBase autonomousBasePD = new AutonomousBasePD(new Pose2d(0*Constants.TICKS_PER_INCH, -20*Constants.TICKS_PER_INCH, new Rotation2d(0)), 0.0, new Pose2d(), 0.0);
   private static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
+
+  public ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
 
   public static DrivetrainSubsystem getDrivetrainSubsystem(){
     return m_drivetrainSubsystem;
@@ -71,26 +75,20 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     autonomousBasePD.init();
-    m_autoSelected = m_chooser.getSelected();
-    m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
+
+    elevatorSubsystem.init();
+    // m_autoSelected = m_chooser.getSelected();
+    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
+    // System.out.println("Auto selected: " + m_autoSelected);
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
     
-    switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
-        break;
-      case kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
-    }
-    
-    autonomousBasePD.periodic();
+    //autonomousBasePD.periodic();
+    elevatorSubsystem.setState(ElevatorStates.MID_ELEVATOR_HEIGHT);
+    elevatorSubsystem.periodic();
     //m_drivetrainSubsystem.drive();
   }
 
@@ -121,14 +119,17 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-    m_drivetrainSubsystem.m_pose = new Pose2d(20, 30, new Rotation2d(Math.PI/4));
-    System.out.println("m_pose: " + m_drivetrainSubsystem.m_pose);
-    autonomousBasePD.init();
+    //m_drivetrainSubsystem.m_pose = new Pose2d(20, 30, new Rotation2d(Math.PI/4));
+    //System.out.println("m_pose: " + m_drivetrainSubsystem.m_pose);
+    //autonomousBasePD.init();
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
+    elevatorSubsystem.setState(ElevatorStates.ZERO);
+    elevatorSubsystem.periodic();
+
   }
 
   /** This function is called once when the robot is first started up. */

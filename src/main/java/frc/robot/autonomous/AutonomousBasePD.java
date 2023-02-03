@@ -51,7 +51,7 @@ public class AutonomousBasePD extends AutonomousBase{
         directionController.setTolerance(DEADBAND); 
         distanceController.setTolerance(DEADBAND*Constants.TICKS_PER_INCH);
         states = States.FIRST;
-        System.out.println("init!");
+        System.out.println("auto init!");
     }
 
     public static enum States{
