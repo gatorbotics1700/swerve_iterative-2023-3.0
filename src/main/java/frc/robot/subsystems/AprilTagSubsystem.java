@@ -30,6 +30,7 @@ public class AprilTagSubsystem {
     }*/
 
     public static UsbCamera camera0;
+    public static UsbCamera camera1;
     //public static VideoSink sink;
     private String family = "tag16h5";
     Mat source;
@@ -75,6 +76,7 @@ public class AprilTagSubsystem {
         //camera0 = new UsbCamera("USB Camera 0", 0);
         aprilTagDetector.addFamily(family, 0); //added 0
         camera0 = CameraServer.startAutomaticCapture(); //deleted 0
+        camera1 = CameraServer.startAutomaticCapture();
         server = CameraServer.getServer();
         //sink = CameraServer.getServer();
         source = new Mat();
