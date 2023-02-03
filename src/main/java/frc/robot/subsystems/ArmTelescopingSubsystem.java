@@ -51,7 +51,7 @@ public class ArmTelescopingSubsystem {
             telescopingMotor.set(ControlMode.Position, 0);
             telescopingMotor.set(ControlMode.PercentOutput, 0);
         } else if (tState == TelescopingStates.FULLY_EXTENDED){
-            telescopingMotor.set(ControlMode.Position, extensionVal); //confirmed
+            telescopingMotor.set(ControlMode.Position, extensionVal * Constants.TICKS_PER_INCH); //confirmed
         } else if (tState == TelescopingStates.LOW_ARM_LENGTH){
             telescopingMotor.set(ControlMode.Position, 8); // replace position value w low length
         }else if (tState == TelescopingStates.MID_ARM_LENGTH){

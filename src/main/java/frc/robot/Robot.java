@@ -15,6 +15,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.subsystems.ArmTelescopingSubsystem.TelescopingStates;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -71,28 +72,18 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    autonomousBasePD.init();
-    m_autoSelected = m_chooser.getSelected();
-    m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
+    armTelescopingSubsystem.init();
+
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    
-    switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
-        break;
-      case kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
-    }
-    
-    autonomousBasePD.periodic();
-    //m_drivetrainSubsystem.drive();
+   
+    armTelescopingSubsystem.timedMoveArm(1, true); //you can change forwards to be false to go backwards; time is in seconds
+
+    // armTelescopingSubsystem.setTState(TelescopingStates.FULLY_EXTENDED);
+    // armTelescopingSubsystem.periodic();
   }
 
   /** This function is called once when teleop is enabled. */
@@ -131,7 +122,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-    armTelescopingSubsystem.timedMoveArm(5, true); //you can change forwards to be false to go backwards; time is in seconds
   }
 
   /** This function is called once when the robot is first started up. */
