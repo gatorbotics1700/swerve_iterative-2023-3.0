@@ -45,11 +45,13 @@ public class ElevatorSubsystem {
         } else if (elevatorState == ElevatorStates.LOW_ELEVATOR_HEIGHT){
             elevatorMotor.set(ControlMode.Position, 100); //change value once we know robot dimensions
         } else if (elevatorState == ElevatorStates.MID_ELEVATOR_HEIGHT){
-            elevatorMotor.set(ControlMode.Position, 24.5); //change value once we know robot dimensions
+            elevatorMotor.set(ControlMode.Position, 24.5 * Constants.TICKS_PER_INCH); //change value once we know robot dimensions
         } else {
             elevatorMotor.set(ControlMode.Position, 300); //change value once we know robot dimensions
         }
     }
+
+    
 
     public void setState(ElevatorStates newElevatorState){
         elevatorState = newElevatorState;
