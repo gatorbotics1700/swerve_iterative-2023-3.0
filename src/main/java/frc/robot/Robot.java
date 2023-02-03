@@ -80,10 +80,10 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
    
-    armTelescopingSubsystem.timedMoveArm(1, true); //you can change forwards to be false to go backwards; time is in seconds
+    //armTelescopingSubsystem.timedMoveArm(0.5, false); //you can change forwards to be false to go backwards; time is in seconds
 
-    // armTelescopingSubsystem.setTState(TelescopingStates.FULLY_EXTENDED);
-    // armTelescopingSubsystem.periodic();
+    armTelescopingSubsystem.setTState(TelescopingStates.FULLY_EXTENDED);
+    armTelescopingSubsystem.periodic();
   }
 
   /** This function is called once when teleop is enabled. */
@@ -122,6 +122,8 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
+    armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
+    armTelescopingSubsystem.periodic();
   }
 
   /** This function is called once when the robot is first started up. */

@@ -14,7 +14,7 @@ public class ArmTelescopingSubsystem {
     public static TelescopingStates tState = TelescopingStates.RETRACTED;//should this be retracted or mid? what is the equivalent to off?
 
     TalonFX telescopingMotor = new TalonFX(Constants.TELESCOPING_MOTOR_ID);//maybe this motor should be renamed to make it more descriptive
-
+    double startTime;
     //armMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx, Constants.kTimeoutMs);//determine what these values would be for us
 
     /*public static enum ArmStates{
@@ -34,26 +34,24 @@ public class ArmTelescopingSubsystem {
         MID_ARM_LENGTH,
         HIGH_ARM_LENGTH;
     }
-    
-    public void setTState(TelescopingStates newState){
-        tState = newState;
-    }
 
     public ArmTelescopingSubsystem(){}
 
     public void init(){
+        System.out.println("telescoping init!! :)");
         telescopingMotor.setInverted(false); //sets the forward direction of the motor to counter clockwise
+        startTime = System.currentTimeMillis();
+
     }
 
     public void periodic(){//sam requests that we can operate arm length by stick on xbox
         //all of the motor values need to be changed to ticks
         if (tState == TelescopingStates.RETRACTED){
             telescopingMotor.set(ControlMode.Position, 0);
-            telescopingMotor.set(ControlMode.PercentOutput, 0);
         } else if (tState == TelescopingStates.FULLY_EXTENDED){
             telescopingMotor.set(ControlMode.Position, extensionVal * Constants.TICKS_PER_INCH); //confirmed
         } else if (tState == TelescopingStates.LOW_ARM_LENGTH){
-            telescopingMotor.set(ControlMode.Position, 8); // replace position value w low length
+            telescopingMotor.set(ControlMode.Position, 8 * Constants.TICKS_PER_INCH); // replace position value w low length
         }else if (tState == TelescopingStates.MID_ARM_LENGTH){
             telescopingMotor.set(ControlMode.Position, 5); // goes with 90 degrees rotation // replace position value w mid length
         }else{
@@ -72,8 +70,10 @@ public class ArmTelescopingSubsystem {
     }
     
     public void timedMoveArm(double time, boolean forwards){ //time in seconds
-        double startTime = System.currentTimeMillis();
-        int milliTime = (int) time * 1000;
+        System.out.println("moving arm >:)");
+        System.out.println("start time: " + startTime);
+        double milliTime = time * 1000;
+        System.out.println("milli time: " + milliTime);
         if(forwards == true){
             while(System.currentTimeMillis() - startTime <= milliTime){
                 telescopingMotor.set(ControlMode.PercentOutput,0.2);
@@ -86,6 +86,10 @@ public class ArmTelescopingSubsystem {
             telescopingMotor.set(ControlMode.PercentOutput,0);
         }
         
+    }
+
+    public void setTState(TelescopingStates newState){
+        tState = newState;
     }
 
     //public void armPID(double armLengthSetpoint){
