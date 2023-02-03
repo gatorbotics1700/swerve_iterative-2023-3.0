@@ -60,12 +60,11 @@ public final class Constants {
     public static final double STEER_MOTOR_MIN_VOLTAGE = 0.02; 
     public static final double STEER_MOTOR_MAX_VOLTAGE = 0.5;
     public static final double GEAR_RATIO = 6.75;
-    public static final double WHEEL_DIAMETER= 4; //inches
+    public static final double ELEVATOR_SPROCKET_DIAMETER= 1.05; //inches
     public static final double TICKS_PER_REV = 2048;
-    public static final double TICKS_PER_INCH = TICKS_PER_REV*GEAR_RATIO/WHEEL_DIAMETER/Math.PI; // check if this is right //talonfx drive encoder
-    public static final double ELEVATOR_GEAR_RATIO = 100.0; //says arya on jan 30th
+    public static final double TICKS_PER_INCH = TICKS_PER_REV*GEAR_RATIO/ELEVATOR_SPROCKET_DIAMETER/Math.PI; // check if this is right //talonfx drive encoder
+    public static final double ELEVATOR_GEAR_RATIO = 25.0; //says arya on jan 30th // 25 motor spins for 1 shaft spin
 
-    
 
     public static final int kTimeoutMs = 1000;
     public static final int kPIDLoopIdx = 0; //not sure what this value does or if this value should be diff for rotation, telescoping, elevator
