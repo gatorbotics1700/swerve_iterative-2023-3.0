@@ -1,21 +1,24 @@
 package frc.robot.subsystems;
+import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
-import java.nio.file.Path;
-import edu.wpi.first.wpilibj.Filesystem;
+
+import edu.wpi.first.apriltag.AprilTagDetection;
+import edu.wpi.first.apriltag.AprilTagDetector;
+import edu.wpi.first.apriltag.AprilTagPoseEstimator;
+
+import edu.wpi.first.apriltag.AprilTagPoseEstimator.Config;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoSink;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-
-import org.opencv.core.Mat;
-import edu.wpi.first.apriltag.*;
-import java.util.Arrays;
-import edu.wpi.first.cscore.CvSink;
-import edu.wpi.first.cscore.CvSource;
-import edu.wpi.first.apriltag.AprilTagFields;
-import frc.robot.subsystems.*;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Robot;
-import frc.robot.autonomous.*;
+import frc.robot.autonomous.AutonomousBasePD;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 //import frc.robot.subsystems.AprilTagFieldEnum;
 
@@ -50,7 +53,12 @@ public class AprilTagSubsystem {
 
     //CvSource outputStream;
 
-
+    private static double tagSize = 4.0; //change to actual size(inches)
+    private static double fx;//need to add value
+    private static double fy;//need to add value
+    private static double cx;//need to add value
+    private static double cy;//need to add value
+    private static SwerveDrivePoseEstimator swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(Robot.m_drivetrainSubsystem.m_kinematics, Robot.m_drivetrainSubsystem.getGyroscopeRotation(), new SwerveModulePosition[] {Robot.m_drivetrainSubsystem.m_frontLeftModule.getSwerveModulePosition(),Robot.m_drivetrainSubsystem.m_frontRightModule.getSwerveModulePosition(), Robot.m_drivetrainSubsystem.m_backRightModule.getSwerveModulePosition(), Robot.m_drivetrainSubsystem.m_backLeftModule.getSwerveModulePosition()}, new Pose2d(0.0, 0.0,Robot.m_drivetrainSubsystem.getGyroscopeRotation())); //what arguments go here?
 
     public static enum AprilTagSequence{
         DETECT,
@@ -66,6 +74,9 @@ public class AprilTagSubsystem {
     private static AprilTagDetector aprilTagDetector = new AprilTagDetector();
 
     private static AutonomousBasePD autonomousBasePD = new AutonomousBasePD();
+
+    public final AprilTagPoseEstimator.Config aprilTagPoseEstimatorConfig = new Config(tagSize, fx, fy, cx, cy);
+    public AprilTagPoseEstimator aprilTagPoseEstimator = new AprilTagPoseEstimator(aprilTagPoseEstimatorConfig);
     //AprilTagFieldLayout aprilTagFieldLayout = new AprilTagFieldLayout("src/main/deploy/2023-chargedup.json");
     //AprilTagFieldLayout secondAprilTagFieldLayout = new AprilTagFieldLayout(AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile));
     //AprilTagFieldLayout thirdAprilTagFieldLayout = new AprilTagFieldLayout("/edu/wpi/first/apriltag/2023-chargedup.json");
@@ -90,13 +101,23 @@ public class AprilTagSubsystem {
         //outputStream = CameraServer.putVideo("camera stream", 320, 240);
     }
     
+
+    //kaylin wrote this but probably did it wrong :)
+    public void addVisionToOdometry(){
+        Transform3d aprilTagError = aprilTagPoseEstimator.estimate(detectedAprilTag);//april tag pose estimator in Transform 3d
+        Pose2d aprilTagPose2D = AprilTagLocation.aprilTagPoses[detectedAprilTag.getId()-1].toPose2d();//pose 2d of the actual april tag
+        Rotation2d robotSubtractedAngle =  Rotation2d.fromDegrees(aprilTagPose2D.getRotation().getDegrees()-aprilTagError.getRotation().toRotation2d().getDegrees());//angle needed to create pose 2d of robot position, don't know if toRotatation2D converts Rotation3D properly
+        Pose2d robotPose2DAprilTag = new Pose2d(aprilTagPose2D.getX()-aprilTagError.getX(), aprilTagPose2D.getY()-aprilTagError.getY(), robotSubtractedAngle);
+        swerveDrivePoseEstimator.addVisionMeasurement(robotPose2DAprilTag, Timer.getFPGATimestamp());
+    }
+    
     public void periodic(){
         if(states == AprilTagSequence.DETECT){
             detectTag();
             setState(AprilTagSequence.CORRECTPOSITION);
         }else if(states == AprilTagSequence.CORRECTPOSITION){
             correctPosition();
-        }
+        }        
     }
 
     public void detectTag(){
