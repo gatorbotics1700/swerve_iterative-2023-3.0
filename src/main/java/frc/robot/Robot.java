@@ -49,20 +49,21 @@ public class Robot extends TimedRobot {
   private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<AutonomousBase>();
 
   //COORDINATES IN INCHES
-  private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
-  private AutonomousBasePD placeNLeave = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)));
- 
   private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
   private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, -30, new Rotation2d(0)), new Pose2d(-20, -40, new Rotation2d(0)), new Pose2d(0, -20, new Rotation2d(0)), new Pose2d(0, -20, new Rotation2d(0)), new Pose2d(0, -20, new Rotation2d(0)), new Pose2d(0, -20, new Rotation2d(0))); //first is starting position, second is where we want to go
-  private AutonomousBaseMP motionProfiling = new AutonomousBaseMP(Trajectories.uno, Trajectories.dos, Trajectories.tres);
+  private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
   
-  private AutonomousBasePD leave = new AutonomousBasePD(new Pose2d(56.069, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)));
-  private AutonomousBasePD placeOnePickOneEngage = new AutonomousBasePD(new Pose2d(56.222, 43.068, new Rotation2d(0)), new Pose2d(278.999, 37.193, new Rotation2d(0)), new Pose2d(257.650, 64.004, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)));
+  private AutonomousBasePD HDplaceNLeave = new AutonomousBasePD(new Pose2d(56.069, 17.332, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)));
+  
+  private AutonomousBasePD HBLeave = new AutonomousBasePD(new Pose2d(56.069, 200.046, new Rotation2d(0)), new Pose2d(219.915, 200.046, new Rotation2d(0)), new Pose2d(219.915, 200.046, new Rotation2d(0)), new Pose2d(219.915, 200.046, new Rotation2d(0)), new Pose2d(219.915, 200.046, new Rotation2d(0)), new Pose2d(219.915, 200.046, new Rotation2d(0)), new Pose2d(219.915, 200.046, new Rotation2d(0)));
+  private AutonomousBasePD HDLeave = new AutonomousBasePD(new Pose2d(56.069, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)));
+  private AutonomousBasePD HDScorePickEngage = new AutonomousBasePD(new Pose2d(56.222, 43.068, new Rotation2d(0)), new Pose2d(278.999, 37.193, new Rotation2d(0)), new Pose2d(257.650, 64.004, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)));
 
   //these paths score 3 balls without touching the charge station, requires 7 Pose2ds!
-  private AutonomousBasePD threeUnderChargeStation = new AutonomousBasePD(new Pose2d(56.069, 17.332, new Rotation2d(0)), new Pose2d(278.999, 37.193, new Rotation2d(0)), new Pose2d(56.222, 43.068, new Rotation2d(0)), new Pose2d(197.484,45.934, new Rotation2d(0)), new Pose2d(279.077, 85.622, new Rotation2d(0)), new Pose2d(197.484,40.000, new Rotation2d(0)), new Pose2d(56.154,66.117, new Rotation2d(0)));
-  private AutonomousBasePD threeAboveChargeStation = new AutonomousBasePD(new Pose2d(56.069, 200.046, new Rotation2d(0)), new Pose2d(278.999, 180.683, new Rotation2d(0)), new Pose2d(56.069, 174.725, new Rotation2d(0)), new Pose2d(207.006, 174.725, new Rotation2d(0)), new Pose2d(278.006, 133.515, new Rotation2d(0)), new Pose2d(200.552, 185.151, new Rotation2d(0)), new Pose2d(57.062, 154.368, new Rotation2d(0)));
+  private AutonomousBasePD HDThreeScore= new AutonomousBasePD(new Pose2d(56.069, 17.332, new Rotation2d(0)), new Pose2d(278.999, 37.193, new Rotation2d(0)), new Pose2d(56.222, 43.068, new Rotation2d(0)), new Pose2d(197.484,45.934, new Rotation2d(0)), new Pose2d(279.077, 85.622, new Rotation2d(0)), new Pose2d(197.484,40.000, new Rotation2d(0)), new Pose2d(56.154,66.117, new Rotation2d(0)));
+  private AutonomousBasePD HBThreeScore = new AutonomousBasePD(new Pose2d(56.069, 200.046, new Rotation2d(0)), new Pose2d(278.999, 180.683, new Rotation2d(0)), new Pose2d(56.069, 174.725, new Rotation2d(0)), new Pose2d(207.006, 174.725, new Rotation2d(0)), new Pose2d(278.006, 133.515, new Rotation2d(0)), new Pose2d(200.552, 185.151, new Rotation2d(0)), new Pose2d(57.062, 154.368, new Rotation2d(0)));
 
+  private AutonomousBaseMP motionProfiling = new AutonomousBaseMP(Trajectories.uno, Trajectories.dos, Trajectories.tres);
   
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   private final Field2d m_field = new Field2d();
@@ -115,13 +116,13 @@ public class Robot extends TimedRobot {
     System.out.println("#I'm Awake");
     m_chooser.setDefaultOption("Default Auto", testPath);
     m_chooser.addOption("My Auto 1", noGo);
-    m_chooser.addOption("My Auto 2",placeNLeave);
-    m_chooser.addOption("My Auto 3", leave);
-    m_chooser.addOption("My Auto 4", placeOnePickOneEngage);
+    m_chooser.addOption("My Auto 2",HDplaceNLeave);
+    m_chooser.addOption("My Auto 3", HDLeave);
+    m_chooser.addOption("My Auto 4", HDScorePickEngage);
     m_chooser.addOption("My Auto timed", timedPath);
     m_chooser.addOption("Motion profiling path", motionProfiling);
-    m_chooser.addOption("three under charge station", threeUnderChargeStation);
-    m_chooser.addOption("three above charge station", threeAboveChargeStation);
+    m_chooser.addOption("three under charge station", HDThreeScore);
+    m_chooser.addOption("three above charge station", HBThreeScore);
 
     SmartDashboard.putData("Auto choices", m_chooser);
 
