@@ -39,7 +39,7 @@ public class AprilTagSubsystem {
     Mat source;
     Mat grayMat;
     CvSink cvSink;
-    AprilTagDetection[] detectedAprilTagsArray;
+    AprilTagDetection[] detectedAprilTagsArray ={};
     AprilTagDetection detectedAprilTag;
     VideoSink server;
     /*int aprilTagIds[];
@@ -59,6 +59,7 @@ public class AprilTagSubsystem {
     private static double cx;//need to add value
     private static double cy;//need to add value
     private static SwerveDrivePoseEstimator swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(Robot.m_drivetrainSubsystem.m_kinematics, Robot.m_drivetrainSubsystem.getGyroscopeRotation(), new SwerveModulePosition[] {Robot.m_drivetrainSubsystem.m_frontLeftModule.getSwerveModulePosition(),Robot.m_drivetrainSubsystem.m_frontRightModule.getSwerveModulePosition(), Robot.m_drivetrainSubsystem.m_backRightModule.getSwerveModulePosition(), Robot.m_drivetrainSubsystem.m_backLeftModule.getSwerveModulePosition()}, new Pose2d(0.0, 0.0,Robot.m_drivetrainSubsystem.getGyroscopeRotation())); //what arguments go here?
+    private static Pose2d prePose;
 
     public static enum AprilTagSequence{
         DETECT,
@@ -83,7 +84,7 @@ public class AprilTagSubsystem {
     //Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectory);
     
     public void init(){
-        Robot.m_drivetrainSubsystem.resetOdometry(new Pose2d(3.0, 4.0, Robot.m_drivetrainSubsystem.getGyroscopeRotation()));
+        Robot.m_drivetrainSubsystem.resetOdometry(new Pose2d(AprilTagLocation.scoringPoses[13].getX() + 12.0, AprilTagLocation.scoringPoses[13].getY() + 12.0, Robot.m_drivetrainSubsystem.getGyroscopeRotation()));
         System.loadLibrary("opencv_java460");
         //camera0 = new UsbCamera("USB Camera 0", 0);
         aprilTagDetector.addFamily(family, 0); //added 0
@@ -103,20 +104,26 @@ public class AprilTagSubsystem {
     
 
     //kaylin wrote this but probably did it wrong :)
-    public void addVisionToOdometry(){
+    /*public void addVisionToOdometry(){
         Transform3d aprilTagError = aprilTagPoseEstimator.estimate(detectedAprilTag);//april tag pose estimator in Transform 3d
         Pose2d aprilTagPose2D = AprilTagLocation.aprilTagPoses[detectedAprilTag.getId()-1].toPose2d();//pose 2d of the actual april tag
         Rotation2d robotSubtractedAngle =  Rotation2d.fromDegrees(aprilTagPose2D.getRotation().getDegrees()-aprilTagError.getRotation().toRotation2d().getDegrees());//angle needed to create pose 2d of robot position, don't know if toRotatation2D converts Rotation3D properly
         Pose2d robotPose2DAprilTag = new Pose2d(aprilTagPose2D.getX()-aprilTagError.getX(), aprilTagPose2D.getY()-aprilTagError.getY(), robotSubtractedAngle);
         swerveDrivePoseEstimator.addVisionMeasurement(robotPose2DAprilTag, Timer.getFPGATimestamp());
-    }
+    }*/
     
     public void periodic(){
         if(states == AprilTagSequence.DETECT){
             detectTag();
-            setState(AprilTagSequence.CORRECTPOSITION);
+            if(detectedAprilTagsArray.length!=0){
+                System.out.println("APRIL TAG DETECTED!!!!!!");
+                setState(AprilTagSequence.CORRECTPOSITION);
+                prePose = autonomousBasePD.preDDD(DrivetrainSubsystem.m_pose, AprilTagLocation.scoringPoses[14]); 
+            }
         }else if(states == AprilTagSequence.CORRECTPOSITION){
+            //addVisionToOdometry();
             correctPosition();
+            Robot.m_drivetrainSubsystem.drive();
         }        
     }
 
@@ -157,7 +164,7 @@ public class AprilTagSubsystem {
 
 
     private void correctPosition(){
-        Pose2d prePose = autonomousBasePD.preDDD(DrivetrainSubsystem.m_pose, AprilTagLocation.aprilTagPoses[detectedAprilTag.getId()].toPose2d()); 
+        
         autonomousBasePD.driveDesiredDistance(prePose);
     }
     
