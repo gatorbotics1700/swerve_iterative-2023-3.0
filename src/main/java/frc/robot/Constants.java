@@ -59,10 +59,10 @@ public final class Constants {
     public static final double DRIVE_MOTOR_MAX_VOLTAGE = 0.8;
     public static final double STEER_MOTOR_MIN_VOLTAGE = 0.02; 
     public static final double STEER_MOTOR_MAX_VOLTAGE = 0.5;
-    public static final double GEAR_RATIO = 6.75;
+    // public static final double GEAR_RATIO = 6.75;
     public static final double ELEVATOR_SPROCKET_DIAMETER= 1.05; //inches
     public static final double TICKS_PER_REV = 2048;
-    public static final double ELEVATOR_GEAR_RATIO = 25.0; //says arya on jan 30th // 25 motor spins for 1 shaft spin
+    public static final double ELEVATOR_GEAR_RATIO = 25.0; // 25 motor spins for 1 shaft spin
 
     public static final double TICKS_PER_INCH = (TICKS_PER_REV*ELEVATOR_GEAR_RATIO)/(ELEVATOR_SPROCKET_DIAMETER*Math.PI); //talonfx drive encoder
 
@@ -74,6 +74,6 @@ public final class Constants {
 
     //public static double deadband = 0.5; //arbitrary
 
-    public static int topLimitSwitchPort = 0;
+    public static int topLimitSwitchPort = 2;
     public static int bottomLimitSwitchPort = 1;
 }

@@ -21,7 +21,7 @@ public class ElevatorSubsystem {
     public int _kIzone = 0;
     public double _kPeakOutput = 1.0;
 
-    public double scaleDown = 1.214; //this value was determined using tested values and plotted by lauren macdonald in loggerpro!
+    public double scaleDown = 1.214; //this value was determined using tested values and plotted by lauren mcdonald in loggerpro!
 
     public static TalonFX elevatorMotor = new TalonFX(Constants.ELEVATOR_CAN_ID);
     public static ElevatorStates elevatorState = ElevatorStates.ZERO;
@@ -32,7 +32,7 @@ public class ElevatorSubsystem {
     public Gains elevatorGains = new Gains(_kP, _kI, _kD, _kIzone, _kPeakOutput);
 
     public static enum ElevatorStates{
-        STOP,
+        STOP, //goes with limit switch
         ZERO, 
         LOW_ELEVATOR_HEIGHT,
         MID_ELEVATOR_HEIGHT,
@@ -59,7 +59,7 @@ public class ElevatorSubsystem {
         }else if (elevatorState == ElevatorStates.ZERO){ //facing forward, turning clockwise = going down
             elevatorMotor.set(ControlMode.Position, 0);
         } else if (elevatorState == ElevatorStates.LOW_ELEVATOR_HEIGHT){
-            elevatorMotor.set(ControlMode.Position, (8/scaleDown) * Constants.TICKS_PER_INCH); //change value once we know robot dimensions
+            elevatorMotor.set(ControlMode.Position, (5/scaleDown) * Constants.TICKS_PER_INCH); //change value once we know robot dimensions
         } else if (elevatorState == ElevatorStates.MID_ELEVATOR_HEIGHT){
             elevatorMotor.set(ControlMode.Position, (24.5/scaleDown) * Constants.TICKS_PER_INCH); //change value once we know robot dimensions
         } else {
