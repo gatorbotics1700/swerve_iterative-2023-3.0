@@ -14,7 +14,6 @@ import frc.robot.autonomous.*;
 import frc.robot.Constants;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.GenericEntry;
@@ -34,6 +33,15 @@ import edu.wpi.first.wpilibj.util.Color;
 //SAM below this
 import com.revrobotics.ColorSensorV3; */
 
+import org.opencv.core.Core;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoSink;
+import org.opencv.core.Mat;
+import edu.wpi.first.apriltag.*;
+import java.util.Arrays;
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.CvSource;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -67,6 +75,8 @@ public class Robot extends TimedRobot {
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   private final Field2d m_field = new Field2d();
   ChassisSpeeds m_ChassisSpeeds;
+
+  public static final AprilTagSubsystem m_AprilTagSubsystem = new AprilTagSubsystem(); 
 
   // static ShuffleboardTab tab = DrivetrainSubsystem.tab;
   //sprivate static NetworkTableEntry kP = tab.add("Auto kP", 0.1).getEntry(); 
@@ -171,27 +181,27 @@ public class Robot extends TimedRobot {
     
   }
 
+
+
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    m_drivetrainSubsystem.driveTeleop();
-
+    System.out.println("i am in teleop");
     if (OI.m_controller.getBButton()){
       m_drivetrainSubsystem.stopDrive();
     }
-    if(OI.m_controller.getAButton()){
+    if (OI.m_controller.getAButton()){
       m_drivetrainSubsystem.resetOdometry(new Pose2d());
     }
 
   }
 
-  /** This function is called once when the robot is disabled. */
+/** This function is called once when the robot is disabled. */
   @Override
   public void disabledInit() {}
 

@@ -168,7 +168,6 @@ public class DrivetrainSubsystem {
     
     m_odometry = new SwerveDrivePoseEstimator(m_kinematics, getGyroscopeRotation(), new SwerveModulePosition[] {m_frontLeftModule.getSwerveModulePosition(), m_frontRightModule.getSwerveModulePosition(), m_backRightModule.getSwerveModulePosition(), m_backLeftModule.getSwerveModulePosition()}, new Pose2d());
   }
-
    /**
    * Sets the gyroscope angle to zero. This can be used to set the direction the robot is currently facing to the
    * 'forwards' direction.
@@ -211,7 +210,6 @@ public class DrivetrainSubsystem {
         System.out.println("position array: " + positionArray.toString());
         System.out.println("m_pose: " + m_pose);
         m_odometry.resetPosition(getGyroscopeRotation(), positionArray, m_pose);
-        
         System.out.println("#resetodometry! new pose: " + m_pose.getX()/TICKS_PER_INCH + " y: " + m_pose.getY()/TICKS_PER_INCH);
         System.out.println("inputs for the reset: " + getGyroscopeRotation() + " " + m_frontLeftModule.getSwerveModulePosition().distanceMeters + " " + m_frontRightModule.getSwerveModulePosition().distanceMeters + " " + m_backLeftModule.getSwerveModulePosition().distanceMeters + " " + m_backRightModule.getSwerveModulePosition().distanceMeters);
 }
@@ -271,7 +269,7 @@ public class DrivetrainSubsystem {
         //desaturatewheelspeeds checks and fixes if any module's wheel speed is above the max
         SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
         
-        double frontLeftSpeed= m_frontLeftModule.getDriveVelocity() + appliedDrivePID(states[0], m_frontLeftModule);
+        /*double frontLeftSpeed= m_frontLeftModule.getDriveVelocity() + appliedDrivePID(states[0], m_frontLeftModule);
         double frontRightSpeed= m_frontRightModule.getDriveVelocity() + appliedDrivePID(states[1], m_frontRightModule);
         double backLeftSpeed=  m_backLeftModule.getDriveVelocity() + appliedDrivePID(states[2], m_backLeftModule);
         double backRightSpeed= m_backRightModule.getDriveVelocity() + appliedDrivePID(states[3], m_backRightModule);
@@ -285,7 +283,7 @@ public class DrivetrainSubsystem {
         m_frontLeftModule.set(frontLeftSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, frontLeftAngle);
         m_frontRightModule.set(frontRightSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, frontRightAngle);
         m_backLeftModule.set(backLeftSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, backLeftAngle);
-        m_backRightModule.set(backRightSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, backRightAngle);
+        m_backRightModule.set(backRightSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, backRightAngle);*/
         
         m_frontLeftModule.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getRadians());
         m_frontRightModule.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());
