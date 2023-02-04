@@ -6,14 +6,20 @@ import frc.robot.Gains;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
+//NOTES ON MEASUREMENTS
+//22.5inches on inside of metal frame that chain moves in
+//10 in on moving mechanism thing
+
 public class ElevatorSubsystem {
 
     //these values are to be determined (untested)
-    public double _kP = 1.0;
+    public double _kP = 0.05;
     public double _kI = 0.0;
     public double _kD = 0.0;
     public int _kIzone = 0;
     public double _kPeakOutput = 1.0;
+
+    public double scaleDown = 1.214; //this value was determined using tested values and plotted by lauren macdonald in loggerpro!
 
     public static TalonFX elevatorMotor = new TalonFX(Constants.ELEVATOR_CAN_ID);
     public static ElevatorStates elevatorState = ElevatorStates.ZERO;
@@ -29,7 +35,7 @@ public class ElevatorSubsystem {
 
     public void init(){
         System.out.println("elevvator init!!!!");
-        elevatorMotor.setInverted(false);
+        elevatorMotor.setInverted(true);
         elevatorMotor.setNeutralMode(NeutralMode.Brake);
 
         //configuring deadband
@@ -40,16 +46,16 @@ public class ElevatorSubsystem {
 		elevatorMotor.config_kD(Constants.kPIDLoopIdx, elevatorGains.kD, Constants.kTimeoutMs);
     }
 
-    public void periodic(){
+    public void periodic(){//need to divide each value by 
         System.out.println("periodicQ!!!!!!!");
         if (elevatorState == ElevatorStates.ZERO){ //facing forward, turning clockwise = going down
             elevatorMotor.set(ControlMode.Position, 0);
         } else if (elevatorState == ElevatorStates.LOW_ELEVATOR_HEIGHT){
-            elevatorMotor.set(ControlMode.Position, 100); //change value once we know robot dimensions
+            elevatorMotor.set(ControlMode.Position, (8/scaleDown) * Constants.TICKS_PER_INCH); //change value once we know robot dimensions
         } else if (elevatorState == ElevatorStates.MID_ELEVATOR_HEIGHT){
-            elevatorMotor.set(ControlMode.Position, 24.5 * Constants.TICKS_PER_INCH); //change value once we know robot dimensions
+            elevatorMotor.set(ControlMode.Position, (24.5/scaleDown) * Constants.TICKS_PER_INCH); //change value once we know robot dimensions
         } else {
-            elevatorMotor.set(ControlMode.Position, 300); //change value once we know robot dimensions
+            elevatorMotor.set(ControlMode.Position, 20 / scaleDown); //change value once we know robot dimensions
         }
     }
 

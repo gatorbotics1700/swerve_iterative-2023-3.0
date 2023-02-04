@@ -74,7 +74,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    autonomousBasePD.init();
+   //autonomousBasePD.init();
 
     elevatorSubsystem.init();
     // m_autoSelected = m_chooser.getSelected();
@@ -87,7 +87,7 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     
     //autonomousBasePD.periodic();
-    elevatorSubsystem.setState(ElevatorStates.MID_ELEVATOR_HEIGHT);
+    elevatorSubsystem.setState(ElevatorStates.LOW_ELEVATOR_HEIGHT);
     elevatorSubsystem.periodic();
     //m_drivetrainSubsystem.drive();
   }
