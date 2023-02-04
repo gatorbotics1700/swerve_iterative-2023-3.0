@@ -72,6 +72,7 @@ public class AprilTagSubsystem {
     //Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectory);
     
     public void init(){
+        Robot.m_drivetrainSubsystem.resetOdometry(new Pose2d(3.0, 4.0, Robot.m_drivetrainSubsystem.getGyroscopeRotation()));
         System.loadLibrary("opencv_java460");
         //camera0 = new UsbCamera("USB Camera 0", 0);
         aprilTagDetector.addFamily(family, 0); //added 0
