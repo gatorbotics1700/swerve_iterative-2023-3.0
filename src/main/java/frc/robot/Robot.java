@@ -33,15 +33,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 //SAM below this
 import com.revrobotics.ColorSensorV3; */
-import org.opencv.core.Core;
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.UsbCamera;
-import edu.wpi.first.cscore.VideoSink;
-import org.opencv.core.Mat;
-import edu.wpi.first.apriltag.*;
-import java.util.Arrays;
-import edu.wpi.first.cscore.CvSink;
-import edu.wpi.first.cscore.CvSource;
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -76,20 +68,6 @@ public class Robot extends TimedRobot {
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   private final Field2d m_field = new Field2d();
   ChassisSpeeds m_ChassisSpeeds;
-
-  // static ShuffleboardTab tab = DrivetrainSubsystem.tab;
-  //sprivate static NetworkTableEntry kP = tab.add("Auto kP", 0.1).getEntry(); 
-  //public static GenericEntry kI = tab.add("Auto kI", 0.0).getEntry(); 
-  //public static GenericEntry kD = tab.add("Auto kD", 0.0).getEntry();
-
-  /**
-   * This function is run when the robot is first started up and should be used for any
-   * initialization code.
-   */
-  //class AutoPID{
-   
-    
-  //}
  
 
  public static ShuffleboardTab tab = DrivetrainSubsystem.tab;
@@ -221,7 +199,7 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
 
     /*intial test!*/
-    m_drivetrainSubsystem.setSpeed(new ChassisSpeeds(-0.2, 0, 0));
+    m_drivetrainSubsystem.setSpeed(new ChassisSpeeds(0, -0.4, 0));
     
     m_drivetrainSubsystem.drive();
     

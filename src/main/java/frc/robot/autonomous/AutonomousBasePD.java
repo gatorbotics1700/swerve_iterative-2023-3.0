@@ -164,7 +164,7 @@ public class AutonomousBasePD extends AutonomousBase{
     @Override
     public void driveDesiredDistance(Pose2d dPose){      
         System.out.println("where we are rn: " + DrivetrainSubsystem.m_pose.getX() + " and " + DrivetrainSubsystem.m_pose.getY());
-        double speed = distanceController.calculate(Math.hypot(DrivetrainSubsystem.m_pose.getX(), DrivetrainSubsystem.m_pose.getY()), hypotenuse);
+        double speed = -(distanceController.calculate(Math.hypot(DrivetrainSubsystem.m_pose.getX(), DrivetrainSubsystem.m_pose.getY()), hypotenuse));
         double directionX = dPose.getX() / Math.hypot(dPose.getX(), dPose.getY());
         double directionY = dPose.getY() / Math.hypot(dPose.getX(), dPose.getY());
         System.out.println("DDDing");    
