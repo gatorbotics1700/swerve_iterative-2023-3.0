@@ -3,6 +3,8 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import frc.robot.Constants;
 import frc.robot.Gains;
+import edu.wpi.first.wpilibj.DigitalInput;
+import frc.robot.Constants;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
@@ -23,10 +25,13 @@ public class ElevatorSubsystem {
 
     public static TalonFX elevatorMotor = new TalonFX(Constants.ELEVATOR_CAN_ID);
     public static ElevatorStates elevatorState = ElevatorStates.ZERO;
+
+    DigitalInput limit_switch = new DigitalInput(Constants.limitSwitchPort);
     
     public Gains elevatorGains = new Gains(_kP, _kI, _kD, _kIzone, _kPeakOutput);
 
     public static enum ElevatorStates{
+        STOP,
         ZERO, 
         LOW_ELEVATOR_HEIGHT,
         MID_ELEVATOR_HEIGHT,
@@ -34,7 +39,7 @@ public class ElevatorSubsystem {
     }
 
     public void init(){
-        System.out.println("elevvator init!!!!");
+        System.out.println("elevator init!!!!");
         elevatorMotor.setInverted(true);
         elevatorMotor.setNeutralMode(NeutralMode.Brake);
 
@@ -47,8 +52,10 @@ public class ElevatorSubsystem {
     }
 
     public void periodic(){//need to divide each value by 
-        System.out.println("periodicQ!!!!!!!");
-        if (elevatorState == ElevatorStates.ZERO){ //facing forward, turning clockwise = going down
+        System.out.println("periodic!!!!!!!");
+        if (elevatorState == ElevatorStates.STOP){ //emergency stop
+            elevatorMotor.set(ControlMode.PercentOutput, 0);
+        }else if (elevatorState == ElevatorStates.ZERO){ //facing forward, turning clockwise = going down
             elevatorMotor.set(ControlMode.Position, 0);
         } else if (elevatorState == ElevatorStates.LOW_ELEVATOR_HEIGHT){
             elevatorMotor.set(ControlMode.Position, (8/scaleDown) * Constants.TICKS_PER_INCH); //change value once we know robot dimensions
@@ -57,9 +64,12 @@ public class ElevatorSubsystem {
         } else {
             elevatorMotor.set(ControlMode.Position, 20 / scaleDown); //change value once we know robot dimensions
         }
-    }
 
-    
+        if(limit_switch.get()){
+            System.out.println("Limit switch worked");
+            setState(ElevatorStates.STOP);
+        }
+    }
 
     public void setState(ElevatorStates newElevatorState){
         elevatorState = newElevatorState;

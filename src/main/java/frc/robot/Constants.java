@@ -73,4 +73,6 @@ public final class Constants {
     public static boolean kSensorPhase = true; //Sensor phase describes the relationship between the motor output direction (positive vs negative) and sensor velocity (positive vs negative). For soft-limits and closed-loop features to function correctly, the sensor measurement and motor output must be “in-phase”.
 
     //public static double deadband = 0.5; //arbitrary
+
+    public static int limitSwitchPort = 1;
 }
