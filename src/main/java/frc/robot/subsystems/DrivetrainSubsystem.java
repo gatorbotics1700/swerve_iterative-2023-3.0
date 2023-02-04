@@ -208,10 +208,10 @@ public class DrivetrainSubsystem {
                 m_backLeftModule.getSwerveModulePosition() };
         m_pose = start;
         System.out.println("position array: " + positionArray.toString());
-        System.out.println("m_pose: " + m_pose);
+        System.out.println("m_pose: " + m_pose.getX()/TICKS_PER_INCH + ", " + m_pose.getY()/TICKS_PER_INCH);
         m_odometry.resetPosition(getGyroscopeRotation(), positionArray, m_pose);
         System.out.println("#resetodometry! new pose: " + m_pose.getX()/TICKS_PER_INCH + " y: " + m_pose.getY()/TICKS_PER_INCH);
-        System.out.println("inputs for the reset: " + getGyroscopeRotation() + " " + m_frontLeftModule.getSwerveModulePosition().distanceMeters + " " + m_frontRightModule.getSwerveModulePosition().distanceMeters + " " + m_backLeftModule.getSwerveModulePosition().distanceMeters + " " + m_backRightModule.getSwerveModulePosition().distanceMeters);
+        //System.out.println("inputs for the reset: " + getGyroscopeRotation() + " " + m_frontLeftModule.getSwerveModulePosition().distanceMeters + " " + m_frontRightModule.getSwerveModulePosition().distanceMeters + " " + m_backLeftModule.getSwerveModulePosition().distanceMeters + " " + m_backRightModule.getSwerveModulePosition().distanceMeters);
 }
 
   public void zeroDriveEncoder(){
