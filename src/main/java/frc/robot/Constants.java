@@ -74,5 +74,6 @@ public final class Constants {
 
     //public static double deadband = 0.5; //arbitrary
 
-    public static int limitSwitchPort = 1;
+    public static int topLimitSwitchPort = 0;
+    public static int bottomLimitSwitchPort = 1;
 }

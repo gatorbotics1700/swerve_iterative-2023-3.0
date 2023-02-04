@@ -26,7 +26,8 @@ public class ElevatorSubsystem {
     public static TalonFX elevatorMotor = new TalonFX(Constants.ELEVATOR_CAN_ID);
     public static ElevatorStates elevatorState = ElevatorStates.ZERO;
 
-    DigitalInput limit_switch = new DigitalInput(Constants.limitSwitchPort);
+    DigitalInput top_limit_switch = new DigitalInput(Constants.topLimitSwitchPort);
+    DigitalInput bottom_limit_switch = new DigitalInput(Constants.bottomLimitSwitchPort);
     
     public Gains elevatorGains = new Gains(_kP, _kI, _kD, _kIzone, _kPeakOutput);
 
@@ -65,9 +66,9 @@ public class ElevatorSubsystem {
             elevatorMotor.set(ControlMode.Position, 20 / scaleDown); //change value once we know robot dimensions
         }
 
-        if(limit_switch.get()){
-            System.out.println("Limit switch worked");
+        if(top_limit_switch.get() || bottom_limit_switch.get()){
             setState(ElevatorStates.STOP);
+            System.out.println("Top/bottom limit switch triggered");
         }
     }
 
