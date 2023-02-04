@@ -8,7 +8,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.Constants;
 
 public class AutonomousBasePD extends AutonomousBase{
-    public static final double turnKP= 0.0002;
+    public static final double turnKP= 0.0003; //increased slight *** not tested
     public static final double turnKI= 0.0;
     public static final double turnKD= 0.0;
     public static final double driveKP= 0.0001;//Robot.kP.getDouble(0.00006);//0.00006;
@@ -26,6 +26,7 @@ public class AutonomousBasePD extends AutonomousBase{
     private Pose2d goalCoordinate4; 
     private Pose2d goalCoordinate5;
     private Pose2d goalCoordinate6;
+    private Pose2d goalCoordinate7;
 
     public double desiredTurn;
     private Pose2d desiredTranslation;
@@ -44,6 +45,7 @@ public class AutonomousBasePD extends AutonomousBase{
         this.goalCoordinate4 = goalCoordinate4;
         this.goalCoordinate5 = goalCoordinate5;
         this.goalCoordinate6 = goalCoordinate6;
+        this.goalCoordinate7 = goalCoordinate7;
     }
 
     public AutonomousBasePD(){
@@ -131,7 +133,7 @@ public class AutonomousBasePD extends AutonomousBase{
             }else if(states==States.DRIVE6){
                 driveDesiredDistance(desiredTranslation);
                 if(distanceController.atSetpoint()){
-                    desiredTranslation = preDDD(goalCoordinate5, goalCoordinate6); //this is wrong
+                    desiredTranslation = preDDD(goalCoordinate6, goalCoordinate7); 
                     setState(States.DRIVE6);
                 }
             } else if(states==States.DRIVE6){
