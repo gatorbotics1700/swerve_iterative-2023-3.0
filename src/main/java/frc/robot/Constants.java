@@ -59,4 +59,7 @@ public final class Constants {
     public static final double TICKS_PER_INCH = TICKS_PER_REV*GEAR_RATIO/WHEEL_DIAMETER/Math.PI; //talonfx drive encoder
 
     public static final int INTAKE_MOTOR_ID = 8;//used to be 28; change back -build
+
+    public static final int intakeSensor = 0;
+
 }
