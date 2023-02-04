@@ -8,7 +8,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.Constants;
 
 public class AutonomousBasePD extends AutonomousBase{
-    public static final double turnKP= 0.0002;
+    public static final double turnKP= 0.0003; //increased slight *** not tested
     public static final double turnKI= 0.0;
     public static final double turnKD= 0.0;
     public static final double driveKP= 0.0001;//Robot.kP.getDouble(0.00006);//0.00006;
@@ -26,6 +26,7 @@ public class AutonomousBasePD extends AutonomousBase{
     private Pose2d goalCoordinate4; 
     private Pose2d goalCoordinate5;
     private Pose2d goalCoordinate6;
+    private Pose2d goalCoordinate7;
 
     public double desiredTurn;
     private Pose2d desiredTranslation;
@@ -156,7 +157,7 @@ public class AutonomousBasePD extends AutonomousBase{
     @Override
     public void driveDesiredDistance(Pose2d dPose){      
         System.out.println("where we are rn: " + DrivetrainSubsystem.m_pose.getX() + " and " + DrivetrainSubsystem.m_pose.getY());
-        double speed = distanceController.calculate(Math.hypot(DrivetrainSubsystem.m_pose.getX(), DrivetrainSubsystem.m_pose.getY()), hypotenuse);
+        double speed = -(distanceController.calculate(Math.hypot(DrivetrainSubsystem.m_pose.getX(), DrivetrainSubsystem.m_pose.getY()), hypotenuse));
         double directionX = dPose.getX() / Math.hypot(dPose.getX(), dPose.getY());
         double directionY = dPose.getY() / Math.hypot(dPose.getX(), dPose.getY());
         System.out.println("DDDing");    
