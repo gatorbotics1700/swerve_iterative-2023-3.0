@@ -131,12 +131,6 @@ public class AutonomousBasePD extends AutonomousBase{
             }else if(states==States.DRIVE6){
                 driveDesiredDistance(desiredTranslation);
                 if(distanceController.atSetpoint()){
-                    desiredTranslation = preDDD(goalCoordinate5, goalCoordinate6); //this is wrong
-                    setState(States.DRIVE6);
-                }
-            } else if(states==States.DRIVE6){
-                driveDesiredDistance(desiredTranslation);
-                if(distanceController.atSetpoint()){
                     setState(States.STOP);
                 }
             }else{
