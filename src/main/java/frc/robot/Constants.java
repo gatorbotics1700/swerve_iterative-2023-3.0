@@ -13,6 +13,8 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public static final double BUMPER_WIDTH = 3;
+    public static final double DRIVETRAIN_WIDTH = 12.5;
     /**
      * The left-to-right distance between the drivetrain wheels
      *
