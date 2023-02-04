@@ -53,7 +53,7 @@ public class Robot extends TimedRobot {
   private AutonomousBasePD placeNLeave = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)));
  
   private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
-  private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 30, new Rotation2d(0)), new Pose2d(20, 40, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0))); //first is starting position, second is where we want to go
+  private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, -30, new Rotation2d(0)), new Pose2d(-20, -40, new Rotation2d(0)), new Pose2d(0, -20, new Rotation2d(0)), new Pose2d(0, -20, new Rotation2d(0)), new Pose2d(0, -20, new Rotation2d(0)), new Pose2d(0, -20, new Rotation2d(0))); //first is starting position, second is where we want to go
   private AutonomousBaseMP motionProfiling = new AutonomousBaseMP(Trajectories.uno, Trajectories.dos, Trajectories.tres);
   
   private AutonomousBasePD leave = new AutonomousBasePD(new Pose2d(56.069, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)));
@@ -211,7 +211,7 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
 
     /*intial test!*/
-    m_drivetrainSubsystem.setSpeed(new ChassisSpeeds(0, 0.2, 0));
+    m_drivetrainSubsystem.setSpeed(new ChassisSpeeds(-0.2, 0, 0));
     
     m_drivetrainSubsystem.drive();
     
