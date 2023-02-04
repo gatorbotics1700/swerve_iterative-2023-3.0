@@ -44,6 +44,7 @@ public class Robot extends TimedRobot {
   ChassisSpeeds m_ChassisSpeeds;
 
   IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+  PneumaticIntakeSubsystem pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
 
 
   /**
@@ -94,16 +95,14 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autoSelected = m_chooser.getSelected();
-    m_autoSelected.init();
+    pneumaticIntakeSubsystem.init();
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
      //m_drivetrainSubsystem.driveTeleop();
-     m_autoSelected.periodic();
-     m_drivetrainSubsystem.drive();
+     pneumaticIntakeSubsystem.periodic();
 
      //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
     
@@ -142,7 +141,6 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     //m_autoSelected.init();
-    intakeSubsystem.init();
   }
 
   /** This function is called periodically during test mode. */
