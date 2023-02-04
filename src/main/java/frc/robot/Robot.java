@@ -33,7 +33,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 //SAM below this
 import com.revrobotics.ColorSensorV3; */
-
+import org.opencv.core.Core;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoSink;
+import org.opencv.core.Mat;
+import edu.wpi.first.apriltag.*;
+import java.util.Arrays;
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.CvSource;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -114,15 +122,16 @@ public class Robot extends TimedRobot {
   
 
     System.out.println("#I'm Awake");
-    m_chooser.setDefaultOption("Default Auto", testPath);
-    m_chooser.addOption("My Auto 1", noGo);
-    m_chooser.addOption("My Auto 2",HDplaceNLeave);
-    m_chooser.addOption("My Auto 3", HDLeave);
-    m_chooser.addOption("My Auto 4", HDScorePickEngage);
-    m_chooser.addOption("My Auto timed", timedPath);
-    m_chooser.addOption("Motion profiling path", motionProfiling);
-    m_chooser.addOption("three under charge station", HDThreeScore);
-    m_chooser.addOption("three above charge station", HBThreeScore);
+    m_chooser.setDefaultOption("Default testing auto", testPath);
+    m_chooser.addOption("Nothing! No go!", noGo);
+    m_chooser.addOption("Place and leave community from Hot Dog", HDplaceNLeave);
+    m_chooser.addOption("Leave community from Hot Dog", HDLeave);
+    m_chooser.addOption("Leave community from HamBurger", HBLeave); 
+    m_chooser.addOption("Score, get another, and engage with charge station from Hot Dog", HDScorePickEngage);
+    m_chooser.addOption("Timed auto", timedPath);
+    m_chooser.addOption("Motion profiling tester path", motionProfiling);
+    m_chooser.addOption("Three balls scored on Hot Dog", HDThreeScore);
+    m_chooser.addOption("Three balls scored on HamBurger", HBThreeScore);
 
     SmartDashboard.putData("Auto choices", m_chooser);
 

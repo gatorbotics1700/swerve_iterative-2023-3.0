@@ -8,7 +8,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.Constants;
 
 public class AutonomousBasePD extends AutonomousBase{
-    public static final double turnKP= 0.002;
+    public static final double turnKP= 0.0002;
     public static final double turnKI= 0.0;
     public static final double turnKD= 0.0;
     public static final double driveKP= 0.0001;//Robot.kP.getDouble(0.00006);//0.00006;
@@ -46,6 +46,15 @@ public class AutonomousBasePD extends AutonomousBase{
         this.goalCoordinate6 = goalCoordinate6;
     }
 
+    public AutonomousBasePD(){
+        startingCoordinate = new Pose2d(0.0, 0.0, drivetrainSubsystem.getGyroscopeRotation());
+        goalCoordinate1 = new Pose2d(0.0, 0.0, drivetrainSubsystem.getGyroscopeRotation());
+        goalCoordinate2 = new Pose2d(0.0, 0.0, drivetrainSubsystem.getGyroscopeRotation());
+        goalCoordinate3 = new Pose2d(0.0, 0.0, drivetrainSubsystem.getGyroscopeRotation());
+        goalCoordinate4 = new Pose2d(0.0, 0.0, drivetrainSubsystem.getGyroscopeRotation());
+        goalCoordinate5 = new Pose2d(0.0, 0.0, drivetrainSubsystem.getGyroscopeRotation());
+        goalCoordinate6 = new Pose2d(0.0, 0.0, drivetrainSubsystem.getGyroscopeRotation());
+    }
     @Override
     public void init(){
         drivetrainSubsystem.resetOdometry(startingCoordinate);
@@ -122,7 +131,7 @@ public class AutonomousBasePD extends AutonomousBase{
             }else if(states==States.DRIVE6){
                 driveDesiredDistance(desiredTranslation);
                 if(distanceController.atSetpoint()){
-                    desiredTranslation = preDDD(goalCoordinate5, goalCoordinate6);
+                    desiredTranslation = preDDD(goalCoordinate5, goalCoordinate6); //this is wrong
                     setState(States.DRIVE6);
                 }
             } else if(states==States.DRIVE6){
