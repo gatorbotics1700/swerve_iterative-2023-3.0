@@ -4,7 +4,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import frc.robot.Constants;
 import frc.robot.Gains;
 import edu.wpi.first.wpilibj.DigitalInput;
-import frc.robot.Constants;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
@@ -52,7 +51,7 @@ public class ElevatorSubsystem {
 		elevatorMotor.config_kD(Constants.kPIDLoopIdx, elevatorGains.kD, Constants.kTimeoutMs);
     }
 
-    public void periodic(){//need to divide each value by 
+    public void periodic(){//still need to scale down the values or figure out why it is overshooting
         System.out.println("periodic!!!!!!!");
         if (elevatorState == ElevatorStates.STOP){ //emergency stop
             elevatorMotor.set(ControlMode.PercentOutput, 0);
