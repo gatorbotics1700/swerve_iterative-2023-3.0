@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
 import frc.robot.Constants;
 
+import com.ctre.phoenix.ErrorCode;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -95,7 +97,7 @@ public class Robot extends TimedRobot {
   */
   @Override
   public void robotInit() { //creates options for different autopaths, names are placeholders
-    
+
     System.out.println("#I'm Awake");
     m_chooser.setDefaultOption("testPath", testPath);
     m_chooser.addOption("noGo!", noGo);
@@ -145,6 +147,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+
+    m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
+    System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
+
     m_autoSelected = m_chooser.getSelected();
     m_autoSelected.init();
   }
@@ -160,6 +166,8 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
+    m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
+    System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
 
   }
 
@@ -188,16 +196,24 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
+
     //System.out.println("Trajectory: " + Trajectories.uno);
     m_drivetrainSubsystem.zeroGyroscope();
+    
   }
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {
+  public void testPeriodic(){
+  
+    m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
+    System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
+    if (m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError() != ErrorCode.OK) {
+      return;
+    }
 
     /*intial test!*/
-    m_drivetrainSubsystem.setSpeed(new ChassisSpeeds(0, -0.4, 0));
+    m_drivetrainSubsystem.setSpeed(new ChassisSpeeds(0, -0.2, 0));
     
     m_drivetrainSubsystem.drive();
     
