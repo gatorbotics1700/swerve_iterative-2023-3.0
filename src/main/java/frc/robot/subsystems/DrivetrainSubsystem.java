@@ -274,21 +274,16 @@ public class DrivetrainSubsystem {
         double backLeftSpeed=  m_backLeftModule.getDriveVelocity() + appliedDrivePID(states[2], m_backLeftModule);
         double backRightSpeed= m_backRightModule.getDriveVelocity() + appliedDrivePID(states[3], m_backRightModule);
 
-        /*double frontLeftSpeed= appliedDrivePID(states[0], m_frontLeftModule);
-        double frontRightSpeed= appliedDrivePID(states[1], m_frontRightModule);
-        double backLeftSpeed= appliedDrivePID(states[2], m_backLeftModule);
-        double backRightSpeed= appliedDrivePID(states[3], m_backRightModule);*/
-
         /*double frontLeftAngle= appliedAnglePID(states[0], m_frontLeftModule);
         double frontRightAngle= appliedAnglePID(states[1], m_frontRightModule);
         double backLeftAngle= appliedAnglePID(states[2], m_backLeftModule);
         double backRightAngle= appliedAnglePID(states[3], m_backRightModule);*/
 
         //parameters are double driveVoltage, double steerAngle
-        /*m_frontLeftModule.set(frontLeftSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, frontLeftAngle);
-        m_frontRightModule.set(frontRightSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, frontRightAngle);
-        m_backLeftModule.set(backLeftSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, backLeftAngle);
-        m_backRightModule.set(backRightSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, backRightAngle);*/
+        m_frontLeftModule.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getDegrees());
+        m_frontRightModule.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getDegrees());
+        m_backLeftModule.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getDegrees());
+        m_backRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getDegrees());
   }
 
   /*private double appliedDrivePID(SwerveModuleState state, SwerveModule module){

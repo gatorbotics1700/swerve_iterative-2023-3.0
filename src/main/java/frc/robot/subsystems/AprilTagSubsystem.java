@@ -33,7 +33,7 @@ public class AprilTagSubsystem {
     }*/
 
     public static UsbCamera camera0;
-    public static UsbCamera camera1;
+    //public static UsbCamera camera1;
     //public static VideoSink sink;
     private String family = "tag16h5";
     Mat source;
@@ -89,16 +89,22 @@ public class AprilTagSubsystem {
         //camera0 = new UsbCamera("USB Camera 0", 0);
         aprilTagDetector.addFamily(family, 0); //added 0
         camera0 = CameraServer.startAutomaticCapture(); //deleted 0
-        camera1 = CameraServer.startAutomaticCapture();
+        //camera1 = CameraServer.startAutomaticCapture();
         server = CameraServer.getServer();
         //sink = CameraServer.getServer();
         source = new Mat();
         grayMat = new Mat();
         
 
-        System.out.println("source from init: " + source);
+        //System.out.println("source from init: " + source);
         //source.release();
-        cvSink = CameraServer.getVideo();
+        cvSink = CameraServer.getVideo(camera0);
+        //System.out.println("cvSink value before if statement: " + cvSink);
+        /*if(cvSink == null){
+            System.out.println("CvSink is null!!!!!!!!!!");
+            return;
+        }*/
+        //System.out.println("cvSink value: " + cvSink);
         //outputStream = CameraServer.putVideo("camera stream", 320, 240);
     }
     
@@ -123,7 +129,7 @@ public class AprilTagSubsystem {
         }else if(states == AprilTagSequence.CORRECTPOSITION){
             //addVisionToOdometry();
             correctPosition();
-            Robot.m_drivetrainSubsystem.drive();
+            
         }        
     }
 
@@ -164,8 +170,8 @@ public class AprilTagSubsystem {
 
 
     private void correctPosition(){
-        
         autonomousBasePD.driveDesiredDistance(prePose);
+        Robot.m_drivetrainSubsystem.drive();
     }
     
 
