@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
 import frc.robot.Constants;
 
+import com.ctre.phoenix.ErrorCode;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -47,49 +49,34 @@ import com.revrobotics.ColorSensorV3; */
 public class Robot extends TimedRobot {
   private AutonomousBase m_autoSelected;
   private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<AutonomousBase>();
+  public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
+  private final Field2d m_field = new Field2d();
+  ChassisSpeeds m_ChassisSpeeds;
 
   // whole field: 651.683 
   // center : 325.8415
-
+  private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
   private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
   private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)));
-  private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
-
-
+  
   // blue alliance 
-  private AutonomousBasePD HDplaceTwoEngageB = new AutonomousBasePD(new Pose2d(56.069, 17.332, new Rotation2d(0)), new Pose2d(278.999, 37.193, new Rotation2d(0)), new Pose2d(257.650, 64.004, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)));
-  
+  private AutonomousBasePD HDplaceTwoEngageB = new AutonomousBasePD(new Pose2d(56.069, 20.19, new Rotation2d(0)), new Pose2d(278.999, 36.19, new Rotation2d(0)), new Pose2d(257.650, 64.004, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)));
   private AutonomousBasePD HBLeaveB = new AutonomousBasePD(new Pose2d(56.069, 200.046, new Rotation2d(0)), new Pose2d(219.915, 200.046, new Rotation2d(0)), new Pose2d(219.915, 200.046, new Rotation2d(0)), new Pose2d(219.915, 200.046, new Rotation2d(0)), new Pose2d(219.915, 200.046, new Rotation2d(0)), new Pose2d(219.915, 200.046, new Rotation2d(0)), new Pose2d(219.915, 200.046, new Rotation2d(0)));
-  private AutonomousBasePD HDLeaveB = new AutonomousBasePD(new Pose2d(56.069, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)));
-  
-  //this is wrong
-  private AutonomousBasePD engageChargeB = new AutonomousBasePD(new Pose2d(97.759, 0, new Rotation2d(0)), new Pose2d(97.759, 0, new Rotation2d(0)), new Pose2d(97.759, 0, new Rotation2d(0)), new Pose2d(97.759, 0, new Rotation2d(0)), new Pose2d(97.759, 0, new Rotation2d(0)), new Pose2d(97.759, 0, new Rotation2d(0)), new Pose2d(97.759, 0, new Rotation2d(0)));
-  
-  //these paths score 3 balls without touching the charge station, requires 7 Pose2ds!
-  private AutonomousBasePD HDThreeScoreB = new AutonomousBasePD(new Pose2d(56.069, 17.332, new Rotation2d(0)), new Pose2d(278.999, 37.193, new Rotation2d(0)), new Pose2d(56.222, 43.068, new Rotation2d(0)), new Pose2d(197.484,45.934, new Rotation2d(0)), new Pose2d(279.077, 85.622, new Rotation2d(0)), new Pose2d(197.484,40.000, new Rotation2d(0)), new Pose2d(56.154,66.117, new Rotation2d(0)));
+  private AutonomousBasePD HDLeaveB = new AutonomousBasePD(new Pose2d(56.069, 20.19, new Rotation2d(0)), new Pose2d(219.915, 20.19, new Rotation2d(0)), new Pose2d(219.915, 20.19, new Rotation2d(0)), new Pose2d(219.915, 20.19, new Rotation2d(0)), new Pose2d(219.915, 20.19, new Rotation2d(0)), new Pose2d(219.915, 20.19, new Rotation2d(0)), new Pose2d(219.915, 20.19, new Rotation2d(0)));
+  private AutonomousBasePD HDThreeScoreB = new AutonomousBasePD(new Pose2d(56.069, 20.19, new Rotation2d(0)), new Pose2d(278.999, 37.193, new Rotation2d(0)), new Pose2d(56.222, 43.068, new Rotation2d(0)), new Pose2d(197.484,45.934, new Rotation2d(0)), new Pose2d(279.077, 85.622, new Rotation2d(0)), new Pose2d(197.484,40.000, new Rotation2d(0)), new Pose2d(56.154,66.117, new Rotation2d(0)));
   private AutonomousBasePD HBThreeScoreB = new AutonomousBasePD(new Pose2d(56.069, 200.046, new Rotation2d(0)), new Pose2d(278.999, 180.683, new Rotation2d(0)), new Pose2d(56.069, 174.725, new Rotation2d(0)), new Pose2d(207.006, 174.725, new Rotation2d(0)), new Pose2d(278.006, 133.515, new Rotation2d(0)), new Pose2d(200.552, 185.151, new Rotation2d(0)), new Pose2d(57.062, 154.368, new Rotation2d(0)));
+  private AutonomousBasePD engageChargeB = new AutonomousBasePD(new Pose2d(56.069, 108.015, new Rotation2d(0)), new Pose2d(152.812, 108.015, new Rotation2d(0)), new Pose2d(152.812, 108.015, new Rotation2d(0)), new Pose2d(152.812, 108.015, new Rotation2d(0)), new Pose2d(152.812, 108.015, new Rotation2d(0)), new Pose2d(152.812, 108.015, new Rotation2d(0)), new Pose2d(152.812, 108.015, new Rotation2d(0)));
 
 
 
   // red alliance  
   // half the field (325.8415) - blue x value + half the field (325.8415) = red x value
-
-  private AutonomousBasePD HDplaceTwoEngageR = new AutonomousBasePD(new Pose2d(595.614, 17.332, new Rotation2d(0)), new Pose2d(372.684, 37.193, new Rotation2d(0)), new Pose2d(394.033, 64.004, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)));
-  
+  private AutonomousBasePD HDplaceTwoEngageR = new AutonomousBasePD(new Pose2d(595.614, 20.19, new Rotation2d(0)), new Pose2d(372.684, 36.19, new Rotation2d(0)), new Pose2d(394.033, 64.004, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)));
   private AutonomousBasePD HBLeaveR = new AutonomousBasePD(new Pose2d(595.614, 200.046, new Rotation2d(0)), new Pose2d(431.768, 200.046, new Rotation2d(0)), new Pose2d(431.768, 200.046, new Rotation2d(0)), new Pose2d(431.768, 200.046, new Rotation2d(0)), new Pose2d(431.768, 200.046, new Rotation2d(0)), new Pose2d(431.768, 200.046, new Rotation2d(0)), new Pose2d(431.768, 200.046, new Rotation2d(0)));
-  private AutonomousBasePD HDLeaveR = new AutonomousBasePD(new Pose2d(595.614, 17.332, new Rotation2d(0)), new Pose2d(431.768, 17.332, new Rotation2d(0)), new Pose2d(431.768, 17.332, new Rotation2d(0)), new Pose2d(431.768, 17.332, new Rotation2d(0)), new Pose2d(431.768, 17.332, new Rotation2d(0)), new Pose2d(431.768, 17.332, new Rotation2d(0)), new Pose2d(431.768, 17.332, new Rotation2d(0)));
-  
-  // this is wrong
-  private AutonomousBasePD engageChargeR = new AutonomousBasePD(new Pose2d(553.924, 0, new Rotation2d(0)), new Pose2d(553.924, 0, new Rotation2d(0)), new Pose2d(553.924, 0, new Rotation2d(0)), new Pose2d(553.924, 0, new Rotation2d(0)), new Pose2d(553.924, 0, new Rotation2d(0)), new Pose2d(553.924, 0, new Rotation2d(0)), new Pose2d(553.924, 0, new Rotation2d(0)));
-  
-  //these paths score 3 balls without touching the charge station, requires 7 Pose2ds!
-  private AutonomousBasePD HDThreeScoreR = new AutonomousBasePD(new Pose2d(595.614, 17.332, new Rotation2d(0)), new Pose2d(372.684, 37.193, new Rotation2d(0)), new Pose2d(595.461, 43.068, new Rotation2d(0)), new Pose2d(454.199,45.934, new Rotation2d(0)), new Pose2d(372.606, 85.622, new Rotation2d(0)), new Pose2d(454.199,40.000, new Rotation2d(0)), new Pose2d(595.529,66.117, new Rotation2d(0)));
+  private AutonomousBasePD HDLeaveR = new AutonomousBasePD(new Pose2d(595.614, 20.19, new Rotation2d(0)), new Pose2d(431.768, 20.19, new Rotation2d(0)), new Pose2d(431.768, 20.19, new Rotation2d(0)), new Pose2d(431.768, 20.19, new Rotation2d(0)), new Pose2d(431.768, 20.19, new Rotation2d(0)), new Pose2d(431.768, 20.19, new Rotation2d(0)), new Pose2d(431.768, 20.19, new Rotation2d(0)));
+  private AutonomousBasePD HDThreeScoreR = new AutonomousBasePD(new Pose2d(595.614, 20.19, new Rotation2d(0)), new Pose2d(372.684, 37.193, new Rotation2d(0)), new Pose2d(595.461, 43.068, new Rotation2d(0)), new Pose2d(454.199,45.934, new Rotation2d(0)), new Pose2d(372.606, 85.622, new Rotation2d(0)), new Pose2d(454.199,40.000, new Rotation2d(0)), new Pose2d(595.529,66.117, new Rotation2d(0)));
   private AutonomousBasePD HBThreeScoreR = new AutonomousBasePD(new Pose2d(595.614, 200.046, new Rotation2d(0)), new Pose2d(372.684, 180.683, new Rotation2d(0)), new Pose2d(595.614, 174.725, new Rotation2d(0)), new Pose2d(444.677, 174.725, new Rotation2d(0)), new Pose2d(373.677, 133.515, new Rotation2d(0)), new Pose2d(451.131, 185.151, new Rotation2d(0)), new Pose2d(594.621, 154.368, new Rotation2d(0)));
-
-  
-  public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
-  private final Field2d m_field = new Field2d();
-  ChassisSpeeds m_ChassisSpeeds;
+  private AutonomousBasePD engageChargeR = new AutonomousBasePD(new Pose2d(553.924, 108.015, new Rotation2d(0)), new Pose2d(553.924, 108.015, new Rotation2d(0)), new Pose2d(553.924, 108.015, new Rotation2d(0)), new Pose2d(553.924, 108.015, new Rotation2d(0)), new Pose2d(553.924, 108.015, new Rotation2d(0)), new Pose2d(553.924, 108.015, new Rotation2d(0)), new Pose2d(553.924, 108.015, new Rotation2d(0)));
  
 
  public static ShuffleboardTab tab = DrivetrainSubsystem.tab;
@@ -103,41 +90,33 @@ public class Robot extends TimedRobot {
         tab.add("Auto kD", 0.0)
           .getEntry();
   
+  
+  /**
+  * This function is run when the robot is first started up and should be used for any
+  * initialization code.
+  */
   @Override
   public void robotInit() { //creates options for different autopaths, names are placeholders
-   // kP = tab.add("Auto kP", 0.1).getEntry(); 
-    //kI = tab.add("Auto kI", 0.0).getEntry(); 
-    //kD = tab.add("Auto kD", 0.0).getEntry();
-
-      // private ShuffleboardTab tab = Shuffleboard.getTab("Drive");
-      // private NetworkTableEntry kP = tab.add("Auto kP", 0.1).getEntry();
-   
-      // private DifferentialDrive robotDrive = ...;
-   
-      // public void drive(double left, double right) {
-      //   // Retrieve the maximum speed from the dashboard
-      //   double max = maxSpeed.getDouble(1.0);
-      //   robotDrive.tankDrive(left * max, right * max);
-      // }
-  
 
     System.out.println("#I'm Awake");
-    m_chooser.setDefaultOption("Default testing auto", testPath);
-    m_chooser.addOption("Nothing! No go!", noGo);
-    m_chooser.addOption("Place and leave community from Hot Dog", HDplaceTwoEngageB);
-    m_chooser.addOption("Leave community from Hot Dog", HDLeaveB);
-    m_chooser.addOption("Leave community from HamBurger", HBLeaveB); 
-    m_chooser.addOption("Score, get another, and engage with charge station from Hot Dog", HDplaceTwoEngageR);
-    m_chooser.addOption("Timed auto", timedPath);
+    m_chooser.setDefaultOption("testPath", testPath);
+    m_chooser.addOption("noGo!", noGo);
+    m_chooser.addOption("HDLeaveB", HDLeaveB);
+    m_chooser.addOption("HBLeaveB", HBLeaveB); 
+    m_chooser.addOption("timed", timedPath);
+    m_chooser.addOption("HDThreeScoreB", HDThreeScoreB);
+    m_chooser.addOption("HBThreeScoreB", HBThreeScoreB);
+    m_chooser.addOption("HDplaceTwoEngageB", HDplaceTwoEngageB);
+    m_chooser.addOption("engageChargeB", engageChargeB);
+    m_chooser.addOption("HDplaceTwoEngageR", HDplaceTwoEngageR);
+    m_chooser.addOption("HBLeaveR", HBLeaveR);
+    m_chooser.addOption("HDLeaveR", HDLeaveR);
+    m_chooser.addOption("HDThreeScoreR", HDThreeScoreR);
+    m_chooser.addOption("HBThreeScoreR", HBThreeScoreR);
+    m_chooser.addOption("engageChargeR", engageChargeR);
     //m_chooser.addOption("Motion profiling tester path", motionProfiling);
-    m_chooser.addOption("Three balls scored on Hot Dog", HDThreeScoreB);
-    m_chooser.addOption("Three balls scored on HamBurger", HBThreeScoreR);
-
     SmartDashboard.putData("Auto choices", m_chooser);
-
-    
    
-
   }
 
   /**
@@ -168,6 +147,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+
+    m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
+    System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
+
     m_autoSelected = m_chooser.getSelected();
     m_autoSelected.init();
   }
@@ -175,7 +158,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    
      m_autoSelected.periodic();
      //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
     
@@ -184,6 +166,8 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
+    m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
+    System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
 
   }
 
@@ -212,16 +196,24 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
+
     //System.out.println("Trajectory: " + Trajectories.uno);
     m_drivetrainSubsystem.zeroGyroscope();
+    
   }
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {
+  public void testPeriodic(){
+  
+    m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
+    System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
+    if (m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError() != ErrorCode.OK) {
+      return;
+    }
 
     /*intial test!*/
-    m_drivetrainSubsystem.setSpeed(new ChassisSpeeds(0, -0.4, 0));
+    m_drivetrainSubsystem.setSpeed(new ChassisSpeeds(0, -0.2, 0));
     
     m_drivetrainSubsystem.drive();
     
