@@ -119,7 +119,7 @@ public class Robot extends TimedRobot {
     m_drivetrainSubsystem.driveTeleop();
 
 
-    if (OI.m_controller.getBButton()){
+    if (OI.m_controller.getBButton()){ 
       m_drivetrainSubsystem.stopDrive();
     }
 
