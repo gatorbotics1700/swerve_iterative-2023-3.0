@@ -20,6 +20,10 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import frc.robot.autonomous.AutonomousBasePD;
+import frc.robot.subsystems.ArmTelescopingSubsystem.TelescopingStates;
+import frc.robot.subsystems.ElevatorSubsystem.ElevatorStates;
+import edu.wpi.first.math.controller.PIDController;
+import frc.robot.Robot;
 
 import java.util.Arrays;
 import java.util.function.DoubleSupplier;
@@ -35,6 +39,11 @@ public class DrivetrainSubsystem {
    * This can be reduced to cap the robot's maximum speed. Typically, this is useful during initial testing of the robot.
    */
   public static final double MAX_VOLTAGE = 16.3;
+  public static double pitchKP = 0.025;
+  public static double pitchKI = 0.0;
+  public static double pitchKD = 0.001;
+  public static double MINOUTPUT = 0.1;
+  private PIDController pitchController = new PIDController(pitchKP, pitchKI, pitchKD);
   //  The formula for calculating the theoretical maximum velocity is:
   //   <Motor free speed RPM> / 60 * <Drive reduction> * <Wheel diameter meters> * pi
   //  By default this value is setup for a Mk3 standard module using Falcon500s to drive.
@@ -45,6 +54,8 @@ public class DrivetrainSubsystem {
    * <p>
    * This is a measure of how fast the robot should be able to drive in a straight line.
    */
+  public static final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+  public static final ArmTelescopingSubsystem armTelescopingSubsystem = new ArmTelescopingSubsystem();
   public static final double MAX_VELOCITY_METERS_PER_SECOND = 6380.0 / 60.0 *
           SdsModuleConfigurations.MK4_L2.getDriveReduction() *
           SdsModuleConfigurations.MK4_L2.getWheelDiameter() * Math.PI;
@@ -243,9 +254,9 @@ public class DrivetrainSubsystem {
 //   }
   
   public void driveTeleop(){
-        DoubleSupplier m_translationXSupplier = () -> -modifyAxis(OI.m_controller.getLeftY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
-        DoubleSupplier m_translationYSupplier = () -> -modifyAxis(OI.m_controller.getLeftX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
-        DoubleSupplier m_rotationSupplier = () -> -modifyAxis(OI.m_controller.getRightX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
+        DoubleSupplier m_translationXSupplier = () -> -modifyAxis(OI.m_driver_controller.getLeftY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
+        DoubleSupplier m_translationYSupplier = () -> -modifyAxis(OI.m_driver_controller.getLeftX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
+        DoubleSupplier m_rotationSupplier = () -> -modifyAxis(OI.m_driver_controller.getRightX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
         
         //setting speed
         setSpeed(
@@ -326,4 +337,38 @@ public class DrivetrainSubsystem {
         setSpeed(new ChassisSpeeds(0.0, 0.0, 0.0));
         drive();
    }
+   public void pitchBalance(double pitchSetpoint){
+        System.out.println("pitch: " + m_pigeon.getPitch());
+        System.out.println("universal pitch: " + Robot.universalPitch);
+        double pitchAfterCorrection = m_pigeon.getPitch()-Robot.universalPitch;
+        System.out.println("pitch after correcting for universalPitch: " + pitchAfterCorrection);
+        pitchController.setSetpoint(pitchSetpoint); 
+        double output = pitchController.calculate(pitchAfterCorrection, pitchSetpoint);
+        System.out.println("output: " + output); 
+        setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, -output, 0, getGyroscopeRotation()));
+        drive();
+        
+        if (Math.abs(pitchAfterCorrection - pitchSetpoint) < 1.0){
+            setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0,getGyroscopeRotation()));
+            //velocityPD(0);
+        } else{
+                if(Math.abs(output) < MINOUTPUT){
+                   output = Math.signum(output) * MINOUTPUT;
+                }
+        }
+    }
+    public void scoreLow(){
+        elevatorSubsystem.setState(ElevatorStates.LOW_ELEVATOR_HEIGHT);
+        armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
+    }
+    public void scoreMid(){
+        elevatorSubsystem.setState(ElevatorStates.MID_ELEVATOR_HEIGHT);
+        armTelescopingSubsystem.setTState(TelescopingStates.MID_ARM_LENGTH);
+    }
+    public void scoreHigh(){
+        elevatorSubsystem.setState(ElevatorStates.HIGH_ELEVATOR_HEIGHT);
+        armTelescopingSubsystem.setTState(TelescopingStates.HIGH_ARM_LENGTH);
+    }
 }
+
+

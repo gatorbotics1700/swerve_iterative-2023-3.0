@@ -43,4 +43,8 @@ public class IntakeSubsystem {
         intakeMotor.set(ControlMode.PercentOutput, -0.5);
     }
 
+    public void setState(IntakeStates newState){
+        intakeState = newState;
+    }
+
 }

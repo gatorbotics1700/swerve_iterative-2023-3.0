@@ -7,20 +7,21 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.IntakeSubsystem.IntakeStates;
-import frc.robot.OI;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+//import frc.robot.OI;
+//import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
-import frc.robot.autonomous.AutonomousBase.Paths;
-import frc.robot.Constants;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Pose2d;
+//import frc.robot.autonomous.AutonomousBase.Paths;
+//import frc.robot.Constants;
+//import edu.wpi.first.math.controller.PIDController;
+//import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
+//import edu.wpi.first.math.trajectory.Trajectory;
+//import edu.wpi.first.math.geometry.Rotation2d;
+//import edu.wpi.first.math.geometry.Translation2d;
+//import edu.wpi.first.math.kinematics.ChassisSpeeds;
+//import frc.robot.OI;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -28,6 +29,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
  * project.
  */
 public class Robot extends TimedRobot {
+  public static double universalPitch = 0.0;
   private AutonomousBase m_autoSelected;
   private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<AutonomousBase>();
   // private AutonomousBasePD blueCharge = new AutonomousBasePD(new Translation2d(221.353, 23.720), new Translation2d(0, 21.574), new Translation2d(96.902, 21.574), new Translation2d(96.902, 21.574), new Translation2d(96.902, 21.574), new Translation2d(96.902, 21.574));
@@ -36,11 +38,13 @@ public class Robot extends TimedRobot {
   // private AutonomousBasePD mScore = new AutonomousBasePD(new Translation2d(222.037, 0), new Translation2d(135.091, -41.307), new Translation2d(0, -44.163), new Translation2d(222.894, -50.377), new Translation2d(0, -65.388), new Translation2d(0, -65.388));
   // private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
   // private AutonomousBasePD testPath = new AutonomousBasePD(new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20), new Translation2d(0, 20));
-  private AutonomousBaseMP motionProfiling = new AutonomousBaseMP(Trajectories.uno, Trajectories.dos, Trajectories.tres);
+  //private AutonomousBaseMP motionProfiling = new AutonomousBaseMP(Trajectories.uno, Trajectories.dos, Trajectories.tres);
 
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   public static final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
-  private final Field2d m_field = new Field2d();
+  public static final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+  public static final ArmTelescopingSubsystem armTelescopingSubsystem = new ArmTelescopingSubsystem();
+  //private final Field2d m_field = new Field2d();
   ChassisSpeeds m_ChassisSpeeds;
 
 
@@ -119,16 +123,30 @@ public class Robot extends TimedRobot {
     m_drivetrainSubsystem.driveTeleop();
 
 
-    if (OI.m_controller.getBButton()){ 
+    if (OI.m_driver_controller.getBButton()){ 
       m_drivetrainSubsystem.stopDrive();
     }
 
-    if(OI.m_controller.getAButton()){ //Katherine is skeptical whether this button work :/
+    if(OI.m_driver_controller.getAButton()){ 
       m_drivetrainSubsystem.resetOdometry();
     }
     
-    if(OI.m_controller_two.getYButton()){ 
+    if(OI.m_codriver_controller.getYButton()){ //double check if codriver or driver
       m_drivetrainSubsystem.trueNorth(); // lauren did this!!!
+    }
+
+    if(OI.m_codriver_controller.getXButton()){
+      m_drivetrainSubsystem.pitchBalance(0.0);
+    }
+
+    if(OI.m_codriver_controller.getLeftBumper()){//score low
+      m_drivetrainSubsystem.scoreLow();
+    }
+    if(OI.m_codriver_controller.getRightBumper()){//score mid
+      m_drivetrainSubsystem.scoreMid();
+    }
+    if(OI.m_codriver_controller.getAButton()){//score high
+      m_drivetrainSubsystem.scoreHigh();
     }
 
     if(OI.intakeOn >= 0.5) {
@@ -163,10 +181,6 @@ public class Robot extends TimedRobot {
             m_drivetrainSubsystem.getGyroscopeRotation())
         ); 
         m_drivetrainSubsystem.drive();
-
-    if(OI.m_controller.getAButton()){
-      m_drivetrainSubsystem.resetOdometry();
-    }
 
     //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
   }
