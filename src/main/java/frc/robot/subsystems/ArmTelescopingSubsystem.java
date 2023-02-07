@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import frc.robot.Constants;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import frc.robot.Gains;
 
 public class ArmTelescopingSubsystem {
 
@@ -24,8 +25,14 @@ public class ArmTelescopingSubsystem {
         MID_ARM_LENGTH, // also shelf height
         HIGH_ARM_LENGTH;
     }*/
+    public int _kIzone = 0;
+    public double _kPeakOutput = 1.0;
 
+    double telescopeKP = 0.001;
+    double telescopeKD = 0.001;
+    double telescopeKI = 0.001;
     double extensionVal = 56.26;//this value should be the full extension length of the arm minus the length of it at zero
+    public Gains telescopeGains = new Gains(telescopeKP, telescopeKI, telescopeKD, _kIzone, _kPeakOutput);
 
     public static enum TelescopingStates{
         RETRACTED,

@@ -82,7 +82,7 @@ public class Robot extends TimedRobot {
    
     //armTelescopingSubsystem.timedMoveArm(0.5, false); //you can change forwards to be false to go backwards; time is in seconds
 
-    armTelescopingSubsystem.setTState(TelescopingStates.FULLY_EXTENDED);
+    armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
     armTelescopingSubsystem.periodic();
   }
 
