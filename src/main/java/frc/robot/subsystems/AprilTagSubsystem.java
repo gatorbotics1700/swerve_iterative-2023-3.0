@@ -170,6 +170,7 @@ public class AprilTagSubsystem {
 
 
     private void correctPosition(){
+        System.out.println("I am correcting position!!!");
         autonomousBasePD.driveDesiredDistance(prePose);
         Robot.m_drivetrainSubsystem.drive();
     }
