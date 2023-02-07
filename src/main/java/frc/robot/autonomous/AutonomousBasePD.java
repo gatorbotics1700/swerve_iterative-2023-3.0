@@ -102,8 +102,8 @@ public class AutonomousBasePD extends AutonomousBase{
                 driveDesiredDistance(desiredTranslation);
                 System.out.println("inside drive state! pose: " + DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
                 if (distanceController.atSetpoint()){
-                    desiredTranslation = preDDD(goalCoordinate1, goalCoordinate2);
-                    setState(States.DRIVE2);
+                   // desiredTranslation = preDDD(goalCoordinate1, goalCoordinate2);
+                    setState(States.STOP);
                 }
             } else if(states == States.DRIVE2){
                 driveDesiredDistance(desiredTranslation);
