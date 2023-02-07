@@ -199,7 +199,6 @@ public class Robot extends TimedRobot {
 
     //System.out.println("Trajectory: " + Trajectories.uno);
     m_drivetrainSubsystem.zeroGyroscope();
-    
   }
 
   /** This function is called periodically during test mode. */

@@ -201,7 +201,7 @@ public class DrivetrainSubsystem {
 
   public void resetOdometry(Pose2d start){
         zeroGyroscope();
-        SwerveModulePosition [] positionArray =  new SwerveModulePosition[] {
+        SwerveModulePosition[] positionArray =  new SwerveModulePosition[] {
                 m_frontLeftModule.getSwerveModulePosition(),
                 m_frontRightModule.getSwerveModulePosition(),
                 m_backRightModule.getSwerveModulePosition(),
@@ -211,6 +211,8 @@ public class DrivetrainSubsystem {
         System.out.println("m_pose: " + m_pose.getX()/TICKS_PER_INCH + ", " + m_pose.getY()/TICKS_PER_INCH);
         m_odometry.resetPosition(getGyroscopeRotation(), positionArray, m_pose);
         System.out.println("#resetodometry! new pose: " + m_pose.getX()/TICKS_PER_INCH + " y: " + m_pose.getY()/TICKS_PER_INCH);
+        m_pose = m_odometry.update(getGyroscopeRotation(), positionArray);
+        System.out.println("m_pose after update in odometry: " + m_pose.getX()/TICKS_PER_INCH + ", " + m_pose.getY()/TICKS_PER_INCH);
         //System.out.println("inputs for the reset: " + getGyroscopeRotation() + " " + m_frontLeftModule.getSwerveModulePosition().distanceMeters + " " + m_frontRightModule.getSwerveModulePosition().distanceMeters + " " + m_backLeftModule.getSwerveModulePosition().distanceMeters + " " + m_backRightModule.getSwerveModulePosition().distanceMeters);
 }
 
