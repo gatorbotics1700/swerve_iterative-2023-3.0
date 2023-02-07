@@ -90,13 +90,24 @@ public class PneumaticIntakeSubsystem {
          */
         String colorString;
         ColorMatchResult match = colorMatcher.matchClosestColor(detectedColor);
+        
+        if((Math.abs(detectedColor.red-kPurpleTarget.red)>0.05 && Math.abs(detectedColor.green-kPurpleTarget.green)>0.05) || (Math.abs(detectedColor.red-kPurpleTarget.red)>0.05 && Math.abs(detectedColor.blue-kPurpleTarget.blue)>0.05) || (Math.abs(detectedColor.green-kPurpleTarget.green)>0.05 && Math.abs(detectedColor.blue-kPurpleTarget.blue)>0.05)){
+            if((Math.abs(detectedColor.red-kYellowTarget.red)>0.05 && Math.abs(detectedColor.green-kYellowTarget.green)>0.05) || (Math.abs(detectedColor.red-kYellowTarget.red)>0.05 && Math.abs(detectedColor.blue-kYellowTarget.blue)>0.05) || (Math.abs(detectedColor.green-kYellowTarget.green)>0.05 && Math.abs(detectedColor.blue-kYellowTarget.blue)>0.05)){
+                colorString = "Unknown";
+            }
+        }
 
+        // if((Math.abs(detectedColor.red-kYellowTarget.red)>0.05 && Math.abs(detectedColor.green-kYellowTarget.green)>0.05) || (Math.abs(detectedColor.red-kYellowTarget.red)>0.05 && Math.abs(detectedColor.blue-kYellowTarget.blue)>0.05) || (Math.abs(detectedColor.green-kYellowTarget.green)>0.05 && Math.abs(detectedColor.blue-kYellowTarget.blue)>0.05)){
+        //     if((Math.abs(detectedColor.red-kPurpleTarget.red)>0.05 && Math.abs(detectedColor.green-kPurpleTarget.green)>0.05) || (Math.abs(detectedColor.red-kPurpleTarget.red)>0.05 && Math.abs(detectedColor.blue-kPurpleTarget.blue)>0.05) || (Math.abs(detectedColor.green-kPurpleTarget.green)>0.05 && Math.abs(detectedColor.blue-kPurpleTarget.blue)>0.05)){
+        //         colorString = "Unknown";
+        //     } 
+        // }
+        
+        
         if (match.color == kPurpleTarget) {
             colorString = "Purple";
-        } else if (match.color == kYellowTarget) {
+        } else{//means its yellow :DDD
             colorString = "Yellow";
-        } else {
-            colorString = "Unknown";
         }
         System.out.println(colorString + " detected");
 
