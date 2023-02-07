@@ -67,7 +67,7 @@ public class Robot extends TimedRobot {
   
   //these paths score 3 balls without touching the charge station, requires 7 Pose2ds!
   private AutonomousBasePD HDThreeScoreB = new AutonomousBasePD(new Pose2d(56.069, 17.332, new Rotation2d(0)), new Pose2d(278.999, 37.193, new Rotation2d(0)), new Pose2d(56.222, 43.068, new Rotation2d(0)), new Pose2d(197.484,45.934, new Rotation2d(0)), new Pose2d(279.077, 85.622, new Rotation2d(0)), new Pose2d(197.484,40.000, new Rotation2d(0)), new Pose2d(56.154,66.117, new Rotation2d(0)));
-  private AutonomousBasePD HBThreeSchoreB = new AutonomousBasePD(new Pose2d(56.069, 200.046, new Rotation2d(0)), new Pose2d(278.999, 180.683, new Rotation2d(0)), new Pose2d(56.069, 174.725, new Rotation2d(0)), new Pose2d(207.006, 174.725, new Rotation2d(0)), new Pose2d(278.006, 133.515, new Rotation2d(0)), new Pose2d(200.552, 185.151, new Rotation2d(0)), new Pose2d(57.062, 154.368, new Rotation2d(0)));
+  private AutonomousBasePD HBThreeScoreB = new AutonomousBasePD(new Pose2d(56.069, 200.046, new Rotation2d(0)), new Pose2d(278.999, 180.683, new Rotation2d(0)), new Pose2d(56.069, 174.725, new Rotation2d(0)), new Pose2d(207.006, 174.725, new Rotation2d(0)), new Pose2d(278.006, 133.515, new Rotation2d(0)), new Pose2d(200.552, 185.151, new Rotation2d(0)), new Pose2d(57.062, 154.368, new Rotation2d(0)));
 
 
 
@@ -84,7 +84,7 @@ public class Robot extends TimedRobot {
   
   //these paths score 3 balls without touching the charge station, requires 7 Pose2ds!
   private AutonomousBasePD HDThreeScoreR = new AutonomousBasePD(new Pose2d(595.614, 17.332, new Rotation2d(0)), new Pose2d(372.684, 37.193, new Rotation2d(0)), new Pose2d(595.461, 43.068, new Rotation2d(0)), new Pose2d(454.199,45.934, new Rotation2d(0)), new Pose2d(372.606, 85.622, new Rotation2d(0)), new Pose2d(454.199,40.000, new Rotation2d(0)), new Pose2d(595.529,66.117, new Rotation2d(0)));
-  private AutonomousBasePD HBThreeSchoreR = new AutonomousBasePD(new Pose2d(595.614, 200.046, new Rotation2d(0)), new Pose2d(372.684, 180.683, new Rotation2d(0)), new Pose2d(595.614, 174.725, new Rotation2d(0)), new Pose2d(444.677, 174.725, new Rotation2d(0)), new Pose2d(373.677, 133.515, new Rotation2d(0)), new Pose2d(451.131, 185.151, new Rotation2d(0)), new Pose2d(594.621, 154.368, new Rotation2d(0)));
+  private AutonomousBasePD HBThreeScoreR = new AutonomousBasePD(new Pose2d(595.614, 200.046, new Rotation2d(0)), new Pose2d(372.684, 180.683, new Rotation2d(0)), new Pose2d(595.614, 174.725, new Rotation2d(0)), new Pose2d(444.677, 174.725, new Rotation2d(0)), new Pose2d(373.677, 133.515, new Rotation2d(0)), new Pose2d(451.131, 185.151, new Rotation2d(0)), new Pose2d(594.621, 154.368, new Rotation2d(0)));
 
   
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
@@ -124,14 +124,14 @@ public class Robot extends TimedRobot {
     System.out.println("#I'm Awake");
     m_chooser.setDefaultOption("Default testing auto", testPath);
     m_chooser.addOption("Nothing! No go!", noGo);
-    m_chooser.addOption("Place and leave community from Hot Dog", HDplaceNLeave);
-    m_chooser.addOption("Leave community from Hot Dog", HDLeave);
-    m_chooser.addOption("Leave community from HamBurger", HBLeave); 
-    m_chooser.addOption("Score, get another, and engage with charge station from Hot Dog", HDScorePickEngage);
+    m_chooser.addOption("Place and leave community from Hot Dog", HDplaceTwoEngageB);
+    m_chooser.addOption("Leave community from Hot Dog", HDLeaveB);
+    m_chooser.addOption("Leave community from HamBurger", HBLeaveB); 
+    m_chooser.addOption("Score, get another, and engage with charge station from Hot Dog", HDplaceTwoEngageR);
     m_chooser.addOption("Timed auto", timedPath);
-    m_chooser.addOption("Motion profiling tester path", motionProfiling);
-    m_chooser.addOption("Three balls scored on Hot Dog", HDThreeScore);
-    m_chooser.addOption("Three balls scored on HamBurger", HBThreeScore);
+    //m_chooser.addOption("Motion profiling tester path", motionProfiling);
+    m_chooser.addOption("Three balls scored on Hot Dog", HDThreeScoreB);
+    m_chooser.addOption("Three balls scored on HamBurger", HBThreeScoreR);
 
     SmartDashboard.putData("Auto choices", m_chooser);
 
