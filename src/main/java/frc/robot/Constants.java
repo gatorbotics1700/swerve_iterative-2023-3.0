@@ -29,22 +29,16 @@ public final class Constants {
     public static final int DRIVETRAIN_PIGEON_ID = 6; 
 
     //green
-    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(193.36);
-    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(305.24);
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(276.86);
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(122.87);
+    // public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(193.36);
+    // public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(305.24);
+    // public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(276.86);
+    // public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(122.87);
 
-    //swervo
-    // public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(185.713); 
-    // public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(341.982);
-    // public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(229.064); 
-    // public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(341.904);
-
-    //1/28 new swervo 
-    // public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(9.580);
-    // public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(256.358);
-    // public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(137.637);
-    // public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(72.949);
+    //swervo MOST RECENT PLS USE THESE 2/4
+     public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(100.986); 
+     public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(343.037);
+     public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(228.076); 
+     public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(161.104);
 
     //even can ids are drive, odd can ids are steer
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 26;
