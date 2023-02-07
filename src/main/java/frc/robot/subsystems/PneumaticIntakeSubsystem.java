@@ -26,6 +26,7 @@ public class PneumaticIntakeSubsystem {
 
     public static PneumaticIntakeStates pneumaticIntakeState = PneumaticIntakeStates.OFF;
 
+    public double colorThreshold = 0.03;
     //confirm we are using double solenoid
     public static DoubleSolenoid solenoidOne = new DoubleSolenoid(2, PneumaticsModuleType.REVPH, 8, 9); 
     //what compressor are we using?
@@ -91,8 +92,13 @@ public class PneumaticIntakeSubsystem {
         String colorString;
         ColorMatchResult match = colorMatcher.matchClosestColor(detectedColor);
         
-        if((Math.abs(detectedColor.red-kPurpleTarget.red)>0.05 && Math.abs(detectedColor.green-kPurpleTarget.green)>0.05) || (Math.abs(detectedColor.red-kPurpleTarget.red)>0.05 && Math.abs(detectedColor.blue-kPurpleTarget.blue)>0.05) || (Math.abs(detectedColor.green-kPurpleTarget.green)>0.05 && Math.abs(detectedColor.blue-kPurpleTarget.blue)>0.05)){
-            if((Math.abs(detectedColor.red-kYellowTarget.red)>0.05 && Math.abs(detectedColor.green-kYellowTarget.green)>0.05) || (Math.abs(detectedColor.red-kYellowTarget.red)>0.05 && Math.abs(detectedColor.blue-kYellowTarget.blue)>0.05) || (Math.abs(detectedColor.green-kYellowTarget.green)>0.05 && Math.abs(detectedColor.blue-kYellowTarget.blue)>0.05)){
+        if((Math.abs(detectedColor.red-kPurpleTarget.red)>colorThreshold && Math.abs(detectedColor.green-kPurpleTarget.green)>colorThreshold) || (Math.abs(detectedColor.red-kPurpleTarget.red)>colorThreshold && Math.abs(detectedColor.blue-kPurpleTarget.blue)>colorThreshold) || (Math.abs(detectedColor.green-kPurpleTarget.green)>colorThreshold && Math.abs(detectedColor.blue-kPurpleTarget.blue)>colorThreshold)){
+            System.out.println("diff w/ purple red: " + (detectedColor.red-kPurpleTarget.red));
+            System.out.println("diff w/ purple green: " + (detectedColor.green-kPurpleTarget.green));
+            System.out.println("diff w/ purple blue: " + (detectedColor.blue-kPurpleTarget.blue));
+
+            System.out.println("here!!!!");
+            if((Math.abs(detectedColor.red-kYellowTarget.red)>colorThreshold && Math.abs(detectedColor.green-kYellowTarget.green)>colorThreshold) || (Math.abs(detectedColor.red-kYellowTarget.red)>colorThreshold && Math.abs(detectedColor.blue-kYellowTarget.blue)>colorThreshold) || (Math.abs(detectedColor.green-kYellowTarget.green)>colorThreshold && Math.abs(detectedColor.blue-kYellowTarget.blue)>colorThreshold)){
                 colorString = "Unknown";
             }
         }
