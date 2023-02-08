@@ -262,8 +262,14 @@ public class DrivetrainSubsystem {
   public void drive() { //runs periodically
         //System.out.println("pose before update: " + m_pose.getX()/TICKS_PER_INCH + " and y: " + m_pose.getY()/TICKS_PER_INCH);
 
+        SwerveModulePosition[] array =  {new SwerveModulePosition(m_frontLeftModule.getSwerveModulePosition().distanceMeters - tareLFEncoder, new Rotation2d(m_frontLeftModule.getSteerAngle())),
+        new SwerveModulePosition(m_frontRightModule.getSwerveModulePosition().distanceMeters - tareRFEncoder, new Rotation2d(m_frontRightModule.getSteerAngle())), 
+        new SwerveModulePosition(m_backRightModule.getSwerveModulePosition().distanceMeters - tareRBEncoder, new Rotation2d(m_backRightModule.getSteerAngle())),
+        new SwerveModulePosition(m_backLeftModule.getSwerveModulePosition().distanceMeters - tareLBEncoder, new Rotation2d(m_backLeftModule.getSteerAngle()))};
+ 
+        
         //System.out.println("inputs for the update: " + getGyroscopeRotation() + m_frontLeftModule.getSwerveModulePosition().distanceMeters + m_frontRightModule.getSwerveModulePosition().distanceMeters + m_backLeftModule.getSwerveModulePosition().distanceMeters + m_backRightModule.getSwerveModulePosition().distanceMeters);
-        m_pose = m_odometry.update(getGyroscopeRotation(), new SwerveModulePosition[] {m_frontLeftModule.getSwerveModulePosition(), m_frontRightModule.getSwerveModulePosition(), m_backLeftModule.getSwerveModulePosition(), m_backRightModule.getSwerveModulePosition()});
+        m_pose = m_odometry.update(getGyroscopeRotation(),array); 
     
         System.out.println("new pose after update: " + m_pose.getX()/TICKS_PER_INCH + " and y: " + m_pose.getY()/TICKS_PER_INCH);
     
