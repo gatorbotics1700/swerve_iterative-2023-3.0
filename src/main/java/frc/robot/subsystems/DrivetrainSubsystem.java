@@ -19,6 +19,11 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import frc.robot.autonomous.AutonomousBasePD;
+import frc.robot.subsystems.ArmTelescopingSubsystem.TelescopingStates;
+import frc.robot.subsystems.ElevatorSubsystem.ElevatorStates;
+import edu.wpi.first.math.controller.PIDController;
+import frc.robot.Robot;
 
 import java.util.Arrays;
 import java.util.function.DoubleSupplier;
@@ -29,11 +34,16 @@ import frc.robot.OI;
 public class DrivetrainSubsystem {
 
   /**
-   * The maximum voltage that will be delivered to the motors.
+   * The maximum voltage that will be delivered to the drive motors.
    * <p>
    * This can be reduced to cap the robot's maximum speed. Typically, this is useful during initial testing of the robot.
    */
   public static final double MAX_VOLTAGE = 16.3;
+  public static double pitchKP = 0.025;
+  public static double pitchKI = 0.0;
+  public static double pitchKD = 0.001;
+  public static double MINOUTPUT = 0.1;
+  private PIDController pitchController = new PIDController(pitchKP, pitchKI, pitchKD);
   //  The formula for calculating the theoretical maximum velocity is:
   //   <Motor free speed RPM> / 60 * <Drive reduction> * <Wheel diameter meters> * pi
   //  By default this value is setup for a Mk3 standard module using Falcon500s to drive.
@@ -44,6 +54,8 @@ public class DrivetrainSubsystem {
    * <p>
    * This is a measure of how fast the robot should be able to drive in a straight line.
    */
+  public static final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+  public static final ArmTelescopingSubsystem armTelescopingSubsystem = new ArmTelescopingSubsystem();
   public static final double MAX_VELOCITY_METERS_PER_SECOND = 6380.0 / 60.0 *
           SdsModuleConfigurations.MK4_L2.getDriveReduction() *
           SdsModuleConfigurations.MK4_L2.getWheelDiameter() * Math.PI;
@@ -56,7 +68,7 @@ public class DrivetrainSubsystem {
   public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND /
           Math.hypot(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0);
 
-  public final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
+  private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
           // Setting up location of modules relative to the center of the robot
           // Front left
           new Translation2d(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0),
@@ -85,9 +97,12 @@ public class DrivetrainSubsystem {
   private double tareRFEncoder = 0.0;
   private double tareRBEncoder = 0.0;
 
-  public static SwerveDriveOdometry m_odometry; 
-  public static Pose2d m_pose = new Pose2d();
-  public static ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain"); 
+  private double trueNorthError;
+  private double yaw; //yaw used to find true north
+
+  public SwerveDriveOdometry m_odometry; 
+  public Pose2d m_pose = new Pose2d(20, 30, new Rotation2d(Math.PI/4));
+  public AutonomousBasePD autonomousBasePD = new AutonomousBasePD();
 
   //ChassisSpeeds takes in y velocity, x velocity, speed of rotation
   private ChassisSpeeds m_chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
@@ -163,7 +178,8 @@ public class DrivetrainSubsystem {
             BACK_RIGHT_MODULE_STEER_OFFSET
     );
     
-    m_odometry = new SwerveDriveOdometry(m_kinematics, getGyroscopeRotation(), new SwerveModulePosition[] {m_frontLeftModule.getSwerveModulePosition(), m_frontRightModule.getSwerveModulePosition(), m_backRightModule.getSwerveModulePosition(), m_backLeftModule.getSwerveModulePosition()}, new Pose2d());
+    m_odometry = new SwerveDriveOdometry(m_kinematics, getGyroscopeRotation(), new SwerveModulePosition[] {m_frontLeftModule.getSwerveModulePosition(), m_frontRightModule.getSwerveModulePosition(), m_backRightModule.getSwerveModulePosition(), m_backLeftModule.getSwerveModulePosition()}, new Pose2d(20, 30, new Rotation2d(Math.PI/4)));
+    
   }
 
    /**
@@ -206,12 +222,13 @@ public class DrivetrainSubsystem {
                 m_frontRightModule.getSwerveModulePosition(),
                 m_backRightModule.getSwerveModulePosition(),
                 m_backLeftModule.getSwerveModulePosition() };
-        m_pose = start;
-        System.out.println("position array: " + positionArray.toString());
+
+        m_pose = new Pose2d();
+        System.out.println("position array: " + positionArray);
+
         System.out.println("m_pose: " + m_pose);
         m_odometry.resetPosition(getGyroscopeRotation(), positionArray, m_pose);
         System.out.println("#resetodometry! new pose: " + m_pose.getX()/TICKS_PER_INCH + " y: " + m_pose.getY()/TICKS_PER_INCH);
-        System.out.println("inputs for the reset: " + getGyroscopeRotation() + m_frontLeftModule.getSwerveModulePosition().distanceMeters + m_frontRightModule.getSwerveModulePosition().distanceMeters + m_backLeftModule.getSwerveModulePosition().distanceMeters + m_backRightModule.getSwerveModulePosition().distanceMeters);
   }
 
   public void zeroDriveEncoder(){
@@ -219,7 +236,7 @@ public class DrivetrainSubsystem {
         tareLFEncoder = m_frontLeftModule.getPosition();
         tareRFEncoder = m_frontRightModule.getPosition();
         tareRBEncoder = m_backRightModule.getPosition();
-        System.out.println("tared...  " + getDistance());
+        System.out.print("tared...  " + getDistance());
   }
 
   public void zeroGyroscope() {
@@ -239,9 +256,9 @@ public class DrivetrainSubsystem {
 //   }
   
   public void driveTeleop(){
-        DoubleSupplier m_translationXSupplier = () -> -modifyAxis(OI.m_controller.getLeftY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
-        DoubleSupplier m_translationYSupplier = () -> -modifyAxis(OI.m_controller.getLeftX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
-        DoubleSupplier m_rotationSupplier = () -> -modifyAxis(OI.m_controller.getRightX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
+        DoubleSupplier m_translationXSupplier = () -> -modifyAxis(OI.m_driver_controller.getLeftY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
+        DoubleSupplier m_translationYSupplier = () -> -modifyAxis(OI.m_driver_controller.getLeftX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
+        DoubleSupplier m_rotationSupplier = () -> -modifyAxis(OI.m_driver_controller.getRightX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
         
         //setting speed
         setSpeed(
@@ -257,12 +274,11 @@ public class DrivetrainSubsystem {
   }
 
   public void drive() { //runs periodically
-    //System.out.println("pose before update: " + m_pose.getX()/TICKS_PER_INCH + " and y: " + m_pose.getY()/TICKS_PER_INCH);
 
-        //System.out.println("inputs for the update: " + getGyroscopeRotation() + m_frontLeftModule.getSwerveModulePosition().distanceMeters + m_frontRightModule.getSwerveModulePosition().distanceMeters + m_backLeftModule.getSwerveModulePosition().distanceMeters + m_backRightModule.getSwerveModulePosition().distanceMeters);
+    System.out.print("pose meters: " + m_odometry.getPoseMeters());
+
     m_pose = m_odometry.update(getGyroscopeRotation(), new SwerveModulePosition[] {m_frontLeftModule.getSwerveModulePosition(), m_frontRightModule.getSwerveModulePosition(), m_backLeftModule.getSwerveModulePosition(), m_backRightModule.getSwerveModulePosition()});
-    
-    System.out.println("new pose after update: " + m_pose.getX()/TICKS_PER_INCH + " and y: " + m_pose.getY()/TICKS_PER_INCH);
+    System.out.println("new pose: " + m_pose.getX()/TICKS_PER_INCH + " and y: " + m_pose.getY()/TICKS_PER_INCH);
     
     //array of states filled with the speed and angle for each module (made from linear and angular motion for the whole robot) 
     SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
@@ -306,10 +322,57 @@ public class DrivetrainSubsystem {
                     return num[num.length/2];
             }
     }
+    //turn to true north kaylin wrote this :)
+    public void trueNorth(){
+        yaw = m_pigeon.getYaw();
+        if(Math.abs(yaw)>360){
+                yaw = Math.signum(yaw) * Math.abs(yaw)%360.0;       
+        }
+        if(Math.abs(yaw)>180){
+             yaw = yaw-360;   
+        }
+        trueNorthError = 0-yaw;
+        autonomousBasePD.turnDesiredAngle(trueNorthError);
+    }
+
 
     //AUTO AND FAILSAFE
     public void stopDrive() {
         setSpeed(new ChassisSpeeds(0.0, 0.0, 0.0));
         drive();
    }
+   public void pitchBalance(double pitchSetpoint){
+        System.out.println("pitch: " + m_pigeon.getPitch());
+        System.out.println("universal pitch: " + Robot.universalPitch);
+        double pitchAfterCorrection = m_pigeon.getPitch()-Robot.universalPitch;
+        System.out.println("pitch after correcting for universalPitch: " + pitchAfterCorrection);
+        pitchController.setSetpoint(pitchSetpoint); 
+        double output = pitchController.calculate(pitchAfterCorrection, pitchSetpoint);
+        System.out.println("output: " + output); 
+        setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, -output, 0, getGyroscopeRotation()));
+        drive();
+        
+        if (Math.abs(pitchAfterCorrection - pitchSetpoint) < 1.0){
+            setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0,getGyroscopeRotation()));
+            //velocityPD(0);
+        } else{
+                if(Math.abs(output) < MINOUTPUT){
+                   output = Math.signum(output) * MINOUTPUT;
+                }
+        }
+    }
+    public void scoreLow(){
+        elevatorSubsystem.setState(ElevatorStates.LOW_ELEVATOR_HEIGHT);
+        armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
+    }
+    public void scoreMid(){
+        elevatorSubsystem.setState(ElevatorStates.MID_ELEVATOR_HEIGHT);
+        armTelescopingSubsystem.setTState(TelescopingStates.MID_ARM_LENGTH);
+    }
+    public void scoreHigh(){
+        elevatorSubsystem.setState(ElevatorStates.HIGH_ELEVATOR_HEIGHT);
+        armTelescopingSubsystem.setTState(TelescopingStates.HIGH_ARM_LENGTH);
+    }
 }
+
+

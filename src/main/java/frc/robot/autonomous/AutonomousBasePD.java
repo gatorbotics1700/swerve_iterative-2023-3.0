@@ -36,14 +36,9 @@ public class AutonomousBasePD extends AutonomousBase{
     private PIDController directionController = new PIDController(turnKP, turnKI, turnKD);
     private PIDController distanceController = new PIDController(driveKP, driveKI, driveKD);
     
-    public AutonomousBasePD(Pose2d startingCoordinate, Pose2d goalCoordinate1, Pose2d goalCoordinate2, Pose2d goalCoordinate3, Pose2d goalCoordinate4, Pose2d goalCoordinate5, Pose2d goalCoordinate6){
-        this.startingCoordinate = startingCoordinate;
-        this.goalCoordinate1 = goalCoordinate1;
-        this.goalCoordinate2 = goalCoordinate2;
-        this.goalCoordinate3 = goalCoordinate3;
-        this.goalCoordinate4 = goalCoordinate4;
-        this.goalCoordinate5 = goalCoordinate5;
-        this.goalCoordinate6 = goalCoordinate6;
+
+    public AutonomousBasePD(){
+     
     }
 
     @Override
@@ -82,8 +77,8 @@ public class AutonomousBasePD extends AutonomousBase{
         
         //System.out.println("state: "+states);
         if (states == States.FIRST){
-            desiredTranslation = preDDD(startingCoordinate, goalCoordinate1); 
-            System.out.println("we've reset to this pose: " + DrivetrainSubsystem.m_pose);
+            desiredTranslation = preDDD(new Translation2d(), goalCoordinate1); 
+            //System.out.println("we've reset to this pose: " + DrivetrainSubsystem.m_pose);
             setState(States.DRIVE);
         }
         if (states == States.DRIVE){

@@ -56,6 +56,9 @@ public final class Constants {
     public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 22; 
     public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 23; 
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 3; 
+    
+    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(267.45); // FIXME Measure and set back right steer offset
+    public static final int INTAKE_MOTOR_ID = 12;
 
     public static final double DRIVE_MOTOR_MIN_VOLTAGE = 0.19;
     public static final double DRIVE_MOTOR_MAX_VOLTAGE = 0.8;
@@ -65,4 +68,8 @@ public final class Constants {
     public static final double WHEEL_DIAMETER= 4; //inches
     public static final double TICKS_PER_REV = 2048;
     public static final double TICKS_PER_INCH = TICKS_PER_REV*GEAR_RATIO/WHEEL_DIAMETER/Math.PI; //talonfx drive encoder
+
+    public static final int TELESCOPING_MOTOR_ID = 31;
+    public static final int ELEVATOR_CAN_ID = 9;
+
 }
