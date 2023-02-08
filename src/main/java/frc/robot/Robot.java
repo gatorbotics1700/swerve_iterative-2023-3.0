@@ -50,7 +50,7 @@ public class Robot extends TimedRobot {
   private AutonomousBase m_autoSelected;
   private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<AutonomousBase>();
   private AprilTagSubsystem m_AprilTagSubsystem = new AprilTagSubsystem();
-  private DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
+  public static DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   // whole field: 651.683 
   // center : 325.8415
   private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
@@ -135,7 +135,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-
+      m_AprilTagSubsystem.init();
     //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
     //System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
 
@@ -165,7 +165,7 @@ public class Robot extends TimedRobot {
   
     System.out.println("i am in teleop");
     m_AprilTagSubsystem.periodic();
-    //m_AprilTagSubsystem.detectTag();
+    m_AprilTagSubsystem.detectTag();
 
   }
 
