@@ -267,7 +267,6 @@ public class DrivetrainSubsystem {
         new SwerveModulePosition(m_backRightModule.getSwerveModulePosition().distanceMeters - tareRBEncoder, new Rotation2d(m_backRightModule.getSteerAngle())),
         new SwerveModulePosition(m_backLeftModule.getSwerveModulePosition().distanceMeters - tareLBEncoder, new Rotation2d(m_backLeftModule.getSteerAngle()))};
  
-        
         //System.out.println("inputs for the update: " + getGyroscopeRotation() + m_frontLeftModule.getSwerveModulePosition().distanceMeters + m_frontRightModule.getSwerveModulePosition().distanceMeters + m_backLeftModule.getSwerveModulePosition().distanceMeters + m_backRightModule.getSwerveModulePosition().distanceMeters);
         m_pose = m_odometry.update(getGyroscopeRotation(),array); 
     

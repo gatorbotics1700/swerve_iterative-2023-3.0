@@ -17,6 +17,7 @@ public class AutonomousBasePD extends AutonomousBase{
     private final double DRIVE_DEADBAND = 3;
     private final double TURN_DEADBAND = 6;
     private double hypotenuse;
+    private double gone;
 
     
     private Pose2d startingCoordinate;
@@ -93,7 +94,7 @@ public class AutonomousBasePD extends AutonomousBase{
         System.out.println("state: " + states);
         if (states == States.FIRST){
             desiredTranslation = preDDD(startingCoordinate, goalCoordinate1); 
-            drivetrainSubsystem.resetOdometry(startingCoordinate);
+            //drivetrainSubsystem.resetOdometry(startingCoordinate);
             System.out.println("we've reset to this pose: " + DrivetrainSubsystem.m_pose);
             setState(States.DRIVE);
         } else {
@@ -157,7 +158,8 @@ public class AutonomousBasePD extends AutonomousBase{
     @Override
     public void driveDesiredDistance(Pose2d dPose){      
         System.out.println("where we are rn: " + DrivetrainSubsystem.m_pose.getX() + " and " + DrivetrainSubsystem.m_pose.getY());
-        double speed = -(distanceController.calculate(Math.hypot(DrivetrainSubsystem.m_pose.getX(), DrivetrainSubsystem.m_pose.getY()), hypotenuse));
+        gone += Math.hypot(DrivetrainSubsystem.m_pose.getX(), DrivetrainSubsystem.m_pose.getY());
+        double speed = -(distanceController.calculate(gone, gone+hypotenuse));
         double directionX = dPose.getX() / Math.hypot(dPose.getX(), dPose.getY());
         double directionY = dPose.getY() / Math.hypot(dPose.getX(), dPose.getY());
         System.out.println("DDDing");    
