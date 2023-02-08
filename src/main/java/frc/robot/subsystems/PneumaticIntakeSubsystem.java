@@ -23,7 +23,7 @@ public class PneumaticIntakeSubsystem {
         RETRACTING, 
         OFF;
     }
-
+    String colorString;
     public PneumaticIntakeStates pneumaticIntakeState = PneumaticIntakeStates.OFF;
 
     public double colorThreshold = 0.03;
@@ -91,7 +91,6 @@ public class PneumaticIntakeSubsystem {
          /**
          * Run the color match algorithm on our detected color
          */
-        String colorString;
         ColorMatchResult match = colorMatcher.matchClosestColor(detectedColor);
 
         boolean purpleNotRedThreshold = (Math.abs(detectedColor.red-kPurpleTarget.red)>colorThreshold);
@@ -151,7 +150,9 @@ public class PneumaticIntakeSubsystem {
             System.out.println("Solenoid Off");
         }
         //switchState_beamBreakSensor(); //comment out one or the other to test one at a time
-        switchState_colorSensor();
+        if (colorString=="Yellow"|| colorString=="Purple"){
+            setState(PneumaticIntakeStates.ACTUATING);
+        }
     }
 
     public boolean getPSI(){
