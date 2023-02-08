@@ -2,7 +2,7 @@ package frc.robot.autonomous;
 import edu.wpi.first.math.geometry.*;
 
 public class AutonomousBase{
-    public void driveDesiredDistance(Translation2d dTranslation){
+    public void driveDesiredDistance(Pose2d dPose){
 
     }
 
@@ -16,16 +16,6 @@ public class AutonomousBase{
 
     public void periodic(){
 
-    }
-
-    public static enum Paths{ //rename paths later
-        TIMEDPATH,
-        A,
-        B,
-        C,
-        D,
-        E,
-        F;
     }
 
 }
