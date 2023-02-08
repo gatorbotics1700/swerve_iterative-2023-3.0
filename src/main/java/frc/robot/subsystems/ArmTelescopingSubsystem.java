@@ -58,13 +58,14 @@ public class ArmTelescopingSubsystem {
         } else if (tState == TelescopingStates.FULLY_EXTENDED){
             telescopingMotor.set(ControlMode.Position, extensionVal * Constants.TICKS_PER_INCH); //confirmed
         } else if (tState == TelescopingStates.LOW_ARM_LENGTH){
-            telescopingMotor.set(ControlMode.Position, 8 * Constants.TICKS_PER_INCH); // replace position value w low length
+            telescopingMotor.set(ControlMode.Position, 22 * Constants.TICKS_PER_INCH); // replace position value w low length
         }else if (tState == TelescopingStates.MID_ARM_LENGTH){
             telescopingMotor.set(ControlMode.Position, 5); // goes with 90 degrees rotation // replace position value w mid length
         }else{
             telescopingMotor.set(ControlMode.Position, 15); // replace position value w high length
         }
     }
+    
 
     
     public void moveArm(double armSetpoint){//setpoint in inches

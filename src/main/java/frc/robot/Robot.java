@@ -45,8 +45,8 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  private final AutonomousBase autonomousBasePD = new AutonomousBasePD(new Pose2d(0*Constants.TICKS_PER_INCH, -20*Constants.TICKS_PER_INCH, new Rotation2d(0)), 0.0, new Pose2d(), 0.0);
-  private static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
+ // private final AutonomousBase autonomousBasePD = new AutonomousBasePD(new Pose2d(0*Constants.TICKS_PER_INCH, -20*Constants.TICKS_PER_INCH, new Rotation2d(0)), 0.0, new Pose2d(), 0.0);
+  public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private static ArmTelescopingSubsystem armTelescopingSubsystem = new ArmTelescopingSubsystem();
 
   public static DrivetrainSubsystem getDrivetrainSubsystem(){
@@ -60,23 +60,23 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() { //creates options for different autopaths, names are placeholders
  
-    System.out.println("#I'm Awake");
-    m_chooser.setDefaultOption("Default Auto", testPath);
-    m_chooser.addOption("My Auto 1", noGo);
-    m_chooser.addOption("My Auto 2",placeNLeave);
-    m_chooser.addOption("My Auto 3", antiCharge);
-    m_chooser.addOption("My Auto 4", antiChargeOpposite);
-    //m_chooser.addOption(name: "My Auto 5", engageCharge);
-   // m_chooser.addOption(name: "My Auto 6",placeTwoEngage);
-    m_chooser.addOption("My Auto timed", timedPath);
-    m_chooser.addOption("Motion profiling path", motionProfiling);
+  //   System.out.println("#I'm Awake");
+  //   m_chooser.setDefaultOption("Default Auto", testPath);
+  //   m_chooser.addOption("My Auto 1", noGo);
+  //   m_chooser.addOption("My Auto 2",placeNLeave);
+  //   m_chooser.addOption("My Auto 3", antiCharge);
+  //   m_chooser.addOption("My Auto 4", antiChargeOpposite);
+  //   //m_chooser.addOption(name: "My Auto 5", engageCharge);
+  //  // m_chooser.addOption(name: "My Auto 6",placeTwoEngage);
+  //   m_chooser.addOption("My Auto timed", timedPath);
+  //   m_chooser.addOption("Motion profiling path", motionProfiling);
 
     SmartDashboard.putData("Auto choices", m_chooser);
 
-    ShuffleboardTab tab = DrivetrainSubsystem.tab;
-     kP = tab.add("Auto kP", 0.1).getEntry(); 
-     kI = tab.add("Auto kI", 0.0).getEntry();
-     kD = tab.add("Auto kD", 0.0).getEntry();
+    // ShuffleboardTab tab = DrivetrainSubsystem.tab;
+    //  kP = tab.add("Auto kP", 0.1).getEntry(); 
+    //  kI = tab.add("Auto kI", 0.0).getEntry();
+    //  kD = tab.add("Auto kD", 0.0).getEntry();
    
 
   }
@@ -88,12 +88,12 @@ public class Robot extends TimedRobot {
    * <p>This runs after the mode specific periodic functions, but before LiveWindow and
    * SmartDashboard integrated updating.
    */
-  @Override
-  public void robotPeriodic() {
-    SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH);
-    SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
-    m_field.setRobotPose(DrivetrainSubsystem.m_odometry.getPoseMeters());
-  }
+ // @Override
+  // public void robotPeriodic() {
+  //   SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH);
+  //   SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
+  //   m_field.setRobotPose(DrivetrainSubsystem.m_odometry.getPoseMeters());
+  // }
 
   /**
    * This autonomous (along with the chooser code above) shows how to select between different
