@@ -57,9 +57,6 @@ public final class Constants {
     public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 23; 
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 3; 
 
-    
-
-
     public static final double DRIVE_MOTOR_MIN_VOLTAGE = 0.19;
     public static final double DRIVE_MOTOR_MAX_VOLTAGE = 0.8;
     public static final double STEER_MOTOR_MIN_VOLTAGE = 0.02; 
