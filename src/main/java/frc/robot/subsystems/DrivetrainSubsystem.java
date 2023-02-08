@@ -204,9 +204,9 @@ public class DrivetrainSubsystem {
         zeroDriveEncoder();
         SwerveModulePosition[] positionArray =  new SwerveModulePosition[] {
                 new SwerveModulePosition(m_frontLeftModule.getSwerveModulePosition().distanceMeters - tareLFEncoder, new Rotation2d(m_frontLeftModule.getSteerAngle())),
-                m_frontRightModule.getSwerveModulePosition(),
-                m_backRightModule.getSwerveModulePosition(),
-                m_backLeftModule.getSwerveModulePosition() };
+                new SwerveModulePosition(m_frontRightModule.getSwerveModulePosition().distanceMeters - tareRFEncoder, new Rotation2d(m_frontRightModule.getSteerAngle())), 
+                new SwerveModulePosition(m_backRightModule.getSwerveModulePosition().distanceMeters - tareRBEncoder, new Rotation2d(m_backRightModule.getSteerAngle())),
+                new SwerveModulePosition(m_backLeftModule.getSwerveModulePosition().distanceMeters - tareLBEncoder, new Rotation2d(m_backLeftModule.getSteerAngle()))};
         m_pose = start;
         System.out.println("position array: " + positionArray.toString());
         System.out.println("m_pose: " + m_pose.getX()/TICKS_PER_INCH + ", " + m_pose.getY()/TICKS_PER_INCH);
@@ -219,9 +219,9 @@ public class DrivetrainSubsystem {
 
   public void zeroDriveEncoder(){
         tareLFEncoder = m_frontLeftModule.getSwerveModulePosition().distanceMeters;
-        tareLBEncoder = m_backLeftModule.getPosition();
-        tareRFEncoder = m_frontRightModule.getPosition();
-        tareRBEncoder = m_backRightModule.getPosition();
+        tareLBEncoder = m_backLeftModule.getSwerveModulePosition().distanceMeters;
+        tareRFEncoder = m_frontRightModule.getSwerveModulePosition().distanceMeters;
+        tareRBEncoder = m_backRightModule.getSwerveModulePosition().distanceMeters;
         System.out.println("tared...  " + getDistance());
   }
 
