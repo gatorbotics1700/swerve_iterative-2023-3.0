@@ -63,12 +63,14 @@ public class PneumaticIntakeSubsystem {
     // private final Color kYellowTarget = new Color(0.941, 0.745, 0.039); //rgb: 240, 190, 10 // acc yellow 
     private final Color kPurpleTarget = new Color(0.218, 0.367, 0.415); // fake purple (what it sees - aka teal)
     private final Color kYellowTarget = new Color(0.355, 0.547, 0.100); //fake yellow (what it sees - aka marsh green)
-    
+    private final Color kUnknownTarget = new Color(0,0,0); //black
+
     public void init(){
         solenoidOne.set(kOff);
         System.out.println("solenoid set to off");
         colorMatcher.addColorMatch(kPurpleTarget);
         colorMatcher.addColorMatch(kYellowTarget);
+        colorMatcher.addColorMatch(kUnknownTarget);
     }
 
     public void setStatePneumaticIntake(PneumaticIntakeStates newState){
@@ -99,7 +101,12 @@ public class PneumaticIntakeSubsystem {
 
             System.out.println("here!!!!");
             if((Math.abs(detectedColor.red-kYellowTarget.red)>colorThreshold && Math.abs(detectedColor.green-kYellowTarget.green)>colorThreshold) || (Math.abs(detectedColor.red-kYellowTarget.red)>colorThreshold && Math.abs(detectedColor.blue-kYellowTarget.blue)>colorThreshold) || (Math.abs(detectedColor.green-kYellowTarget.green)>colorThreshold && Math.abs(detectedColor.blue-kYellowTarget.blue)>colorThreshold)){
+                System.out.println("diff w/ yellos red: " + (detectedColor.red-kYellowTarget.red));
+                System.out.println("diff w/ yellow green: " + (detectedColor.green-kYellowTarget.green));
+                System.out.println("diff w/ yellow blue: " + (detectedColor.blue-kYellowTarget.blue));
                 colorString = "Unknown";
+                //match should become black here
+                match = colorMatcher.matchClosestColor(new Color(0,0,0));
             }
         }
 
@@ -112,10 +119,13 @@ public class PneumaticIntakeSubsystem {
         
         if (match.color == kPurpleTarget) {
             colorString = "Purple";
-        } else{//means its yellow :DDD
+        } else if (match.color == kYellowTarget){//means its yellow :DDD
             colorString = "Yellow";
+        } else{
+            colorString = "Unknown"; 
         }
         System.out.println(colorString + " detected");
+        
 
         /**
          * Open Smart Dashboard or Shuffleboard to see the color detected by the 
