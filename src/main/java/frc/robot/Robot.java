@@ -64,7 +64,6 @@ public class Robot extends TimedRobot {
   private final Field2d m_field = new Field2d();
   ChassisSpeeds m_ChassisSpeeds;
 
-  IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   PneumaticIntakeSubsystem pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
 
   /**
@@ -122,6 +121,9 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     pneumaticIntakeSubsystem.init();
+
+    m_autoSelected = m_chooser.getSelected();
+    m_autoSelected.init();
   }
 
   /** This function is called periodically during autonomous. */
@@ -130,6 +132,9 @@ public class Robot extends TimedRobot {
      //m_drivetrainSubsystem.driveTeleop();
      pneumaticIntakeSubsystem.periodic();
      //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
+
+     m_autoSelected.periodic();
+     m_drivetrainSubsystem.drive();
     
   }
 
@@ -181,14 +186,6 @@ public class Robot extends TimedRobot {
     //     m_drivetrainSubsystem.drive();
 
     // System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
-    if(OI.m_controller.getAButton()){
-      System.out.println("we are running away");
-      intakeSubsystem.runMotorsForward();
-      //intakeSubsystem.runMotorsBackward(); // sara you can choose which one depending on if the motors are inverted correctly in init() - janet :)
-    }
-    if(OI.m_controller.getXButton()){
-      IntakeSubsystem.intakeMotor.set(ControlMode.PercentOutput, 0.0);
-    }
   }
 
   /** This function is called once when the robot is first started up. */
