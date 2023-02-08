@@ -7,22 +7,40 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.*;
 import frc.robot.OI;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
 import frc.robot.Constants;
+
+import com.fasterxml.jackson.core.sym.Name;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTable.*;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.subsystems.ArmTelescopingSubsystem.TelescopingStates;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
+
+
+//private AutonomousBasePD mScore = new AutonomousBasePD(new Translation2d(222.037, 0), new Translation2d(135.091, -41.307), new Translation2d(0, -44.163), new Translation2d(222.894, -50.377), new Translation2d(0, -65.388), new Translation2d(0, -65.388));
+
 public class Robot extends TimedRobot {
+
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
@@ -40,13 +58,27 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
   @Override
-  public void robotInit() {
-    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("My Auto", kCustomAuto);
+  public void robotInit() { //creates options for different autopaths, names are placeholders
+ 
+    System.out.println("#I'm Awake");
+    m_chooser.setDefaultOption("Default Auto", testPath);
+    m_chooser.addOption("My Auto 1", noGo);
+    m_chooser.addOption("My Auto 2",placeNLeave);
+    m_chooser.addOption("My Auto 3", antiCharge);
+    m_chooser.addOption("My Auto 4", antiChargeOpposite);
+    //m_chooser.addOption(name: "My Auto 5", engageCharge);
+   // m_chooser.addOption(name: "My Auto 6",placeTwoEngage);
+    m_chooser.addOption("My Auto timed", timedPath);
+    m_chooser.addOption("Motion profiling path", motionProfiling);
+
     SmartDashboard.putData("Auto choices", m_chooser);
-    m_drivetrainSubsystem.resetOdometry();
-    // m_drivetrainSubsystem.zeroGyroscope();
-    // m_drivetrainSubsystem.zeroDriveEncoder();
+
+    ShuffleboardTab tab = DrivetrainSubsystem.tab;
+     kP = tab.add("Auto kP", 0.1).getEntry(); 
+     kI = tab.add("Auto kI", 0.0).getEntry();
+     kD = tab.add("Auto kD", 0.0).getEntry();
+   
+
   }
 
   /**
@@ -58,6 +90,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH);
+    SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
+    m_field.setRobotPose(DrivetrainSubsystem.m_odometry.getPoseMeters());
   }
 
   /**
@@ -72,6 +107,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+
     armTelescopingSubsystem.init();
 
   }
@@ -84,22 +120,29 @@ public class Robot extends TimedRobot {
 
     armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
     armTelescopingSubsystem.periodic();
+
   }
 
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    m_drivetrainSubsystem.resetOdometry();
+
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    /*System.out.println("back left module: " + m_drivetrainSubsystem.m_backLeftModule.getAbsoluteAngle());
+    System.out.println("back right module: " + m_drivetrainSubsystem.m_backRightModule.getSteerAngle());
+    System.out.println("front left module: " + m_drivetrainSubsystem.m_frontLeftModule.getSteerAngle());
+    System.out.println("front right module: " + m_drivetrainSubsystem.m_frontRightModule.getSteerAngle());*/
     m_drivetrainSubsystem.driveTeleop();
+
 
     if (OI.m_controller.getBButton()){
       m_drivetrainSubsystem.stopDrive();
     }
+
   }
 
   /** This function is called once when the robot is disabled. */
@@ -113,17 +156,21 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
+
     // m_drivetrainSubsystem.m_pose = new Pose2d(20, 30, new Rotation2d(Math.PI/4));
     // System.out.println("m_pose: " + m_drivetrainSubsystem.m_pose);
     // autonomousBasePD.init();
     armTelescopingSubsystem.init();
+
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
+
     armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
     armTelescopingSubsystem.periodic();
+
   }
 
   /** This function is called once when the robot is first started up. */
