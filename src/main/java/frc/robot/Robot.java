@@ -26,7 +26,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -63,9 +64,7 @@ public class Robot extends TimedRobot {
   private final Field2d m_field = new Field2d();
   ChassisSpeeds m_ChassisSpeeds;
 
-  public static GenericEntry kP; 
-  public static GenericEntry kI; 
-  public static GenericEntry kD; 
+  PneumaticIntakeSubsystem pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -87,10 +86,10 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putData("Auto choices", m_chooser);
 
-    ShuffleboardTab tab = DrivetrainSubsystem.tab;
-     kP = tab.add("Auto kP", 0.1).getEntry(); 
-     kI = tab.add("Auto kI", 0.0).getEntry();
-     kD = tab.add("Auto kD", 0.0).getEntry();
+    // ShuffleboardTab tab = DrivetrainSubsystem.tab;
+    //  kP = tab.add("Auto kP", 0.1).getEntry(); 
+    //  kI = tab.add("Auto kI", 0.0).getEntry();
+    //  kD = tab.add("Auto kD", 0.0).getEntry();
    
 
   }
@@ -121,6 +120,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    pneumaticIntakeSubsystem.init();
+
     m_autoSelected = m_chooser.getSelected();
     m_autoSelected.init();
   }
@@ -128,10 +129,12 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    
+     //m_drivetrainSubsystem.driveTeleop();
+     pneumaticIntakeSubsystem.periodic();
+     //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
+
      m_autoSelected.periodic();
      m_drivetrainSubsystem.drive();
-     //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
     
   }
 
@@ -168,17 +171,21 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-    System.out.println("Trajectory: " + Trajectories.uno);
+    //m_autoSelected.init();
+
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
+    // m_drivetrainSubsystem.setSpeed(
+    //         ChassisSpeeds.fromFieldRelativeSpeeds(1, 0, 
+    //         0, 
+    //         m_drivetrainSubsystem.getGyroscopeRotation())
+    //     ); 
+    //     m_drivetrainSubsystem.drive();
 
-    /*intial test!*/
-    m_drivetrainSubsystem.setSpeed(new ChassisSpeeds(-0.2, -0.2, 0));
-    
-    m_drivetrainSubsystem.drive();
+    // System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
   }
 
   /** This function is called once when the robot is first started up. */
