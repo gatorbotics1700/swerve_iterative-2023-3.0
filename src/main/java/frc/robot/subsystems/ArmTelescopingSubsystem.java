@@ -52,13 +52,16 @@ public class ArmTelescopingSubsystem {
     }
 
     public void periodic(){//sam requests that we can operate arm length by stick on xbox
+        System.out.println("current telescoping arm motor position:" + telescopingMotor.getSelectedSensorPosition());
         //all of the motor values need to be changed to ticks
         if (tState == TelescopingStates.RETRACTED){
             telescopingMotor.set(ControlMode.Position, 0);
+            System.out.println("when at 0 in ticks: " + 10 * Constants.TICKS_PER_INCH);
         } else if (tState == TelescopingStates.FULLY_EXTENDED){
             telescopingMotor.set(ControlMode.Position, extensionVal * Constants.TICKS_PER_INCH); //confirmed
         } else if (tState == TelescopingStates.LOW_ARM_LENGTH){
-            telescopingMotor.set(ControlMode.Position, 22 * Constants.TICKS_PER_INCH); // replace position value w low length
+            telescopingMotor.set(ControlMode.Position, 10 * Constants.TICKS_PER_INCH); // replace position value w low length
+            System.out.println("low arm length in ticks: " + 10 * Constants.TICKS_PER_INCH);
         }else if (tState == TelescopingStates.MID_ARM_LENGTH){
             telescopingMotor.set(ControlMode.Position, 5); // goes with 90 degrees rotation // replace position value w mid length
         }else{
