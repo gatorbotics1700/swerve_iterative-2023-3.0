@@ -201,8 +201,9 @@ public class DrivetrainSubsystem {
 
   public void resetOdometry(Pose2d start){
         zeroGyroscope();
+        zeroDriveEncoder();
         SwerveModulePosition[] positionArray =  new SwerveModulePosition[] {
-                m_frontLeftModule.getSwerveModulePosition(),
+                new SwerveModulePosition(m_frontLeftModule.getSwerveModulePosition().distanceMeters - tareLFEncoder, new Rotation2d(m_frontLeftModule.getSteerAngle())),
                 m_frontRightModule.getSwerveModulePosition(),
                 m_backRightModule.getSwerveModulePosition(),
                 m_backLeftModule.getSwerveModulePosition() };
@@ -217,8 +218,8 @@ public class DrivetrainSubsystem {
 }
 
   public void zeroDriveEncoder(){
+        tareLFEncoder = m_frontLeftModule.getSwerveModulePosition().distanceMeters;
         tareLBEncoder = m_backLeftModule.getPosition();
-        tareLFEncoder = m_frontLeftModule.getPosition();
         tareRFEncoder = m_frontRightModule.getPosition();
         tareRBEncoder = m_backRightModule.getPosition();
         System.out.println("tared...  " + getDistance());
