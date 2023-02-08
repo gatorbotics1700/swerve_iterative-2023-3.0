@@ -87,10 +87,10 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putData("Auto choices", m_chooser);
 
-    ShuffleboardTab tab = DrivetrainSubsystem.tab;
-     kP = tab.add("Auto kP", 0.1).getEntry(); 
-     kI = tab.add("Auto kI", 0.0).getEntry();
-     kD = tab.add("Auto kD", 0.0).getEntry();
+    // ShuffleboardTab tab = DrivetrainSubsystem.tab;
+    //  kP = tab.add("Auto kP", 0.1).getEntry(); 
+    //  kI = tab.add("Auto kI", 0.0).getEntry();
+    //  kD = tab.add("Auto kD", 0.0).getEntry();
    
 
   }
