@@ -26,13 +26,13 @@ public class PneumaticIntakeSubsystem {
     String colorString;
     public PneumaticIntakeStates pneumaticIntakeState = PneumaticIntakeStates.OFF;
 
-    public double colorThreshold = 0.03;
+    public static final double COLOR_THRESHOLD = 0.03;
     //confirm we are using double solenoid
-    public DoubleSolenoid solenoidOne = new DoubleSolenoid(2, PneumaticsModuleType.REVPH, 8, 9); 
+    private DoubleSolenoid solenoidOne = new DoubleSolenoid(2, PneumaticsModuleType.REVPH, 8, 9); 
     //what compressor are we using?
-    public Compressor compressor = new Compressor(PneumaticsModuleType.REVPH); 
+    private Compressor compressor = new Compressor(PneumaticsModuleType.REVPH); 
     // Initializes a DigitalInput on DIO 0 (roborio is built in w/ 10 DIOs (digital input-output ports))
-    private DigitalInput beambreakSensor = new DigitalInput(Constants.intakeSensor); 
+    private DigitalInput beambreakSensor = new DigitalInput(Constants.INTAKE_SENSOR); 
 
     /**
      * Change the I2C port below to match the connection of your color sensor
@@ -44,7 +44,7 @@ public class PneumaticIntakeSubsystem {
      * parameter. The device will be automatically initialized with default 
      * parameters.
      */
-    private ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort); //random port val
+    private ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
 
     /**
      * A Rev Color Match object is used to register and detect known colors. This can 
@@ -93,13 +93,13 @@ public class PneumaticIntakeSubsystem {
          */
         ColorMatchResult match = colorMatcher.matchClosestColor(detectedColor);
 
-        boolean purpleNotRedThreshold = (Math.abs(detectedColor.red-kPurpleTarget.red)>colorThreshold);
-        boolean purpleNotGreenThreshold = (Math.abs(detectedColor.green-kPurpleTarget.green)>colorThreshold);
-        boolean purpleNotBlueThreshold = (Math.abs(detectedColor.blue-kPurpleTarget.blue)>colorThreshold);
+        boolean purpleNotRedThreshold = (Math.abs(detectedColor.red-kPurpleTarget.red)>COLOR_THRESHOLD);
+        boolean purpleNotGreenThreshold = (Math.abs(detectedColor.green-kPurpleTarget.green)>COLOR_THRESHOLD);
+        boolean purpleNotBlueThreshold = (Math.abs(detectedColor.blue-kPurpleTarget.blue)>COLOR_THRESHOLD);
 
-        boolean yellowNotRedThreshold = (Math.abs(detectedColor.red-kYellowTarget.red)>colorThreshold);
-        boolean yellowNotGreenThreshold = (Math.abs(detectedColor.green-kYellowTarget.green)>colorThreshold);
-        boolean yellowNotBlueThreshold = (Math.abs(detectedColor.blue-kYellowTarget.blue)>colorThreshold);
+        boolean yellowNotRedThreshold = (Math.abs(detectedColor.red-kYellowTarget.red)>COLOR_THRESHOLD);
+        boolean yellowNotGreenThreshold = (Math.abs(detectedColor.green-kYellowTarget.green)>COLOR_THRESHOLD);
+        boolean yellowNotBlueThreshold = (Math.abs(detectedColor.blue-kYellowTarget.blue)>COLOR_THRESHOLD);
         
         if((purpleNotRedThreshold && purpleNotGreenThreshold) || (purpleNotRedThreshold &&purpleNotBlueThreshold) || (purpleNotGreenThreshold && purpleNotBlueThreshold)){
             System.out.println("diff w/ purple red: " + (detectedColor.red-kPurpleTarget.red));
