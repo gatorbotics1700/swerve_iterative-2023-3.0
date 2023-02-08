@@ -22,6 +22,7 @@ public class OI {
     public static Button highShelf = Button.kB; // high shelf
     public static Button turnNorth = Button.kY;//button to turn to true north
 
+
     /*
     public static Button outtake = Button.kA; 
     
@@ -29,12 +30,14 @@ public class OI {
         intakeOn = triggerThreshold (m_controller.getLeftTriggerAxis());
         intakeOff = triggerThreshold (m_controller.getRightTriggerAxis());
     }
+
     // two total xbox controllers, one for driver, one for co-driver. 4 buttons on each, 2 joysticks, 2 triggers, 2 bumbers, 2 additional buttons at the back of the contoller, and possibly 4 directional arrow keys. All can be programmed for different settings as desired.
     //  buttons/joysticks to be coded:
     //  - make joystick for driving robot
     //  - outtake button
      
      public static double triggerThreshold(double tValue) {
+
         if (Math.abs(tValue) < 0.1) { //change this value to be more specific if wanted
             return 0;
         } else {
@@ -42,4 +45,5 @@ public class OI {
         }
         //trigger axis is bound by the range [0,1] not [-1,1]
     }*/
+
 }
