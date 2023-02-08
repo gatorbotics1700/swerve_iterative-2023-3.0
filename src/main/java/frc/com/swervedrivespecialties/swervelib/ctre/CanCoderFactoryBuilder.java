@@ -44,6 +44,11 @@ public class CanCoderFactoryBuilder {
             this.encoder = encoder;
         }
 
+        @Override 
+        public CANCoder getCANCoder() {
+            return encoder;
+        }
+
         @Override
         public double getAbsoluteAngle() {
             double angle = Math.toRadians(encoder.getAbsolutePosition());

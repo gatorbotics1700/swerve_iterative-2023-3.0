@@ -17,6 +17,9 @@ public class OI {
     public static Button stop = Button.kRightBumper;//stop drive bumper
     //public static Trigger leftTrigger = Trigger.;
 
+
+    /*
+
     public static Button lowShelf = Button.kX; // low shelf height combo of elevator and arm angle
     public static Button midShelf = Button.kA; // mid shelf
     public static Button highShelf = Button.kB; // high shelf
