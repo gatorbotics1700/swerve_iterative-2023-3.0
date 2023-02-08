@@ -7,10 +7,14 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.*;
 import frc.robot.OI;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
 import frc.robot.Constants;
+
+import com.fasterxml.jackson.core.sym.Name;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import org.opencv.core.Core;
@@ -22,13 +26,19 @@ import edu.wpi.first.apriltag.*;
 import java.util.Arrays;
 import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
+
+
+//private AutonomousBasePD mScore = new AutonomousBasePD(new Translation2d(222.037, 0), new Translation2d(135.091, -41.307), new Translation2d(0, -44.163), new Translation2d(222.894, -50.377), new Translation2d(0, -65.388), new Translation2d(0, -65.388));
+
 public class Robot extends TimedRobot {
+
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
@@ -36,6 +46,7 @@ public class Robot extends TimedRobot {
   //private final AutonomousBase autonomousBasePD = new AutonomousBasePD(20, -2, -3, 240);
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   public static final AprilTagSubsystem m_AprilTagSubsystem = new AprilTagSubsystem(); 
+
 
   static {System.loadLibrary(Core.NATIVE_LIBRARY_NAME);}
   /**
@@ -47,9 +58,6 @@ public class Robot extends TimedRobot {
 
   //Thread m_visionThread;
   @Override
-
-  
-
   
   public void robotInit() {
     System.out.println("native library name" + Core.NATIVE_LIBRARY_NAME);
@@ -82,6 +90,7 @@ public class Robot extends TimedRobot {
         }
       )*/
     System.out.println("finished april tag init");
+
   }
 
   /**
@@ -93,6 +102,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH);
+    SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
+    m_field.setRobotPose(DrivetrainSubsystem.m_odometry.getPoseMeters());
   }
 
   /**
@@ -107,30 +119,25 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-   // autonomousBasePD.init();
+    // autonomousBasePD.init();
     m_drivetrainSubsystem.zeroGyroscope();
     m_drivetrainSubsystem.zeroDriveEncoder();
     m_autoSelected = m_chooser.getSelected();
     m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     //System.out.println("Auto selected: " + m_autoSelected);
+    
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
     
-    switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
-        break;
-      case kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
-    }
-    
-    //autonomousBasePD.periodic();
-    m_drivetrainSubsystem.drive();
+     m_autoSelected.periodic();
+     m_drivetrainSubsystem.drive();
+     //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
+     //autonomousBasePD.periodic();
+     m_drivetrainSubsystem.drive();
+
   }
 
 
@@ -140,8 +147,8 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     //System.out.println("in teleop init");
     m_AprilTagSubsystem.init();
-    
     // m_drivetrainSubsystem.zeroGyroscope();
+
   }
 
   /** This function is called periodically during operator control. */
@@ -150,13 +157,12 @@ public class Robot extends TimedRobot {
     System.out.println("i am in teleop");
     m_AprilTagSubsystem.periodic();
 
-
-    
     // m_drivetrainSubsystem.driveTeleop();
 
     // if (OI.m_controller.getBButton()){
     //   m_drivetrainSubsystem.stopDrive();
     // }
+
   }
 
   /** This function is called once when the robot is disabled. */
@@ -171,6 +177,7 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     //m_realAprilTagDetection.init();
+    
   }
 
   /** This function is called periodically during test mode. */
@@ -181,6 +188,7 @@ public class Robot extends TimedRobot {
     /*m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.3, 0.0, m_drivetrainSubsystem.getGyroscopeRotation()));
     m_drivetrainSubsystem.drive();
     System.out.println("distance: " + m_drivetrainSubsystem.getDistance());*/
+
   }
 
   /** This function is called once when the robot is first started up. */
