@@ -1,5 +1,5 @@
 package frc.robot.subsystems;
-
+import frc.robot.OI;
 import frc.robot.Constants;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -10,6 +10,22 @@ public class IntakeSubsystem {
     public static TalonFX intakeMotor = new TalonFX(Constants.INTAKE_MOTOR_ID);
 
     IntakeStates intakeState = IntakeStates.STOP;
+
+    public double intakeOn, intakeOff;
+
+    public void triggerPeriodic() {
+        intakeOn = triggerThreshold (m_codriver_controller.getLeftTriggerAxis());
+        intakeOff = triggerThreshold (m_codriver_controller.getRightTriggerAxis());
+    }
+
+    public static double triggerThreshold(double tValue) {
+        if (Math.abs(tValue) < 0.1) { //change this value to be more specific if wanted
+            return 0;
+        } else {
+            return 1 * tValue;
+        }
+        //trigger axis is bound by the range [0,1] not [-1,1]
+    }
 
     public IntakeSubsystem(){
 
