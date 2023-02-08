@@ -147,6 +147,7 @@ public class AutonomousBasePD extends AutonomousBase{
         double yDDistance = Constants.TICKS_PER_INCH*(dCoordinate.getY() - cCoordinate.getY());
         Rotation2d zDDistance = new Rotation2d(Constants.TICKS_PER_INCH*(dCoordinate.getRotation().getDegrees() - cCoordinate.getRotation().getDegrees()));
         hypotenuse = Math.hypot(xDDistance, yDDistance);
+        gone += Math.hypot(DrivetrainSubsystem.m_pose.getX(), DrivetrainSubsystem.m_pose.getY());
         distanceController.setSetpoint(hypotenuse); 
         System.out.println("preDDDing: " + xDDistance + ", " + yDDistance);    
         return new Pose2d (xDDistance, yDDistance, zDDistance);
@@ -158,7 +159,6 @@ public class AutonomousBasePD extends AutonomousBase{
     @Override
     public void driveDesiredDistance(Pose2d dPose){      
         System.out.println("where we are rn: " + DrivetrainSubsystem.m_pose.getX() + " and " + DrivetrainSubsystem.m_pose.getY());
-        gone += Math.hypot(DrivetrainSubsystem.m_pose.getX(), DrivetrainSubsystem.m_pose.getY());
         double speed = (distanceController.calculate(gone, gone+hypotenuse));
         double directionX = dPose.getX() / Math.hypot(dPose.getX(), dPose.getY());
         double directionY = dPose.getY() / Math.hypot(dPose.getX(), dPose.getY());
