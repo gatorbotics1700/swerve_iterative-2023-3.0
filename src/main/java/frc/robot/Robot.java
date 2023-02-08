@@ -165,12 +165,13 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_autoSelected = m_chooser.getSelected();
     m_autoSelected.init();
+    m_AprilTagSubsystem.init();
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    
+    m_AprilTagSubsystem.periodic();
      m_autoSelected.periodic();
      //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
     
