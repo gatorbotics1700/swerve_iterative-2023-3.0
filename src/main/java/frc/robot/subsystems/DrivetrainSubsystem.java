@@ -108,7 +108,6 @@ public class DrivetrainSubsystem {
   private ChassisSpeeds m_chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
 
   public DrivetrainSubsystem() {
-    ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
 
     // There are 4 methods you can call to create your swerve modules.
     // The method you use depends on what motors you are using.
@@ -214,16 +213,19 @@ public class DrivetrainSubsystem {
         return getMedian(positions);
   }
 
-  public void resetOdometry(){
+  public void resetOdometry(Pose2d start){
         zeroGyroscope(); //truly resets gyro
-        //zeroDriveEncoder(); //finds the tare
+        //zeroDriveEncoder(); 
+        //finds the tare
         SwerveModulePosition [] positionArray =  new SwerveModulePosition[] {
                 m_frontLeftModule.getSwerveModulePosition(),
                 m_frontRightModule.getSwerveModulePosition(),
                 m_backRightModule.getSwerveModulePosition(),
                 m_backLeftModule.getSwerveModulePosition() };
+
         m_pose = new Pose2d();
         System.out.println("position array: " + positionArray);
+
         System.out.println("m_pose: " + m_pose);
         m_odometry.resetPosition(getGyroscopeRotation(), positionArray, m_pose);
         System.out.println("#resetodometry! new pose: " + m_pose.getX()/TICKS_PER_INCH + " y: " + m_pose.getY()/TICKS_PER_INCH);
@@ -272,7 +274,9 @@ public class DrivetrainSubsystem {
   }
 
   public void drive() { //runs periodically
+
     System.out.print("pose meters: " + m_odometry.getPoseMeters());
+
     m_pose = m_odometry.update(getGyroscopeRotation(), new SwerveModulePosition[] {m_frontLeftModule.getSwerveModulePosition(), m_frontRightModule.getSwerveModulePosition(), m_backLeftModule.getSwerveModulePosition(), m_backRightModule.getSwerveModulePosition()});
     System.out.println("new pose: " + m_pose.getX()/TICKS_PER_INCH + " and y: " + m_pose.getY()/TICKS_PER_INCH);
     
