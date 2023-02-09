@@ -147,8 +147,8 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    m_AprilTagSubsystem.periodic();
-     m_autoSelected.periodic();
+     m_AprilTagSubsystem.periodic();
+     //m_autoSelected.periodic();
      //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
     
   }

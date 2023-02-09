@@ -124,7 +124,7 @@ public class AprilTagSubsystem {
             if(detectedAprilTagsArray.length!=0){
                 System.out.println("APRIL TAG DETECTED!!!!!!");
                 setState(AprilTagSequence.CORRECTPOSITION);
-                Robot.m_drivetrainSubsytem.resetOdometry(new Pose2d(35, 72, new Rotation2d(0))); //DELETE THIS WHEN DONE WITH TESTING
+                Robot.m_drivetrainSubsystem.resetOdometry(new Pose2d(35, 72, new Rotation2d(0))); //DELETE THIS WHEN DONE WITH TESTING
                 System.out.println("Reset odometry to this m_pose: " + DrivetrainSubsystem.m_pose);
                 prePose = autonomousBasePD.preDDD(DrivetrainSubsystem.m_pose, AprilTagLocation.scoringPoses[14]);
                 }
