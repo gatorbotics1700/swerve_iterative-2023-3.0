@@ -16,6 +16,7 @@ public class ArmTelescopingSubsystem {
 
     TalonFX telescopingMotor = new TalonFX(Constants.TELESCOPING_MOTOR_ID);//maybe this motor should be renamed to make it more descriptive
     double startTime;
+    public double tareEncoder;
     //armMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx, Constants.kTimeoutMs);//determine what these values would be for us
 
     /*public static enum ArmStates{
@@ -28,14 +29,14 @@ public class ArmTelescopingSubsystem {
     public int _kIzone = 0;
     public double _kPeakOutput = 1.0;
 
-    double telescopeKP = 0.001;
-    double telescopeKD = 0.001;
-    double telescopeKI = 0.001;
+    double telescopeKP = 0.01;
+    double telescopeKD = 0;
+    double telescopeKI = 0;
     double extensionVal = 56.26;//this value should be the full extension length of the arm minus the length of it at zero
     public Gains telescopeGains = new Gains(telescopeKP, telescopeKI, telescopeKD, _kIzone, _kPeakOutput);
 
     public static enum TelescopingStates{
-        RETRACTED,
+        RETRACTED, //zero state
         FULLY_EXTENDED,
         LOW_ARM_LENGTH,
         MID_ARM_LENGTH,
@@ -46,26 +47,26 @@ public class ArmTelescopingSubsystem {
 
     public void init(){
         System.out.println("telescoping init!! :)");
-        telescopingMotor.setInverted(false); //sets the forward direction of the motor to counter clockwise
+        telescopingMotor.setInverted(true); //sets the forward direction of the motor to counter clockwise
         startTime = System.currentTimeMillis();
 
     }
 
     public void periodic(){//sam requests that we can operate arm length by stick on xbox
         System.out.println("current telescoping arm motor position:" + telescopingMotor.getSelectedSensorPosition());
+        
         //all of the motor values need to be changed to ticks
         if (tState == TelescopingStates.RETRACTED){
             telescopingMotor.set(ControlMode.Position, 0);
-            System.out.println("when at 0 in ticks: " + 10 * Constants.TICKS_PER_INCH);
         } else if (tState == TelescopingStates.FULLY_EXTENDED){
-            telescopingMotor.set(ControlMode.Position, extensionVal * Constants.TICKS_PER_INCH); //confirmed
+            telescopingMotor.set(ControlMode.Position, (extensionVal * Constants.TICKS_PER_INCH)-tareEncoder); //confirmed
         } else if (tState == TelescopingStates.LOW_ARM_LENGTH){
-            telescopingMotor.set(ControlMode.Position, 10 * Constants.TICKS_PER_INCH); // replace position value w low length
-            System.out.println("low arm length in ticks: " + 10 * Constants.TICKS_PER_INCH);
+            telescopingMotor.set(ControlMode.Position, (10 * Constants.TICKS_PER_INCH)-tareEncoder); // replace position value w low length
+            System.out.println("error: " + (10 * Constants.TICKS_PER_INCH - telescopingMotor.getSelectedSensorPosition()));
         }else if (tState == TelescopingStates.MID_ARM_LENGTH){
-            telescopingMotor.set(ControlMode.Position, 5); // goes with 90 degrees rotation // replace position value w mid length
+            telescopingMotor.set(ControlMode.Position, (5 * Constants.TICKS_PER_INCH)-tareEncoder); // goes with 90 degrees rotation // replace position value w mid length
         }else{
-            telescopingMotor.set(ControlMode.Position, 15); // replace position value w high length
+            telescopingMotor.set(ControlMode.Position, (15 * Constants.TICKS_PER_INCH)-tareEncoder); // replace position value w high length
         }
     }
     
@@ -103,16 +104,12 @@ public class ArmTelescopingSubsystem {
         tState = newState;
     }
 
-    //public void armPID(double armLengthSetpoint){
-       // armLengthController.setSetpoint(armLengthSetpoint);
-        //double output = armLengthController.calculate(getArmLength(), armLengthSetpoint);
-        //System.out.println("output: " + output);
-        //armMotor.set(ControlMode.PercentOutput, output);//written as _talon.set(TalonFXControlMode.PercentOutput, leftYstick); in documentation. leftystick is joy.gety
-    //}
+    public void tareEncoder() {
+        tareEncoder = telescopingMotor.getSelectedSensorPosition();
 
-     // if (Math.abs(leftYstick) < 0.10/*this number should be changed through testing*/) {
-    //     /* Within 10% of zero */
-    //     leftYstick = 0;//left joystick y axis in documentation. assign later
-    // }
+    }
+    public double getTicks() {
+        return telescopingMotor.getSelectedSensorPosition() - tareEncoder;
+    }
 
 }
