@@ -102,15 +102,15 @@ public class PneumaticIntakeSubsystem {
         boolean yellowNotBlueThreshold = (Math.abs(detectedColor.blue-kYellowTarget.blue)>COLOR_THRESHOLD);
         
         if((purpleNotRedThreshold && purpleNotGreenThreshold) || (purpleNotRedThreshold &&purpleNotBlueThreshold) || (purpleNotGreenThreshold && purpleNotBlueThreshold)){
-            System.out.println("diff w/ purple red: " + (detectedColor.red-kPurpleTarget.red));
-            System.out.println("diff w/ purple green: " + (detectedColor.green-kPurpleTarget.green));
-            System.out.println("diff w/ purple blue: " + (detectedColor.blue-kPurpleTarget.blue));
+           // System.out.println("diff w/ purple red: " + (detectedColor.red-kPurpleTarget.red));
+           // System.out.println("diff w/ purple green: " + (detectedColor.green-kPurpleTarget.green));
+           // System.out.println("diff w/ purple blue: " + (detectedColor.blue-kPurpleTarget.blue));
 
             System.out.println("here!!!!");
             if((yellowNotRedThreshold && yellowNotGreenThreshold) || (yellowNotRedThreshold && yellowNotBlueThreshold) || (yellowNotGreenThreshold && yellowNotBlueThreshold)){
-                System.out.println("diff w/ yellos red: " + (detectedColor.red-kYellowTarget.red));
-                System.out.println("diff w/ yellow green: " + (detectedColor.green-kYellowTarget.green));
-                System.out.println("diff w/ yellow blue: " + (detectedColor.blue-kYellowTarget.blue));
+               // System.out.println("diff w/ yellow red: " + (detectedColor.red-kYellowTarget.red));
+               // System.out.println("diff w/ yellow green: " + (detectedColor.green-kYellowTarget.green));
+                //System.out.println("diff w/ yellow blue: " + (detectedColor.blue-kYellowTarget.blue));
                 colorString = "Unknown";
                 //match should become black here
                 match = colorMatcher.matchClosestColor(new Color(0,0,0));
@@ -150,9 +150,6 @@ public class PneumaticIntakeSubsystem {
             System.out.println("Solenoid Off");
         }
         //switchState_beamBreakSensor(); //comment out one or the other to test one at a time
-        if (colorString=="Yellow"|| colorString=="Purple"){
-            setState(PneumaticIntakeStates.ACTUATING);
-        }
     }
 
     public boolean getPSI(){
