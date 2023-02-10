@@ -36,11 +36,11 @@ public final class Constants {
     //public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(122.87-90);
 
     //swervo - might need to be changed to whats in main
-    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(90 + 279.316);
+    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(180 + 279.316);
     //front right offset should be rechecked, is maybe wrong  
-    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(180 + 75.938);
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(180 + 320.098); 
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(180 + 250.183);
+    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(180 + 75.938 + 90);
+    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(180 + 320.098 + 90); 
+    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(180 + 250.183 + 90);
 
     //even can ids are drive, odd can ids are steer
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 26;
