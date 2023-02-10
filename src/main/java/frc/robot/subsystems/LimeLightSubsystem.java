@@ -4,14 +4,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
-public class LimeLightSubsystem {
-    /*
-    TODOS/PROBLEMS
-    1) robot bounces?
-    2) commented out shooting & everything to do with turret
-    3) make tx_2 for driving after centering
-    */
-    public final double MOUNTINGANGLE = 2.0; //degrees c    hange
+import frc.robot.subsystems.*;
+public class LimelightSubsystem {
+    public final double MOUNTINGANGLE = 2.0; //degrees change
     public final double LOWERHEIGHT = 22.124; //inches height of bottom to bottom of tape of shorter pole
     public final double HIGHERHEIGHT = 41.125; //inches height of bottom to bottom of tape of shorter pole
     public final double ROBOTHEIGHT = 20.0; //inches change
@@ -20,14 +15,19 @@ public class LimeLightSubsystem {
     public static double tx_0;
     public static double tx_1;
     public static double tx_2;
+    private static double tv;
+    private static double tx;
+    private static double ty;
+    private static double ta;
+
+    private AprilTagSubsystem aprilTagSubsystem = new AprilTagSubsystem();
     // this variable determines whether the Limelight has a valid target
-    private static double tv = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0.0);
-    // this variable determines the horizonal (x direction) error from the crosshair to the target
-    private static double tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0.0);
-    // this variable determines the vertical (y direction) error from the crosshair to the target
-    private static double ty = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0.0);
-    // target Area (0% of image to 100% of image)
-    private static double ta = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0.0);
+    public void reset(){
+        tv = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0.0);
+        tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0.0);
+        ty = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0.0);
+        ta = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0.0);
+    }
     public static void limelightData(){
         tv = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0.0);
         tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0.0);
@@ -54,41 +54,23 @@ public class LimeLightSubsystem {
         //System.out.println(“1 network table: ” + networkTable.getEntry(“pipeline”).getDouble(0.0));
     }
     public static enum LimelightStates{
-        CENTER, //make the turret and the robot line up
-        SCANZERO,
-        SCANONE,
-        TURNLOOSE,
-        TURNFINE,
-        MOVE,
-        SHOOT,
+        SCANAPRILTAG,
+        SCANTAPE,
         OFF;
     }
     public static LimelightStates state = LimelightStates.OFF;
     public void init(){
-        setState(LimelightStates.SCANZERO);
+        setState(LimelightStates.SCANAPRILTAG);
         //initialPosition = DrivetrainSubsystem.getTicks();
         tx_0 = 0.0;
         tx_1 = 0.0;
     }
     public void periodic(){
-        if(state == LimelightStates.CENTER){
-            align();
-            System.out.println("aligning!");
-        } else if (state == LimelightStates.SCANZERO){ //turret
-            System.out.println("turret is scanning on pipeline zero");
-            scanPipelineZero();
-        } else if (state == LimelightStates.SCANONE) { //turret
-            System.out.println("turret is scanning on pipeline one");
-            scanPipelineOne();
-        } else if (state == LimelightStates.TURNLOOSE){ //robot but only if we are wrong distance
-            turnLoose();
-        } else if (state == LimelightStates.TURNFINE){ //robot but only if we are wrong distance
-            turnFine();
-        } else if (state == LimelightStates.MOVE){
-            moveRoboWithLimeLight();
-            System.out.println("robot is moving");
-        } else if (state == LimelightStates.SHOOT){
-            //shootSubsystem.setState(ShootState.SHOOT1);
+        if (state == LimelightStates.SCANAPRILTAG){ //turret
+            networkTable.getEntry("ledMode").setNumber(1); //force led off, can be customized in pipeline
+            aprilTagSubsystem.setState(AprilTagSubsystem.AprilTagSequence.DETECT);
+        } else if (state == LimelightStates.SCANTAPE) { //turret
+            networkTable.getEntry("ledMode").setNumber(3); //force led on
         } else {
             /*shootSubsystem.setState(ShootState.OFF);
             intakeSubsystem.setState(IntakeStates.OFF);
@@ -98,9 +80,6 @@ public class LimeLightSubsystem {
     }
     public static void setState(LimelightStates newState){
         state = newState;
-        if (newState == LimelightStates.MOVE || newState == LimelightStates.CENTER){
-            //initialPosition = driveSubsystem.getTicks();
-        }
     }
     // turning tx and ty into distance (in)
     public double yDistanceFromIdeal(){
@@ -110,44 +89,11 @@ public class LimeLightSubsystem {
         System.out.println("distance from ideal: " + distanceFromIdeal);
         return distanceFromIdeal;
     }
-    public void moveRoboWithLimeLight(){
-        double finalDistance = yDistanceFromIdeal()/Math.cos(Math.toRadians(tx_2)); ///Math.cos(tx);
-        /*System.out.println(“final distance: ” + finalDistance);
-        if (Math.abs(finalDistance) >= 10){
-            autonomousBasePID.driveForwardVision(-finalDistance);
-        } else {
-            setState(LimelightStates.SHOOT);
-        }*/
-        // if(Math.abs(initialPosition - driveSubsystem.getTicks()) >= 100 && driveSubsystem.getDriveVelocity() < 0.1 && driveSubsystem.getDriveVelocity() > -0.1){
-        //     setState(LimelightStates.SHOOT);
-        // }
-    }
-    public void align(){
-        //autonomousBasePID.turnToAnglePDVision(tx_0);//+tx_1);//turretSubsystem.getTicks()*9/256);
-        // turretSubsystem.turnToAnglePD(-tx_0-tx_1); //-turretSubsystem.getTareEncoder());
-        //if(Math.abs(initialPosition - driveSubsystem.getTicks()) >= 100 && driveSubsystem.getDriveVelocity() < 0.1 && driveSubsystem.getDriveVelocity() > -0.1){
-            //setState(LimelightStates.MOVE);
-        //}
-    }
-    public void turnLoose(){
-        // turretSubsystem.turnToAnglePD(tx);
-        // if(turretSubsystem.getRate() < 0.1 && turretSubsystem.getRate() > -0.1){
-        //     setState(LimelightStates.SCANONE);
-        // }
-        //System.out.println(“turret”);
-        setState(LimelightStates.SCANONE);
-    }
-    public void turnFine(){
-        // turretSubsystem.turnToAnglePD(tx);
-        // if(turretSubsystem.getRate() < 0.1 && turretSubsystem.getRate() > -0.1){
-        //     if(yDistanceFromIdeal()<6.0 && yDistanceFromIdeal()>-6.0){
-        //         setState(LimelightStates.SHOOT);
-        //     }else{
-        //         setState(LimelightStates.CENTER);
-        //     }
-        // }
-        System.out.println("turret to center");
-        setState(LimelightStates.CENTER);
+    public void scanPipeline(){
+        reset();
+        if(tv==1.0){
+            //do stuff
+        }
     }
     public boolean isThereTarget(){
         if(tv != 0){
@@ -160,27 +106,6 @@ public class LimeLightSubsystem {
     }
     public double getTx(){
         return tx;
-    }
-    public void scanPipelineZero(){
-        setPipeline(0.0);
-        if(isThereTarget()){
-            tx_0 = tx;
-            System.out.println("tx_0: " + tx_0);
-            setState(LimelightStates.TURNLOOSE);
-        } else {
-            System.out.println("limelight screwed up and/or driver do better");
-        }
-    }
-    public void scanPipelineOne(){
-        setPipeline(1.0);
-        if(isThereTarget()){
-            tx_1 = tx;
-            System.out.println("tx_0: " + tx_0);
-            System.out.println("tx_1: "+ tx_1);
-            setState(LimelightStates.TURNFINE);
-        } else {
-            System.out.println("not working :");
-        }
     }
 //a bit worried about the infinate loop possibilities between scanzero and scanone
 }

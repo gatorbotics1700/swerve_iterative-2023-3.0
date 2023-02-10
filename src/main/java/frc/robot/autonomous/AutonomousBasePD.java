@@ -212,5 +212,8 @@ public class AutonomousBasePD extends AutonomousBase{
         System.out.println("Something wrong w/ angle calculation :(");
         return 0.0;
       }
+    public PIDController getDistanceController(){
+        return distanceController;
+    }
 
 }

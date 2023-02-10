@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Robot;
 import frc.robot.autonomous.AutonomousBasePD;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import frc.robot.subsystems.*;
 
 //import frc.robot.subsystems.AprilTagFieldEnum;
 
@@ -63,7 +64,8 @@ public class AprilTagSubsystem {
 
     public static enum AprilTagSequence{
         DETECT,
-        CORRECTPOSITION;
+        CORRECTPOSITION,
+        OFF;
     }
 
     private static AprilTagSequence states = AprilTagSequence.DETECT; 
@@ -73,7 +75,7 @@ public class AprilTagSubsystem {
     }
     
     private static AprilTagDetector aprilTagDetector = new AprilTagDetector();
-
+    private LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
     private static AutonomousBasePD autonomousBasePD = new AutonomousBasePD();
 
     public final AprilTagPoseEstimator.Config aprilTagPoseEstimatorConfig = new Config(tagSize, fx, fy, cx, cy);
@@ -131,7 +133,10 @@ public class AprilTagSubsystem {
         }else if(states == AprilTagSequence.CORRECTPOSITION){
             //addVisionToOdometry();
             correctPosition();
-            
+            if(autonomousBasePD.getDistanceController().atSetpoint()){
+                setState(AprilTagSequence.OFF);
+                
+            }
         }        
     }
 
