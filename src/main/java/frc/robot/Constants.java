@@ -29,18 +29,18 @@ public final class Constants {
     public static final int DRIVETRAIN_PIGEON_ID = 6; 
 
     //green
-    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(193.36);
-    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(305.24);
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(276.86);
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(122.87);
 
-    /*//swervo
-    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(279.316);
+    //public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(194.41-90);
+    //public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(305.15625-90);
+    //public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(23.73);//fix this one to like -70 or something
+    //public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(122.87-90);
+
+    //swervo - might need to be changed to whats in main
+    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(180 + 279.316);
     //front right offset should be rechecked, is maybe wrong  
-    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(75.938);
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(320.098); 
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(250.183);
-    */
+    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(180 + 75.938 + 90);
+    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(180 + 320.098 + 90); 
+    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(180 + 250.183 + 90);
 
     //even can ids are drive, odd can ids are steer
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 26;
@@ -60,7 +60,7 @@ public final class Constants {
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 3; 
 
     public static final double DRIVE_MOTOR_MIN_VOLTAGE = 0.19;
-    public static final double DRIVE_MOTOR_MAX_VOLTAGE = 0.8;
+    public static final double DRIVE_MOTOR_MAX_VOLTAGE = 0.4;
     public static final double STEER_MOTOR_MIN_VOLTAGE = 0.02; 
     public static final double STEER_MOTOR_MAX_VOLTAGE = 0.5;
     public static final double GEAR_RATIO = 6.75;

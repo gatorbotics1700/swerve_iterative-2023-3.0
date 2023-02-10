@@ -8,15 +8,14 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.Constants;
 
 public class AutonomousBasePD extends AutonomousBase{
-    public static final double turnKP= 0.002;
+    public static final double turnKP= 0.0003; //increased slight *** not tested
     public static final double turnKI= 0.0;
     public static final double turnKD= 0.0;
-    public static final double driveKP= 0.0001;//Robot.kP.getDouble(0.00006);//0.00006;
-    public static final double driveKI= Robot.kI.getDouble(0.0);//0.0;
-    public static final double driveKD= Robot.kD.getDouble(0.0);//0.0;
+    public static final double driveKP= 0.02;//Robot.kP.getDouble(0.00006);//0.00006;
+    public static final double driveKI= 0.0; //Robot.kI.getDouble(0.0);//0.0;
+    public static final double driveKD= 0.0; //Robot.kD.getDouble(0.0);//0.0;
     private final double DRIVE_DEADBAND = 3;
     private final double TURN_DEADBAND = 6;
-    private double hypotenuse;
 
     
     private Pose2d startingCoordinate;
@@ -26,15 +25,18 @@ public class AutonomousBasePD extends AutonomousBase{
     private Pose2d goalCoordinate4; 
     private Pose2d goalCoordinate5;
     private Pose2d goalCoordinate6;
+    
 
     public double desiredTurn;
-    private Pose2d desiredTranslation;
-
+    
     DrivetrainSubsystem drivetrainSubsystem = Robot.m_drivetrainSubsystem;
 
     //pids
     private PIDController directionController = new PIDController(turnKP, turnKI, turnKD);
-    private PIDController distanceController = new PIDController(driveKP, driveKI, driveKD);
+    private PIDController xController = new PIDController(driveKP, driveKI, driveKD);
+    private PIDController yController = new PIDController(driveKP, driveKI, driveKD);
+
+
     
     public AutonomousBasePD(Pose2d startingCoordinate, Pose2d goalCoordinate1, Pose2d goalCoordinate2, Pose2d goalCoordinate3, Pose2d goalCoordinate4, Pose2d goalCoordinate5, Pose2d goalCoordinate6){
         this.startingCoordinate = startingCoordinate;
@@ -46,13 +48,25 @@ public class AutonomousBasePD extends AutonomousBase{
         this.goalCoordinate6 = goalCoordinate6;
     }
 
+    public AutonomousBasePD(){
+        startingCoordinate = new Pose2d(0.0, 0.0, drivetrainSubsystem.getGyroscopeRotation());
+        goalCoordinate1 = new Pose2d(0.0, 0.0, drivetrainSubsystem.getGyroscopeRotation());
+        goalCoordinate2 = new Pose2d(0.0, 0.0, drivetrainSubsystem.getGyroscopeRotation());
+        goalCoordinate3 = new Pose2d(0.0, 0.0, drivetrainSubsystem.getGyroscopeRotation());
+        goalCoordinate4 = new Pose2d(0.0, 0.0, drivetrainSubsystem.getGyroscopeRotation());
+        goalCoordinate5 = new Pose2d(0.0, 0.0, drivetrainSubsystem.getGyroscopeRotation());
+        goalCoordinate6 = new Pose2d(0.0, 0.0, drivetrainSubsystem.getGyroscopeRotation());
+    }
     @Override
     public void init(){
         drivetrainSubsystem.resetOdometry(startingCoordinate);
         directionController.reset();
-        distanceController.reset();
+        xController.reset();
+        yController.reset();
         directionController.setTolerance(TURN_DEADBAND); 
-        distanceController.setTolerance(DRIVE_DEADBAND*Constants.TICKS_PER_INCH);
+        xController.setTolerance(DRIVE_DEADBAND);
+        yController.setTolerance(DRIVE_DEADBAND);
+
         states = States.FIRST;
         System.out.println("INIT!\nINIT!\nINIT!");
 
@@ -82,52 +96,46 @@ public class AutonomousBasePD extends AutonomousBase{
         
         System.out.println("state: " + states);
         if (states == States.FIRST){
-            desiredTranslation = preDDD(startingCoordinate, goalCoordinate1); 
-            drivetrainSubsystem.resetOdometry(startingCoordinate);
+            preDDD(startingCoordinate, goalCoordinate1); 
+            //drivetrainSubsystem.resetOdometry(startingCoordinate);
             System.out.println("we've reset to this pose: " + DrivetrainSubsystem.m_pose);
             setState(States.DRIVE);
         } else {
             drivetrainSubsystem.drive();
             if (states == States.DRIVE){
-                driveDesiredDistance(desiredTranslation);
+                driveDesiredDistance(goalCoordinate1);
                 System.out.println("inside drive state! pose: " + DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
-                if (distanceController.atSetpoint()){
-                    //desiredTranslation = preDDD(goalCoordinate1, goalCoordinate2);
-                    setState(States.STOP);
+                if (xController.atSetpoint()&& yController.atSetpoint()){
+                   preDDD(goalCoordinate1, goalCoordinate2);
+                   setState(States.DRIVE2);
                 }
             } else if(states == States.DRIVE2){
-                driveDesiredDistance(desiredTranslation);
-                if(distanceController.atSetpoint()){
-                    desiredTranslation = preDDD(goalCoordinate2, goalCoordinate3); 
-                    setState(States.DRIVE3);  
+                driveDesiredDistance(goalCoordinate2);
+                if(xController.atSetpoint()&& yController.atSetpoint()){
+                    //desiredTranslation = preDDD(goalCoordinate2, goalCoordinate3); 
+                    setState(States.STOP);  
                 }
             } else if(states == States.DRIVE3){
-                driveDesiredDistance(desiredTranslation);
-                if(distanceController.atSetpoint()){
-                    desiredTranslation = preDDD(goalCoordinate3, goalCoordinate4); 
+                driveDesiredDistance(goalCoordinate3);
+                if(xController.atSetpoint()&& yController.atSetpoint()){
+                    preDDD(goalCoordinate3, goalCoordinate4); 
                     setState(States.DRIVE4); 
                 }
             } else if(states == States.DRIVE4){
-                driveDesiredDistance(desiredTranslation);
-                if(distanceController.atSetpoint()){
-                    desiredTranslation = preDDD(goalCoordinate4, goalCoordinate5);
+                driveDesiredDistance(goalCoordinate4);
+                if(xController.atSetpoint()&& yController.atSetpoint()){
+                    preDDD(goalCoordinate4, goalCoordinate5);
                     setState(States.DRIVE5); 
                 }
             } else if(states == States.DRIVE5){
-                driveDesiredDistance(desiredTranslation);
-                if(distanceController.atSetpoint()){
-                    desiredTranslation = preDDD(goalCoordinate5, goalCoordinate6);
+                driveDesiredDistance(goalCoordinate5);
+                if(xController.atSetpoint()&& yController.atSetpoint()){
+                    preDDD(goalCoordinate5, goalCoordinate6);
                     setState(States.DRIVE6); 
                 }
             }else if(states==States.DRIVE6){
-                driveDesiredDistance(desiredTranslation);
-                if(distanceController.atSetpoint()){
-                    desiredTranslation = preDDD(goalCoordinate5, goalCoordinate6);
-                    setState(States.DRIVE6);
-                }
-            } else if(states==States.DRIVE6){
-                driveDesiredDistance(desiredTranslation);
-                if(distanceController.atSetpoint()){
+                driveDesiredDistance(goalCoordinate6);
+                if(xController.atSetpoint()&& yController.atSetpoint()){
                     setState(States.STOP);
                 }
             }else{
@@ -137,29 +145,39 @@ public class AutonomousBasePD extends AutonomousBase{
     }
 
     //predrivedesiredistance
-    public Pose2d preDDD(Pose2d cCoordinate, Pose2d dCoordinate){
-        double xDDistance = Constants.TICKS_PER_INCH*(dCoordinate.getX() - cCoordinate.getX());
-        double yDDistance = Constants.TICKS_PER_INCH*(dCoordinate.getY() - cCoordinate.getY());
+    public void preDDD(Pose2d cCoordinate, Pose2d dCoordinate){
         Rotation2d zDDistance = new Rotation2d(Constants.TICKS_PER_INCH*(dCoordinate.getRotation().getDegrees() - cCoordinate.getRotation().getDegrees()));
-        hypotenuse = Math.hypot(xDDistance, yDDistance);
-        distanceController.setSetpoint(hypotenuse); 
-        System.out.println("preDDDing: " + xDDistance + ", " + yDDistance);    
-        return new Pose2d (xDDistance, yDDistance, zDDistance);
+        xController .setSetpoint(dCoordinate.getX()); 
+        yController .setSetpoint(dCoordinate.getY());
+        System.out.println("preDDDing!!!");    
     }
 
     /** 
-    @param dTranslation is desired 
+    @param dTranslation is desired
     */
     @Override
     public void driveDesiredDistance(Pose2d dPose){      
-        System.out.println("where we are rn: " + DrivetrainSubsystem.m_pose.getX() + " and " + DrivetrainSubsystem.m_pose.getY());
-        double speed = distanceController.calculate(Math.hypot(DrivetrainSubsystem.m_pose.getX(), DrivetrainSubsystem.m_pose.getY()), hypotenuse);
-        double directionX = dPose.getX() / Math.sqrt(Math.pow(dPose.getX(),2) + Math.pow(dPose.getY(),2));
-        double directionY = dPose.getY() / Math.sqrt(Math.pow(dPose.getX(),2) + Math.pow(dPose.getY(),2));
-        System.out.println("DDDing");    
-        drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speed * directionX, speed * directionY, 0, drivetrainSubsystem.getGyroscopeRotation()));  
-
-        System.out.println("current speed: " + speed);
+        double speedX = xController.calculate(DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH, dPose.getX());
+        double speedY = yController.calculate(DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH, dPose.getY());
+        System.out.println("DDDing");   
+      
+        if(xController.atSetpoint()){
+            speedX = 0; 
+        } else {
+            speedX = Math.signum(speedX)*Math.max (Constants.DRIVE_MOTOR_MIN_VOLTAGE, Math.min(Constants.DRIVE_MOTOR_MAX_VOLTAGE, Math.abs(speedX)));  
+        }
+ 
+        if(yController.atSetpoint()){
+            speedY = 0; 
+        } else {
+            speedY = Math.signum(speedY)*Math.max (Constants.DRIVE_MOTOR_MIN_VOLTAGE, Math.min(Constants.DRIVE_MOTOR_MAX_VOLTAGE, Math.abs(speedY)));
+        }
+        drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speedX, speedY, 0, drivetrainSubsystem.getGyroscopeRotation()));  
+        double errorX = (dPose.getX() - DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH);
+        double errorY = (dPose.getY() - DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
+        System.out.println("Speed X: " + speedX + " Speed Y: " + speedY);
+        System.out.println("error:" + errorX + ", " + errorY);
+        System.out.println("Desired Position: " + dPose.getX() + ", " + dPose.getY());
     }
 
     /**

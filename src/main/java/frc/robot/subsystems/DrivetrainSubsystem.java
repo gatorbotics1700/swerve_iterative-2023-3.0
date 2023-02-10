@@ -168,7 +168,6 @@ public class DrivetrainSubsystem {
     
     m_odometry = new SwerveDrivePoseEstimator(m_kinematics, getGyroscopeRotation(), new SwerveModulePosition[] {m_frontLeftModule.getSwerveModulePosition(), m_frontRightModule.getSwerveModulePosition(), m_backRightModule.getSwerveModulePosition(), m_backLeftModule.getSwerveModulePosition()}, new Pose2d());
   }
-
    /**
    * Sets the gyroscope angle to zero. This can be used to set the direction the robot is currently facing to the
    * 'forwards' direction.
@@ -201,28 +200,28 @@ public class DrivetrainSubsystem {
   }
 
   public void resetOdometry(Pose2d start){
-        //zeroGyroscope(); //truly resets gyro
-        //zeroDriveEncoder(); 
-        //finds the tare
-        SwerveModulePosition [] positionArray =  new SwerveModulePosition[] {
-                m_frontLeftModule.getSwerveModulePosition(),
-                m_frontRightModule.getSwerveModulePosition(),
-                m_backRightModule.getSwerveModulePosition(),
-                m_backLeftModule.getSwerveModulePosition() };
+        zeroGyroscope();
+        zeroDriveEncoder();
+        SwerveModulePosition[] positionArray =  new SwerveModulePosition[] {
+                new SwerveModulePosition(m_frontLeftModule.getSwerveModulePosition().distanceMeters - tareLFEncoder, new Rotation2d(m_frontLeftModule.getSteerAngle())),
+                new SwerveModulePosition(m_frontRightModule.getSwerveModulePosition().distanceMeters - tareRFEncoder, new Rotation2d(m_frontRightModule.getSteerAngle())), 
+                new SwerveModulePosition(m_backRightModule.getSwerveModulePosition().distanceMeters - tareRBEncoder, new Rotation2d(m_backRightModule.getSteerAngle())),
+                new SwerveModulePosition(m_backLeftModule.getSwerveModulePosition().distanceMeters - tareLBEncoder, new Rotation2d(m_backLeftModule.getSteerAngle()))};
         m_pose = start;
         System.out.println("position array: " + positionArray.toString());
-        System.out.println("m_pose: " + m_pose);
+        System.out.println("m_pose: " + m_pose.getX()/TICKS_PER_INCH + ", " + m_pose.getY()/TICKS_PER_INCH);
         m_odometry.resetPosition(getGyroscopeRotation(), positionArray, m_pose);
-        
         System.out.println("#resetodometry! new pose: " + m_pose.getX()/TICKS_PER_INCH + " y: " + m_pose.getY()/TICKS_PER_INCH);
-        System.out.println("inputs for the reset: " + getGyroscopeRotation() + " " + m_frontLeftModule.getSwerveModulePosition().distanceMeters + " " + m_frontRightModule.getSwerveModulePosition().distanceMeters + " " + m_backLeftModule.getSwerveModulePosition().distanceMeters + " " + m_backRightModule.getSwerveModulePosition().distanceMeters);
+        m_pose = m_odometry.update(getGyroscopeRotation(), positionArray);
+        System.out.println("m_pose after update in odometry: " + m_pose.getX()/TICKS_PER_INCH + ", " + m_pose.getY()/TICKS_PER_INCH);
+        //System.out.println("inputs for the reset: " + getGyroscopeRotation() + " " + m_frontLeftModule.getSwerveModulePosition().distanceMeters + " " + m_frontRightModule.getSwerveModulePosition().distanceMeters + " " + m_backLeftModule.getSwerveModulePosition().distanceMeters + " " + m_backRightModule.getSwerveModulePosition().distanceMeters);
 }
 
   public void zeroDriveEncoder(){
-        tareLBEncoder = m_backLeftModule.getPosition();
-        tareLFEncoder = m_frontLeftModule.getPosition();
-        tareRFEncoder = m_frontRightModule.getPosition();
-        tareRBEncoder = m_backRightModule.getPosition();
+        tareLFEncoder = m_frontLeftModule.getSwerveModulePosition().distanceMeters;
+        tareLBEncoder = m_backLeftModule.getSwerveModulePosition().distanceMeters;
+        tareRFEncoder = m_frontRightModule.getSwerveModulePosition().distanceMeters;
+        tareRBEncoder = m_backRightModule.getSwerveModulePosition().distanceMeters;
         System.out.println("tared...  " + getDistance());
   }
 
@@ -263,8 +262,13 @@ public class DrivetrainSubsystem {
   public void drive() { //runs periodically
         //System.out.println("pose before update: " + m_pose.getX()/TICKS_PER_INCH + " and y: " + m_pose.getY()/TICKS_PER_INCH);
 
+        SwerveModulePosition[] array =  {new SwerveModulePosition(m_frontLeftModule.getSwerveModulePosition().distanceMeters - tareLFEncoder, new Rotation2d(m_frontLeftModule.getSteerAngle())),
+        new SwerveModulePosition(m_frontRightModule.getSwerveModulePosition().distanceMeters - tareRFEncoder, new Rotation2d(m_frontRightModule.getSteerAngle())), 
+        new SwerveModulePosition(m_backRightModule.getSwerveModulePosition().distanceMeters - tareRBEncoder, new Rotation2d(m_backRightModule.getSteerAngle())),
+        new SwerveModulePosition(m_backLeftModule.getSwerveModulePosition().distanceMeters - tareLBEncoder, new Rotation2d(m_backLeftModule.getSteerAngle()))};
+ 
         //System.out.println("inputs for the update: " + getGyroscopeRotation() + m_frontLeftModule.getSwerveModulePosition().distanceMeters + m_frontRightModule.getSwerveModulePosition().distanceMeters + m_backLeftModule.getSwerveModulePosition().distanceMeters + m_backRightModule.getSwerveModulePosition().distanceMeters);
-        m_pose = m_odometry.update(getGyroscopeRotation(), new SwerveModulePosition[] {m_frontLeftModule.getSwerveModulePosition(), m_frontRightModule.getSwerveModulePosition(), m_backLeftModule.getSwerveModulePosition(), m_backRightModule.getSwerveModulePosition()});
+        m_pose = m_odometry.update(getGyroscopeRotation(),array); 
     
         System.out.println("new pose after update: " + m_pose.getX()/TICKS_PER_INCH + " and y: " + m_pose.getY()/TICKS_PER_INCH);
     
@@ -272,23 +276,23 @@ public class DrivetrainSubsystem {
         SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
         //desaturatewheelspeeds checks and fixes if any module's wheel speed is above the max
         SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
-        /*
-        double frontLeftSpeed= appliedDrivePID(states[0], m_frontLeftModule);
-        double frontRightSpeed= appliedDrivePID(states[1], m_frontRightModule);
-        double backLeftSpeed= appliedDrivePID(states[2], m_backLeftModule);
-        double backRightSpeed= appliedDrivePID(states[3], m_backRightModule);
+        
+        /*double frontLeftSpeed= m_frontLeftModule.getDriveVelocity() + appliedDrivePID(states[0], m_frontLeftModule);
+        double frontRightSpeed= m_frontRightModule.getDriveVelocity() + appliedDrivePID(states[1], m_frontRightModule);
+        double backLeftSpeed=  m_backLeftModule.getDriveVelocity() + appliedDrivePID(states[2], m_backLeftModule);
+        double backRightSpeed= m_backRightModule.getDriveVelocity() + appliedDrivePID(states[3], m_backRightModule);
 
-        double frontLeftAngle= appliedAnglePID(states[0], m_frontLeftModule);
-        double frontRightAngle= appliedAnglePID(states[1], m_frontRightModule);
-        double backLeftAngle= appliedAnglePID(states[2], m_backLeftModule);
-        double backRightAngle= appliedAnglePID(states[3], m_backRightModule);
+        double frontLeftAngle= m_frontLeftModule.getSteerAngle() + appliedAnglePID(states[0], m_frontLeftModule);
+        double frontRightAngle= m_frontRightModule.getSteerAngle() + appliedAnglePID(states[1], m_frontRightModule);
+        double backLeftAngle= m_backLeftModule.getSteerAngle() + appliedAnglePID(states[2], m_backLeftModule);
+        double backRightAngle= m_backRightModule.getSteerAngle() + appliedAnglePID(states[3], m_backRightModule);
         
         //parameters are double driveVoltage, double steerAngle
         m_frontLeftModule.set(frontLeftSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, frontLeftAngle);
         m_frontRightModule.set(frontRightSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, frontRightAngle);
         m_backLeftModule.set(backLeftSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, backLeftAngle);
-        m_backRightModule.set(backRightSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, backRightAngle);
-        */
+        m_backRightModule.set(backRightSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, backRightAngle);*/
+        
         m_frontLeftModule.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getRadians());
         m_frontRightModule.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());
         m_backLeftModule.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getRadians());
