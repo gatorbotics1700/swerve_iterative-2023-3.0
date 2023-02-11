@@ -174,6 +174,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    System.out.println("LF Cancoder Position: " + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition());
     /*System.out.println("back left module: " + m_drivetrainSubsystem.m_backLeftModule.getAbsoluteAngle());
     System.out.println("back right module: " + m_drivetrainSubsystem.m_backRightModule.getSteerAngle());
     System.out.println("front left module: " + m_drivetrainSubsystem.m_frontLeftModule.getSteerAngle());
@@ -208,7 +209,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic(){
-  
+    System.out.println("LF Cancoder Position: " + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition());
     m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
     //System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
     /*if (m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError() != ErrorCode.OK) {
@@ -216,11 +217,16 @@ public class Robot extends TimedRobot {
     }*/
 
     /*intial test!*/
-    m_drivetrainSubsystem.setSpeed(new ChassisSpeeds(0, 0.2, 0));
-    
+    /*if(m_drivetrainSubsystem.getGyroscopeRotation().getDegrees() <= 370){
+      m_drivetrainSubsystem.setSpeed(new ChassisSpeeds(0, 0.2, 0));
+    }*/
+    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.1, 0.2, 0, m_drivetrainSubsystem.getGyroscopeRotation()));
+    //m_autoSelected.turnDesiredAngle(180);
     m_drivetrainSubsystem.drive();
+      //m_drivetrainSubsystem.m_frontLeftModule.set(0.4, 0);
+
     
-    System.out.println(m_drivetrainSubsystem.getGyroscopeRotation());
+   // System.out.println(m_drivetrainSubsystem.getGyroscopeRotation());
   }
 
   /** This function is called once when the robot is first started up. */
