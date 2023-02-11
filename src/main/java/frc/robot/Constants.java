@@ -28,26 +28,34 @@ public final class Constants {
 
     public static final int DRIVETRAIN_PIGEON_ID = 6; 
 
+    //green
+    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(193.36);
+    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(305.24);
+    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(276.86);
+    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(122.87);
+
+    //swervo
+    /*public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(185.713); 
+    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(341.982);
+    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(229.064); 
+    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(341.904);*/
+
     //even can ids are drive, odd can ids are steer
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 26;
     public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 27; 
     public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 5;
-    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(98.3); // FIXME Measure and set front left steer offset
-
+    
     public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 20; 
     public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 21; 
     public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 2; 
-    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(251.4); // FIXME Measure and set front right steer offset
 
     public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 24; 
     public static final int BACK_LEFT_MODULE_STEER_MOTOR = 25; 
     public static final int BACK_LEFT_MODULE_STEER_ENCODER = 4; 
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(138.34); // FIXME Measure and set back left steer offset
 
     public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 22; 
     public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 23; 
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 3; 
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(79.45); // FIXME Measure and set back right steer offset
 
     public static final int TELESCOPING_MOTOR_ID = 7;
     public static final int ARM_ROTATION_MOTOR_ID = 8;
@@ -59,12 +67,12 @@ public final class Constants {
     public static final double DRIVE_MOTOR_MAX_VOLTAGE = 0.8;
     public static final double STEER_MOTOR_MIN_VOLTAGE = 0.02; 
     public static final double STEER_MOTOR_MAX_VOLTAGE = 0.5;
-    public static final double GEAR_RATIO = 6.75;
+    // public static final double GEAR_RATIO = 6.75;
     public static final double ELEVATOR_SPROCKET_DIAMETER= 1.05; //inches
     public static final double TICKS_PER_REV = 2048;
-    public static final double TICKS_PER_INCH = TICKS_PER_REV*GEAR_RATIO/ELEVATOR_SPROCKET_DIAMETER/Math.PI; // check if this is right //talonfx drive encoder
-    public static final double ELEVATOR_GEAR_RATIO = 25.0; //says arya on jan 30th // 25 motor spins for 1 shaft spin
+    public static final double ELEVATOR_GEAR_RATIO = 25.0; // 25 motor spins for 1 shaft spin
 
+    public static final double TICKS_PER_INCH = (TICKS_PER_REV*ELEVATOR_GEAR_RATIO)/(ELEVATOR_SPROCKET_DIAMETER*Math.PI); //talonfx drive encoder
 
     public static final int kTimeoutMs = 1000;
     public static final int kPIDLoopIdx = 0; //not sure what this value does or if this value should be diff for rotation, telescoping, elevator
@@ -73,4 +81,7 @@ public final class Constants {
     public static boolean kSensorPhase = true; //Sensor phase describes the relationship between the motor output direction (positive vs negative) and sensor velocity (positive vs negative). For soft-limits and closed-loop features to function correctly, the sensor measurement and motor output must be “in-phase”.
 
     //public static double deadband = 0.5; //arbitrary
+
+    public static int topLimitSwitchPort = 2;
+    public static int bottomLimitSwitchPort = 1;
 }

@@ -70,7 +70,7 @@ public class AprilTagSubsystem {
     
     private static AprilTagDetector aprilTagDetector = new AprilTagDetector();
 
-    private static AutonomousBasePD autonomousBasePD = new AutonomousBasePD();
+    //private static AutonomousBasePD autonomousBasePD = new AutonomousBasePD();
 
     public final AprilTagPoseEstimator.Config aprilTagPoseEstimatorConfig = new Config(tagSize, fx, fy, cx, cy);
     public AprilTagPoseEstimator aprilTagPoseEstimator = new AprilTagPoseEstimator(aprilTagPoseEstimatorConfig);
@@ -98,20 +98,20 @@ public class AprilTagSubsystem {
     
 
     //kaylin wrote this but probably did it wrong :)
-    public void addVisionToOdometry(){
-        Transform3d aprilTagError = aprilTagPoseEstimator.estimate(detectedAprilTag);//april tag pose estimator in Transform 3d
-        Pose2d aprilTagPose2D = AprilTagLocation.aprilTagPoses[detectedAprilTag.getId()-1].toPose2d();//pose 2d of the actual april tag
-        Rotation2d robotSubtractedAngle =  Rotation2d.fromDegrees(aprilTagPose2D.getRotation().getDegrees()-aprilTagError.getRotation().toRotation2d().getDegrees());//angle needed to create pose 2d of robot position, don't know if toRotatation2D converts Rotation3D properly
-        Pose2d robotPost2DAprilTag = new Pose2d(aprilTagPose2D.getX()-aprilTagError.getX(), aprilTagPose2D.getY()-aprilTagError.getY(), robotSubtractedAngle);
-        swerveDrivePoseEstimator.addVisionMeasurement(robotPost2DAprilTag, Timer.getFPGATimestamp());
-    }
+    // public void addVisionToOdometry(){
+    //     Transform3d aprilTagError = aprilTagPoseEstimator.estimate(detectedAprilTag);//april tag pose estimator in Transform 3d
+    //     Pose2d aprilTagPose2D = AprilTagLocation.aprilTagPoses[detectedAprilTag.getId()-1].toPose2d();//pose 2d of the actual april tag
+    //     Rotation2d robotSubtractedAngle =  Rotation2d.fromDegrees(aprilTagPose2D.getRotation().getDegrees()-aprilTagError.getRotation().toRotation2d().getDegrees());//angle needed to create pose 2d of robot position, don't know if toRotatation2D converts Rotation3D properly
+    //     Pose2d robotPost2DAprilTag = new Pose2d(aprilTagPose2D.getX()-aprilTagError.getX(), aprilTagPose2D.getY()-aprilTagError.getY(), robotSubtractedAngle);
+    //     swerveDrivePoseEstimator.addVisionMeasurement(robotPost2DAprilTag, Timer.getFPGATimestamp());
+    // }
     
     public void periodic(){
         if(states == AprilTagSequence.DETECT){
             detectTag();
             setState(AprilTagSequence.CORRECTPOSITION);
         }else if(states == AprilTagSequence.CORRECTPOSITION){
-            correctPosition();
+           // correctPosition();
         }        
     }
 
@@ -146,10 +146,10 @@ public class AprilTagSubsystem {
     }
 
 
-    private void correctPosition(){
-        Pose2d prePose = autonomousBasePD.preDDD(DrivetrainSubsystem.m_pose, AprilTagLocation.aprilTagPoses[detectedAprilTag.getId()].toPose2d()); 
-        autonomousBasePD.driveDesiredDistance(prePose);
-    }
+    // private void correctPosition(){
+    //     Pose2d prePose = autonomousBasePD.preDDD(DrivetrainSubsystem.m_pose, AprilTagLocation.aprilTagPoses[detectedAprilTag.getId()].toPose2d()); 
+    //     autonomousBasePD.driveDesiredDistance(prePose);
+    // }
     
 
     /*private void getError(){
