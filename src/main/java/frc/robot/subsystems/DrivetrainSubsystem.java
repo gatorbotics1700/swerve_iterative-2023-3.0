@@ -25,6 +25,8 @@ import java.util.function.DoubleSupplier;
 
 import static frc.robot.Constants.*;
 import frc.robot.OI;
+import frc.robot.subsystems.ArmTelescopingSubsystem.TelescopingStates;
+import frc.robot.subsystems.ElevatorSubsystem.ElevatorStates;
 
 public class DrivetrainSubsystem {
 
@@ -90,6 +92,8 @@ public class DrivetrainSubsystem {
 
   //ChassisSpeeds takes in y velocity, x velocity, speed of rotation
   private ChassisSpeeds m_chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
+  private ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+  private ArmTelescopingSubsystem armTelescopingSubsystem = new ArmTelescopingSubsystem();
 
   public DrivetrainSubsystem() {
     ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
@@ -302,6 +306,22 @@ public class DrivetrainSubsystem {
                     return num[num.length/2];
             }
     }
+
+    public void scoreLow(){
+        elevatorSubsystem.setState(ElevatorStates.LOW_ELEVATOR_HEIGHT);
+        armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
+    }
+
+    public void scoreMid(){
+        elevatorSubsystem.setState(ElevatorStates.MID_ELEVATOR_HEIGHT);
+        armTelescopingSubsystem.setTState(TelescopingStates.MID_ARM_LENGTH);
+    }
+
+    public void scoreHigh(){
+        elevatorSubsystem.setState(ElevatorStates.HIGH_ELEVATOR_HEIGHT);
+        armTelescopingSubsystem.setTState(TelescopingStates.HIGH_ARM_LENGTH);
+    }
+
 
     //AUTO AND FAILSAFE
     public void stopDrive() {
