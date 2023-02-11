@@ -33,16 +33,16 @@ public class AprilTagSubsystem {
         k2023ChargedUp("2023-chargedup.json");
     }*/
 
-    public static UsbCamera camera0;
+    //public static UsbCamera camera0;
     //public static UsbCamera camera1;
     //public static VideoSink sink;
     private String family = "tag16h5";
     Mat source;
     Mat grayMat;
-    CvSink cvSink;
+    //CvSink cvSink;
     AprilTagDetection[] detectedAprilTagsArray ={};
     AprilTagDetection detectedAprilTag;
-    VideoSink server;
+    //VideoSink server;
     /*int aprilTagIds[];
     
     float decisionMargin[];
@@ -90,9 +90,9 @@ public class AprilTagSubsystem {
         System.loadLibrary("opencv_java460");
         //camera0 = new UsbCamera("USB Camera 0", 0);
         aprilTagDetector.addFamily(family, 0); //added 0
-        camera0 = CameraServer.startAutomaticCapture(); //deleted 0
+        //camera0 = CameraServer.startAutomaticCapture(); //deleted 0
         //camera1 = CameraServer.startAutomaticCapture();
-        server = CameraServer.getServer();
+        //server = CameraServer.getServer();
         //sink = CameraServer.getServer();
         source = new Mat();
         grayMat = new Mat();
@@ -100,7 +100,7 @@ public class AprilTagSubsystem {
 
         //System.out.println("source from init: " + source);
         //source.release();
-        cvSink = CameraServer.getVideo(camera0);
+        //cvSink = CameraServer.getVideo(camera0);
         //System.out.println("cvSink value before if statement: " + cvSink);
         /*if(cvSink == null){
             System.out.println("CvSink is null!!!!!!!!!!");
@@ -130,8 +130,9 @@ public class AprilTagSubsystem {
                 System.out.println("Reset odometry to this m_pose: " + DrivetrainSubsystem.m_pose);
                 prePose = autonomousBasePD.preDDD(DrivetrainSubsystem.m_pose, AprilTagLocation.scoringPoses[14]);
                 }
-        }else if(states == AprilTagSequence.CORRECTPOSITION){
+        } else if(states == AprilTagSequence.CORRECTPOSITION){
             //addVisionToOdometry();
+            Robot.m_drivetrainSubsystem.m_pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[6]);
             correctPosition();
             if(autonomousBasePD.getDistanceController().atSetpoint()){
                 setState(AprilTagSequence.OFF);
@@ -141,16 +142,12 @@ public class AprilTagSubsystem {
     }
 
     public void detectTag(){
-        long time = cvSink.grabFrame(source);
-        if(time ==0){
-            System.out.println("failed to grab a frame");
-            return;
-        }
-        Imgproc.cvtColor(source, grayMat,Imgproc.COLOR_BGR2GRAY);
-        System.out.println("value of source in periodic: " + source);
-        System.out.println(grayMat.empty());
-        System.out.println(grayMat.width());
-        System.out.println(grayMat.height());
+        //long time = cvSink.grabFrame(source);
+        // if(time ==0){
+        //     System.out.println("failed to grab a frame");
+        //     return;
+        // }
+        //Imgproc.cvtColor(source, grayMat,Imgproc.COLOR_BGR2GRAY);
         //outputStream.putFrame(source);
         
         detectedAprilTagsArray = aprilTagDetector.detect(grayMat);
