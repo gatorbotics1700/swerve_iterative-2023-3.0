@@ -46,12 +46,10 @@ public class LimelightSubsystem {
     */
     public NetworkTable networkTable = NetworkTableInstance.getDefault().getTable("limelight");
     public void setPipeline(double pipeline){
-        //System.out.println(“0 network table: ” + networkTable.getEntry(“pipeline”).getDouble(0.0));
+        
         networkTable.getEntry("pipeline").setNumber(pipeline);
         System.out.println("pipeline:" + networkTable.getEntry("pipeline").getDouble(0.0));
         System.out.println("tv: " + networkTable.getEntry("tv").getDouble(0.0));
-        //System.out.println(“multi network table: ” + multiNetworkTable.getEntry(“pipeline”).getDouble(0.0));
-        //System.out.println(“1 network table: ” + networkTable.getEntry(“pipeline”).getDouble(0.0));
     }
     public static enum LimelightStates{
         SCANAPRILTAG,
