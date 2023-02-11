@@ -96,8 +96,6 @@ public class AutonomousBasePD extends AutonomousBase{
         
         System.out.println("state: " + states);
         if (states == States.FIRST){
-            preDDD(startingCoordinate, goalCoordinate1); 
-            //drivetrainSubsystem.resetOdometry(startingCoordinate);
             System.out.println("we've reset to this pose: " + DrivetrainSubsystem.m_pose);
             setState(States.DRIVE);
         } else {
@@ -105,37 +103,32 @@ public class AutonomousBasePD extends AutonomousBase{
             if (states == States.DRIVE){
                 driveDesiredDistance(goalCoordinate1);
                 System.out.println("inside drive state! pose: " + DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
-                if (xController.atSetpoint()&& yController.atSetpoint()){
-                   preDDD(goalCoordinate1, goalCoordinate2);
+                if (xController.atSetpoint() && yController.atSetpoint()){
                    setState(States.DRIVE2);
                 }
             } else if(states == States.DRIVE2){
                 driveDesiredDistance(goalCoordinate2);
-                if(xController.atSetpoint()&& yController.atSetpoint()){
-                    //desiredTranslation = preDDD(goalCoordinate2, goalCoordinate3); 
+                if(xController.atSetpoint() && yController.atSetpoint()){
                     setState(States.DRIVE3);  
                 }
             } else if(states == States.DRIVE3){
                 driveDesiredDistance(goalCoordinate3);
-                if(xController.atSetpoint()&& yController.atSetpoint()){
-                    preDDD(goalCoordinate3, goalCoordinate4); 
+                if(xController.atSetpoint() && yController.atSetpoint()){
                     setState(States.DRIVE4); 
                 }
             } else if(states == States.DRIVE4){
                 driveDesiredDistance(goalCoordinate4);
-                if(xController.atSetpoint()&& yController.atSetpoint()){
-                    preDDD(goalCoordinate4, goalCoordinate5);
+                if(xController.atSetpoint() && yController.atSetpoint()){
                     setState(States.DRIVE5); 
                 }
             } else if(states == States.DRIVE5){
                 driveDesiredDistance(goalCoordinate5);
-                if(xController.atSetpoint()&& yController.atSetpoint()){
-                    preDDD(goalCoordinate5, goalCoordinate6);
+                if(xController.atSetpoint() && yController.atSetpoint()){
                     setState(States.DRIVE6); 
                 }
             }else if(states==States.DRIVE6){
                 driveDesiredDistance(goalCoordinate6);
-                if(xController.atSetpoint()&& yController.atSetpoint()){
+                if(xController.atSetpoint() && yController.atSetpoint()){
                     setState(States.STOP);
                 }
             }else{
