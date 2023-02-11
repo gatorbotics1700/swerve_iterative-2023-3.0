@@ -7,10 +7,6 @@ import frc.robot.Gains;
 
 public class ArmTelescopingSubsystem {
 
-    //variables go here
-    //double armLengthKP = 0.04; //actual vals to be determined
-    //double armLengthKI = 0.000002;
-    //double armLengthKD = 0.005;
     //PIDController armLengthController = new PIDController(armLengthKP, armLengthKI, armLengthKD);
     public static TelescopingStates tState = TelescopingStates.RETRACTED;//should this be retracted or mid? what is the equivalent to off?
 
@@ -19,13 +15,6 @@ public class ArmTelescopingSubsystem {
     public double tareEncoder;
     //armMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx, Constants.kTimeoutMs);//determine what these values would be for us
 
-    /*public static enum ArmStates{
-        OFF, //fully retracted
-        FULLY_EXTENDED,
-        LOW_ARM_LENGTH, // arm length when scoring on low node
-        MID_ARM_LENGTH, // also shelf height
-        HIGH_ARM_LENGTH;
-    }*/
     public int _kIzone = 0;
     public double _kPeakOutput = 1.0;
 

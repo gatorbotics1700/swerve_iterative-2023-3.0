@@ -62,7 +62,7 @@ public final class Constants {
     public static final double STEER_MOTOR_MIN_VOLTAGE = 0.02; 
     public static final double STEER_MOTOR_MAX_VOLTAGE = 0.5;
     public static final double TELESCOPING_ARM_GEAR_RATIO = 36.0; // as of 2/6
-    public static final double WHEEL_DIAMETER= 0.75; //inches - rough estimate by sara 2/2
+    public static final double WHEEL_DIAMETER= 0.80; //0.75 inches - rough estimate by sara 2/2
     public static final double TICKS_PER_REV = 2048;
     public static final double TICKS_PER_INCH = TICKS_PER_REV*TELESCOPING_ARM_GEAR_RATIO/WHEEL_DIAMETER/Math.PI; //talonfx drive encoder
 
