@@ -91,17 +91,4 @@ public class ArmTelescopingSubsystem {
     public void setTState(TelescopingStates newState){
         tState = newState;
     }
-
-    //public void armPID(double armLengthSetpoint){
-       // armLengthController.setSetpoint(armLengthSetpoint);
-        //double output = armLengthController.calculate(getArmLength(), armLengthSetpoint);
-        //System.out.println("output: " + output);
-        //armMotor.set(ControlMode.PercentOutput, output);//written as _talon.set(TalonFXControlMode.PercentOutput, leftYstick); in documentation. leftystick is joy.gety
-    //}
-
-     // if (Math.abs(leftYstick) < 0.10/*this number should be changed through testing*/) {
-    //     /* Within 10% of zero */
-    //     leftYstick = 0;//left joystick y axis in documentation. assign later
-    // }
-
 }

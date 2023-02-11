@@ -21,7 +21,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import frc.robot.autonomous.AutonomousBasePD;
 import frc.robot.subsystems.ArmTelescopingSubsystem.TelescopingStates;
-import frc.robot.subsystems.ElevatorSubsystem.ElevatorStates;
 import edu.wpi.first.math.controller.PIDController;
 import frc.robot.Robot;
 
@@ -54,7 +53,6 @@ public class DrivetrainSubsystem {
    * <p>
    * This is a measure of how fast the robot should be able to drive in a straight line.
    */
-  public static final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
   public static final ArmTelescopingSubsystem armTelescopingSubsystem = new ArmTelescopingSubsystem();
   public static final double MAX_VELOCITY_METERS_PER_SECOND = 6380.0 / 60.0 *
           SdsModuleConfigurations.MK4_L2.getDriveReduction() *
@@ -360,18 +358,6 @@ public class DrivetrainSubsystem {
                    output = Math.signum(output) * MINOUTPUT;
                 }
         }
-    }
-    public void scoreLow(){
-        elevatorSubsystem.setState(ElevatorStates.LOW_ELEVATOR_HEIGHT);
-        armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
-    }
-    public void scoreMid(){
-        elevatorSubsystem.setState(ElevatorStates.MID_ELEVATOR_HEIGHT);
-        armTelescopingSubsystem.setTState(TelescopingStates.MID_ARM_LENGTH);
-    }
-    public void scoreHigh(){
-        elevatorSubsystem.setState(ElevatorStates.HIGH_ELEVATOR_HEIGHT);
-        armTelescopingSubsystem.setTState(TelescopingStates.HIGH_ARM_LENGTH);
     }
 }
 
