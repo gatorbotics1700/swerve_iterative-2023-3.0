@@ -64,7 +64,8 @@ public class AutonomousBasePD extends AutonomousBase{
         directionController.reset();
         xController.reset();
         yController.reset();
-        directionController.setTolerance(TURN_DEADBAND); 
+        directionController.setTolerance(TURN_DEADBAND);
+        turnController.setTolerance(TURN_DEADBAND); 
         xController.setTolerance(DRIVE_DEADBAND);
         yController.setTolerance(DRIVE_DEADBAND);
 
@@ -95,42 +96,51 @@ public class AutonomousBasePD extends AutonomousBase{
     public void periodic()
     {
         
-        System.out.println("state: " + states);
+        //System.out.println("state: " + states);
         if (states == States.FIRST){
-            System.out.println("we've reset to this pose: " + DrivetrainSubsystem.m_pose);
+            //System.out.println("we've reset to this pose: " + DrivetrainSubsystem.m_pose);
             setState(States.DRIVE);
+            xController.setSetpoint(goalCoordinate1.getX()); 
+            yController.setSetpoint(goalCoordinate1.getY());
+            turnController.setSetpoint(goalCoordinate1.getRotation().getDegrees());
         } else {
             drivetrainSubsystem.drive();
             if (states == States.DRIVE){
                 driveDesiredDistance(goalCoordinate1);
-                System.out.println("inside drive state! pose: " + DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
-                if (xController.atSetpoint() && yController.atSetpoint()){
-                   setState(States.DRIVE2);
+                //System.out.println("inside drive state! pose: " + DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
+                if (xController.atSetpoint() && yController.atSetpoint() && turnController.atSetpoint()){
+                   setState(States.DRIVE2); 
+                   System.out.println("Position: " + DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + ", " + DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
                 }
             } else if(states == States.DRIVE2){
                 driveDesiredDistance(goalCoordinate2);
-                if(xController.atSetpoint() && yController.atSetpoint()){
+                if(xController.atSetpoint() && yController.atSetpoint() && turnController.atSetpoint()){
                     setState(States.DRIVE3);  
+                    System.out.println("Position: " + DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + ", " + DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
                 }
             } else if(states == States.DRIVE3){
                 driveDesiredDistance(goalCoordinate3);
                 if(xController.atSetpoint() && yController.atSetpoint()){
                     setState(States.DRIVE4); 
+                    System.out.println("Position: " + DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + ", " + DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
                 }
             } else if(states == States.DRIVE4){
                 driveDesiredDistance(goalCoordinate4);
                 if(xController.atSetpoint() && yController.atSetpoint()){
                     setState(States.DRIVE5); 
+                    System.out.println("Position: " + DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + ", " + DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
                 }
             } else if(states == States.DRIVE5){
                 driveDesiredDistance(goalCoordinate5);
                 if(xController.atSetpoint() && yController.atSetpoint()){
                     setState(States.DRIVE6); 
+                    System.out.println("Position: " + DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + ", " + DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
                 }
             }else if(states==States.DRIVE6){
                 driveDesiredDistance(goalCoordinate6);
                 if(xController.atSetpoint() && yController.atSetpoint()){
                     setState(States.STOP);
+                    System.out.println("Position: " + DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + ", " + DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
                 }
             }else{
                 drivetrainSubsystem.stopDrive();
@@ -153,8 +163,8 @@ public class AutonomousBasePD extends AutonomousBase{
     public void driveDesiredDistance(Pose2d dPose){      
         double speedX = xController.calculate(DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH, dPose.getX());
         double speedY = yController.calculate(DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH, dPose.getY());
-        double speedRotat = turnController.calculate(drivetrainSubsystem.getGyroscopeRotation().getDegrees(), dPose.getRotation().getDegrees());
-        System.out.println("DDDing");  
+        double speedRotat = turnController.calculate(DrivetrainSubsystem.m_pose.getRotation().getDegrees(), dPose.getRotation().getDegrees());
+        //System.out.println("DDDing");
       
         if(xController.atSetpoint()){
             speedX = 0; 
@@ -171,16 +181,17 @@ public class AutonomousBasePD extends AutonomousBase{
         if(turnController.atSetpoint()){
             speedRotat = 0;
         } else {
+            System.out.println("Position error: " + turnController.getPositionError());
             speedRotat = Math.signum(speedRotat)*Math.max(Constants.STEER_MOTOR_MIN_VOLTAGE, Math.min(Constants.STEER_MOTOR_MAX_VOLTAGE, Math.abs(speedRotat)));
         }
 
-        drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speedX, speedY, speedRotat, drivetrainSubsystem.getGyroscopeRotation()));  
+        drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speedX, speedY, 0, drivetrainSubsystem.getGyroscopeRotation()));  
         double errorX = (dPose.getX() - DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH);
         double errorY = (dPose.getY() - DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
         double errorRotat = (dPose.getRotation().getDegrees() - DrivetrainSubsystem.m_pose.getRotation().getDegrees());
         System.out.println("Speed X: " + speedX + " Speed Y: " + speedY + " Speed Rotat: " + speedRotat);
         System.out.println("error:" + errorX + ", " + errorY + ", " + errorRotat);
-        System.out.println("Desired Position: " + dPose.getX() + ", " + dPose.getY());
+        //System.out.println("Desired Position: " + dPose.getX() + ", " + dPose.getY());
     }
 
     /**

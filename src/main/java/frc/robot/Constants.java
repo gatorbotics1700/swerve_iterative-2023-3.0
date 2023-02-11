@@ -37,7 +37,6 @@ public final class Constants {
 
     //swervo - might need to be changed to whats in main
     public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(180 + 279.316);
-    //front right offset should be rechecked, is maybe wrong  
     public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(180 + 75.938 + 90);
     public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(180 + 320.098 + 90); 
     public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(180 + 250.183 + 90);
@@ -61,7 +60,7 @@ public final class Constants {
 
     public static final double DRIVE_MOTOR_MIN_VOLTAGE = 0.19;
     public static final double DRIVE_MOTOR_MAX_VOLTAGE = 0.4;
-    public static final double STEER_MOTOR_MIN_VOLTAGE = 0.02; 
+    public static final double STEER_MOTOR_MIN_VOLTAGE = 0.1; 
     public static final double STEER_MOTOR_MAX_VOLTAGE = 0.5;
     public static final double GEAR_RATIO = 6.75;
     public static final double WHEEL_DIAMETER= 4; //inches
