@@ -57,7 +57,7 @@ public class Robot extends TimedRobot {
   // center : 325.8415
   private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
   private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
-  private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(10, 30, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)));
+  private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(20, 40, new Rotation2d(0)), new Pose2d(40, 0, new Rotation2d(0)), new Pose2d(0, 30, new Rotation2d(0)), new Pose2d(40, 30, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(20, 20, new Rotation2d(0)));
   
   // blue alliance 
   private AutonomousBasePD HDplaceTwoEngageB = new AutonomousBasePD(new Pose2d(56.069, 20.19, new Rotation2d(0)), new Pose2d(278.999, 36.19, new Rotation2d(0)), new Pose2d(257.650, 64.004, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)));

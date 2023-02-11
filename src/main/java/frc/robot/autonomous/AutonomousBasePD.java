@@ -119,7 +119,7 @@ public class AutonomousBasePD extends AutonomousBase{
                 driveDesiredDistance(goalCoordinate3);
                 if(xController.atSetpoint()&& yController.atSetpoint()){
                     preDDD(goalCoordinate3, goalCoordinate4); 
-                    setState(States.STOP); 
+                    setState(States.DRIVE4); 
                 }
             } else if(states == States.DRIVE4){
                 driveDesiredDistance(goalCoordinate4);
