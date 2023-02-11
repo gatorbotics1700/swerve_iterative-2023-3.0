@@ -113,13 +113,13 @@ public class AutonomousBasePD extends AutonomousBase{
                 driveDesiredDistance(goalCoordinate2);
                 if(xController.atSetpoint()&& yController.atSetpoint()){
                     //desiredTranslation = preDDD(goalCoordinate2, goalCoordinate3); 
-                    setState(States.STOP);  
+                    setState(States.DRIVE3);  
                 }
             } else if(states == States.DRIVE3){
                 driveDesiredDistance(goalCoordinate3);
                 if(xController.atSetpoint()&& yController.atSetpoint()){
                     preDDD(goalCoordinate3, goalCoordinate4); 
-                    setState(States.DRIVE4); 
+                    setState(States.STOP); 
                 }
             } else if(states == States.DRIVE4){
                 driveDesiredDistance(goalCoordinate4);
@@ -147,8 +147,8 @@ public class AutonomousBasePD extends AutonomousBase{
     //predrivedesiredistance
     public void preDDD(Pose2d cCoordinate, Pose2d dCoordinate){
         Rotation2d zDDistance = new Rotation2d(Constants.TICKS_PER_INCH*(dCoordinate.getRotation().getDegrees() - cCoordinate.getRotation().getDegrees()));
-        xController .setSetpoint(dCoordinate.getX()); 
-        yController .setSetpoint(dCoordinate.getY());
+        xController.setSetpoint(dCoordinate.getX()); 
+        yController.setSetpoint(dCoordinate.getY());
         System.out.println("preDDDing!!!");    
     }
 
@@ -164,13 +164,13 @@ public class AutonomousBasePD extends AutonomousBase{
         if(xController.atSetpoint()){
             speedX = 0; 
         } else {
-            speedX = Math.signum(speedX)*Math.max (Constants.DRIVE_MOTOR_MIN_VOLTAGE, Math.min(Constants.DRIVE_MOTOR_MAX_VOLTAGE, Math.abs(speedX)));  
+            speedX = Math.signum(speedX)*Math.max(Constants.DRIVE_MOTOR_MIN_VOLTAGE, Math.min(Constants.DRIVE_MOTOR_MAX_VOLTAGE, Math.abs(speedX)));  
         }
  
         if(yController.atSetpoint()){
             speedY = 0; 
         } else {
-            speedY = Math.signum(speedY)*Math.max (Constants.DRIVE_MOTOR_MIN_VOLTAGE, Math.min(Constants.DRIVE_MOTOR_MAX_VOLTAGE, Math.abs(speedY)));
+            speedY = Math.signum(speedY)*Math.max(Constants.DRIVE_MOTOR_MIN_VOLTAGE, Math.min(Constants.DRIVE_MOTOR_MAX_VOLTAGE, Math.abs(speedY)));
         }
         drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speedX, speedY, 0, drivetrainSubsystem.getGyroscopeRotation()));  
         double errorX = (dPose.getX() - DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH);
