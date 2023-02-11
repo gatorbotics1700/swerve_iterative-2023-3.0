@@ -51,24 +51,24 @@ public class ArmTelescopingSubsystem {
         } else if (tState == TelescopingStates.FULLY_EXTENDED){
             desiredInches = 26; //replace later
             determineRightTicks();
-            telescopingMotor.set(ControlMode.Position, (desiredTicks * Constants.UNDER_TWO_TICKS_PER_INCH)-tareEncoder); //confirmed
+            telescopingMotor.set(ControlMode.Position, desiredTicks -tareEncoder); //confirmed
             telescopeDeadband();
         } else if (tState == TelescopingStates.LOW_ARM_LENGTH){
             desiredInches = 5; //replace later
             determineRightTicks();
-            telescopingMotor.set(ControlMode.Position, (desiredTicks)-tareEncoder);
+            telescopingMotor.set(ControlMode.Position, desiredTicks-tareEncoder);
             System.out.println("error: " + (desiredTicks - telescopingMotor.getSelectedSensorPosition()));
             telescopeDeadband();
         }else if (tState == TelescopingStates.MID_ARM_LENGTH){
             desiredInches = 10; //replace later
             determineRightTicks(); 
-            telescopingMotor.set(ControlMode.Position, (desiredTicks)-tareEncoder); // goes with 90 degrees rotation 
+            telescopingMotor.set(ControlMode.Position, desiredTicks-tareEncoder); // goes with 90 degrees rotation 
             System.out.println("error: " + (desiredTicks - telescopingMotor.getSelectedSensorPosition()));
             telescopeDeadband();
         }else{ //high arm length
             desiredInches = 20; //replace later
             determineRightTicks();
-            telescopingMotor.set(ControlMode.Position, (desiredTicks)-tareEncoder); 
+            telescopingMotor.set(ControlMode.Position, desiredTicks-tareEncoder); 
             telescopeDeadband();
         }
     }
