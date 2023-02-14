@@ -78,7 +78,7 @@ public class PneumaticIntakeSubsystem {
     }
 
     public void switchState_beamBreakSensor (){ //switch state based on sensor reading
-        System.out.println("circuit open? " + beambreakSensor.get());
+        //System.out.println("circuit open? " + beambreakSensor.get());
         if (!beambreakSensor.get()){ //circuit is open meaning it sees something
             //setState(PneumaticIntakeStates.ACTUATING);
             System.out.println("broken");
