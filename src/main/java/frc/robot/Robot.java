@@ -231,7 +231,7 @@ public class Robot extends TimedRobot {
     /*if(m_drivetrainSubsystem.getGyroscopeRotation().getDegrees() <= 370){
       m_drivetrainSubsystem.setSpeed(new ChassisSpeeds(0, 0.2, 0));
     }*/
-    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0.02, m_drivetrainSubsystem.getGyroscopeRotation()));
+    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0.2, 0.02, m_drivetrainSubsystem.getGyroscopeRotation()));
     //m_autoSelected.turnDesiredAngle(180);
     m_drivetrainSubsystem.drive();
     // m_drivetrainSubsystem.m_frontLeftModule.set(0.4, t);

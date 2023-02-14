@@ -30,16 +30,16 @@ public final class Constants {
 
     //green
 
-    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(194.41);
-    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(305.15625);
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(23.73+90);//fix this one to like -70 or something
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(122.87);
+    //public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(194.41);
+    //public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(305.15625);
+    //public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(23.73+90);//fix this one to like -70 or something
+    //public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(122.87);
 
     //swervo - might need to be changed to whats in main
-    /*public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(180 + 279.316);
-    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(180 + 75.938 + 90);
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(180 + 320.098 + 90); 
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(180 + 250.183 + 90);*/
+    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(180 + 279.316-90);
+    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(180 + 75.938);
+    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(180 + 320.098); 
+    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(180 + 250.183);
 
     //even can ids are drive, odd can ids are steer
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 26;
