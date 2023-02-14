@@ -5,7 +5,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import frc.robot.subsystems.*;
-public class LimelightSubsystem {
+public class LimeLightSubsystem{
     public final double MOUNTINGANGLE = 2.0; //degrees change
     public final double LOWERHEIGHT = 22.124; //inches height of bottom to bottom of tape of shorter pole
     public final double HIGHERHEIGHT = 41.125; //inches height of bottom to bottom of tape of shorter pole
