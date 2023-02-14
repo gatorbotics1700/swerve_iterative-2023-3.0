@@ -14,6 +14,8 @@ import frc.robot.autonomous.*;
 import frc.robot.Constants;
 
 import com.ctre.phoenix.ErrorCode;
+import com.ctre.phoenix.sensors.CANCoderConfiguration;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -51,6 +53,7 @@ public class Robot extends TimedRobot {
   private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<AutonomousBase>();
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   private final Field2d m_field = new Field2d();
+  double t= 0.0;
   ChassisSpeeds m_ChassisSpeeds;
 
   // whole field: 651.683 
@@ -201,7 +204,13 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-
+    //CANCoderConfiguration config = new CANCoderConfiguration();
+    //config.sensorDirection = false;
+    //config.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
+    //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().configAllSettings(config);
+    //m_drivetrainSubsystem.m_backLeftModule.getCANCoder().configAllSettings(config);
+    //m_drivetrainSubsystem.m_backRightModule.getCANCoder().configAllSettings(config);
+    //m_drivetrainSubsystem.m_frontRightModule.getCANCoder().configAllSettings(config);
     //System.out.println("Trajectory: " + Trajectories.uno);
     m_drivetrainSubsystem.zeroGyroscope();
   }
@@ -209,8 +218,10 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic(){
-    System.out.println("LF Cancoder Position: " + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition());
+    double d = (m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition()) % 360;
+    System.out.println("LF Cancoder Position: " + d);
     m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
+
     //System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
     /*if (m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError() != ErrorCode.OK) {
       return;
@@ -220,10 +231,11 @@ public class Robot extends TimedRobot {
     /*if(m_drivetrainSubsystem.getGyroscopeRotation().getDegrees() <= 370){
       m_drivetrainSubsystem.setSpeed(new ChassisSpeeds(0, 0.2, 0));
     }*/
-    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.1, 0.2, 0, m_drivetrainSubsystem.getGyroscopeRotation()));
+    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0.02, m_drivetrainSubsystem.getGyroscopeRotation()));
     //m_autoSelected.turnDesiredAngle(180);
     m_drivetrainSubsystem.drive();
-      //m_drivetrainSubsystem.m_frontLeftModule.set(0.4, 0);
+    // m_drivetrainSubsystem.m_frontLeftModule.set(0.4, t);
+    // t+=0.1;
 
     
    // System.out.println(m_drivetrainSubsystem.getGyroscopeRotation());
