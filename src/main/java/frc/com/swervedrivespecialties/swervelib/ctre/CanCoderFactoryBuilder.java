@@ -4,6 +4,8 @@ import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.CANCoderStatusFrame;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
+
 import frc.com.swervedrivespecialties.swervelib.AbsoluteEncoder;
 import frc.com.swervedrivespecialties.swervelib.AbsoluteEncoderFactory;
 
