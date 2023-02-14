@@ -30,6 +30,7 @@ public class ArmTelescopingSubsystem {
         RETRACTED, //zero 
         FULLY_EXTENDED,
         LOW_ARM_LENGTH,
+        SHELF_ARM_LENGTH,
         MID_ARM_LENGTH,
         HIGH_ARM_LENGTH;
     }
@@ -49,24 +50,30 @@ public class ArmTelescopingSubsystem {
             desiredTicks = 0;
             telescopeDeadband();
         } else if (tState == TelescopingStates.FULLY_EXTENDED){
-            desiredInches = 26; //replace later
+            desiredInches = 26; //replace later - 26 was old telescope
             determineRightTicks();
             telescopingMotor.set(ControlMode.Position, desiredTicks -tareEncoder); //confirmed
             telescopeDeadband();
         } else if (tState == TelescopingStates.LOW_ARM_LENGTH){
-            desiredInches = 5; //replace later
+            desiredInches = 3; //official 2/13
             determineRightTicks();
             telescopingMotor.set(ControlMode.Position, desiredTicks-tareEncoder);
             System.out.println("error: " + (desiredTicks - telescopingMotor.getSelectedSensorPosition()));
             telescopeDeadband();
+        } else if (tState == TelescopingStates.SHELF_ARM_LENGTH){
+            desiredInches = 6; //official 2/13
+            determineRightTicks(); 
+            telescopingMotor.set(ControlMode.Position, desiredTicks-tareEncoder); // goes with 90 degrees rotation 
+            System.out.println("error: " + (desiredTicks - telescopingMotor.getSelectedSensorPosition()));
+            telescopeDeadband();
         }else if (tState == TelescopingStates.MID_ARM_LENGTH){
-            desiredInches = 10; //replace later
+            desiredInches = 23; //official 2/13
             determineRightTicks(); 
             telescopingMotor.set(ControlMode.Position, desiredTicks-tareEncoder); // goes with 90 degrees rotation 
             System.out.println("error: " + (desiredTicks - telescopingMotor.getSelectedSensorPosition()));
             telescopeDeadband();
         }else{ //high arm length
-            desiredInches = 20; //replace later
+            desiredInches = 34; //official 2/13
             determineRightTicks();
             telescopingMotor.set(ControlMode.Position, desiredTicks-tareEncoder); 
             telescopeDeadband();
