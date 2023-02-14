@@ -80,10 +80,10 @@ public class PneumaticIntakeSubsystem {
     public void switchState_beamBreakSensor (){ //switch state based on sensor reading
         //System.out.println("circuit open? " + beambreakSensor.get());
         if (!beambreakSensor.get()){ //circuit is open meaning it sees something
-            //setState(PneumaticIntakeStates.ACTUATING);
+            setState(PneumaticIntakeStates.ACTUATING);
             System.out.println("broken");
         } else{ // circuit is closed meaning it doesn't see something
-            //setState(PneumaticIntakeStates.RETRACTING); //confirmed b/c OFF stops/disables the solenoids
+            setState(PneumaticIntakeStates.RETRACTING); //confirmed b/c OFF stops/disables the solenoids
             System.out.println("unbroken");
         }
     }
@@ -142,16 +142,16 @@ public class PneumaticIntakeSubsystem {
     }
 
     public void periodic(){
-    //    if(pneumaticIntakeState == PneumaticIntakeStates.ACTUATING){
-    //         solenoidOne.set(kForward);
-    //         System.out.println("Solenoid Actuating");
-    //     } else if (pneumaticIntakeState == PneumaticIntakeStates.RETRACTING){
-    //         solenoidOne.set(kReverse);
-    //         System.out.println("Solenoid Retracting");
-    //     }else{
-    //         solenoidOne.set(kOff);
-    //         System.out.println("Solenoid Off");
-    //     }
+       if(pneumaticIntakeState == PneumaticIntakeStates.ACTUATING){
+            solenoidOne.set(kForward);
+            System.out.println("Solenoid Actuating");
+        } else if (pneumaticIntakeState == PneumaticIntakeStates.RETRACTING){
+            solenoidOne.set(kReverse);
+            System.out.println("Solenoid Retracting");
+        }else{
+            solenoidOne.set(kOff);
+            System.out.println("Solenoid Off");
+        }
         switchState_beamBreakSensor(); 
     }
 
