@@ -23,12 +23,11 @@ public class ArmTelescopingSubsystem {
     double telescopeKP = 0.01;
     double telescopeKD = 0;
     double telescopeKI = 0;
-    private int deadband = 200;
+    private int deadband = 50000;
     public Gains telescopeGains = new Gains(telescopeKP, telescopeKI, telescopeKD, _kIzone, _kPeakOutput);
 
     public static enum TelescopingStates{
         RETRACTED, //zero 
-        FULLY_EXTENDED,
         LOW_ARM_LENGTH,
         SHELF_ARM_LENGTH,
         MID_ARM_LENGTH,
@@ -37,26 +36,24 @@ public class ArmTelescopingSubsystem {
 
     public void init(){
         System.out.println("telescoping init!! :)");
-        telescopingMotor.setInverted(true); //forward = clockwise, changed on 2/9
+        telescopingMotor.setInverted(false); //forward = clockwise, changed on 2/9
         startTime = System.currentTimeMillis();
 
     }
 
     public void periodic(){//sam requests that we can operate arm length by stick on xbox
+        //telescopingMotor.set(ControlMode.PercentOutput, 0.2);
         System.out.println("current telescoping arm motor position:" + telescopingMotor.getSelectedSensorPosition());
         if (tState == TelescopingStates.RETRACTED){
             telescopingMotor.set(ControlMode.Position, 0);
             desiredInches = 0; 
             desiredTicks = 0;
             telescopeDeadband();
-        } else if (tState == TelescopingStates.FULLY_EXTENDED){
-            desiredInches = 26; //replace later - 26 was old telescope
-            determineRightTicks();
-            telescopingMotor.set(ControlMode.Position, desiredTicks -tareEncoder); //confirmed
-            telescopeDeadband();
         } else if (tState == TelescopingStates.LOW_ARM_LENGTH){
             desiredInches = 3; //official 2/13
             determineRightTicks();
+            System.out.println("desired ticks: " + desiredTicks);
+            System.out.println("tare encoder: " + tareEncoder);
             telescopingMotor.set(ControlMode.Position, desiredTicks-tareEncoder);
             System.out.println("error: " + (desiredTicks - telescopingMotor.getSelectedSensorPosition()));
             telescopeDeadband();
@@ -73,7 +70,7 @@ public class ArmTelescopingSubsystem {
             System.out.println("error: " + (desiredTicks - telescopingMotor.getSelectedSensorPosition()));
             telescopeDeadband();
         }else{ //high arm length
-            desiredInches = 34; //official 2/13
+            desiredInches = 32; //official 2/13
             determineRightTicks();
             telescopingMotor.set(ControlMode.Position, desiredTicks-tareEncoder); 
             telescopeDeadband();
