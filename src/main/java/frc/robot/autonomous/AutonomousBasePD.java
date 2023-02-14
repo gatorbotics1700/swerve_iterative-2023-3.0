@@ -191,9 +191,11 @@ public class AutonomousBasePD extends AutonomousBase{
 
         if(turnController.atSetpoint()){
             speedRotat = 0;
+            System.out.println("At setpoint");
         } else {
             System.out.println("Position error: " + turnController.getPositionError());
             speedRotat = Math.signum(speedRotat)*Math.max(Constants.STEER_MOTOR_MIN_VOLTAGE, Math.min(Constants.STEER_MOTOR_MAX_VOLTAGE, Math.abs(speedRotat)));
+            System.out.println("Speed rotat after: " + speedRotat);
         }
 
         drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speedX, speedY, speedRotat, drivetrainSubsystem.getGyroscopeRotation()));  
