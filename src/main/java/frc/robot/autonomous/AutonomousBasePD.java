@@ -8,7 +8,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.Constants;
 
 public class AutonomousBasePD extends AutonomousBase{
-    public static final double turnKP= 0.0003; //increased slight *** not tested
+    public static final double turnKP= 0.0001; //increased slight *** not tested
     public static final double turnKI= 0.0;
     public static final double turnKD= 0.0;
     public static final double driveKP= 0.02;//Robot.kP.getDouble(0.00006);//0.00006;
@@ -25,6 +25,7 @@ public class AutonomousBasePD extends AutonomousBase{
     private Pose2d goalCoordinate4; 
     private Pose2d goalCoordinate5;
     private Pose2d goalCoordinate6;
+    private double goalAngle1;
     
 
     public double desiredTurn;
@@ -39,7 +40,7 @@ public class AutonomousBasePD extends AutonomousBase{
 
 
     
-    public AutonomousBasePD(Pose2d startingCoordinate, Pose2d goalCoordinate1, Pose2d goalCoordinate2, Pose2d goalCoordinate3, Pose2d goalCoordinate4, Pose2d goalCoordinate5, Pose2d goalCoordinate6){
+    public AutonomousBasePD(Pose2d startingCoordinate, Pose2d goalCoordinate1, Pose2d goalCoordinate2, Pose2d goalCoordinate3, Pose2d goalCoordinate4, Pose2d goalCoordinate5, Pose2d goalCoordinate6, double goalAngle1){
         this.startingCoordinate = startingCoordinate;
         this.goalCoordinate1 = goalCoordinate1;
         this.goalCoordinate2 = goalCoordinate2;
@@ -47,6 +48,7 @@ public class AutonomousBasePD extends AutonomousBase{
         this.goalCoordinate4 = goalCoordinate4;
         this.goalCoordinate5 = goalCoordinate5;
         this.goalCoordinate6 = goalCoordinate6;
+        this.goalAngle1 = goalAngle1;
     }
 
     public AutonomousBasePD(){
@@ -57,6 +59,7 @@ public class AutonomousBasePD extends AutonomousBase{
         goalCoordinate4 = new Pose2d(0.0, 0.0, drivetrainSubsystem.getGyroscopeRotation());
         goalCoordinate5 = new Pose2d(0.0, 0.0, drivetrainSubsystem.getGyroscopeRotation());
         goalCoordinate6 = new Pose2d(0.0, 0.0, drivetrainSubsystem.getGyroscopeRotation());
+        //goalAngle1 = drivetrainSubsystem.getGyroscopeRotation();
     }
     @Override
     public void init(){
@@ -77,6 +80,7 @@ public class AutonomousBasePD extends AutonomousBase{
     public static enum States{
         FIRST,
         DRIVE,
+       // TURN1,
         DRIVE2,
         DRIVE3,
         DRIVE4,
@@ -107,15 +111,21 @@ public class AutonomousBasePD extends AutonomousBase{
             drivetrainSubsystem.drive();
             if (states == States.DRIVE){
                 driveDesiredDistance(goalCoordinate1);
-                //System.out.println("inside drive state! pose: " + DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
-                if (xController.atSetpoint() && yController.atSetpoint() && turnController.atSetpoint()){
-                   setState(States.DRIVE2); 
-                   System.out.println("Position: " + DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + ", " + DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
+            //     //System.out.println("inside drive state! pose: " + DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
+            //     if (xController.atSetpoint() && yController.atSetpoint() && turnController.atSetpoint()){
+            //        setState(States.TURN1); 
+            //        System.out.println("Position: " + DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + ", " + DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
+            //     }
+            // } else if(states == States.TURN1){
+            //     turnDesiredAngle(goalAngle1);
+                if(xController.atSetpoint() && yController.atSetpoint() && turnController.atSetpoint()){
+                    setState(States.DRIVE2);  
+                    System.out.println("Position: " + DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + ", " + DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
                 }
             } else if(states == States.DRIVE2){
                 driveDesiredDistance(goalCoordinate2);
-                if(xController.atSetpoint() && yController.atSetpoint() && turnController.atSetpoint()){
-                    setState(States.DRIVE3);  
+                if(xController.atSetpoint() && yController.atSetpoint()){
+                    setState(States.STOP); 
                     System.out.println("Position: " + DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + ", " + DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
                 }
             } else if(states == States.DRIVE3){
@@ -130,10 +140,10 @@ public class AutonomousBasePD extends AutonomousBase{
                     setState(States.DRIVE5); 
                     System.out.println("Position: " + DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + ", " + DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
                 }
-            } else if(states == States.DRIVE5){
+            }else if(states==States.DRIVE5){
                 driveDesiredDistance(goalCoordinate5);
                 if(xController.atSetpoint() && yController.atSetpoint()){
-                    setState(States.DRIVE6); 
+                    setState(States.DRIVE6);
                     System.out.println("Position: " + DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + ", " + DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
                 }
             }else if(states==States.DRIVE6){
@@ -141,7 +151,7 @@ public class AutonomousBasePD extends AutonomousBase{
                 if(xController.atSetpoint() && yController.atSetpoint()){
                     setState(States.STOP);
                     System.out.println("Position: " + DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + ", " + DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
-                }
+                }    
             }else{
                 drivetrainSubsystem.stopDrive();
             }
@@ -185,7 +195,7 @@ public class AutonomousBasePD extends AutonomousBase{
             speedRotat = Math.signum(speedRotat)*Math.max(Constants.STEER_MOTOR_MIN_VOLTAGE, Math.min(Constants.STEER_MOTOR_MAX_VOLTAGE, Math.abs(speedRotat)));
         }
 
-        drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speedX, speedY, 0, drivetrainSubsystem.getGyroscopeRotation()));  
+        drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speedX, speedY, speedRotat, drivetrainSubsystem.getGyroscopeRotation()));  
         double errorX = (dPose.getX() - DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH);
         double errorY = (dPose.getY() - DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
         double errorRotat = (dPose.getRotation().getDegrees() - DrivetrainSubsystem.m_pose.getRotation().getDegrees());

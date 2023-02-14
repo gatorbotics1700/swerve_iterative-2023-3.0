@@ -274,7 +274,6 @@ public class DrivetrainSubsystem {
     
         //array of states filled with the speed and angle for each module (made from linear and angular motion for the whole robot) 
         SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
-        System.out.println("LF Desired Position: "+states[0].angle);
         //desaturatewheelspeeds checks and fixes if any module's wheel speed is above the max
         SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
         
