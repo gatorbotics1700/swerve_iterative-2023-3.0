@@ -209,11 +209,11 @@ public class DrivetrainSubsystem {
                 new SwerveModulePosition(m_backLeftModule.getSwerveModulePosition().distanceMeters - tareLBEncoder, new Rotation2d(m_backLeftModule.getSteerAngle()))};
         m_pose = start;
         System.out.println("position array: " + positionArray.toString());
-        System.out.println("m_pose: " + m_pose.getX()/TICKS_PER_INCH + ", " + m_pose.getY()/TICKS_PER_INCH);
+        System.out.println("m_pose: " + m_pose.getX()/TICKS_PER_INCH + ", " + m_pose.getY()/TICKS_PER_INCH + ", " + m_pose.getRotation().getDegrees());
         m_odometry.resetPosition(getGyroscopeRotation(), positionArray, m_pose);
         System.out.println("#resetodometry! new pose: " + m_pose.getX()/TICKS_PER_INCH + " y: " + m_pose.getY()/TICKS_PER_INCH);
         m_pose = m_odometry.update(getGyroscopeRotation(), positionArray);
-        System.out.println("m_pose after update in odometry: " + m_pose.getX()/TICKS_PER_INCH + ", " + m_pose.getY()/TICKS_PER_INCH);
+        System.out.println("m_pose after update in odometry: " + m_pose.getX()/TICKS_PER_INCH + ", " + m_pose.getY()/TICKS_PER_INCH + ", " + m_pose.getRotation().getDegrees());
         //System.out.println("inputs for the reset: " + getGyroscopeRotation() + " " + m_frontLeftModule.getSwerveModulePosition().distanceMeters + " " + m_frontRightModule.getSwerveModulePosition().distanceMeters + " " + m_backLeftModule.getSwerveModulePosition().distanceMeters + " " + m_backRightModule.getSwerveModulePosition().distanceMeters);
 }
 

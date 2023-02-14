@@ -36,10 +36,10 @@ public final class Constants {
     //public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(122.87);
 
     //swervo - might need to be changed to whats in main
-    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(180 + 279.316-90);
-    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(180 + 75.938);
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(180 + 320.098); 
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(180 + 250.183);
+    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(279.316-90);
+    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(75.938);
+    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(320.098); 
+    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(250.183);
 
     //even can ids are drive, odd can ids are steer
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 26;
@@ -60,7 +60,7 @@ public final class Constants {
 
     public static final double DRIVE_MOTOR_MIN_VOLTAGE = 0.19;
     public static final double DRIVE_MOTOR_MAX_VOLTAGE = 0.4;
-    public static final double STEER_MOTOR_MIN_VOLTAGE = 0.001; 
+    public static final double STEER_MOTOR_MIN_VOLTAGE = 0.01; 
     public static final double STEER_MOTOR_MAX_VOLTAGE = 0.03;
     public static final double GEAR_RATIO = 6.75;
     public static final double WHEEL_DIAMETER= 4; //inches
