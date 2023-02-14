@@ -52,7 +52,7 @@ public class AutonomousBasePD extends AutonomousBase{
         // directionController.reset();
         // distanceController.reset();
         directionController.setTolerance(TURN_DEADBAND); 
-        distanceController.setTolerance(DRIVE_DEADBAND*Constants.TICKS_PER_INCH);
+        distanceController.setTolerance(DRIVE_DEADBAND*Constants.SWERVE_TICKS_PER_INCH);
         states = States.FIRST;
         System.out.println("INIT!\nINIT!\nINIT!");
 
@@ -88,7 +88,7 @@ public class AutonomousBasePD extends AutonomousBase{
         }
         if (states == States.DRIVE){
             driveDesiredDistance(desiredTranslation);
-            System.out.println("inside drive state! pose: " + DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
+            System.out.println("inside drive state! pose: " + DrivetrainSubsystem.m_pose.getX()/Constants.SWERVE_TICKS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getY()/Constants.SWERVE_TICKS_PER_INCH);
             if (distanceController.atSetpoint()){
                 desiredTranslation = preDDD(goalCoordinate1, goalCoordinate2);
                 setState(States.DRIVE2);
@@ -129,9 +129,9 @@ public class AutonomousBasePD extends AutonomousBase{
 
     //predrivedesiredistance
     public Pose2d preDDD(Pose2d cCoordinate, Pose2d dCoordinate){
-        double xDDistance = Constants.TICKS_PER_INCH*(dCoordinate.getX() - cCoordinate.getX());
-        double yDDistance = Constants.TICKS_PER_INCH*(dCoordinate.getY() - cCoordinate.getY());
-        Rotation2d zDDistance = new Rotation2d(Constants.TICKS_PER_INCH*(dCoordinate.getRotation().getDegrees() - cCoordinate.getRotation().getDegrees()));
+        double xDDistance = Constants.SWERVE_TICKS_PER_INCH*(dCoordinate.getX() - cCoordinate.getX());
+        double yDDistance = Constants.SWERVE_TICKS_PER_INCH*(dCoordinate.getY() - cCoordinate.getY());
+        Rotation2d zDDistance = new Rotation2d(Constants.SWERVE_TICKS_PER_INCH*(dCoordinate.getRotation().getDegrees() - cCoordinate.getRotation().getDegrees()));
         hypotenuse = Math.hypot(xDDistance, yDDistance);
         distanceController.setSetpoint(hypotenuse); 
         System.out.println("preDDDing: " + xDDistance + ", " + yDDistance);    

@@ -103,8 +103,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH);
-    SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
+    SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX()/Constants.SWERVE_TICKS_PER_INCH);
+    SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.SWERVE_TICKS_PER_INCH);
     m_field.setRobotPose(DrivetrainSubsystem.m_odometry.getPoseMeters());
   }
 
@@ -122,8 +122,8 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     pneumaticIntakeSubsystem.init();
 
-    m_autoSelected = m_chooser.getSelected();
-    m_autoSelected.init();
+    //m_autoSelected = m_chooser.getSelected();
+    //m_autoSelected.init();
   }
 
   /** This function is called periodically during autonomous. */
@@ -133,8 +133,8 @@ public class Robot extends TimedRobot {
      pneumaticIntakeSubsystem.periodic();
      //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
 
-     m_autoSelected.periodic();
-     m_drivetrainSubsystem.drive();
+     //m_autoSelected.periodic();
+     //m_drivetrainSubsystem.drive();
     
   }
 
