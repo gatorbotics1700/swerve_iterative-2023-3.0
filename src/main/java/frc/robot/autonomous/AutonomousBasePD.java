@@ -175,7 +175,8 @@ public class AutonomousBasePD extends AutonomousBase{
         double speedY = yController.calculate(DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH, dPose.getY());
         double speedRotat = turnController.calculate(DrivetrainSubsystem.m_pose.getRotation().getDegrees(), dPose.getRotation().getDegrees());
         //System.out.println("DDDing");
-      
+        System.out.println("speed rotate: " + speedRotat);
+        
         if(xController.atSetpoint()){
             speedX = 0; 
         } else {
