@@ -69,4 +69,8 @@ public final class Constants {
     public static final double WHEEL_DIAMETER= 4; //inches
     public static final double TICKS_PER_REV = 2048;
     public static final double TICKS_PER_INCH = TICKS_PER_REV*GEAR_RATIO/WHEEL_DIAMETER/Math.PI; //talonfx drive encoder
+    public static final double LIMELIGHT_ANGLE = -24; //degrees
+    public static final double TAPE_HEIGHT_ONE = 23.5; //inches
+    public static final double TAPE_HEIGHT_TWO = 46; //inches
+    public static final double LIMELIGHT_HEIGHT = 52; //inches, from the bottom of the chassis
 }
