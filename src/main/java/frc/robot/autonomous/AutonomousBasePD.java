@@ -120,7 +120,7 @@ public class AutonomousBasePD extends AutonomousBase{
             // } else if(states == States.TURN1){
             //     turnDesiredAngle(goalAngle1);
                 if(xController.atSetpoint() && yController.atSetpoint() /*&& turnController.atSetpoint()*/){
-                    setState(States.DRIVE2);  
+                    setState(States.STOP);  
                     System.out.println("Position: " + DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + ", " + DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
                 }
             } else if(states == States.DRIVE2){
