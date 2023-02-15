@@ -44,28 +44,21 @@ public class LimeLightSubsystem {
         System.out.println("tv: " + networkTable.getEntry("tv").getDouble(0.0));
     }
     public static enum LimelightStates{
-        SCANAPRILTAG,
         SCANTAPE,
         OFF;
     }
     public static LimelightStates state = LimelightStates.OFF;
     public void init(){
-        setState(LimelightStates.SCANAPRILTAG);
+        setState(LimelightStates.SCANTAPE);
         //initialPosition = DrivetrainSubsystem.getTicks();
         tx_0 = 0.0;
         tx_1 = 0.0;
     }
     public void periodic(){
-        if (state == LimelightStates.SCANAPRILTAG){ //turret
-            networkTable.getEntry("ledMode").setNumber(1); //force led off, can be customized in pipeline
-            aprilTagSubsystem.setState(AprilTagSubsystem.AprilTagSequence.DETECT);
-        } else if (state == LimelightStates.SCANTAPE) { //turret
-            networkTable.getEntry("ledMode").setNumber(3); //force led on
-        } else {
-            /*shootSubsystem.setState(ShootState.OFF);
-            intakeSubsystem.setState(IntakeStates.OFF);
-            transitionSubsystem.setState(TransitionState.OFF);
-            sensorSubsystem.setState(SensorStates.OFF);*/
+        if (state == LimelightStates.SCANTAPE) { 
+
+        } else { //off
+            
         }
     }
     public static void setState(LimelightStates newState){
@@ -97,6 +90,6 @@ public class LimeLightSubsystem {
     public double getTx(){
         return tx;
     }
-//a bit worried about the infinate loop possibilities between scanzero and scanone
+//a bit worried about the infinite loop possibilities between scanzero and scanone
 
 }

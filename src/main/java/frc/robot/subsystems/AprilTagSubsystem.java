@@ -133,7 +133,8 @@ public class AprilTagSubsystem {
                 }
         } else if(states == AprilTagSequence.CORRECTPOSITION){
             //addVisionToOdometry();
-            DrivetrainSubsystem.m_pose = limeLightSubsystem.networkTable.getEntry("botpose").getDoubleArray(new double[6]);
+            double[] tempArray = limeLightSubsystem.networkTable.getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
+            DrivetrainSubsystem.m_pose = new Pose2d (tempArray[0], tempArray[1], new Rotation2d(tempArray[5]));
             correctPosition();
             if(autonomousBasePD.getDistanceController().atSetpoint()){
                 setState(AprilTagSequence.OFF);
@@ -150,7 +151,6 @@ public class AprilTagSubsystem {
         // }
         //Imgproc.cvtColor(source, grayMat,Imgproc.COLOR_BGR2GRAY);
         //outputStream.putFrame(source);
-        if()
         detectedAprilTagsArray = aprilTagDetector.detect(grayMat);
         if(detectedAprilTagsArray.length == 0){
             return;

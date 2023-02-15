@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.LimeLightSubsystem.LimelightStates;
 
 public class VisionSubsystem {
     public enum VisionStates{
@@ -31,7 +32,14 @@ public class VisionSubsystem {
         }
 
         if(visionState == VisionStates.DETECTTAPE){
-            limeLightSubsystem.setPipeline(1.0);
+            limeLightSubsystem.setPipeline(2.0);
+            if(LimeLightSubsystem.tv == 0){
+                limeLightSubsystem.setPipeline(1.0);
+                if(LimeLightSubsystem.tv == 0){
+                    return;
+                }
+            }
+            limeLightSubsystem.setState(LimelightStates.SCANTAPE);
         }
     }
 
