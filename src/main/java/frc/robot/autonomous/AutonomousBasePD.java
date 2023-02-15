@@ -126,7 +126,7 @@ public class AutonomousBasePD extends AutonomousBase{
             } else if(states == States.DRIVE2){
                 driveDesiredDistance(goalCoordinate2);
                 if(xController.atSetpoint() && yController.atSetpoint()){
-                    setState(States.STOP); 
+                    setState(States.DRIVE3); 
                     System.out.println("Position: " + DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + ", " + DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
                 }
             } else if(states == States.DRIVE3){
