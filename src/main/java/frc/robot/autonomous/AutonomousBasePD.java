@@ -107,7 +107,7 @@ public class AutonomousBasePD extends AutonomousBase{
             setState(States.DRIVE);
             xController.setSetpoint(goalCoordinate1.getX()); 
             yController.setSetpoint(goalCoordinate1.getY());
-            //turnController.setSetpoint(goalCoordinate1.getRotation().getDegrees());
+            turnController.setSetpoint(goalCoordinate1.getRotation().getDegrees());
         } else {
             drivetrainSubsystem.drive();
             if (states == States.DRIVE){
@@ -201,7 +201,7 @@ public class AutonomousBasePD extends AutonomousBase{
             System.out.println("Speed rotat after: " + speedRotat);
         }
 
-        drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speedX, speedY, 0, drivetrainSubsystem.getGyroscopeRotation()));  
+        drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speedX, speedY, speedRotat, drivetrainSubsystem.getGyroscopeRotation()));  
         double errorX = (dPose.getX() - DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH);
         double errorY = (dPose.getY() - DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
         double errorRotat = (dPose.getRotation().getDegrees() - DrivetrainSubsystem.m_pose.getRotation().getDegrees());
