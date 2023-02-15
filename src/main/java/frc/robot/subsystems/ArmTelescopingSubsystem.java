@@ -20,10 +20,10 @@ public class ArmTelescopingSubsystem {
     public int _kIzone = 0;
     public double _kPeakOutput = 1.0;
 
-    double telescopeKP = 0.01;
+    double telescopeKP = 0.005;
     double telescopeKD = 0;
     double telescopeKI = 0;
-    private int deadband = 50000;
+    private int deadband = 25000;
     public Gains telescopeGains = new Gains(telescopeKP, telescopeKI, telescopeKD, _kIzone, _kPeakOutput);
 
     public static enum TelescopingStates{

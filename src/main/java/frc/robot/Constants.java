@@ -62,8 +62,8 @@ public final class Constants {
     public static final double STEER_MOTOR_MIN_VOLTAGE = 0.02; 
     public static final double STEER_MOTOR_MAX_VOLTAGE = 0.5;
     public static final double TELESCOPING_ARM_GEAR_RATIO = 36.0; // as of 2/6
-    public static final double FIRST_WHEEL_DIAMETER= 0.9; //0.75 inches - rough estimate by sara 2/2
-    public static final double SECOND_WHEEL_DIAMETER= 0.8; //0.75 inches - rough estimate by sara 2/2
+    public static final double FIRST_WHEEL_DIAMETER= 1.13;//0.9; //0.75 inches - rough estimate by sara 2/2
+    public static final double SECOND_WHEEL_DIAMETER= 0.87;// 0.8; //0.75 inches - rough estimate by sara 2/2
     public static final double SWERVE_WHEEL_DIAMETER = 4.0;
 
     public static final double TICKS_PER_REV = 2048;
