@@ -18,18 +18,20 @@ public class VisionSubsystem {
     }
 
     public void init(){
-        
     }
     
     public void periodic(){
         if(visionState == VisionStates.DETECTAPRILTAG){
-            limeLightSubsystem.setPipeline(0);
-            aprilTagSubsystem.setState(AprilTagSequence.DETECT);
-            setState(OFF);
+            limeLightSubsystem.setPipeline(0.0);
+            if(LimeLightSubsystem.tv == 0){
+                return;
+            }
+            aprilTagSubsystem.setState(AprilTagSubsystem.AprilTagSequence.DETECT);
+            setState(VisionStates.OFF);
         }
 
         if(visionState == VisionStates.DETECTTAPE){
-            limeLightSubsystem.setPipeline(1);
+            limeLightSubsystem.setPipeline(1.0);
         }
     }
 

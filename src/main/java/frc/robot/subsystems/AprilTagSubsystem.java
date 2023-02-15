@@ -75,7 +75,7 @@ public class AprilTagSubsystem {
     }
     
     private static AprilTagDetector aprilTagDetector = new AprilTagDetector();
-    private LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
+    private LimeLightSubsystem limeLightSubsystem = new LimeLightSubsystem();
     private static AutonomousBasePD autonomousBasePD = new AutonomousBasePD();
 
     public final AprilTagPoseEstimator.Config aprilTagPoseEstimatorConfig = new Config(tagSize, fx, fy, cx, cy);
@@ -132,7 +132,7 @@ public class AprilTagSubsystem {
                 }
         } else if(states == AprilTagSequence.CORRECTPOSITION){
             //addVisionToOdometry();
-            Robot.m_drivetrainSubsystem.m_pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[6]);
+            DrivetrainSubsystem.m_pose = limeLightSubsystem.networkTable.getEntry("botpose").getDoubleArray(new double[6]);
             correctPosition();
             if(autonomousBasePD.getDistanceController().atSetpoint()){
                 setState(AprilTagSequence.OFF);
@@ -149,7 +149,7 @@ public class AprilTagSubsystem {
         // }
         //Imgproc.cvtColor(source, grayMat,Imgproc.COLOR_BGR2GRAY);
         //outputStream.putFrame(source);
-        
+        if()
         detectedAprilTagsArray = aprilTagDetector.detect(grayMat);
         if(detectedAprilTagsArray.length == 0){
             return;
