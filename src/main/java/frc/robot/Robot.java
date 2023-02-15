@@ -216,7 +216,7 @@ public class Robot extends TimedRobot {
     //m_drivetrainSubsystem.m_frontRightModule.getCANCoder().configAllSettings(config);
     //System.out.println("Trajectory: " + Trajectories.uno);
     m_drivetrainSubsystem.zeroGyroscope();
-    System.out.println(Constants.offset);
+    System.out.println("OFFSET" + Constants.offset);
   }
 
   /** This function is called periodically during test mode. */
