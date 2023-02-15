@@ -3,6 +3,9 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+//import frc.robot.Robot;
+
+import edu.wpi.first.networktables.GenericEntry;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -36,7 +39,8 @@ public final class Constants {
     //public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(122.87);
 
     //swervo - might need to be changed to whats in main
-    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(279.316-90);
+    GenericEntry offset = Robot.test;
+    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(/*offset{*/279.316-270);
     public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(75.938);
     public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(320.098); 
     public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(250.183);
@@ -59,7 +63,7 @@ public final class Constants {
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 3; 
 
     public static final double DRIVE_MOTOR_MIN_VOLTAGE = 0.19;
-    public static final double DRIVE_MOTOR_MAX_VOLTAGE = 0.4;
+    public static final double DRIVE_MOTOR_MAX_VOLTAGE = 0.2;
     public static final double STEER_MOTOR_MIN_VOLTAGE = 0.01; 
     public static final double STEER_MOTOR_MAX_VOLTAGE = 0.03;
     public static final double GEAR_RATIO = 6.75;
