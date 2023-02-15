@@ -39,7 +39,7 @@ public final class Constants {
     //public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(122.87);
 
     //swervo - might need to be changed to whats in main
-    public static final double offset = Robot.test.getDouble(DRIVETRAIN_PIGEON_ID);
+    public static final double offset = Robot.test.getDouble(DRIVETRAIN_PIGEON_ID); 
     public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(/*offset*/279.316-270);
     public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(75.938);
     public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(320.098); 
