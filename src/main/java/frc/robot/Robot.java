@@ -154,7 +154,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
 
-    m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
+    //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
     System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
 
     m_autoSelected = m_chooser.getSelected();
@@ -172,7 +172,7 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
+    //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
     System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
 
   }
@@ -222,7 +222,7 @@ public class Robot extends TimedRobot {
   public void testPeriodic(){
     double d = (m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition()) % 360;
     System.out.println("LF Cancoder Position: " + d);
-    m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
+    //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
 
     //System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
     /*if (m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError() != ErrorCode.OK) {
