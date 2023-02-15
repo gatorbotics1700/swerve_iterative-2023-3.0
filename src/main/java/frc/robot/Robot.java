@@ -30,6 +30,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import frc.robot.Constants;
 //Sam's Imports Below This
 /**import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.I2C;
@@ -215,6 +216,7 @@ public class Robot extends TimedRobot {
     //m_drivetrainSubsystem.m_frontRightModule.getCANCoder().configAllSettings(config);
     //System.out.println("Trajectory: " + Trajectories.uno);
     m_drivetrainSubsystem.zeroGyroscope();
+    System.out.println(Constants.offset);
   }
 
   /** This function is called periodically during test mode. */
