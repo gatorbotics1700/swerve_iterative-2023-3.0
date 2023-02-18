@@ -29,9 +29,8 @@ import edu.wpi.first.networktables.NetworkTable.*;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -232,7 +231,8 @@ public class Robot extends TimedRobot {
 //list of widgets: https://first.wpi.edu/wpilib/allwpilib/docs/release/java/edu/wpi/first/wpilibj/shuffleboard/BuiltInWidgets.html#kPIDCommand
 
     ShuffleboardTab pidTab = Shuffleboard.getTab("PID Controllers");//creates a new tab for pid controllers
-   /*
+   pidTab.add("Pitch PID", DrivetrainSubsystem.pitchController).withWidget(BuiltInWidgets.kPIDCommand).withSize(2, 3);
+    /*
     //following code via https://docs.wpilib.org/en/stable/docs/software/dashboards/shuffleboard/layouts-with-code/organizing-widgets.html
     ShuffleboardLayout turnPID = pidTab.getLayout("Turn PID", BuiltInLayouts.kPIDCommand).withSize(2, 2);
     turnPID.add(new ElevatorDownCommand());
@@ -241,8 +241,6 @@ public class Robot extends TimedRobot {
     drivePID.add(new ElevatorDownCommand());//what should we put here instead of the commands? i think this is where we should write the info and ask user for input?
     drivePID.add(new ElevatorUpCommand());
 */
-    ShuffleboardLayout pitchPID = pidTab.getLayout("Pitch PID", BuiltInLayouts.kPIDCommand).withSize(2, 2);
-    pitchPID.add(DrivetrainSubsystem.pitchController);
 /*
     ShuffleboardLayout veloPID = pidTab.getLayout("Velocity PID", BuiltInLayouts.kPIDCommand).withSize(2, 2);//change this layout to support input
     pitchPID.add(new ElevatorDownCommand());//what should we put here instead of the commands? i think this is where we should write the info and ask user for input?
