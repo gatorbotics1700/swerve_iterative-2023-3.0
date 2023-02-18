@@ -227,26 +227,24 @@ public class Robot extends TimedRobot {
     System.out.println("m_pose: " + m_drivetrainSubsystem.m_pose);
     autonomousBasePD.init();
 
-    ShuffleboardTab pidTab = Shuffleboard.getTab("PID Controllers");//creates a new tab for pid controllers
-  /* 
-    //following code via https://docs.wpilib.org/en/stable/docs/software/dashboards/shuffleboard/layouts-with-code/organizing-widgets.html
-    ShuffleboardLayout turnPID = pidTab.getLayout("Turn PID", BuiltInLayouts.kList)//change this layout to support input
-    .withSize(2, 2);
-    turnPID.add(new ElevatorDownCommand());//what should we put here instead of the commands? i think this is where we should write the info and ask user for input?
-    turnPID.add(new ElevatorUpCommand());
+//helpful shuffleboard documentation: https://first.wpi.edu/wpilib/allwpilib/docs/release/java/edu/wpi/first/wpilibj/shuffleboard/package-summary.html
+//info about widgets: https://first.wpi.edu/wpilib/allwpilib/docs/release/java/edu/wpi/first/wpilibj/shuffleboard/ComplexWidget.html
+//list of widgets: https://first.wpi.edu/wpilib/allwpilib/docs/release/java/edu/wpi/first/wpilibj/shuffleboard/BuiltInWidgets.html#kPIDCommand
 
-    ShuffleboardLayout drivePID = pidTab.getLayout("Drive PID", BuiltInLayouts.kList)//change this layout to support input
-    .withSize(2, 2);
+    ShuffleboardTab pidTab = Shuffleboard.getTab("PID Controllers");//creates a new tab for pid controllers
+   /*
+    //following code via https://docs.wpilib.org/en/stable/docs/software/dashboards/shuffleboard/layouts-with-code/organizing-widgets.html
+    ShuffleboardLayout turnPID = pidTab.getLayout("Turn PID", BuiltInLayouts.kPIDCommand).withSize(2, 2);
+    turnPID.add(new ElevatorDownCommand());
+
+    ShuffleboardLayout drivePID = pidTab.getLayout("Drive PID", BuiltInLayouts.kPIDCommand).withSize(2, 2);
     drivePID.add(new ElevatorDownCommand());//what should we put here instead of the commands? i think this is where we should write the info and ask user for input?
     drivePID.add(new ElevatorUpCommand());
-
-    ShuffleboardLayout pitchPID = pidTab.getLayout("Pitch PID", BuiltInLayouts.kList)//change this layout to support input
-    .withSize(2, 2);riodic
-    pitchPID.add(new ElevatorDownCommand());//what should we put here instead of the commands? i think this is where we should write the info and ask user for input?
-    pitchPID.add(new ElevatorUpCommand());
-
-    ShuffleboardLayout veloPID = pidTab.getLayout("Velocity PID", BuiltInLayouts.kList)//change this layout to support input
-    .withSize(2, 2);
+*/
+    ShuffleboardLayout pitchPID = pidTab.getLayout("Pitch PID", BuiltInLayouts.kPIDCommand).withSize(2, 2);
+    pitchPID.add(DrivetrainSubsystem.pitchController);
+/*
+    ShuffleboardLayout veloPID = pidTab.getLayout("Velocity PID", BuiltInLayouts.kPIDCommand).withSize(2, 2);//change this layout to support input
     pitchPID.add(new ElevatorDownCommand());//what should we put here instead of the commands? i think this is where we should write the info and ask user for input?
     pitchPID.add(new ElevatorUpCommand());
 

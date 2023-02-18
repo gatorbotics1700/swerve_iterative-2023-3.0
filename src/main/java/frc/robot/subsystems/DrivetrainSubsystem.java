@@ -97,7 +97,7 @@ public class DrivetrainSubsystem {
     public static double veloKP = 0.25;
     public static double veloKI = 0.3; 
     public static double veloKD = 0.35;
-    private PIDController pitchController = new PIDController(pitchKP, pitchKI, pitchKD);
+    public static PIDController pitchController = new PIDController(pitchKP, pitchKI, pitchKD);
     private PIDController velocityController = new PIDController(veloKP, veloKI, veloKD);
 
   public static SwerveDriveOdometry m_odometry; 
