@@ -78,7 +78,8 @@ public class Robot extends TimedRobot {
   
   //private AutonomousBasePD HDplaceTwoEngageR = new AutonomousBasePD(new Pose2d(595.614, 20.19, new Rotation2d(0)), new Pose2d(372.684, 36.19, new Rotation2d(0)), new Pose2d(394.033, 64.004, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)), 0);
    //elise added a goal angle to make the code happy
-   private AutonomousBasePD HDplaceTwoEngageR = new AutonomousBasePD(new Pose2d(700, 20.19, new Rotation2d(0)), new Pose2d(372.684, 36.19, new Rotation2d(0)), new Pose2d(394.033, 64.004, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)), 0);
+  //  private AutonomousBasePD HDplaceTwoEngageR = new AutonomousBasePD(new Pose2d(595.614, 20.19, new Rotation2d(0)), new Pose2d(372.684, 36.19, new Rotation2d(0)), new Pose2d(394.033, 64.004, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)), 0);
+  private AutonomousBasePD HDplaceTwoEngageR = new AutonomousBasePD(new Pose2d(15.1285956, 0.512826, new Rotation2d(0)), new Pose2d(9.4661736, 0.919226, new Rotation2d(0)), new Pose2d(10.0084382, 1.6257016, new Rotation2d(0)), new Pose2d(12.5685296, 2.1175472, new Rotation2d(0)), new Pose2d(12.5685296, 2.1175472, new Rotation2d(0)), new Pose2d(12.5685296, 2.1175472, new Rotation2d(0)), new Pose2d(12.5685296, 2.1175472, new Rotation2d(0)), 0);
 
   // private AutonomousBasePD HBLeaveR = new AutonomousBasePD(new Pose2d(595.614, 200.046, new Rotation2d(0)), new Pose2d(431.768, 200.046, new Rotation2d(0)), new Pose2d(431.768, 200.046, new Rotation2d(0)), new Pose2d(431.768, 200.046, new Rotation2d(0)), new Pose2d(431.768, 200.046, new Rotation2d(0)), new Pose2d(431.768, 200.046, new Rotation2d(0)), new Pose2d(431.768, 200.046, new Rotation2d(0)));
   // private AutonomousBasePD HDLeaveR = new AutonomousBasePD(new Pose2d(595.614, 20.19, new Rotation2d(0)), new Pose2d(431.768, 20.19, new Rotation2d(0)), new Pose2d(431.768, 20.19, new Rotation2d(0)), new Pose2d(431.768, 20.19, new Rotation2d(0)), new Pose2d(431.768, 20.19, new Rotation2d(0)), new Pose2d(431.768, 20.19, new Rotation2d(0)), new Pose2d(431.768, 20.19, new Rotation2d(0)));
@@ -141,8 +142,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH);
-    SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
+    SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX());
+    SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY());
     
     m_field.setRobotPose(DrivetrainSubsystem.m_odometry.getEstimatedPosition());
     
@@ -163,7 +164,7 @@ public class Robot extends TimedRobot {
 
     //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
     System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
-    System.out.println("current pose: " + DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + " , " + DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH );
+    System.out.println("current pose: " + DrivetrainSubsystem.m_pose.getX() + " , " + DrivetrainSubsystem.m_pose.getY());
     m_autoSelected = m_chooser.getSelected();
     m_autoSelected.init();
   }
@@ -228,7 +229,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic(){
-    double d = (m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition()) % 360;
+    double d = (m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition()/Constants.TICKS_PER_METER) % 360;
     System.out.println("LF Cancoder Position: " + d);
     //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
 
@@ -241,7 +242,8 @@ public class Robot extends TimedRobot {
     /*if(m_drivetrainSubsystem.getGyroscopeRotation().getDegrees() <= 370){
       m_drivetrainSubsystem.setSpeed(new ChassisSpeeds(0, 0.2, 0));
     }*/
-    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.0, 0.2, 0.0, m_drivetrainSubsystem.getGyroscopeRotation()));
+    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0., 0.2, 0.0, m_drivetrainSubsystem.getGyroscopeRotation()));
+    
     //m_autoSelected.turnDesiredAngle(180);
     m_drivetrainSubsystem.drive();
     // m_drivetrainSubsystem.m_frontLeftModule.set(0.4, t);
