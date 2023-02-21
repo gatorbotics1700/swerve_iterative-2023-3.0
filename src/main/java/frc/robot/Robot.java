@@ -56,9 +56,10 @@ public class Robot extends TimedRobot {
   private final Field2d m_field = new Field2d();
   double t= 0.0;
   ChassisSpeeds m_ChassisSpeeds;
+  double mpi = Constants.METERS_PER_INCH;
 
-  // whole field: 651.683 
-  // center : 325.8415
+  // whole field: 651.683 (inches)
+  // center : 325.8415 (inches)
   // private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
   private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
   private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(20, 40, new Rotation2d(Math.toRadians(0))), new Pose2d(40, 0, new Rotation2d(0)), new Pose2d(0, 30, new Rotation2d(0)), new Pose2d(40, 30, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(20, 20, new Rotation2d(0)), 180.0); 
@@ -76,11 +77,8 @@ public class Robot extends TimedRobot {
   // // red alliance  
   // // half the field (325.8415) - blue x value + half the field (325.8415) = red x value
   
-  //private AutonomousBasePD HDplaceTwoEngageR = new AutonomousBasePD(new Pose2d(595.614, 20.19, new Rotation2d(0)), new Pose2d(372.684, 36.19, new Rotation2d(0)), new Pose2d(394.033, 64.004, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)), 0);
+  private AutonomousBasePD HDplaceTwoEngageR = new AutonomousBasePD(new Pose2d(595.614 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(372.684 * mpi, 36.19 * mpi, new Rotation2d(0)), new Pose2d(394.033 * mpi, 64.004 * mpi, new Rotation2d(0)), new Pose2d(494.824 * mpi, 83.368 * mpi, new Rotation2d(0)), new Pose2d(494.824 * mpi, 83.368 * mpi, new Rotation2d(0)), new Pose2d(494.824 * mpi, 83.368 * mpi, new Rotation2d(0)), new Pose2d(494.824 * mpi, 83.368 * mpi, new Rotation2d(0)), 0);
    //elise added a goal angle to make the code happy
-  //  private AutonomousBasePD HDplaceTwoEngageR = new AutonomousBasePD(new Pose2d(595.614, 20.19, new Rotation2d(0)), new Pose2d(372.684, 36.19, new Rotation2d(0)), new Pose2d(394.033, 64.004, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)), 0);
-  private AutonomousBasePD HDplaceTwoEngageR = new AutonomousBasePD(new Pose2d(15.1285956, 0.512826, new Rotation2d(0)), new Pose2d(9.4661736, 0.919226, new Rotation2d(0)), new Pose2d(10.0084382, 1.6257016, new Rotation2d(0)), new Pose2d(12.5685296, 2.1175472, new Rotation2d(0)), new Pose2d(12.5685296, 2.1175472, new Rotation2d(0)), new Pose2d(12.5685296, 2.1175472, new Rotation2d(0)), new Pose2d(12.5685296, 2.1175472, new Rotation2d(0)), 0);
-
   // private AutonomousBasePD HBLeaveR = new AutonomousBasePD(new Pose2d(595.614, 200.046, new Rotation2d(0)), new Pose2d(431.768, 200.046, new Rotation2d(0)), new Pose2d(431.768, 200.046, new Rotation2d(0)), new Pose2d(431.768, 200.046, new Rotation2d(0)), new Pose2d(431.768, 200.046, new Rotation2d(0)), new Pose2d(431.768, 200.046, new Rotation2d(0)), new Pose2d(431.768, 200.046, new Rotation2d(0)));
   // private AutonomousBasePD HDLeaveR = new AutonomousBasePD(new Pose2d(595.614, 20.19, new Rotation2d(0)), new Pose2d(431.768, 20.19, new Rotation2d(0)), new Pose2d(431.768, 20.19, new Rotation2d(0)), new Pose2d(431.768, 20.19, new Rotation2d(0)), new Pose2d(431.768, 20.19, new Rotation2d(0)), new Pose2d(431.768, 20.19, new Rotation2d(0)), new Pose2d(431.768, 20.19, new Rotation2d(0)));
   // private AutonomousBasePD HDThreeScoreR = new AutonomousBasePD(new Pose2d(595.614, 20.19, new Rotation2d(0)), new Pose2d(372.684, 37.193, new Rotation2d(0)), new Pose2d(595.461, 43.068, new Rotation2d(0)), new Pose2d(454.199,45.934, new Rotation2d(0)), new Pose2d(372.606, 85.622, new Rotation2d(0)), new Pose2d(454.199,40.000, new Rotation2d(0)), new Pose2d(595.529,66.117, new Rotation2d(0)));
