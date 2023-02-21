@@ -212,7 +212,7 @@ public class DrivetrainSubsystem {
                 new SwerveModulePosition(m_backLeftModule.getPosition()/Constants.TICKS_PER_METER - tareLBEncoder, new Rotation2d(m_backLeftModule.getSteerAngle()))};
         m_pose = start;
         System.out.println("position array: " + positionArray.toString());
-        System.out.println("m_pose: " + m_pose.getX() + ", " + m_pose.getY() + ", " + m_pose.getRotation().getDegrees());
+                System.out.println("m_pose: " + m_pose.getX() + ", " + m_pose.getY() + ", " + m_pose.getRotation().getDegrees());
         m_odometry.resetPosition(getGyroscopeRotation(), positionArray, m_pose);
         System.out.println("#resetodometry! new pose: " + m_pose.getX() + " y: " + m_pose.getY());
         m_pose = m_odometry.update(getGyroscopeRotation(), positionArray);
@@ -288,7 +288,7 @@ public class DrivetrainSubsystem {
         //System.out.println("inputs for the update: " + getGyroscopeRotation() + m_frontLeftModule.getSwerveModulePosition().distanceMeters + m_frontRightModule.getSwerveModulePosition().distanceMeters + m_backLeftModule.getSwerveModulePosition().distanceMeters + m_backRightModule.getSwerveModulePosition().distanceMeters);
         m_pose = m_odometry.update(getGyroscopeRotation(),array); 
     
-        System.out.println("new pose after update: " + m_pose.getX() + " and y: " + m_pose.getY());
+        System.out.println("new pose after update (in inches): " + m_pose.getX()/Constants.METERS_PER_INCH + " and y: " + m_pose.getY()/Constants.METERS_PER_INCH);
     
         //array of states filled with the speed and angle for each module (made from linear and angular motion for the whole robot) 
         SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);

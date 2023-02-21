@@ -62,7 +62,7 @@ public class Robot extends TimedRobot {
   // center : 325.8415 (inches)
   // private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
   private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
-  private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(20, 40, new Rotation2d(Math.toRadians(0))), new Pose2d(40, 0, new Rotation2d(0)), new Pose2d(0, 30, new Rotation2d(0)), new Pose2d(40, 30, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(20, 20, new Rotation2d(0)), 180.0); 
+  private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(20 * mpi, 40 *mpi, new Rotation2d(Math.toRadians(0))), new Pose2d(40 * mpi, 0 * mpi, new Rotation2d(0)), new Pose2d(0 * mpi, 30 * mpi, new Rotation2d(0)), new Pose2d(40 * mpi, 30 *mpi, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(20 * mpi, 20 * mpi, new Rotation2d(0)), 180.0); 
   
   // // blue alliance 
   // private AutonomousBasePD HDplaceTwoEngageB = new AutonomousBasePD(new Pose2d(56.069, 20.19, new Rotation2d(0)), new Pose2d(278.999, 36.19, new Rotation2d(0)), new Pose2d(257.650, 64.004, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)));
@@ -84,7 +84,7 @@ public class Robot extends TimedRobot {
   // private AutonomousBasePD HDThreeScoreR = new AutonomousBasePD(new Pose2d(595.614, 20.19, new Rotation2d(0)), new Pose2d(372.684, 37.193, new Rotation2d(0)), new Pose2d(595.461, 43.068, new Rotation2d(0)), new Pose2d(454.199,45.934, new Rotation2d(0)), new Pose2d(372.606, 85.622, new Rotation2d(0)), new Pose2d(454.199,40.000, new Rotation2d(0)), new Pose2d(595.529,66.117, new Rotation2d(0)));
   // private AutonomousBasePD HBThreeScoreR = new AutonomousBasePD(new Pose2d(595.614, 200.046, new Rotation2d(0)), new Pose2d(372.684, 180.683, new Rotation2d(0)), new Pose2d(595.614, 174.725, new Rotation2d(0)), new Pose2d(444.677, 174.725, new Rotation2d(0)), new Pose2d(373.677, 133.515, new Rotation2d(0)), new Pose2d(451.131, 185.151, new Rotation2d(0)), new Pose2d(594.621, 154.368, new Rotation2d(0)));
   // private AutonomousBasePD engageChargeR = new AutonomousBasePD(new Pose2d(553.924, 108.015, new Rotation2d(0)), new Pose2d(553.924, 108.015, new Rotation2d(0)), new Pose2d(553.924, 108.015, new Rotation2d(0)), new Pose2d(553.924, 108.015, new Rotation2d(0)), new Pose2d(553.924, 108.015, new Rotation2d(0)), new Pose2d(553.924, 108.015, new Rotation2d(0)), new Pose2d(553.924, 108.015, new Rotation2d(0)));
-  private AutonomousBasePD CurrentPath = HDplaceTwoEngageR;
+  private AutonomousBasePD CurrentPath = HDplaceTwoEngageR; //a placeholder variable for the current path that will be executed in Autonomous
 
  public static ShuffleboardTab tab = DrivetrainSubsystem.tab;
     public static GenericEntry test =
@@ -240,7 +240,7 @@ public class Robot extends TimedRobot {
     /*if(m_drivetrainSubsystem.getGyroscopeRotation().getDegrees() <= 370){
       m_drivetrainSubsystem.setSpeed(new ChassisSpeeds(0, 0.2, 0));
     }*/
-    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0., 0.2, 0.0, m_drivetrainSubsystem.getGyroscopeRotation()));
+    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.0, 0.0, m_drivetrainSubsystem.getGyroscopeRotation()));
     
     //m_autoSelected.turnDesiredAngle(180);
     m_drivetrainSubsystem.drive();
