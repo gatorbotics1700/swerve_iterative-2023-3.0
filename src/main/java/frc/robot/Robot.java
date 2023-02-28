@@ -121,14 +121,14 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    pneumaticIntakeSubsystem.init();
+    //pneumaticIntakeSubsystem.init();
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
      //m_drivetrainSubsystem.driveTeleop();
-     pneumaticIntakeSubsystem.periodic();
+     //pneumaticIntakeSubsystem.periodic();
      //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
     
   }
@@ -167,12 +167,20 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     //m_autoSelected.init();
+    pneumaticIntakeSubsystem.init();
+    //PneumaticIntakeSubsystem.compressor.enableDigital();
+
+    //CompressorTesting.init();
 
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
+    //pneumaticIntakeSubsystem.getPSI();
+    //System.out.println("enabled: " + PneumaticIntakeSubsystem.compressor.isEnabled());
+    //System.out.println("pressure switch value: " + PneumaticIntakeSubsystem.compressor.getPressureSwitchValue());
+    //System.out.println(PneumaticIntakeSubsystem.solenoidOne.get());
     // m_drivetrainSubsystem.setSpeed(
     //         ChassisSpeeds.fromFieldRelativeSpeeds(1, 0, 
     //         0, 
@@ -181,14 +189,14 @@ public class Robot extends TimedRobot {
     //     m_drivetrainSubsystem.drive();
 
     // System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
-    if(OI.m_controller.getAButton()){
+    /*if(OI.m_controller.getAButton()){
       System.out.println("we are running away");
       intakeSubsystem.runMotorsForward();
       //intakeSubsystem.runMotorsBackward(); // sara you can choose which one depending on if the motors are inverted correctly in init() - janet :)
     }
     if(OI.m_controller.getXButton()){
       IntakeSubsystem.intakeMotor.set(ControlMode.PercentOutput, 0.0);
-    }
+    }*/
   }
 
   /** This function is called once when the robot is first started up. */
