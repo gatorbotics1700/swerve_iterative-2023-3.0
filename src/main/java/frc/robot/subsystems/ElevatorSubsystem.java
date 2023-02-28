@@ -25,13 +25,13 @@ public class ElevatorSubsystem {
     public static TalonFX elevatorMotor = new TalonFX(Constants.ELEVATOR_CAN_ID);
     public static ElevatorStates elevatorState = ElevatorStates.LOW_ELEVATOR_HEIGHT;
 
-    DigitalInput top_limit_switch = new DigitalInput(Constants.topLimitSwitchPort);
-    DigitalInput bottom_limit_switch = new DigitalInput(Constants.bottomLimitSwitchPort);
+    // DigitalInput top_limit_switch = new DigitalInput(Constants.topLimitSwitchPort);
+    // DigitalInput bottom_limit_switch = new DigitalInput(Constants.bottomLimitSwitchPort);
     
     public Gains elevatorGains = new Gains(_kP, _kI, _kD, _kIzone, _kPeakOutput);
 
     public static enum ElevatorStates{
-        STOP, //goes with limit switch
+        ZERO, 
         LOW_ELEVATOR_HEIGHT,
         SHELF_ELEVATOR_HEIGHT,
         MID_ELEVATOR_HEIGHT,
@@ -40,7 +40,7 @@ public class ElevatorSubsystem {
 
     public void init(){
         System.out.println("elevator init!!!!");
-        elevatorMotor.setInverted(true);
+        elevatorMotor.setInverted(false); // looking from the front of the robot, clockwise is false (:
         elevatorMotor.setNeutralMode(NeutralMode.Brake);
 
         //configuring deadband
@@ -53,10 +53,11 @@ public class ElevatorSubsystem {
 
     public void periodic(){//still need to scale down the values or figure out why it is overshooting
         System.out.println("elevator periodic!!!!!!!");
-        if (elevatorState == ElevatorStates.STOP){ //emergency stop
-            elevatorMotor.set(ControlMode.PercentOutput, 0);
+        if (elevatorState == ElevatorStates.ZERO){ //emergency stop
+            elevatorMotor.set(ControlMode.Position, 0);
         } else if (elevatorState == ElevatorStates.LOW_ELEVATOR_HEIGHT){
-            elevatorMotor.set(ControlMode.Position, 0 * Constants.TICKS_PER_INCH); //official 2/13
+            System.out.println("low elevator height");
+            elevatorMotor.set(ControlMode.Position, 5 * Constants.TICKS_PER_INCH); //official 2/13
         } else if (elevatorState == ElevatorStates.SHELF_ELEVATOR_HEIGHT) {
             elevatorMotor.set(ControlMode.Position, 39 * Constants.TICKS_PER_INCH); //oficial 2/13
         } else if (elevatorState == ElevatorStates.MID_ELEVATOR_HEIGHT){
@@ -65,10 +66,10 @@ public class ElevatorSubsystem {
             elevatorMotor.set(ControlMode.Position, 48 * Constants.TICKS_PER_INCH); //change value once we know robot dimensions
         }
 
-        if(top_limit_switch.get() || bottom_limit_switch.get()){
-            setState(ElevatorStates.STOP);
-            System.out.println("Top/bottom limit switch triggered");
-        }
+        // if(top_limit_switch.get() || bottom_limit_switch.get()){
+        //     setState(ElevatorStates.STOP);
+        //     System.out.println("Top/bottom limit switch triggered");
+        // }
     }
 
     public void setState(ElevatorStates newElevatorState){

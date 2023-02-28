@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
 import frc.robot.Constants;
-
+import frc.robot.subsystems.ElevatorSubsystem.ElevatorStates;
 import com.fasterxml.jackson.core.sym.Name;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -36,19 +36,16 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
  * project.
  */
 
-public class Robot extends TimedRobot {
+/*public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  private final AutonomousBase autonomousBasePD = new AutonomousBasePD(new Pose2d(0*Constants.TICKS_PER_INCH, -20*Constants.TICKS_PER_INCH, new Rotation2d(0)), 0.0, new Pose2d(), 0.0);
-  private static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
+  //private final AutonomousBase autonomousBasePD = new AutonomousBasePD(new Pose2d(0*Constants.TICKS_PER_INCH, -20*Constants.TICKS_PER_INCH, new Rotation2d(0)), 0.0, new Pose2d(), 0.0);
+  public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
 
-  public ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
-
-  public static DrivetrainSubsystem getDrivetrainSubsystem(){
-    return m_drivetrainSubsystem;
-  }
+ 
+*/
 
 //private AutonomousBasePD mScore = new AutonomousBasePD(new Translation2d(222.037, 0), new Translation2d(135.091, -41.307), new Translation2d(0, -44.163), new Translation2d(222.894, -50.377), new Translation2d(0, -65.388), new Translation2d(0, -65.388));
 
@@ -63,8 +60,8 @@ public class Robot extends TimedRobot {
   private AutonomousBasePD placeTwoEngage = new AutonomousBasePD(new Pose2d(223.014, 16.468, new Rotation2d(0)), new Pose2d(0, 22.683, new Rotation2d(0)), new Pose2d(135.615, 25.539, new Rotation2d(0)), new Pose2d(222.191, 64.230, new Rotation2d(0)), new Pose2d(97.711, 64.230, new Rotation2d(0)), new Pose2d(97.711, 64.230, new Rotation2d(0)), new Pose2d(97.711, 64.230, new Rotation2d(0)));
   private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
   private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)));
-  private AutonomousBaseMP motionProfiling = new AutonomousBaseMP(Trajectories.uno, Trajectories.dos, Trajectories.tres);
-  
+  public ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+
   //above coordinates didn't work
   private AutonomousBasePD leave = new AutonomousBasePD(new Pose2d(56.069, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)));
   private AutonomousBasePD placeTwoEngageReal = new AutonomousBasePD(new Pose2d(56.069, 17.332, new Rotation2d(0)), new Pose2d(278.999, 37.193, new Rotation2d(0)), new Pose2d(257.650, 64.004, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)));
@@ -72,7 +69,6 @@ public class Robot extends TimedRobot {
   //these paths score 3 balls without touching the charge station, requires 7 Pose2ds!
   private AutonomousBasePD threeUnderChargeStation = new AutonomousBasePD(new Pose2d(56.069, 17.332, new Rotation2d(0)), new Pose2d(278.999, 37.193, new Rotation2d(0)), new Pose2d(56.222, 43.068, new Rotation2d(0)), new Pose2d(197.484,45.934, new Rotation2d(0)), new Pose2d(279.077, 85.622, new Rotation2d(0)), new Pose2d(197.484,40.000, new Rotation2d(0)), new Pose2d(56.154,66.117, new Rotation2d(0)));
   private AutonomousBasePD threeAboveChargeStation = new AutonomousBasePD(new Pose2d(56.069, 200.046, new Rotation2d(0)), new Pose2d(278.999, 180.683, new Rotation2d(0)), new Pose2d(56.069, 174.725, new Rotation2d(0)), new Pose2d(207.006, 174.725, new Rotation2d(0)), new Pose2d(278.006, 133.515, new Rotation2d(0)), new Pose2d(200.552, 185.151, new Rotation2d(0)), new Pose2d(57.062, 154.368, new Rotation2d(0)));
-
   
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   private final Field2d m_field = new Field2d();
@@ -82,6 +78,9 @@ public class Robot extends TimedRobot {
   public static GenericEntry kI; 
   public static GenericEntry kD; 
 
+  public static DrivetrainSubsystem getDrivetrainSubsystem(){
+    return m_drivetrainSubsystem;
+  }
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -90,25 +89,23 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() { //creates options for different autopaths, names are placeholders
  
-    System.out.println("#I'm Awake");
-    m_chooser.setDefaultOption("Default Auto", testPath);
-    m_chooser.addOption("My Auto 1", noGo);
-    m_chooser.addOption("My Auto 2",placeNLeave);
-    m_chooser.addOption("My Auto 3", antiCharge);
-    m_chooser.addOption("My Auto 4", antiChargeOpposite);
+    // System.out.println("#I'm Awake");
+    // m_chooser.setDefaultOption("Default Auto", testPath);
+    // m_chooser.addOption("My Auto 1", noGo);
+    // m_chooser.addOption("My Auto 2",placeNLeave);
+    // m_chooser.addOption("My Auto 3", antiCharge);
+    // m_chooser.addOption("My Auto 4", antiChargeOpposite);
     //m_chooser.addOption(name: "My Auto 5", engageCharge);
-   // m_chooser.addOption(name: "My Auto 6",placeTwoEngage);
-    m_chooser.addOption("My Auto timed", timedPath);
-    m_chooser.addOption("Motion profiling path", motionProfiling);
+    //m_chooser.addOption(name: "My Auto 6",placeTwoEngage);
+    //m_chooser.addOption("My Auto timed", timedPath);
+    //m_chooser.addOption("Motion profiling path", motionProfiling);
 
     SmartDashboard.putData("Auto choices", m_chooser);
 
-    ShuffleboardTab tab = DrivetrainSubsystem.tab;
-     kP = tab.add("Auto kP", 0.1).getEntry(); 
-     kI = tab.add("Auto kI", 0.0).getEntry();
-     kD = tab.add("Auto kD", 0.0).getEntry();
-   
-
+    // ShuffleboardTab tab = DrivetrainSubsystem.tab;
+    //  kP = tab.add("Auto kP", 0.1).getEntry(); 
+    //  kI = tab.add("Auto kI", 0.0).getEntry();
+    //  kD = tab.add("Auto kD", 0.0).getEntry();
   }
 
   /**
@@ -153,7 +150,7 @@ public class Robot extends TimedRobot {
     
 
     //autonomousBasePD.periodic();
-    elevatorSubsystem.setState(ElevatorStates.LOW_ELEVATOR_HEIGHT);
+    elevatorSubsystem.setState(ElevatorStates.SHELF_ELEVATOR_HEIGHT);
     elevatorSubsystem.periodic();
     //m_drivetrainSubsystem.drive();
   }
@@ -205,9 +202,9 @@ public class Robot extends TimedRobot {
     elevatorSubsystem.periodic();
 
     /*intial test!*/
-    m_drivetrainSubsystem.setSpeed(new ChassisSpeeds(-0.2, -0.2, 0));
+   // m_drivetrainSubsystem.setSpeed(new ChassisSpeeds(-0.2, -0.2, 0));
     
-    m_drivetrainSubsystem.drive();
+   // m_drivetrainSubsystem.drive();
   }
 
   /** This function is called once when the robot is first started up. */
