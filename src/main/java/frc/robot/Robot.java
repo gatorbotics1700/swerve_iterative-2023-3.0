@@ -30,6 +30,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import frc.robot.Constants;
 //Sam's Imports Below This
 /**import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.I2C;
@@ -55,34 +56,39 @@ public class Robot extends TimedRobot {
   private final Field2d m_field = new Field2d();
   double t= 0.0;
   ChassisSpeeds m_ChassisSpeeds;
+  double mpi = Constants.METERS_PER_INCH;
 
-  // whole field: 651.683 
-  // center : 325.8415
+  // whole field: 651.683 (inches)
+  // center : 325.8415 (inches)
   // private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
   private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
-  private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(20, 40, new Rotation2d(Math.toRadians(180))), new Pose2d(40, 0, new Rotation2d(0)), new Pose2d(0, 30, new Rotation2d(0)), new Pose2d(40, 30, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(20, 20, new Rotation2d(0)), 180.0); 
+  private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(20 * mpi, 40 * mpi, new Rotation2d(Math.toRadians(0))), new Pose2d(40 * mpi, 0, new Rotation2d(0)), new Pose2d(0, 30 * mpi, new Rotation2d(0)), new Pose2d(40 * mpi, 30 * mpi, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(20 * mpi, 20 * mpi, new Rotation2d(0)), 180.0); 
   
   // // blue alliance 
-  // private AutonomousBasePD HDplaceTwoEngageB = new AutonomousBasePD(new Pose2d(56.069, 20.19, new Rotation2d(0)), new Pose2d(278.999, 36.19, new Rotation2d(0)), new Pose2d(257.650, 64.004, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)));
-  // private AutonomousBasePD HBLeaveB = new AutonomousBasePD(new Pose2d(56.069, 200.046, new Rotation2d(0)), new Pose2d(219.915, 200.046, new Rotation2d(0)), new Pose2d(219.915, 200.046, new Rotation2d(0)), new Pose2d(219.915, 200.046, new Rotation2d(0)), new Pose2d(219.915, 200.046, new Rotation2d(0)), new Pose2d(219.915, 200.046, new Rotation2d(0)), new Pose2d(219.915, 200.046, new Rotation2d(0)));
-  // private AutonomousBasePD HDLeaveB = new AutonomousBasePD(new Pose2d(56.069, 20.19, new Rotation2d(0)), new Pose2d(219.915, 20.19, new Rotation2d(0)), new Pose2d(219.915, 20.19, new Rotation2d(0)), new Pose2d(219.915, 20.19, new Rotation2d(0)), new Pose2d(219.915, 20.19, new Rotation2d(0)), new Pose2d(219.915, 20.19, new Rotation2d(0)), new Pose2d(219.915, 20.19, new Rotation2d(0)));
-  // private AutonomousBasePD HDThreeScoreB = new AutonomousBasePD(new Pose2d(56.069, 20.19, new Rotation2d(0)), new Pose2d(278.999, 37.193, new Rotation2d(0)), new Pose2d(56.222, 43.068, new Rotation2d(0)), new Pose2d(197.484,45.934, new Rotation2d(0)), new Pose2d(279.077, 85.622, new Rotation2d(0)), new Pose2d(197.484,40.000, new Rotation2d(0)), new Pose2d(56.154,66.117, new Rotation2d(0)));
-  // private AutonomousBasePD HBThreeScoreB = new AutonomousBasePD(new Pose2d(56.069, 200.046, new Rotation2d(0)), new Pose2d(278.999, 180.683, new Rotation2d(0)), new Pose2d(56.069, 174.725, new Rotation2d(0)), new Pose2d(207.006, 174.725, new Rotation2d(0)), new Pose2d(278.006, 133.515, new Rotation2d(0)), new Pose2d(200.552, 185.151, new Rotation2d(0)), new Pose2d(57.062, 154.368, new Rotation2d(0)));
-  // private AutonomousBasePD engageChargeB = new AutonomousBasePD(new Pose2d(56.069, 108.015, new Rotation2d(0)), new Pose2d(152.812, 108.015, new Rotation2d(0)), new Pose2d(152.812, 108.015, new Rotation2d(0)), new Pose2d(152.812, 108.015, new Rotation2d(0)), new Pose2d(152.812, 108.015, new Rotation2d(0)), new Pose2d(152.812, 108.015, new Rotation2d(0)), new Pose2d(152.812, 108.015, new Rotation2d(0)));
-
+  // private AutonomousBasePD HDplaceTwoEngageB = new AutonomousBasePD(new Pose2d(56.069 * mpi, 20.19 * mpi,  new Rotation2d(0)), new Pose2d(278.999 * mpi, 36.19 * mpi, new Rotation2d(0)), new Pose2d(257.650 * mpi, 64.004 * mpi, new Rotation2d(0)), new Pose2d(156.859 * mpi, 83.368 * mpi, new Rotation2d(0)), new Pose2d(156.859 * mpi, 83.368 * mpi, new Rotation2d(0)), new Pose2d(156.859 * mpi, 83.368 * mpi, new Rotation2d(0)), new Pose2d(156.859 * mpi, 83.368 * mpi, new Rotation2d(0)));
+  // private AutonomousBasePD HBLeaveB = new AutonomousBasePD(new Pose2d(56.069 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(219.915 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(219.915 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(219.915 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(219.915 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(219.915 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(219.915 * mpi, 200.046 * mpi, new Rotation2d(0)));
+  // private AutonomousBasePD HDLeaveB = new AutonomousBasePD(new Pose2d(56.069 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(219.91 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(219.915 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(219.915 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(219.915 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(219.915 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(219.915 * mpi, 20.19 * mpi, new Rotation2d(0)));
+  // private AutonomousBasePD HDThreeScoreB = new AutonomousBasePD(new Pose2d(56.069 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(278.999 * mpi, 37.193 * mpi, new Rotation2d(0)), new Pose2d(56.222 * mpi, 43.068 * mpi, new Rotation2d(0)), new Pose2d(197.484 * mpi,45.934 * mpi, new Rotation2d(0)), new Pose2d(279.077 * mpi, 85.622 * mpi, new Rotation2d(0)), new Pose2d(197.484 * mpi,40.000 * mpi, new Rotation2d(0)), new Pose2d(56.154 * mpi,66.117 * mpi, new Rotation2d(0)));
+  // private AutonomousBasePD HBThreeScoreB = new AutonomousBasePD(new Pose2d(56.069 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(278.999 * mpi, 180.683 * mpi, new Rotation2d(0)), new Pose2d(56.069 * mpi, 174.725 * mpi, new Rotation2d(0)), new Pose2d(207.006 * mpi, 174.725 * mpi, new Rotation2d(0)), new Pose2d(278.006 * mpi, 133.515 * mpi, new Rotation2d(0)), new Pose2d(200.552 * mpi, 185.151 * mpi, new Rotation2d(0)), new Pose2d(57.062 * mpi, 154.368 * mpi, new Rotation2d(0)));
+  // private AutonomousBasePD engageChargeB = new AutonomousBasePD(new Pose2d(56.069 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(152.812 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(152.812 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(152.812 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(152.812 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(152.812 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(152.812 * mpi, 108.015 * mpi, new Rotation2d(0)));
 
 
   // // red alliance  
   // // half the field (325.8415) - blue x value + half the field (325.8415) = red x value
-  // private AutonomousBasePD HDplaceTwoEngageR = new AutonomousBasePD(new Pose2d(595.614, 20.19, new Rotation2d(0)), new Pose2d(372.684, 36.19, new Rotation2d(0)), new Pose2d(394.033, 64.004, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)), new Pose2d(494.824, 83.368, new Rotation2d(0)));
-  // private AutonomousBasePD HBLeaveR = new AutonomousBasePD(new Pose2d(595.614, 200.046, new Rotation2d(0)), new Pose2d(431.768, 200.046, new Rotation2d(0)), new Pose2d(431.768, 200.046, new Rotation2d(0)), new Pose2d(431.768, 200.046, new Rotation2d(0)), new Pose2d(431.768, 200.046, new Rotation2d(0)), new Pose2d(431.768, 200.046, new Rotation2d(0)), new Pose2d(431.768, 200.046, new Rotation2d(0)));
-  // private AutonomousBasePD HDLeaveR = new AutonomousBasePD(new Pose2d(595.614, 20.19, new Rotation2d(0)), new Pose2d(431.768, 20.19, new Rotation2d(0)), new Pose2d(431.768, 20.19, new Rotation2d(0)), new Pose2d(431.768, 20.19, new Rotation2d(0)), new Pose2d(431.768, 20.19, new Rotation2d(0)), new Pose2d(431.768, 20.19, new Rotation2d(0)), new Pose2d(431.768, 20.19, new Rotation2d(0)));
-  // private AutonomousBasePD HDThreeScoreR = new AutonomousBasePD(new Pose2d(595.614, 20.19, new Rotation2d(0)), new Pose2d(372.684, 37.193, new Rotation2d(0)), new Pose2d(595.461, 43.068, new Rotation2d(0)), new Pose2d(454.199,45.934, new Rotation2d(0)), new Pose2d(372.606, 85.622, new Rotation2d(0)), new Pose2d(454.199,40.000, new Rotation2d(0)), new Pose2d(595.529,66.117, new Rotation2d(0)));
-  // private AutonomousBasePD HBThreeScoreR = new AutonomousBasePD(new Pose2d(595.614, 200.046, new Rotation2d(0)), new Pose2d(372.684, 180.683, new Rotation2d(0)), new Pose2d(595.614, 174.725, new Rotation2d(0)), new Pose2d(444.677, 174.725, new Rotation2d(0)), new Pose2d(373.677, 133.515, new Rotation2d(0)), new Pose2d(451.131, 185.151, new Rotation2d(0)), new Pose2d(594.621, 154.368, new Rotation2d(0)));
-  // private AutonomousBasePD engageChargeR = new AutonomousBasePD(new Pose2d(553.924, 108.015, new Rotation2d(0)), new Pose2d(553.924, 108.015, new Rotation2d(0)), new Pose2d(553.924, 108.015, new Rotation2d(0)), new Pose2d(553.924, 108.015, new Rotation2d(0)), new Pose2d(553.924, 108.015, new Rotation2d(0)), new Pose2d(553.924, 108.015, new Rotation2d(0)), new Pose2d(553.924, 108.015, new Rotation2d(0)));
- 
+  
+  private AutonomousBasePD HDplaceTwoEngageR = new AutonomousBasePD(new Pose2d(595.614 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(372.684 * mpi, 36.19 * mpi, new Rotation2d(0)), new Pose2d(394.033 * mpi, 64.004 * mpi, new Rotation2d(0)), new Pose2d(494.824 * mpi, 83.368 * mpi, new Rotation2d(0)), new Pose2d(494.824 * mpi, 83.368 * mpi, new Rotation2d(0)), new Pose2d(494.824 * mpi, 83.368 * mpi, new Rotation2d(0)), new Pose2d(494.824 * mpi, 83.368 * mpi, new Rotation2d(0)), 0);
+   //elise added a goal angle to make the code happy
+  // private AutonomousBasePD HBLeaveR = new AutonomousBasePD(new Pose2d(595.614 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(431.768 * mpi, 200.04 * mpi, new Rotation2d(0)), new Pose2d(431.768 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(431.768 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(431.768 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(431.768 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(431.768 * mpi, 200.046 * mpi, new Rotation2d(0)));
+  // private AutonomousBasePD HDLeaveR = new AutonomousBasePD(new Pose2d(595.614 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(431.768 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(431.768 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(431.768 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(431.768 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(431.768 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(431.768 * mpi, 20.19 * mpi, new Rotation2d(0)));
+  // private AutonomousBasePD HDThreeScoreR = new AutonomousBasePD(new Pose2d(595.614 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(372.684 * mpi, 37.193 * mpi, new Rotation2d(0)), new Pose2d(595.461 * mpi, 43.068 * mpi, new Rotation2d(0)), new Pose2d(454.199 * mpi,45.934 * mpi, new Rotation2d(0)), new Pose2d(372.606, 85.622 * mpi, new Rotation2d(0)), new Pose2d(454.199 * mpi,40.000 * mpi, new Rotation2d(0)), new Pose2d(595.529 * mpi,66.117 * mpi, new Rotation2d(0)));
+  // private AutonomousBasePD HBThreeScoreR = new AutonomousBasePD(new Pose2d(595.614 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(372.684 * mpi, 180.683 * mpi, new Rotation2d(0)), new Pose2d(595.614 * mpi, 174.725 * mpi, new Rotation2d(0)), new Pose2d(444.677 * mpi, 174.725 * mpi, new Rotation2d(0)), new Pose2d(373.677 * mpi, 133.515 * mpi, new Rotation2d(0)), new Pose2d(451.131 * mpi, 185.151 * mpi, new Rotation2d(0)), new Pose2d(594.621 * mpi, 154.368 * mpi, new Rotation2d(0)));
+  // private AutonomousBasePD engageChargeR = new AutonomousBasePD(new Pose2d(553.924 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(553.924 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(553.924 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(553.924 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(553.924 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(553.924 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(553.924 * mpi, 108.015 * mpi, new Rotation2d(0)));
+  private AutonomousBasePD CurrentPath = HDplaceTwoEngageR;
 
  public static ShuffleboardTab tab = DrivetrainSubsystem.tab;
+    public static GenericEntry test =
+    tab.add("test", 10)
+      .getEntry();
     public static GenericEntry kP =
         tab.add("Auto kP", 0.1)
           .getEntry();
@@ -102,7 +108,9 @@ public class Robot extends TimedRobot {
   public void robotInit() { //creates options for different autopaths, names are placeholders
 
     System.out.println("#I'm Awake");
-    m_chooser.setDefaultOption("testPath", testPath);
+    
+   // m_chooser.setDefaultOption("testPath", testPath);
+    m_chooser.setDefaultOption("current", CurrentPath);
     // m_chooser.addOption("noGo!", noGo);
     // m_chooser.addOption("HDLeaveB", HDLeaveB);
     // m_chooser.addOption("HBLeaveB", HBLeaveB); 
@@ -131,8 +139,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH);
-    SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
+    SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX());
+    SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY());
     
     m_field.setRobotPose(DrivetrainSubsystem.m_odometry.getEstimatedPosition());
     
@@ -152,8 +160,8 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
 
     //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
-    System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
-
+    // System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
+    System.out.println("current pose: " + DrivetrainSubsystem.m_pose.getX() + " , " + DrivetrainSubsystem.m_pose.getY());
     m_autoSelected = m_chooser.getSelected();
     m_autoSelected.init();
   }
@@ -170,7 +178,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
-    System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
+   // System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
 
   }
 
@@ -212,12 +220,13 @@ public class Robot extends TimedRobot {
     //m_drivetrainSubsystem.m_frontRightModule.getCANCoder().configAllSettings(config);
     //System.out.println("Trajectory: " + Trajectories.uno);
     m_drivetrainSubsystem.zeroGyroscope();
+    //System.out.println("OFFSET" + Constants.offset);
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic(){
-    double d = (m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition()) % 360;
+    double d = (m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition()/Constants.TICKS_PER_METER) % 360;
     System.out.println("LF Cancoder Position: " + d);
     //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
 
@@ -230,7 +239,8 @@ public class Robot extends TimedRobot {
     /*if(m_drivetrainSubsystem.getGyroscopeRotation().getDegrees() <= 370){
       m_drivetrainSubsystem.setSpeed(new ChassisSpeeds(0, 0.2, 0));
     }*/
-    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0.0, 0.02, m_drivetrainSubsystem.getGyroscopeRotation()));
+    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.0, 0.0, m_drivetrainSubsystem.getGyroscopeRotation()));
+    
     //m_autoSelected.turnDesiredAngle(180);
     m_drivetrainSubsystem.drive();
     // m_drivetrainSubsystem.m_frontLeftModule.set(0.4, t);
