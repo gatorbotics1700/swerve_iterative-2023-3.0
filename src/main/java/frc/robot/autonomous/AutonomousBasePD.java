@@ -220,8 +220,19 @@ public class AutonomousBasePD extends AutonomousBase{
         Pose2d goal = startingCoordinate;
         if(currentPose == goal){
             System.out.println("correct");
-        }
-        
+        }else{
+            if(currentPose.getX() > goal.getX()){
+                System.out.println("X too positive");
+            }else if(currentPose.getX() < goal.getX()){
+                System.out.println("X too negative");
+            }
+
+            if(currentPose.getY() > goal.getY()){
+                System.out.println("Y too positive");
+            }else if(currentPose.getY() < goal.getY()){
+                System.out.println("Y too negative");
+            }
+        }     
     }
 
 }
