@@ -3,6 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.*;
@@ -104,6 +106,21 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("Timed auto", timedPath);
 
     SmartDashboard.putData("Auto choices", m_chooser);
+    // PWM port (currently set to 9 but figure out actual port)
+    // Must be a PWM header, not MXP or DIO
+    AddressableLED m_led = new AddressableLED(9);
+
+    // Reuse buffer
+    // Default to a length of 60, start empty output
+    // Length is expensive to set, so only set it once, then just update data
+    AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(60);
+    m_led.setLength(m_ledBuffer.getLength());
+
+    // Set the data
+    m_led.setData(m_ledBuffer);
+    m_led.start();
+
+    m_ledBuffer.setRGB(0,255, 0, 0);
    
   }
 
