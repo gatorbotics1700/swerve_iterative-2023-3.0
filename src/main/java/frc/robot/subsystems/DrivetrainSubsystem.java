@@ -245,6 +245,22 @@ public class DrivetrainSubsystem {
         m_chassisSpeeds = chassisSpeeds;
   }
 
+  public void scoreLow(){
+        ArmTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
+  }
+
+  public void scoreHigh(){
+        ArmTelescopingSubsystem.setTState(TelescopingStates.HIGH_ARM_LENGTH);
+  }
+
+  public void scoreMid(){
+        ArmTelescopingSubsystem.setTState(TelescopingStates.MID_ARM_LENGTH);
+  }
+
+  public void substation(){
+        ArmTelescopingSubsystem.setTState(TelescopingStates.SHELF_ARM_LENGTH);
+  }
+
 //   public Pose2d getCurrentPose(){
 //         return m_pose;
 //   }

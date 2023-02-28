@@ -5,17 +5,23 @@ import frc.robot.Constants;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
-//karys did this!
+
 public class IntakeSubsystem {
     public static TalonFX intakeMotor = new TalonFX(Constants.INTAKE_MOTOR_ID);
 
     IntakeStates intakeState = IntakeStates.STOP;
-
-    public double intakeOn, intakeOff;
+    
+    public static enum IntakeStates{
+        STOP,
+        FORWARD,
+        BACKWARD;
+    }
+    
+    public static double intakeOn, intakeOff; //intakeOff is outake
 
     public void triggerPeriodic() {
-        intakeOn = triggerThreshold (m_codriver_controller.getLeftTriggerAxis());
-        intakeOff = triggerThreshold (m_codriver_controller.getRightTriggerAxis());
+        intakeOn = triggerThreshold (OI.m_codriver_controller.getLeftTriggerAxis());
+        intakeOff = triggerThreshold (OI.m_codriver_controller.getRightTriggerAxis());
     }
 
     public static double triggerThreshold(double tValue) {
@@ -31,11 +37,6 @@ public class IntakeSubsystem {
 
     }
 
-    public static enum IntakeStates{
-        STOP,
-        FORWARD,
-        BACKWARD;
-    }
 
     public void init(){
         intakeMotor.setInverted(false);

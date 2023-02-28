@@ -1,70 +1,98 @@
+
+
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import frc.robot.Constants;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import frc.robot.Gains;
 
 public class ArmTelescopingSubsystem {
 
-    //variables go here
-    //double armLengthKP = 0.04; //actual vals to be determined
-    //double armLengthKI = 0.000002;
-    //double armLengthKD = 0.005;
     //PIDController armLengthController = new PIDController(armLengthKP, armLengthKI, armLengthKD);
     public static TelescopingStates tState = TelescopingStates.RETRACTED;//should this be retracted or mid? what is the equivalent to off?
 
     TalonFX telescopingMotor = new TalonFX(Constants.TELESCOPING_MOTOR_ID);//maybe this motor should be renamed to make it more descriptive
-    double startTime;
+    private double startTime;
+    private double desiredInches;
+    private double desiredTicks;
+    public double tareEncoder;
     //armMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx, Constants.kTimeoutMs);//determine what these values would be for us
 
-    /*public static enum ArmStates{
-        OFF, //fully retracted
-        FULLY_EXTENDED,
-        LOW_ARM_LENGTH, // arm length when scoring on low node
-        MID_ARM_LENGTH, // also shelf height
-        HIGH_ARM_LENGTH;
-    }*/
+    public int _kIzone = 0;
+    public double _kPeakOutput = 1.0;
 
-    double extensionVal = 56.26;//this value should be the full extension length of the arm minus the length of it at zero
+    double telescopeKP = 0.005;
+    double telescopeKD = 0;
+    double telescopeKI = 0;
+    private int deadband = 25000;
+    public Gains telescopeGains = new Gains(telescopeKP, telescopeKI, telescopeKD, _kIzone, _kPeakOutput);
 
     public static enum TelescopingStates{
-        RETRACTED,
-        FULLY_EXTENDED,
+        RETRACTED, //zero 
         LOW_ARM_LENGTH,
+        SHELF_ARM_LENGTH,
         MID_ARM_LENGTH,
         HIGH_ARM_LENGTH;
     }
 
-    public ArmTelescopingSubsystem(){}
-
     public void init(){
         System.out.println("telescoping init!! :)");
-        telescopingMotor.setInverted(false); //sets the forward direction of the motor to counter clockwise
+        telescopingMotor.setInverted(false); //forward = clockwise, changed on 2/9
         startTime = System.currentTimeMillis();
 
     }
 
     public void periodic(){//sam requests that we can operate arm length by stick on xbox
-        //all of the motor values need to be changed to ticks
+        //telescopingMotor.set(ControlMode.PercentOutput, 0.2);
+        System.out.println("current telescoping arm motor position:" + telescopingMotor.getSelectedSensorPosition());
         if (tState == TelescopingStates.RETRACTED){
             telescopingMotor.set(ControlMode.Position, 0);
-        } else if (tState == TelescopingStates.FULLY_EXTENDED){
-            telescopingMotor.set(ControlMode.Position, extensionVal * Constants.TICKS_PER_INCH); //confirmed
+            desiredInches = 0; 
+            desiredTicks = 0;
+            telescopeDeadband();
         } else if (tState == TelescopingStates.LOW_ARM_LENGTH){
-            telescopingMotor.set(ControlMode.Position, 8 * Constants.TICKS_PER_INCH); // replace position value w low length
+            desiredInches = 3; //official 2/13
+            determineRightTicks();
+            System.out.println("desired ticks: " + desiredTicks);
+            System.out.println("tare encoder: " + tareEncoder);
+            telescopingMotor.set(ControlMode.Position, desiredTicks-tareEncoder);
+            System.out.println("error: " + (desiredTicks - telescopingMotor.getSelectedSensorPosition()));
+            telescopeDeadband();
+        } else if (tState == TelescopingStates.SHELF_ARM_LENGTH){
+            desiredInches = 6; //official 2/13
+            determineRightTicks(); 
+            telescopingMotor.set(ControlMode.Position, desiredTicks-tareEncoder); // goes with 90 degrees rotation 
+            System.out.println("error: " + (desiredTicks - telescopingMotor.getSelectedSensorPosition()));
+            telescopeDeadband();
         }else if (tState == TelescopingStates.MID_ARM_LENGTH){
-            telescopingMotor.set(ControlMode.Position, 5); // goes with 90 degrees rotation // replace position value w mid length
-        }else{
-            telescopingMotor.set(ControlMode.Position, 15); // replace position value w high length
+            desiredInches = 23; //official 2/13
+            determineRightTicks(); 
+            telescopingMotor.set(ControlMode.Position, desiredTicks-tareEncoder); // goes with 90 degrees rotation 
+            System.out.println("error: " + (desiredTicks - telescopingMotor.getSelectedSensorPosition()));
+            telescopeDeadband();
+        }else{ //high arm length
+            desiredInches = 32; //official 2/13
+            determineRightTicks();
+            telescopingMotor.set(ControlMode.Position, desiredTicks-tareEncoder); 
+            telescopeDeadband();
         }
     }
 
-    
-    public void moveArm(double armSetpoint){//setpoint in inches
-        armSetpoint = armSetpoint * Constants.TICKS_PER_INCH;//will probably have to change because wheel diameter in this constant is not relevant
-        telescopingMotor.set(ControlMode.Position, armSetpoint);//change to whatever motor we use for arm
+    public void determineRightTicks(){
+        if (telescopingMotor.getSelectedSensorPosition() < 2 * Constants.UNDER_TWO_TICKS_PER_INCH){
+            desiredTicks = 2 * Constants.UNDER_TWO_TICKS_PER_INCH; 
+        } else{
+            desiredTicks = (desiredInches-2) * Constants.OVER_TWO_TICKS_PER_INCH;
+        }
     }
-
+    public void telescopeDeadband(){
+        if (Math.abs(desiredTicks - telescopingMotor.getSelectedSensorPosition()) < deadband){
+            telescopingMotor.set(ControlMode.PercentOutput, 0);
+            System.out.println("STOPPED");
+        }
+    }
+    
     public double getArmPosition(){
         return telescopingMotor.getSelectedSensorPosition();
     }
@@ -85,10 +113,18 @@ public class ArmTelescopingSubsystem {
             }
             telescopingMotor.set(ControlMode.PercentOutput,0);
         }
-        
     }
 
-    public void setTState(TelescopingStates newState){
+    public static void setTState(TelescopingStates newState){
         tState = newState;
     }
+
+    public void tareEncoder() {
+        tareEncoder = telescopingMotor.getSelectedSensorPosition();
+
+    }
+    public double getTicks() {
+        return telescopingMotor.getSelectedSensorPosition() - tareEncoder;
+    }
+
 }

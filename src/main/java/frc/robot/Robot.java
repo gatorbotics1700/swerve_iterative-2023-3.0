@@ -132,8 +132,8 @@ public class Robot extends TimedRobot {
       m_drivetrainSubsystem.stopDrive();
     }
 
-    if(OI.m_driver_controller.getAButton()){ 
-      m_drivetrainSubsystem.resetOdometry();
+    if(OI.m_codriver_controller.getAButton()){ 
+      m_drivetrainSubsystem.substation();
     }
     
     if(OI.m_codriver_controller.getYButton()){ //double check if codriver or driver
@@ -154,11 +154,11 @@ public class Robot extends TimedRobot {
       m_drivetrainSubsystem.scoreHigh();
     }
 
-    if(OI.intakeOn >= 0.5) {
+    if(IntakeSubsystem.intakeOn >= 0.5) {
       intakeSubsystem.setState(IntakeStates.FORWARD);
     }
 
-    if (OI.intakeOff >= 0.5){
+    if (IntakeSubsystem.intakeOff >= 0.5){
       intakeSubsystem.setState(IntakeStates.STOP);
     }
   }
