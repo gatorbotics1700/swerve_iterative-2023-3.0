@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
 import frc.robot.OI;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -136,7 +137,7 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-
+    pneumaticIntakeSubsystem.init();
   }
 
   /** This function is called periodically during operator control. */
@@ -147,10 +148,23 @@ public class Robot extends TimedRobot {
     System.out.println("front left module: " + m_drivetrainSubsystem.m_frontLeftModule.getSteerAngle());
     System.out.println("front right module: " + m_drivetrainSubsystem.m_frontRightModule.getSteerAngle());*/
     m_drivetrainSubsystem.driveTeleop();
-
+    
+    pneumaticIntakeSubsystem.periodic();
 
     if (OI.m_controller.getBButton()){
       m_drivetrainSubsystem.stopDrive();
+    }
+
+    if(OI.m_controller.getAButtonReleased()){
+      pneumaticIntakeSubsystem.setState(PneumaticIntakeStates.OFF);
+    }
+
+    if(OI.m_controller.getXButtonReleased()){
+      if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeStates.ACTUATING || PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeStates.OFF){
+        pneumaticIntakeSubsystem.setState(PneumaticIntakeStates.RETRACTING);
+      } else if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeStates.RETRACTING){
+        pneumaticIntakeSubsystem.setState(PneumaticIntakeStates.ACTUATING); 
+      }
     }
 
   }
