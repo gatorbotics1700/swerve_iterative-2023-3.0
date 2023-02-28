@@ -160,7 +160,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
 
     //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
-    System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
+    // System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
     System.out.println("current pose: " + DrivetrainSubsystem.m_pose.getX() + " , " + DrivetrainSubsystem.m_pose.getY());
     m_autoSelected = m_chooser.getSelected();
     m_autoSelected.init();
@@ -178,7 +178,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
-    System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
+   // System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
 
   }
 
