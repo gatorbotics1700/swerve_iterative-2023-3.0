@@ -49,7 +49,7 @@ import com.revrobotics.ColorSensorV3; */
 public class Robot extends TimedRobot {
   private AutonomousBase m_autoSelected;
   private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<AutonomousBase>();
-  private AprilTagSubsystem m_AprilTagSubsystem = new AprilTagSubsystem();
+  public static AprilTagSubsystem m_AprilTagSubsystem = new AprilTagSubsystem();
   public static DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   // whole field: 651.683 
   // center : 325.8415

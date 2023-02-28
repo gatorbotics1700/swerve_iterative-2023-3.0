@@ -215,5 +215,13 @@ public class AutonomousBasePD extends AutonomousBase{
     public PIDController getDistanceController(){
         return distanceController;
     }
+    public void AutoSetupLEDs(){
+        Pose2d currentPose = Robot.m_AprilTagSubsystem.getRobotPose();
+        Pose2d goal = startingCoordinate;
+        if(currentPose == goal){
+            System.out.println("correct");
+        }
+        
+    }
 
 }
