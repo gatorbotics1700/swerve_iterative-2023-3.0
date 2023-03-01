@@ -264,6 +264,10 @@ public class DrivetrainSubsystem {
   public void intake(){
         PneumaticIntakeSubsystem.setState(PneumaticIntakeStates.OFF);
   }
+
+  public void offtake(){
+        PneumaticIntakeSubsystem.setState(PneumaticIntakeStates.RETRACTING);
+  }
 //   public Pose2d getCurrentPose(){
 //         return m_pose;
 //   }
