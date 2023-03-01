@@ -24,6 +24,7 @@ import frc.robot.subsystems.ArmTelescopingSubsystem.TelescopingStates;
 import edu.wpi.first.math.controller.PIDController;
 import frc.robot.Robot;
 import frc.robot.subsystems.PneumaticIntakeSubsystem;
+import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;;
 import java.util.Arrays;
 import java.util.function.DoubleSupplier;
 
@@ -262,7 +263,7 @@ public class DrivetrainSubsystem {
   }
 
   public void intake(){
-        PneumaticIntakeSubsystem.setState(PneumaticIntakeStates.OFF);
+        PneumaticIntakeSubsystem.setState(PneumaticIntakeStates.ACTUATING);
   }
 
   public void outtake(){
