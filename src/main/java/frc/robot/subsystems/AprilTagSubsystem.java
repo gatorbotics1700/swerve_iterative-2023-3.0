@@ -76,7 +76,7 @@ public class AprilTagSubsystem {
     }
     
     private static AprilTagDetector aprilTagDetector = new AprilTagDetector();
-    private LimeLightSubsystem limeLightSubsystem = new LimeLightSubsystem();
+    private static LimeLightSubsystem limeLightSubsystem = new LimeLightSubsystem();
     private static AutonomousBasePD autonomousBasePD = new AutonomousBasePD();
 
     public final AprilTagPoseEstimator.Config aprilTagPoseEstimatorConfig = new Config(tagSize, fx, fy, cx, cy);
@@ -123,8 +123,9 @@ public class AprilTagSubsystem {
     
     public void periodic(){
         if(states == AprilTagSequence.DETECT){
-            detectTag();
-            if(detectedAprilTagsArray.length!=0){
+            limeLightSubsystem.reset();
+            //detectTag();
+            if(LimeLightSubsystem.tv!=0){
                 System.out.println("APRIL TAG DETECTED!!!!!!");
                 setState(AprilTagSequence.CORRECTPOSITION);
                 Robot.m_drivetrainSubsystem.resetOdometry(new Pose2d(35, 72, new Rotation2d(0))); //DELETE THIS WHEN DONE WITH TESTING

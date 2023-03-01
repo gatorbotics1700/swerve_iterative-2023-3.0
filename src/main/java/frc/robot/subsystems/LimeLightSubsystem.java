@@ -23,7 +23,7 @@ public class LimeLightSubsystem {
 
     public NetworkTable networkTable = NetworkTableInstance.getDefault().getTable("limelight");
 
-    private AprilTagSubsystem aprilTagSubsystem = new AprilTagSubsystem();
+    private static AprilTagSubsystem aprilTagSubsystem = new AprilTagSubsystem();
     // this variable determines whether the Limelight has a valid target
     public void reset(){
         tv = networkTable.getEntry("tv").getDouble(0.0);
