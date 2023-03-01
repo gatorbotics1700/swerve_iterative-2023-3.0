@@ -5,6 +5,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import frc.robot.subsystems.*;
+import frc.robot.Constants; 
 public class LimeLightSubsystem {
     public final double MOUNTINGANGLE = 2.0; //degrees change
     public final double LOWERHEIGHT = 22.124; //inches height of bottom to bottom of tape of shorter pole
@@ -45,18 +46,19 @@ public class LimeLightSubsystem {
     }
     public static enum LimelightStates{
         SCANTAPE,
-        OFF;
-    }
+        OFF;   
+    } 
     public static LimelightStates state = LimelightStates.OFF;
     public void init(){
         setState(LimelightStates.SCANTAPE);
         //initialPosition = DrivetrainSubsystem.getTicks();
         tx_0 = 0.0;
         tx_1 = 0.0;
+
     }
     public void periodic(){
         if (state == LimelightStates.SCANTAPE) { 
-
+            double distance = (Constants.TAPE_HEIGHT_ONE-Constants.LIMELIGHT_HEIGHT) / Math.tan(Constants.LIMELIGHT_ANGLE+ty);
         } else { //off
             
         }
