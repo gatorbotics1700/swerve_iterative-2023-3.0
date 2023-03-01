@@ -65,8 +65,8 @@ public final class Constants {
 
     public static final double DRIVE_MOTOR_MIN_VOLTAGE = 0.19;
     public static final double DRIVE_MOTOR_MAX_VOLTAGE = 0.2;
-    public static final double STEER_MOTOR_MIN_VOLTAGE = 0.01; 
-    public static final double STEER_MOTOR_MAX_VOLTAGE = 0.03;
+    public static final double STEER_MOTOR_MIN_VOLTAGE = 0.525; 
+    public static final double STEER_MOTOR_MAX_VOLTAGE = 0.8;
     public static final double GEAR_RATIO = 6.75;
     public static final double WHEEL_DIAMETER= 0.1016; //meters, previously 4 inches
     public static final double TICKS_PER_REV = 2048;

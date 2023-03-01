@@ -108,31 +108,36 @@ public class AutonomousBasePD extends AutonomousBase{
             xController.setSetpoint(goalCoordinate1.getX()); 
             yController.setSetpoint(goalCoordinate1.getY());
             turnController.setSetpoint(goalCoordinate1.getRotation().getDegrees());
+            System.out.println("drive");
         } else {
             drivetrainSubsystem.drive();
+            //System.out.println("pose in auto: " + DrivetrainSubsystem.m_pose.getX() + " " + DrivetrainSubsystem.m_pose.getY());
             if (states == States.DRIVE){
                 driveDesiredDistance(goalCoordinate1);
-            //     //System.out.println("inside drive state! pose: " + DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
+                //System.out.println("inside drive state! pose: " + DrivetrainSubsystem.m_pose.getX() + " " + DrivetrainSubsystem.m_pose.getY());
             //     if (xController.atSetpoint() && yController.atSetpoint() && turnController.atSetpoint()){
             //        setState(States.TURN1); 
             //        System.out.println("Position: " + DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + ", " + DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
             //     }
             // } else if(states == States.TURN1){
             //     turnDesiredAngle(goalAngle1);
-                if(xController.atSetpoint() && yController.atSetpoint() /*&& turnController.atSetpoint()*/){
+                if(xController.atSetpoint() && yController.atSetpoint() && turnController.atSetpoint()){
                     setState(States.DRIVE2);  
+                    System.out.println("drive 2");
                   //  System.out.println("Position: " + DrivetrainSubsystem.m_pose.getX() + ", " + DrivetrainSubsystem.m_pose.getY());
                 }
             } else if(states == States.DRIVE2){
                 driveDesiredDistance(goalCoordinate2);
                 if(xController.atSetpoint() && yController.atSetpoint()){
                     setState(States.DRIVE3); 
+                    System.out.println("drive 3");
                 //    System.out.println("Position: " + DrivetrainSubsystem.m_pose.getX() + ", " + DrivetrainSubsystem.m_pose.getY());
                 }
             } else if(states == States.DRIVE3){
                 driveDesiredDistance(goalCoordinate3);
                 if(xController.atSetpoint() && yController.atSetpoint()){
-                    setState(States.DRIVE4); 
+                    setState(States.DRIVE4);
+                    System.out.println("drive 4"); 
                  //   System.out.println("Position: " + DrivetrainSubsystem.m_pose.getX() + ", " + DrivetrainSubsystem.m_pose.getY());
                 }
             } else if(states == States.DRIVE4){
@@ -194,7 +199,7 @@ public class AutonomousBasePD extends AutonomousBase{
 
         if(turnController.atSetpoint()){
             speedRotat = 0;
-            System.out.println("At setpoint");
+            //System.out.println("At setpoint");
         } else {
             //System.out.println("Position error: " + turnController.getPositionError());
             speedRotat = Math.signum(speedRotat)*Math.max(Constants.STEER_MOTOR_MIN_VOLTAGE, Math.min(Constants.STEER_MOTOR_MAX_VOLTAGE, Math.abs(speedRotat)));
