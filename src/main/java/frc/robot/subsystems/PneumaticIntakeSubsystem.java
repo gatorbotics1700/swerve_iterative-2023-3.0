@@ -25,7 +25,6 @@ public class PneumaticIntakeSubsystem {
         OFF;
     }
 
-
     public static PneumaticIntakeStates pneumaticIntakeState = PneumaticIntakeStates.OFF;
 
     public double colorThreshold = 0.03;

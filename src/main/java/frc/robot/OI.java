@@ -10,7 +10,8 @@ public class OI {
 
     public static final XboxController m_driver_controller = new XboxController(0);
     public static final XboxController m_codriver_controller = new XboxController(1);
-
+    public static double intakeOn;
+    public static double intakeOff;
     //public static Button armExtended  = Button.kY;//button to fully extend to 90 degrees
     //public static Button armControl  = Button.kLeftStick;//stick to control arm length (any length from fully retracted to extended)
     //public static Button pitchPD = Button.kLeftBumper;//pitch pd for charge station
@@ -21,6 +22,20 @@ public class OI {
     public static Button midShelf = Button.kA; // mid shelf
     public static Button highShelf = Button.kB; // high shelf
     public static Button turnNorth = Button.kY;//button to turn to true north*/
+
+    public void triggerPeriodic() {
+         intakeOn = triggerThreshold (m_codriver_controller.getLeftTriggerAxis());
+         intakeOff = triggerThreshold (m_codriver_controller.getRightTriggerAxis());
+    }
+
+    public double triggerThreshold(double tValue) {
+        if (Math.abs(tValue) < 0.1) { //change this value to be more specific if wanted
+            return 0;
+        } else {
+            return 1 * tValue;
+        }
+        //trigger axis is bound by the range [0,1] not [-1,1]
+    }
 
     public static Button outtake = Button.kA; 
     

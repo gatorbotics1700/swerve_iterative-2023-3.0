@@ -22,6 +22,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import frc.robot.OI;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -154,13 +155,11 @@ public class Robot extends TimedRobot {
     if(OI.m_codriver_controller.getAButton()){//score high
       m_drivetrainSubsystem.scoreHigh();
     }
-
-    if(OI.m_codriver_controller.intakeOn >= 0.5) {
-      
+    if(OI.intakeOn > 0){
+      m_drivetrainSubsystem.intake();
     }
-
-    if (IntakeSubsystem.intakeOff >= 0.5){
-      intakeSubsystem.setState(IntakeStates.STOP);
+    if(OI.intakeOff > 0){
+      m_drivetrainSubsystem.outtake();
     }
   }
 
