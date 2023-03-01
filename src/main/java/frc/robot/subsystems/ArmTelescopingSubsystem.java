@@ -1,11 +1,9 @@
-
-
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import frc.robot.Constants;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import frc.robot.Gains;
+//import frc.robot.Gains;
 
 public class ArmTelescopingSubsystem {
 
@@ -26,7 +24,8 @@ public class ArmTelescopingSubsystem {
     double telescopeKD = 0;
     double telescopeKI = 0;
     private int deadband = 25000;
-    public Gains telescopeGains = new Gains(telescopeKP, telescopeKI, telescopeKD, _kIzone, _kPeakOutput);
+   // public Gains telescopeGains = new Gains(telescopeKP, telescopeKI, telescopeKD, _kIzone, _kPeakOutput);
+
 
     public static enum TelescopingStates{
         RETRACTED, //zero 
