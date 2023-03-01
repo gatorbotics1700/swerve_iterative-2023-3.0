@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.IntakeSubsystem.IntakeStates;
+import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
 import frc.robot.OI;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -154,8 +155,8 @@ public class Robot extends TimedRobot {
       m_drivetrainSubsystem.scoreHigh();
     }
 
-    if(IntakeSubsystem.intakeOn >= 0.5) {
-      intakeSubsystem.setState(IntakeStates.FORWARD);
+    if(OI.m_codriver_controller.intakeOn >= 0.5) {
+      
     }
 
     if (IntakeSubsystem.intakeOff >= 0.5){

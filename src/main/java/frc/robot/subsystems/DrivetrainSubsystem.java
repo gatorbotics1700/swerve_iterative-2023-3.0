@@ -23,7 +23,7 @@ import frc.robot.autonomous.AutonomousBasePD;
 import frc.robot.subsystems.ArmTelescopingSubsystem.TelescopingStates;
 import edu.wpi.first.math.controller.PIDController;
 import frc.robot.Robot;
-
+import frc.robot.subsystems.PneumaticIntakeSubsystem;
 import java.util.Arrays;
 import java.util.function.DoubleSupplier;
 
@@ -261,6 +261,9 @@ public class DrivetrainSubsystem {
         ArmTelescopingSubsystem.setTState(TelescopingStates.SHELF_ARM_LENGTH);
   }
 
+  public void intake(){
+        PneumaticIntakeSubsystem.setState(PneumaticIntakeStates.OFF);
+  }
 //   public Pose2d getCurrentPose(){
 //         return m_pose;
 //   }
