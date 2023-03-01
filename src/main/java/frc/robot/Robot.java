@@ -42,7 +42,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 public class Robot extends TimedRobot {
   private AutonomousBase m_autoSelected;
   private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<AutonomousBase>();
-  private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
+  /*private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
   private AutonomousBasePD placeNLeave = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)));
   private AutonomousBasePD antiCharge = new AutonomousBasePD(new Pose2d(86.840, -45.282, new Rotation2d(0)), new Pose2d(221.978, 19.463, new Rotation2d(0)), new Pose2d(135.091, -19.421, new Rotation2d(0)), new Pose2d(0, -22.277, new Rotation2d(0)), new Pose2d(222.491, -28.492, new Rotation2d(0)), new Pose2d(0, -43.502, new Rotation2d(0)), new Pose2d(0, -43.502, new Rotation2d(0)));
   private AutonomousBasePD antiChargeOpposite = new AutonomousBasePD(new Pose2d(86.840, 45.282, new Rotation2d(0)), new Pose2d(221.978, -19.463, new Rotation2d(0)), new Pose2d(135.091, 19.421, new Rotation2d(0)), new Pose2d(0, 22.277, new Rotation2d(0)), new Pose2d(222.491, 28.492, new Rotation2d(0)), new Pose2d(0, 43.502, new Rotation2d(0)), new Pose2d(0, 43.502, new Rotation2d(0)));
@@ -58,7 +58,7 @@ public class Robot extends TimedRobot {
 
   //these paths score 3 balls without touching the charge station, requires 7 Pose2ds!
   private AutonomousBasePD threeUnderChargeStation = new AutonomousBasePD(new Pose2d(56.069, 17.332, new Rotation2d(0)), new Pose2d(278.999, 37.193, new Rotation2d(0)), new Pose2d(56.222, 43.068, new Rotation2d(0)), new Pose2d(197.484,45.934, new Rotation2d(0)), new Pose2d(279.077, 85.622, new Rotation2d(0)), new Pose2d(197.484,40.000, new Rotation2d(0)), new Pose2d(56.154,66.117, new Rotation2d(0)));
-  private AutonomousBasePD threeAboveChargeStation = new AutonomousBasePD(new Pose2d(56.069, 200.046, new Rotation2d(0)), new Pose2d(278.999, 180.683, new Rotation2d(0)), new Pose2d(56.069, 174.725, new Rotation2d(0)), new Pose2d(207.006, 174.725, new Rotation2d(0)), new Pose2d(278.006, 133.515, new Rotation2d(0)), new Pose2d(200.552, 185.151, new Rotation2d(0)), new Pose2d(57.062, 154.368, new Rotation2d(0)));
+  private AutonomousBasePD threeAboveChargeStation = new AutonomousBasePD(new Pose2d(56.069, 200.046, new Rotation2d(0)), new Pose2d(278.999, 180.683, new Rotation2d(0)), new Pose2d(56.069, 174.725, new Rotation2d(0)), new Pose2d(207.006, 174.725, new Rotation2d(0)), new Pose2d(278.006, 133.515, new Rotation2d(0)), new Pose2d(200.552, 185.151, new Rotation2d(0)), new Pose2d(57.062, 154.368, new Rotation2d(0)));*/
 
   
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
@@ -75,7 +75,7 @@ public class Robot extends TimedRobot {
   public void robotInit() { //creates options for different autopaths, names are placeholders
  
     System.out.println("#I'm Awake");
-    m_chooser.setDefaultOption("Default Auto", testPath);
+    /*m_chooser.setDefaultOption("Default Auto", testPath);
     m_chooser.addOption("My Auto 1", noGo);
     m_chooser.addOption("My Auto 2",placeNLeave);
     m_chooser.addOption("My Auto 3", antiCharge);
@@ -83,7 +83,7 @@ public class Robot extends TimedRobot {
     //m_chooser.addOption(name: "My Auto 5", engageCharge);
    // m_chooser.addOption(name: "My Auto 6",placeTwoEngage);
     m_chooser.addOption("My Auto timed", timedPath);
-    m_chooser.addOption("Motion profiling path", motionProfiling);
+    m_chooser.addOption("Motion profiling path", motionProfiling);*/
 
     SmartDashboard.putData("Auto choices", m_chooser);
 
@@ -104,8 +104,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH);
-    SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
+    SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX()/Constants.SWERVE_TICKS_PER_INCH);
+    SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.SWERVE_TICKS_PER_INCH);
     m_field.setRobotPose(DrivetrainSubsystem.m_odometry.getPoseMeters());
   }
 
@@ -123,19 +123,21 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     pneumaticIntakeSubsystem.init();
 
-    m_autoSelected = m_chooser.getSelected();
-    m_autoSelected.init();
+    //m_autoSelected = m_chooser.getSelected();
+    //m_autoSelected.init();
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+    System.out.println("Compressor enabled?: " + pneumaticIntakeSubsystem.compressor.isEnabled());
      //m_drivetrainSubsystem.driveTeleop();
-     //pneumaticIntakeSubsystem.periodic();
+     System.out.println("compressor current: " + pneumaticIntakeSubsystem.compressor.getCurrent());
+     pneumaticIntakeSubsystem.periodic();
      //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
 
-     m_autoSelected.periodic();
-     m_drivetrainSubsystem.drive();
+     //m_autoSelected.periodic();
+     //m_drivetrainSubsystem.drive();
     
   }
 

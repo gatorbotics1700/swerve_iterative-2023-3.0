@@ -210,7 +210,7 @@ public class DrivetrainSubsystem {
         System.out.println("position array: " + positionArray.toString());
         System.out.println("m_pose: " + m_pose);
         m_odometry.resetPosition(getGyroscopeRotation(), positionArray, m_pose);
-        System.out.println("#resetodometry! new pose: " + m_pose.getX()/TICKS_PER_INCH + " y: " + m_pose.getY()/TICKS_PER_INCH);
+        System.out.println("#resetodometry! new pose: " + m_pose.getX()/SWERVE_TICKS_PER_INCH + " y: " + m_pose.getY()/SWERVE_TICKS_PER_INCH);
         System.out.println("inputs for the reset: " + getGyroscopeRotation() + m_frontLeftModule.getSwerveModulePosition().distanceMeters + m_frontRightModule.getSwerveModulePosition().distanceMeters + m_backLeftModule.getSwerveModulePosition().distanceMeters + m_backRightModule.getSwerveModulePosition().distanceMeters);
   }
 
@@ -262,7 +262,7 @@ public class DrivetrainSubsystem {
         //System.out.println("inputs for the update: " + getGyroscopeRotation() + m_frontLeftModule.getSwerveModulePosition().distanceMeters + m_frontRightModule.getSwerveModulePosition().distanceMeters + m_backLeftModule.getSwerveModulePosition().distanceMeters + m_backRightModule.getSwerveModulePosition().distanceMeters);
     m_pose = m_odometry.update(getGyroscopeRotation(), new SwerveModulePosition[] {m_frontLeftModule.getSwerveModulePosition(), m_frontRightModule.getSwerveModulePosition(), m_backLeftModule.getSwerveModulePosition(), m_backRightModule.getSwerveModulePosition()});
     
-    System.out.println("new pose after update: " + m_pose.getX()/TICKS_PER_INCH + " and y: " + m_pose.getY()/TICKS_PER_INCH);
+    System.out.println("new pose after update: " + m_pose.getX()/SWERVE_TICKS_PER_INCH + " and y: " + m_pose.getY()/SWERVE_TICKS_PER_INCH);
     
     //array of states filled with the speed and angle for each module (made from linear and angular motion for the whole robot) 
     SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
