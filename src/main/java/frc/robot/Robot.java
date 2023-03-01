@@ -50,6 +50,7 @@ public class Robot extends TimedRobot {
   private AutonomousBase m_autoSelected;
   private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<AutonomousBase>();
   private AprilTagSubsystem m_AprilTagSubsystem = new AprilTagSubsystem();
+  private VisionSubsystem m_VisionSubsystem = new VisionSubsystem();
   public static DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   // whole field: 651.683 
   // center : 325.8415
@@ -166,6 +167,29 @@ public class Robot extends TimedRobot {
     System.out.println("i am in teleop");
     m_AprilTagSubsystem.periodic();
     m_AprilTagSubsystem.detectTag();
+
+    if(OI.m_controller.getBackButton()){
+      m_VisionSubsystem.setState(VisionSubsystem.VisionStates.DETECTTAPE);
+    }
+
+    if(OI.m_controller.getStartButton()){
+      m_VisionSubsystem.setState(VisionSubsystem.VisionStates.DETECTAPRILTAG);
+    }
+
+    //low level
+    if(OI.m_controller.getLeftStickButton()){
+      VisionSubsystem.level = 0;
+    }
+
+    //middle level
+    if(OI.m_controller.getRightStickButton()){
+      VisionSubsystem.level = 1;
+    }
+
+    //high level
+    if(OI.m_controller.getXButton()){
+      VisionSubsystem.level = 2;
+    }
 
   }
 

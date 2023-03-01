@@ -1,9 +1,10 @@
 package frc.robot.subsystems;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.LimeLightSubsystem.LimelightStates;
+//d = (h2-h1)/tan(a1+a2)
 
 public class VisionSubsystem {
-    public enum VisionStates{
+    public static enum VisionStates{
         DETECTAPRILTAG,
         DETECTTAPE,
         OFF;
@@ -13,6 +14,7 @@ public class VisionSubsystem {
 
     public LimeLightSubsystem limeLightSubsystem = new LimeLightSubsystem(); 
     public AprilTagSubsystem aprilTagSubsystem = new AprilTagSubsystem();
+    public static int level;
     
     public void setState(VisionStates state){
         visionState = state;
