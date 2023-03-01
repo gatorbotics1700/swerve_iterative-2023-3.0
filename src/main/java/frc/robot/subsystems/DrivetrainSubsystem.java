@@ -208,8 +208,8 @@ public class DrivetrainSubsystem {
         SwerveModulePosition[] positionArray =  new SwerveModulePosition[] { //IMPORTANT?
                 new SwerveModulePosition(m_frontLeftModule.getPosition()/Constants.TICKS_PER_METER - tareLFEncoder, new Rotation2d(m_frontLeftModule.getSteerAngle())),
                 new SwerveModulePosition(m_frontRightModule.getPosition()/Constants.TICKS_PER_METER - tareRFEncoder, new Rotation2d(m_frontRightModule.getSteerAngle())), 
-                new SwerveModulePosition(m_backRightModule.getPosition()/Constants.TICKS_PER_METER - tareRBEncoder, new Rotation2d(m_backRightModule.getSteerAngle())),
-                new SwerveModulePosition(m_backLeftModule.getPosition()/Constants.TICKS_PER_METER - tareLBEncoder, new Rotation2d(m_backLeftModule.getSteerAngle()))};
+                new SwerveModulePosition(m_backLeftModule.getPosition()/Constants.TICKS_PER_METER - tareLBEncoder, new Rotation2d(m_backLeftModule.getSteerAngle())),
+                new SwerveModulePosition(m_backRightModule.getPosition()/Constants.TICKS_PER_METER - tareRBEncoder, new Rotation2d(m_backRightModule.getSteerAngle()))};
         m_pose = start;
         //System.out.println("position array: " + positionArray.toString());
         //System.out.println("m_pose: " + m_pose.getX() + ", " + m_pose.getY() + ", " + m_pose.getRotation().getDegrees());
@@ -267,10 +267,11 @@ public class DrivetrainSubsystem {
   public void drive() { //runs periodically
         //System.out.println("pose before update: " + m_pose.getX()/TICKS_PER_INCH + " and y: " + m_pose.getY()/TICKS_PER_INCH);
 
-        SwerveModulePosition[] array =  {new SwerveModulePosition(m_frontLeftModule.getPosition()/Constants.TICKS_PER_METER - tareLFEncoder, new Rotation2d(m_frontLeftModule.getSteerAngle())),
+        SwerveModulePosition[] array =  {
+        new SwerveModulePosition(m_frontLeftModule.getPosition()/Constants.TICKS_PER_METER - tareLFEncoder, new Rotation2d(m_frontLeftModule.getSteerAngle())),
         new SwerveModulePosition(m_frontRightModule.getPosition()/Constants.TICKS_PER_METER - tareRFEncoder, new Rotation2d(m_frontRightModule.getSteerAngle())), 
-        new SwerveModulePosition(m_backRightModule.getPosition()/Constants.TICKS_PER_METER - tareRBEncoder, new Rotation2d(m_backRightModule.getSteerAngle())),
-        new SwerveModulePosition(m_backLeftModule.getPosition()/Constants.TICKS_PER_METER - tareLBEncoder, new Rotation2d(m_backLeftModule.getSteerAngle()))};
+        new SwerveModulePosition(m_backLeftModule.getPosition()/Constants.TICKS_PER_METER - tareLBEncoder, new Rotation2d(m_backLeftModule.getSteerAngle())),
+        new SwerveModulePosition(m_backRightModule.getPosition()/Constants.TICKS_PER_METER - tareRBEncoder, new Rotation2d(m_backRightModule.getSteerAngle()))};
  
         
         // System.out.println("front left module position: " + m_frontLeftModule.getPosition()/Constants.TICKS_PER_METER);
