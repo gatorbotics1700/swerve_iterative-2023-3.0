@@ -24,11 +24,11 @@ public class PneumaticIntakeSubsystem {
         OFF;
     }
     String colorString;
-    public PneumaticIntakeStates pneumaticIntakeState = PneumaticIntakeStates.ACTUATING;
+    public static PneumaticIntakeStates pneumaticIntakeState = PneumaticIntakeStates.ACTUATING;
 
     public static final double COLOR_THRESHOLD = 0.03;
     //confirm we are using double solenoid
-    private DoubleSolenoid solenoidOne = new DoubleSolenoid(2, PneumaticsModuleType.REVPH, 8, 10); 
+    private DoubleSolenoid solenoidOne = new DoubleSolenoid(7, PneumaticsModuleType.REVPH, 8, 10); 
     //what compressor are we using?
     public Compressor compressor = new Compressor(PneumaticsModuleType.REVPH); 
     // Initializes a DigitalInput on DIO 0 (roborio is built in w/ 10 DIOs (digital input-output ports))
