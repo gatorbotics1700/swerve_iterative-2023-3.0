@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.XboxController;
 
 public class OI {
 
-    public static double intakeOn, intakeOff;
+    public double intakeOn, intakeOff;
 
     public static final XboxController m_controller = new XboxController(0);//buttons/co-driver controller
     public static final XboxController m_controller_two = new XboxController(1);//main driver/driving controller
