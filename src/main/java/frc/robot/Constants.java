@@ -73,4 +73,5 @@ public final class Constants {
     public static final double TAPE_HEIGHT_ONE = 23.5; //inches
     public static final double TAPE_HEIGHT_TWO = 46; //inches
     public static final double LIMELIGHT_HEIGHT = 52; //inches, from the bottom of the chassis
+    public static final double TICKS_PER_METER = 
 }
