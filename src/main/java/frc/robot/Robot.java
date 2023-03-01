@@ -44,9 +44,7 @@ public class Robot extends TimedRobot {
   //private final Field2d m_field = new Field2d();
   ChassisSpeeds m_ChassisSpeeds;
 
-  public static GenericEntry kP; 
-  public static GenericEntry kI; 
-  public static GenericEntry kD; 
+  PneumaticIntakeSubsystem pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -71,6 +69,8 @@ public class Robot extends TimedRobot {
      kP = tab.add("Auto kP", 0.1).getEntry(); 
      kI = tab.add("Auto kI", 0.0).getEntry();
      kD = tab.add("Auto kD", 0.0).getEntry();
+   
+
   }
 
   /**
@@ -99,6 +99,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    pneumaticIntakeSubsystem.init();
+
     m_autoSelected = m_chooser.getSelected();
     m_autoSelected.init();
   }
@@ -106,10 +108,12 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    
+     //m_drivetrainSubsystem.driveTeleop();
+     pneumaticIntakeSubsystem.periodic();
+     //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
+
      m_autoSelected.periodic();
      m_drivetrainSubsystem.drive();
-     //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
     
   }
 
@@ -172,7 +176,8 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-    System.out.println("Trajectory: " + Trajectories.uno);
+    //m_autoSelected.init();
+
   }
 
   /** This function is called periodically during test mode. */
