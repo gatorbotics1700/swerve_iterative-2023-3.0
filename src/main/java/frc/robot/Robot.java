@@ -83,7 +83,7 @@ public class Robot extends TimedRobot {
   // private AutonomousBasePD HDThreeScoreR = new AutonomousBasePD(new Pose2d(595.614 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(372.684 * mpi, 37.193 * mpi, new Rotation2d(0)), new Pose2d(595.461 * mpi, 43.068 * mpi, new Rotation2d(0)), new Pose2d(454.199 * mpi,45.934 * mpi, new Rotation2d(0)), new Pose2d(372.606, 85.622 * mpi, new Rotation2d(0)), new Pose2d(454.199 * mpi,40.000 * mpi, new Rotation2d(0)), new Pose2d(595.529 * mpi,66.117 * mpi, new Rotation2d(0)));
   // private AutonomousBasePD HBThreeScoreR = new AutonomousBasePD(new Pose2d(595.614 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(372.684 * mpi, 180.683 * mpi, new Rotation2d(0)), new Pose2d(595.614 * mpi, 174.725 * mpi, new Rotation2d(0)), new Pose2d(444.677 * mpi, 174.725 * mpi, new Rotation2d(0)), new Pose2d(373.677 * mpi, 133.515 * mpi, new Rotation2d(0)), new Pose2d(451.131 * mpi, 185.151 * mpi, new Rotation2d(0)), new Pose2d(594.621 * mpi, 154.368 * mpi, new Rotation2d(0)));
   // private AutonomousBasePD engageChargeR = new AutonomousBasePD(new Pose2d(553.924 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(553.924 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(553.924 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(553.924 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(553.924 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(553.924 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(553.924 * mpi, 108.015 * mpi, new Rotation2d(0)));
-  private AutonomousBasePD CurrentPath = HDplaceTwoEngageR;
+  private AutonomousBasePD CurrentPath = testPath;
 
  public static ShuffleboardTab tab = DrivetrainSubsystem.tab;
     public static GenericEntry test =
@@ -239,7 +239,7 @@ public class Robot extends TimedRobot {
     /*if(m_drivetrainSubsystem.getGyroscopeRotation().getDegrees() <= 370){
       m_drivetrainSubsystem.setSpeed(new ChassisSpeeds(0, 0.2, 0));
     }*/
-    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.0, 0.0, Math.toRadians(30), m_drivetrainSubsystem.getGyroscopeRotation()));
+    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0, Math.toRadians(0), m_drivetrainSubsystem.getGyroscopeRotation()));
     
     //m_autoSelected.turnDesiredAngle(180);
     m_drivetrainSubsystem.drive();
