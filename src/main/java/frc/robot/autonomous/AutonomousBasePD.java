@@ -73,6 +73,9 @@ public class AutonomousBasePD extends AutonomousBase{
         xController.setTolerance(DRIVE_DEADBAND);
         yController.setTolerance(DRIVE_DEADBAND);
 
+        // directionController.reset();
+        // distanceController.reset(); 
+        //distanceController.setTolerance(DRIVE_DEADBAND*Constants.SWERVE_TICKS_PER_INCH);
         states = States.FIRST;
         System.out.println("INIT!\nINIT!\nINIT!");
 
@@ -170,6 +173,16 @@ public class AutonomousBasePD extends AutonomousBase{
         xController.setSetpoint(dCoordinate.getX()); 
         yController.setSetpoint(dCoordinate.getY());
         System.out.println("preDDDing!!!");    
+
+        /*public Pose2d preDDD(Pose2d cCoordinate, Pose2d dCoordinate){
+        double xDDistance = Constants.SWERVE_TICKS_PER_INCH*(dCoordinate.getX() - cCoordinate.getX());
+        double yDDistance = Constants.SWERVE_TICKS_PER_INCH*(dCoordinate.getY() - cCoordinate.getY());
+        Rotation2d zDDistance = new Rotation2d(Constants.SWERVE_TICKS_PER_INCH*(dCoordinate.getRotation().getDegrees() - cCoordinate.getRotation().getDegrees()));
+        hypotenuse = Math.hypot(xDDistance, yDDistance);
+        distanceController.setSetpoint(hypotenuse); 
+        System.out.println("preDDDing: " + xDDistance + ", " + yDDistance);    
+        return new Pose2d (xDDistance, yDDistance, zDDistance);
+         */
     }
 
     /** 
