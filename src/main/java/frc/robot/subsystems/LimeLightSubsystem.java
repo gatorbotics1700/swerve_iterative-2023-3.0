@@ -58,8 +58,9 @@ public class LimeLightSubsystem {
     }
     public void periodic(){
         if (state == LimelightStates.SCANTAPE) { 
-            double distance = (Constants.TAPE_HEIGHT_ONE-Constants.LIMELIGHT_HEIGHT) / Math.tan(Constants.LIMELIGHT_ANGLE+ty);
-        } else { //off
+            double yDistance = (Constants.TAPE_HEIGHT_ONE-Constants.LIMELIGHT_HEIGHT) / Math.tan(Constants.LIMELIGHT_ANGLE+ty);
+            double xDistance = yDistance / Math.tan((90 - DrivetrainSubsystem.m_pose.getRotation().getDegrees()));
+        }else { //off
             
         }
     }
@@ -67,13 +68,13 @@ public class LimeLightSubsystem {
         state = newState;
     }
     // turning tx and ty into distance (in)
-    public double yDistanceFromIdeal(){
+    /*public double yDistanceFromIdeal(){
         double distanceFromTarget = (LOWERHEIGHT- ROBOTHEIGHT)/Math.tan(Math.toRadians(MOUNTINGANGLE + ty));
         System.out.println("distance from target: " + distanceFromTarget);
         double distanceFromIdeal = distanceFromTarget - IDEALDISTANCE;
         System.out.println("distance from ideal: " + distanceFromIdeal);
         return distanceFromIdeal;
-    }
+    }*/
     public void scanPipeline(){
         reset();
         if(tv==1.0){
@@ -92,6 +93,5 @@ public class LimeLightSubsystem {
     public double getTx(){
         return tx;
     }
-//a bit worried about the infinite loop possibilities between scanzero and scanone
 
 }
