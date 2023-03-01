@@ -198,7 +198,7 @@ public class DrivetrainSubsystem {
   }
 
   public double getDistance(){
-        double[] positions = {getEncoderPosition(m_backLeftModule), getEncoderPosition(m_backRightModule), getEncoderPosition(m_frontLeftModule), getEncoderPosition(m_frontRightModule)};
+        double[] positions = {getEncoderPosition(m_frontLeftModule), getEncoderPosition(m_frontRightModule), getEncoderPosition(m_backLeftModule), getEncoderPosition(m_backRightModule)};
         return getMedian(positions);
   }
 
@@ -224,8 +224,8 @@ public class DrivetrainSubsystem {
 
   public void zeroDriveEncoder(){
         tareLFEncoder = m_frontLeftModule.getPosition()/Constants.TICKS_PER_METER;
-        tareLBEncoder = m_backLeftModule.getPosition()/Constants.TICKS_PER_METER;
         tareRFEncoder = m_frontRightModule.getPosition()/Constants.TICKS_PER_METER;
+        tareLBEncoder = m_backLeftModule.getPosition()/Constants.TICKS_PER_METER;
         tareRBEncoder = m_backRightModule.getPosition()/Constants.TICKS_PER_METER;
        // System.out.println("tared...  " + getDistance());
   }
