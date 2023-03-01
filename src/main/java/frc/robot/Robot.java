@@ -54,7 +54,7 @@ public class Robot extends TimedRobot {
   public static DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   // whole field: 651.683 
   // center : 325.8415
-  private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
+  /*private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
   private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
   private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(10, 30, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)));
   
@@ -77,7 +77,7 @@ public class Robot extends TimedRobot {
   private AutonomousBasePD HBThreeScoreR = new AutonomousBasePD(new Pose2d(595.614, 200.046, new Rotation2d(0)), new Pose2d(372.684, 180.683, new Rotation2d(0)), new Pose2d(595.614, 174.725, new Rotation2d(0)), new Pose2d(444.677, 174.725, new Rotation2d(0)), new Pose2d(373.677, 133.515, new Rotation2d(0)), new Pose2d(451.131, 185.151, new Rotation2d(0)), new Pose2d(594.621, 154.368, new Rotation2d(0)));
   private AutonomousBasePD engageChargeR = new AutonomousBasePD(new Pose2d(553.924, 108.015, new Rotation2d(0)), new Pose2d(553.924, 108.015, new Rotation2d(0)), new Pose2d(553.924, 108.015, new Rotation2d(0)), new Pose2d(553.924, 108.015, new Rotation2d(0)), new Pose2d(553.924, 108.015, new Rotation2d(0)), new Pose2d(553.924, 108.015, new Rotation2d(0)), new Pose2d(553.924, 108.015, new Rotation2d(0)));
  
-
+*/
  public static ShuffleboardTab tab = DrivetrainSubsystem.tab;
     public static GenericEntry kP =
         tab.add("Auto kP", 0.1)
@@ -96,7 +96,7 @@ public class Robot extends TimedRobot {
   */
   @Override
   public void robotInit() { //creates options for different autopaths, names are placeholders
-
+    /* 
     System.out.println("#I'm Awake");
     m_chooser.setDefaultOption("Default testing auto", testPath);
     m_chooser.addOption("Nothing! No go!", noGo);
@@ -105,7 +105,7 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("Timed auto", timedPath);
 
     SmartDashboard.putData("Auto choices", m_chooser);
-   
+   */
   }
 
   /**
@@ -157,16 +157,17 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    m_AprilTagSubsystem.init();
+    m_drivetrainSubsystem.resetOdometry(new Pose2d(0.0,0.0, new Rotation2d(Math.toRadians(0.0))));
+    //m_AprilTagSubsystem.init();
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-  
-    System.out.println("i am in teleop");
-    m_AprilTagSubsystem.periodic();
-    m_AprilTagSubsystem.detectTag();
+    m_drivetrainSubsystem.driveTeleop();
+    //System.out.println("i am in teleop");
+    //m_AprilTagSubsystem.periodic();
+    //m_AprilTagSubsystem.detectTag();
 
     if(OI.m_controller.getBackButton()){
       m_VisionSubsystem.setState(VisionSubsystem.VisionStates.DETECTTAPE);
@@ -204,7 +205,7 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-
+    m_drivetrainSubsystem.resetOdometry(new Pose2d(0.0, 0.0, new Rotation2d(Math.toRadians(0.0))));
     //System.out.println("Trajectory: " + Trajectories.uno);
     //m_drivetrainSubsystem.zeroGyroscope();
   }
@@ -212,7 +213,10 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic(){
-  
+    //m_drivetrainSubsystem.resetOdometry(new Pose2d(0.0, 0.0, new Rotation2d(Math.toRadians(180.0))));
+    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.2, 0.0, m_drivetrainSubsystem.getGyroscopeRotation()));
+    m_drivetrainSubsystem.drive();
+    //System.out.println("Our pose: " + DrivetrainSubsystem.m_pose);
     //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
     //System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
     /*if (m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError() != ErrorCode.OK) {

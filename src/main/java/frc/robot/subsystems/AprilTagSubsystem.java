@@ -89,6 +89,7 @@ public class AprilTagSubsystem {
     public void init(){
         limeLightSubsystem.setPipeline(0.0);
         Robot.m_drivetrainSubsystem.resetOdometry(new Pose2d(AprilTagLocation.scoringPoses[1].getX() -24.0, AprilTagLocation.scoringPoses[13].getY() - 12.0, new Rotation2d(Math.toRadians(180.0))));
+        System.out.println("resetted odometry in INIT to: " + DrivetrainSubsystem.m_pose);
         System.loadLibrary("opencv_java460");
         //camera0 = new UsbCamera("USB Camera 0", 0);
         aprilTagDetector.addFamily(family, 0); //added 0
@@ -96,8 +97,8 @@ public class AprilTagSubsystem {
         //camera1 = CameraServer.startAutomaticCapture();
         //server = CameraServer.getServer();
         //sink = CameraServer.getServer();
-        source = new Mat();
-        grayMat = new Mat();
+        //source = new Mat();
+        //grayMat = new Mat();
         
 
         //System.out.println("source from init: " + source);
@@ -131,14 +132,14 @@ public class AprilTagSubsystem {
                 setState(AprilTagSequence.CORRECTPOSITION);
                 //Robot.m_drivetrainSubsystem.resetOdometry(new Pose2d(35, 72, new Rotation2d(0))); //DELETE THIS WHEN DONE WITH TESTING
                 System.out.println("Reset odometry to this m_pose: " + DrivetrainSubsystem.m_pose);
-                prePose = autonomousBasePD.preDDD(DrivetrainSubsystem.m_pose, AprilTagLocation.scoringPoses[1]);
+                autonomousBasePD.preDDD(DrivetrainSubsystem.m_pose, AprilTagLocation.scoringPoses[1]);
                 }
         } else if(states == AprilTagSequence.CORRECTPOSITION){
             //addVisionToOdometry();
             //double[] tempArray = limeLightSubsystem.networkTable.getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
             //DrivetrainSubsystem.m_pose = new Pose2d (tempArray[0], tempArray[1], new Rotation2d(tempArray[5]));
             correctPosition();
-            if(autonomousBasePD.getDistanceController().atSetpoint()){
+            if(autonomousBasePD.xAtSetpoint() && autonomousBasePD.yAtSetpoint() && autonomousBasePD.turnAtSetpoint()){
                 setState(AprilTagSequence.OFF);
                 System.out.println("finished correcting position!!!!!");
             }
@@ -178,7 +179,7 @@ public class AprilTagSubsystem {
 
     private void correctPosition(){
         System.out.println("I am correcting position!!!");
-        autonomousBasePD.driveDesiredDistance(prePose);
+        autonomousBasePD.driveDesiredDistance(AprilTagLocation.scoringPoses[1]);
         Robot.m_drivetrainSubsystem.drive();
     }
     

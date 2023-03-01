@@ -271,4 +271,16 @@ public class AutonomousBasePD extends AutonomousBase{
         return 0.0;
       }
 
+    public boolean xAtSetpoint(){
+        return xController.atSetpoint();
+    }
+
+    public boolean yAtSetpoint(){
+        return yController.atSetpoint();
+    }
+
+    public boolean turnAtSetpoint(){
+        return turnController.atSetpoint();
+    }
+
 }

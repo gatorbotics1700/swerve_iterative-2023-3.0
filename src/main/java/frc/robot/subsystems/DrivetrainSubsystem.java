@@ -182,7 +182,7 @@ public class DrivetrainSubsystem {
   
   //returns the direction of the robot, originally in radians, but fromDegrees switches into degrees
   public Rotation2d getGyroscopeRotation() {
-        return Rotation2d.fromDegrees(m_pigeon.getYaw());
+        return m_pose.getRotation();
   }
 
   public double getEncoderPosition(SwerveModule module) {
@@ -247,6 +247,8 @@ public class DrivetrainSubsystem {
 //   }
   
   public void driveTeleop(){
+        //X supplier is INTENTIONALLY y axis
+        //Y supplier is INTENTIONALLY x axis
         DoubleSupplier m_translationXSupplier = () -> -modifyAxis(OI.m_controller.getLeftY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
         DoubleSupplier m_translationYSupplier = () -> -modifyAxis(OI.m_controller.getLeftX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
         DoubleSupplier m_rotationSupplier = () -> -modifyAxis(OI.m_controller.getRightX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
@@ -267,10 +269,11 @@ public class DrivetrainSubsystem {
   public void drive() { //runs periodically
         //System.out.println("pose before update: " + m_pose.getX()/TICKS_PER_INCH + " and y: " + m_pose.getY()/TICKS_PER_INCH);
 
-        SwerveModulePosition[] array =  {new SwerveModulePosition(m_frontLeftModule.getPosition()/Constants.TICKS_PER_METER - tareLFEncoder, new Rotation2d(m_frontLeftModule.getSteerAngle())),
+        SwerveModulePosition[] array =  {
+        new SwerveModulePosition(m_frontLeftModule.getPosition()/Constants.TICKS_PER_METER - tareLFEncoder, new Rotation2d(m_frontLeftModule.getSteerAngle())),
         new SwerveModulePosition(m_frontRightModule.getPosition()/Constants.TICKS_PER_METER - tareRFEncoder, new Rotation2d(m_frontRightModule.getSteerAngle())), 
-        new SwerveModulePosition(m_backRightModule.getPosition()/Constants.TICKS_PER_METER - tareRBEncoder, new Rotation2d(m_backRightModule.getSteerAngle())),
-        new SwerveModulePosition(m_backLeftModule.getPosition()/Constants.TICKS_PER_METER - tareLBEncoder, new Rotation2d(m_backLeftModule.getSteerAngle()))};
+        new SwerveModulePosition(m_backLeftModule.getPosition()/Constants.TICKS_PER_METER - tareLBEncoder, new Rotation2d(m_backLeftModule.getSteerAngle())),
+        new SwerveModulePosition(m_backRightModule.getPosition()/Constants.TICKS_PER_METER - tareRBEncoder, new Rotation2d(m_backRightModule.getSteerAngle()))};
  
         
         // System.out.println("front left module position: " + m_frontLeftModule.getPosition()/Constants.TICKS_PER_METER);
@@ -314,10 +317,10 @@ public class DrivetrainSubsystem {
         m_backLeftModule.set(backLeftSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, backLeftAngle);
         m_backRightModule.set(backRightSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, backRightAngle);*/
         
-        m_frontLeftModule.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getRadians());
-        m_frontRightModule.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());
-        m_backLeftModule.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getRadians());
-        m_backRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
+        m_frontLeftModule.set(-states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getRadians());
+        m_frontRightModule.set(-states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());
+        m_backLeftModule.set(-states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getRadians());
+        m_backRightModule.set(-states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
 
         // System.out.println("The angle of front left module: "+states[0].angle.getDegrees());
         // System.out.println("The angle of front right module: "+states[1].angle.getDegrees());

@@ -38,11 +38,11 @@ public final class Constants {
     //public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(122.87-90);
 
     //swervo - might need to be changed to whats in main
-    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(90 + 279.316);
+    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(279.316);
     //front right offset should be rechecked, is maybe wrong  
-    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(180 + 75.938);
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(180 + 320.098); 
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(180 + 250.183);
+    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(90 + 75.938);
+    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(90 + 320.098); 
+    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(90 + 250.183);
 
     //even can ids are drive, odd can ids are steer
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 26;
@@ -73,5 +73,5 @@ public final class Constants {
     public static final double TAPE_HEIGHT_ONE = 23.5; //inches
     public static final double TAPE_HEIGHT_TWO = 46; //inches
     public static final double LIMELIGHT_HEIGHT = 52; //inches, from the bottom of the chassis
-    public static final double TICKS_PER_METER = 
+    public static final double TICKS_PER_METER = TICKS_PER_REV*GEAR_RATIO/WHEEL_DIAMETER/Math.PI; //talonfx drive encoder
 }
