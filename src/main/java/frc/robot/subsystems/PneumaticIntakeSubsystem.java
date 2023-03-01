@@ -60,6 +60,7 @@ public class PneumaticIntakeSubsystem {
      * Note: Any example colors should be calibrated as the user needs, these
      * are here as a basic example.
      */
+    
     // private final Color kPurpleTarget = new Color(0.494, 0.020, 0.910); //rgb: 126, 5, 232 // acc purple
     // private final Color kYellowTarget = new Color(0.941, 0.745, 0.039); //rgb: 240, 190, 10 // acc yellow 
     private final Color kPurpleTarget = new Color(0.218, 0.367, 0.415); // fake purple (what it sees - aka teal)
@@ -67,8 +68,8 @@ public class PneumaticIntakeSubsystem {
     private final Color kUnknownTarget = new Color(0,0,0); //black
 
     public void init(){
-        solenoidOne.set(kForward);
-        System.out.println("solenoid set to forward");
+        solenoidOne.set(kOff);
+        System.out.println("solenoid set to off");
         colorMatcher.addColorMatch(kPurpleTarget);
         colorMatcher.addColorMatch(kYellowTarget);
         colorMatcher.addColorMatch(kUnknownTarget);
@@ -111,13 +112,6 @@ public class PneumaticIntakeSubsystem {
                 match = colorMatcher.matchClosestColor(new Color(0,0,0));
             }
         }
-
-        // if((Math.abs(detectedColor.red-kYellowTarget.red)>0.05 && Math.abs(detectedColor.green-kYellowTarget.green)>0.05) || (Math.abs(detectedColor.red-kYellowTarget.red)>0.05 && Math.abs(detectedColor.blue-kYellowTarget.blue)>0.05) || (Math.abs(detectedColor.green-kYellowTarget.green)>0.05 && Math.abs(detectedColor.blue-kYellowTarget.blue)>0.05)){
-        //     if((Math.abs(detectedColor.red-kPurpleTarget.red)>0.05 && Math.abs(detectedColor.green-kPurpleTarget.green)>0.05) || (Math.abs(detectedColor.red-kPurpleTarget.red)>0.05 && Math.abs(detectedColor.blue-kPurpleTarget.blue)>0.05) || (Math.abs(detectedColor.green-kPurpleTarget.green)>0.05 && Math.abs(detectedColor.blue-kPurpleTarget.blue)>0.05)){
-        //         colorString = "Unknown";
-        //     } 
-        // }
-        
         
         if (match.color == kPurpleTarget) {
             colorString = "Purple";
@@ -127,7 +121,6 @@ public class PneumaticIntakeSubsystem {
             colorString = "Unknown"; 
         }
         System.out.println(colorString + " detected");
-        
 
         /**
          * Open Smart Dashboard or Shuffleboard to see the color detected by the 
@@ -141,7 +134,7 @@ public class PneumaticIntakeSubsystem {
     }
 
     public void periodic(){
-        /*if(pneumaticIntakeState == PneumaticIntakeStates.ACTUATING){
+        if(pneumaticIntakeState == PneumaticIntakeStates.ACTUATING){
             solenoidOne.set(kForward);
             System.out.println("Solenoid Actuating");
         } else if (pneumaticIntakeState == PneumaticIntakeStates.RETRACTING){
@@ -150,8 +143,8 @@ public class PneumaticIntakeSubsystem {
         }else{
             solenoidOne.set(kOff);
             System.out.println("Solenoid Off");
-        } */
-        switchState_beamBreakSensor(); //comment out one or the other to test one at a time
+        } 
+        //switchState_beamBreakSensor(); 
         //switchState_colorSensor();
     }
 

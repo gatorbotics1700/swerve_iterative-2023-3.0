@@ -7,7 +7,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.IntakeSubsystem.IntakeStates;
 import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
 import frc.robot.OI;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -128,7 +127,6 @@ public class Robot extends TimedRobot {
     System.out.println("front right module: " + m_drivetrainSubsystem.m_frontRightModule.getSteerAngle());*/
     m_drivetrainSubsystem.driveTeleop();
 
-
     if (OI.m_driver_controller.getBButton()){ 
       m_drivetrainSubsystem.stopDrive();
     }
@@ -137,8 +135,8 @@ public class Robot extends TimedRobot {
       m_drivetrainSubsystem.substation();
     }
     
-    if(OI.m_codriver_controller.getYButton()){ //double check if codriver or driver
-      m_drivetrainSubsystem.trueNorth(); // lauren did this!!!
+    if(OI.m_codriver_controller.getYButton()){ 
+      m_drivetrainSubsystem.trueNorth(); 
     }
 
     if(OI.m_codriver_controller.getXButton()){
@@ -155,13 +153,7 @@ public class Robot extends TimedRobot {
       m_drivetrainSubsystem.scoreHigh();
     }
 
-    if(OI.m_codriver_controller.intakeOn >= 0.5) {
-      
-    }
-
-    if (IntakeSubsystem.intakeOff >= 0.5){
-      intakeSubsystem.setState(IntakeStates.STOP);
-    }
+    
   }
 
   /** This function is called once when the robot is disabled. */

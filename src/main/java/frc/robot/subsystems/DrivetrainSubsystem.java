@@ -99,7 +99,7 @@ public class DrivetrainSubsystem {
   private double yaw; //yaw used to find true north
 
   public SwerveDriveOdometry m_odometry; 
-  public Pose2d m_pose = new Pose2d(20, 30, new Rotation2d(Math.PI/4));
+  public static Pose2d m_pose = new Pose2d(20, 30, new Rotation2d(Math.PI/4));
   public AutonomousBasePD autonomousBasePD = new AutonomousBasePD();
 
   //ChassisSpeeds takes in y velocity, x velocity, speed of rotation
