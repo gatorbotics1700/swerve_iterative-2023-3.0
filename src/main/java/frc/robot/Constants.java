@@ -67,9 +67,24 @@ public final class Constants {
     public static final double DRIVE_MOTOR_MAX_VOLTAGE = 0.2;
     public static final double STEER_MOTOR_MIN_VOLTAGE = 0.525; 
     public static final double STEER_MOTOR_MAX_VOLTAGE = 0.8;
+    public static final double SWERVE_GEAR_RATIO = 6.75;
+    public static final double TELESCOPING_ARM_GEAR_RATIO = 36.0; // as of 2/6
+    public static final double FIRST_WHEEL_DIAMETER= 0.9; //0.75 inches - rough estimate by sara 2/2
+    public static final double SECOND_WHEEL_DIAMETER= 0.8; //0.75 inches - rough estimate by sara 2/2
+    public static final double SWERVE_WHEEL_DIAMETER = 4;
+
+    public static final double TICKS_PER_REV = 2048;
+    public static final double UNDER_TWO_TICKS_PER_INCH = TICKS_PER_REV*TELESCOPING_ARM_GEAR_RATIO/FIRST_WHEEL_DIAMETER/Math.PI; //talonfx drive encoder
+    public static final double OVER_TWO_TICKS_PER_INCH = TICKS_PER_REV*TELESCOPING_ARM_GEAR_RATIO/SECOND_WHEEL_DIAMETER/Math.PI;
+    public static final double SWERVE_TICKS_PER_INCH = TICKS_PER_REV*SWERVE_GEAR_RATIO/SWERVE_WHEEL_DIAMETER/Math.PI;
+    
+    public static final int TELESCOPING_MOTOR_ID = 31;
+    public static final int BEAM_BREAK_RECEIVER = 0; //port number of beam break receiver
+    public static final int BEAM_BREAK_SENDER = 1;
+
     public static final double GEAR_RATIO = 6.75;
     public static final double WHEEL_DIAMETER= 0.1016; //meters, previously 4 inches
-    public static final double TICKS_PER_REV = 2048;
-    public static final double TICKS_PER_METER =TICKS_PER_REV*GEAR_RATIO/WHEEL_DIAMETER/Math.PI; //talonfx drive encoder
+
     public static final double METERS_PER_INCH = 0.0254; 
+    public static final double TICKS_PER_METER =TICKS_PER_REV*GEAR_RATIO/WHEEL_DIAMETER/Math.PI; //talonfx drive encoder
 }
