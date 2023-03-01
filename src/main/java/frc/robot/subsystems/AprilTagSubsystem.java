@@ -87,7 +87,8 @@ public class AprilTagSubsystem {
     //Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectory);
     
     public void init(){
-        Robot.m_drivetrainSubsystem.resetOdometry(new Pose2d(AprilTagLocation.scoringPoses[13].getX() + 12.0, AprilTagLocation.scoringPoses[13].getY() + 12.0, Robot.m_drivetrainSubsystem.getGyroscopeRotation()));
+        limeLightSubsystem.setPipeline(0.0);
+        Robot.m_drivetrainSubsystem.resetOdometry(new Pose2d(AprilTagLocation.scoringPoses[1].getX() -24.0, AprilTagLocation.scoringPoses[13].getY() - 12.0, new Rotation2d(Math.toRadians(180.0))));
         System.loadLibrary("opencv_java460");
         //camera0 = new UsbCamera("USB Camera 0", 0);
         aprilTagDetector.addFamily(family, 0); //added 0
@@ -128,17 +129,18 @@ public class AprilTagSubsystem {
             if(LimeLightSubsystem.tv!=0){
                 System.out.println("APRIL TAG DETECTED!!!!!!");
                 setState(AprilTagSequence.CORRECTPOSITION);
-                Robot.m_drivetrainSubsystem.resetOdometry(new Pose2d(35, 72, new Rotation2d(0))); //DELETE THIS WHEN DONE WITH TESTING
+                //Robot.m_drivetrainSubsystem.resetOdometry(new Pose2d(35, 72, new Rotation2d(0))); //DELETE THIS WHEN DONE WITH TESTING
                 System.out.println("Reset odometry to this m_pose: " + DrivetrainSubsystem.m_pose);
-                prePose = autonomousBasePD.preDDD(DrivetrainSubsystem.m_pose, AprilTagLocation.scoringPoses[14]);
+                prePose = autonomousBasePD.preDDD(DrivetrainSubsystem.m_pose, AprilTagLocation.scoringPoses[1]);
                 }
         } else if(states == AprilTagSequence.CORRECTPOSITION){
             //addVisionToOdometry();
-            double[] tempArray = limeLightSubsystem.networkTable.getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
-            DrivetrainSubsystem.m_pose = new Pose2d (tempArray[0], tempArray[1], new Rotation2d(tempArray[5]));
+            //double[] tempArray = limeLightSubsystem.networkTable.getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
+            //DrivetrainSubsystem.m_pose = new Pose2d (tempArray[0], tempArray[1], new Rotation2d(tempArray[5]));
             correctPosition();
             if(autonomousBasePD.getDistanceController().atSetpoint()){
                 setState(AprilTagSequence.OFF);
+                System.out.println("finished correcting position!!!!!");
             }
         }        
     }
@@ -151,7 +153,7 @@ public class AprilTagSubsystem {
         // }
         //Imgproc.cvtColor(source, grayMat,Imgproc.COLOR_BGR2GRAY);
         //outputStream.putFrame(source);
-        detectedAprilTagsArray = aprilTagDetector.detect(grayMat);
+        //detectedAprilTagsArray = aprilTagDetector.detect(grayMat);
         if(detectedAprilTagsArray.length == 0){
             return;
         } else {
