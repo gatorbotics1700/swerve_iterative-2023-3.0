@@ -39,7 +39,6 @@ public class Robot extends TimedRobot {
   private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<AutonomousBase>();
   
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
-  public static final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   public static final ArmTelescopingSubsystem armTelescopingSubsystem = new ArmTelescopingSubsystem();
   //private final Field2d m_field = new Field2d();
   ChassisSpeeds m_ChassisSpeeds;
@@ -69,8 +68,6 @@ public class Robot extends TimedRobot {
      kP = tab.add("Auto kP", 0.1).getEntry(); 
      kI = tab.add("Auto kI", 0.0).getEntry();
      kD = tab.add("Auto kD", 0.0).getEntry();
-   
-
   }
 
   /**
@@ -132,37 +129,48 @@ public class Robot extends TimedRobot {
     System.out.println("front right module: " + m_drivetrainSubsystem.m_frontRightModule.getSteerAngle());*/
     m_drivetrainSubsystem.driveTeleop();
 
+    //driver
     if (OI.m_driver_controller.getBButton()){ 
       m_drivetrainSubsystem.stopDrive();
     }
 
-    if(OI.m_codriver_controller.getAButton()){ 
-      m_drivetrainSubsystem.substation();
-    }
-    
-    if(OI.m_codriver_controller.getYButton()){ 
+    if(OI.m_driver_controller.getYButton()){ 
       m_drivetrainSubsystem.trueNorth(); 
     }
 
+    //codriver
+    if(OI.m_codriver_controller.getAButton()){ 
+      m_drivetrainSubsystem.substation();
+    }
+
+    if(OI.m_codriver_controller.getBButton()){
+      m_drivetrainSubsystem.scoreHigh();
+    }
+    
     if(OI.m_codriver_controller.getXButton()){
+      m_drivetrainSubsystem.scoreMid();
+    }
+
+    if(OI.m_codriver_controller.getYButton()){
+      m_drivetrainSubsystem.scoreHigh();
+    }
+
+    if(OI.m_codriver_controller.getLeftBumper()){
       m_drivetrainSubsystem.pitchBalance(0.0);
     }
 
-    if(OI.m_codriver_controller.getLeftBumper()){//score low
-      m_drivetrainSubsystem.scoreLow();
+    if(OI.m_codriver_controller.getRightBumper()){
     }
-    if(OI.m_codriver_controller.getRightBumper()){//score mid
-      m_drivetrainSubsystem.scoreMid();
-    }
-    if(OI.m_codriver_controller.getAButton()){//score high
-      m_drivetrainSubsystem.scoreHigh();
-    }
+    
     if(OI.intakeOn > 0){
       m_drivetrainSubsystem.intake();
     }
+
     if(OI.intakeOff > 0){
       m_drivetrainSubsystem.outtake();
     }
+
+    //4 more for april tags, 1 for tape
   }
 
   /** This function is called once when the robot is disabled. */

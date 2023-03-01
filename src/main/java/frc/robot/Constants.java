@@ -78,6 +78,8 @@ public final class Constants {
 
     public static final double UNDER_TWO_TICKS_PER_INCH = TICKS_PER_REV*TELESCOPING_ARM_GEAR_RATIO/FIRST_WHEEL_DIAMETER/Math.PI; //talonfx drive encoder
     public static final double OVER_TWO_TICKS_PER_INCH = TICKS_PER_REV*TELESCOPING_ARM_GEAR_RATIO/SECOND_WHEEL_DIAMETER/Math.PI;
-    public static final int INTAKE_SENSOR = 0;
+
+    public static final int BEAM_BREAK_RECEIVER = 0; //port number of beam break receiver
+    public static final int BEAM_BREAK_SENDER = 1;
 
 }

@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import frc.robot.Constants;
+import frc.robot.Constants;
 import frc.robot.OI;
 
 public class PneumaticIntakeSubsystem {
@@ -32,7 +33,7 @@ public class PneumaticIntakeSubsystem {
     public static DoubleSolenoid solenoidOne = new DoubleSolenoid(7, PneumaticsModuleType.REVPH, 8, 10); 
     public static Compressor compressor = new Compressor(PneumaticsModuleType.REVPH); 
     // Initializes a DigitalInput on DIO 0 (roborio is built in w/ 10 DIOs (digital input-output ports))
-    private DigitalInput beambreakSensor = new DigitalInput(Constants.intakeSensor); 
+    private DigitalInput beambreakSensor = new DigitalInput(Constants.BEAM_BREAK_RECEIVER); 
 
     /**
      * Change the I2C port below to match the connection of your color sensor
