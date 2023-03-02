@@ -167,16 +167,16 @@ public class Robot extends TimedRobot {
       }
     }
     
-    //triggers can be used for smth else now - janet 3/1 b/c above covers
-    if(OI.intakeOn > 0){
-      m_drivetrainSubsystem.intake();
-    }
+    //triggers can be used for smth else now - janet 3/1 
+    // if(OI.intakeOn > 0){
+    //   m_drivetrainSubsystem.intake();
+    // }
 
-    if(OI.intakeOff > 0){
-      m_drivetrainSubsystem.outtake();
-    }
+    // if(OI.intakeOff > 0){
+    //   m_drivetrainSubsystem.outtake();
+    // }
 
-    //4 more buttons for april tags, 1 for tape
+    //4 more buttons are available for april tags, 1 for tape
   }
 
   /** This function is called once when the robot is disabled. */
