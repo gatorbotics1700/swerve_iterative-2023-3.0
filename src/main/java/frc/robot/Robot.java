@@ -134,6 +134,10 @@ public class Robot extends TimedRobot {
       m_drivetrainSubsystem.stopDrive();
     }
 
+    if(OI.m_driver_controller.getXButton()){
+      m_drivetrainSubsystem.pitchBalance(0.0);
+    }
+
     if(OI.m_driver_controller.getYButton()){ 
       m_drivetrainSubsystem.trueNorth(); 
     }
@@ -152,14 +156,19 @@ public class Robot extends TimedRobot {
     }
 
     if(OI.m_codriver_controller.getYButton()){
-      m_drivetrainSubsystem.scoreHigh();
-    }
-
-    if(OI.m_codriver_controller.getLeftBumper()){
-      m_drivetrainSubsystem.pitchBalance(0.0);
+      m_drivetrainSubsystem.scoreLow();
     }
 
     if(OI.m_codriver_controller.getRightBumper()){
+      PneumaticIntakeSubsystem.setState(PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF);
+    }
+
+    if(OI.m_driver_controller.getLeftBumperReleased()){ //needs its own button & not enough
+      if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING || PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF){
+        PneumaticIntakeSubsystem.setState(PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING);
+      } else if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING){
+        PneumaticIntakeSubsystem.setState(PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING); 
+      }
     }
     
     if(OI.intakeOn > 0){
