@@ -86,5 +86,5 @@ public final class Constants {
     public static final double WHEEL_DIAMETER= 0.1016; //meters, previously 4 inches
 
     public static final double METERS_PER_INCH = 0.0254; 
-    public static final double TICKS_PER_METER =TICKS_PER_REV*GEAR_RATIO/WHEEL_DIAMETER/Math.PI; //talonfx drive encoder
+    public static final double TICKS_PER_METER = TICKS_PER_REV*SWERVE_GEAR_RATIO/SWERVE_WHEEL_DIAMETER/Math.PI*METERS_PER_INCH;
 }

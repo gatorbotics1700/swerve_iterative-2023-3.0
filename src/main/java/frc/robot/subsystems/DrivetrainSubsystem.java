@@ -182,7 +182,7 @@ public class DrivetrainSubsystem {
   
   //returns the direction of the robot, originally in radians, but fromDegrees switches into degrees
   public Rotation2d getGyroscopeRotation() {
-        return Rotation2d.fromDegrees(m_pigeon.getYaw());
+        return m_pose.getRotation();
   }
 
   public double getEncoderPosition(SwerveModule module) {
