@@ -247,19 +247,19 @@ public class DrivetrainSubsystem {
   }
 
   public void scoreLow(){
-        ArmTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
+        armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
   }
 
   public void scoreHigh(){
-        ArmTelescopingSubsystem.setTState(TelescopingStates.HIGH_ARM_LENGTH);
+        armTelescopingSubsystem.setTState(TelescopingStates.HIGH_ARM_LENGTH);
   }
 
   public void scoreMid(){
-        ArmTelescopingSubsystem.setTState(TelescopingStates.MID_ARM_LENGTH);
+        armTelescopingSubsystem.setTState(TelescopingStates.MID_ARM_LENGTH);
   }
 
   public void substation(){
-        ArmTelescopingSubsystem.setTState(TelescopingStates.SHELF_ARM_LENGTH);
+        armTelescopingSubsystem.setTState(TelescopingStates.SHELF_ARM_LENGTH);
   }
 
   public void intake(){
