@@ -14,8 +14,8 @@ public class AutonomousBasePD extends AutonomousBase{
     public static final double driveKP= 0.02;//Robot.kP.getDouble(0.00006);//0.00006;
     public static final double driveKI= 0.0; //Robot.kI.getDouble(0.0);//0.0;
     public static final double driveKD= 0.0; //Robot.kD.getDouble(0.0);//0.0;
-    private final double DRIVE_DEADBAND = 0.0762; //meters - previously 3 inches
-    private final double TURN_DEADBAND = 6; 
+    private final double DRIVE_DEADBAND = 3*Constants.METERS_PER_INCH; //meters - previously 3 inches
+    private final double TURN_DEADBAND = 6*Constants.METERS_PER_INCH; 
 
     
     private Pose2d startingCoordinate;
@@ -114,7 +114,7 @@ public class AutonomousBasePD extends AutonomousBase{
             System.out.println("drive");
         } else {
             drivetrainSubsystem.drive();
-            //System.out.println("pose in auto: " + DrivetrainSubsystem.m_pose.getX() + " " + DrivetrainSubsystem.m_pose.getY());
+            System.out.println("pose in auto: " + DrivetrainSubsystem.m_pose.getX() + " " + DrivetrainSubsystem.m_pose.getY());
             if (states == States.DRIVE){
                 driveDesiredDistance(goalCoordinate1);
                 //System.out.println("inside drive state! pose: " + DrivetrainSubsystem.m_pose.getX() + " " + DrivetrainSubsystem.m_pose.getY());
@@ -125,7 +125,7 @@ public class AutonomousBasePD extends AutonomousBase{
             // } else if(states == States.TURN1){
             //     turnDesiredAngle(goalAngle1);
                 if(xController.atSetpoint() && yController.atSetpoint() && turnController.atSetpoint()){
-                    setState(States.DRIVE2);  
+                    setState(States.STOP);  
                     System.out.println("drive 2");
                   //  System.out.println("Position: " + DrivetrainSubsystem.m_pose.getX() + ", " + DrivetrainSubsystem.m_pose.getY());
                 }

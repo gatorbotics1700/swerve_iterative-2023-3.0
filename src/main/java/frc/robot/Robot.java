@@ -70,7 +70,7 @@ public class Robot extends TimedRobot {
   // center : 325.8415 (inches)
   // private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
   private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
-  private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(20 * mpi, 40 * mpi, new Rotation2d(Math.toRadians(90))), new Pose2d(40 * mpi, 0, new Rotation2d(0)), new Pose2d(0, 30 * mpi, new Rotation2d(0)), new Pose2d(40 * mpi, 30 * mpi, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(20 * mpi, 20 * mpi, new Rotation2d(0)), 180.0); 
+  private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0.0, 0.0, new Rotation2d(Math.toRadians(180.0))), new Pose2d(5 * mpi, -40 * mpi, new Rotation2d(Math.toRadians(180))), new Pose2d(40 * mpi, 0, new Rotation2d(0)), new Pose2d(0, 30 * mpi, new Rotation2d(0)), new Pose2d(40 * mpi, 30 * mpi, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(20 * mpi, 20 * mpi, new Rotation2d(0)), 180.0); 
   
   // blue alliance 
   // private AutonomousBasePD HDplaceTwoEngageB = new AutonomousBasePD(new Pose2d(56.069 * mpi, 20.19 * mpi,  new Rotation2d(0)), new Pose2d(278.999 * mpi, 36.19 * mpi, new Rotation2d(0)), new Pose2d(257.650 * mpi, 64.004 * mpi, new Rotation2d(0)), new Pose2d(156.859 * mpi, 83.368 * mpi, new Rotation2d(0)), new Pose2d(156.859 * mpi, 83.368 * mpi, new Rotation2d(0)), new Pose2d(156.859 * mpi, 83.368 * mpi, new Rotation2d(0)), new Pose2d(156.859 * mpi, 83.368 * mpi, new Rotation2d(0)));
@@ -155,7 +155,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX());
     SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY());
     
-    m_field.setRobotPose(DrivetrainSubsystem.m_odometry.getEstimatedPosition());
+    //m_field.setRobotPose(DrivetrainSubsystem.m_odometry.getEstimatedPosition());
     
   }
 
@@ -259,7 +259,7 @@ public class Robot extends TimedRobot {
     /*if(m_drivetrainSubsystem.getGyroscopeRotation().getDegrees() <= 370){
       m_drivetrainSubsystem.setSpeed(new ChassisSpeeds(0, 0.2, 0));
     }*/
-    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0, Math.toRadians(0), m_drivetrainSubsystem.getGyroscopeRotation()));
+    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.0, Math.toRadians(0), m_drivetrainSubsystem.getGyroscopeRotation()));
     
     //m_autoSelected.turnDesiredAngle(180);
     m_drivetrainSubsystem.drive();

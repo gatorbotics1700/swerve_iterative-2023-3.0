@@ -65,14 +65,14 @@ public class DrivetrainSubsystem {
   public final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
           // Setting up location of modules relative to the center of the robot
           // Front left
-          new Translation2d(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0),
+          new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0),
           //translation2d refers to the robot's x and y position in the larger field coordinate system
           // Front right
-          new Translation2d(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0),
+          new Translation2d(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0), //SCREWING UP
           // Back left
-          new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0),
+          new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0), //OOPS
           // Back right
-          new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0)
+          new Translation2d(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0)
   );
 
   // By default we use a Pigeon for our gyroscope. But if you use another gyroscope, like a NavX, you can change this.
@@ -169,7 +169,7 @@ public class DrivetrainSubsystem {
             BACK_RIGHT_MODULE_STEER_OFFSET
     );
     
-    m_odometry = new SwerveDrivePoseEstimator(m_kinematics, getGyroscopeRotation(), new SwerveModulePosition[] {m_frontLeftModule.getSwerveModulePosition(), m_frontRightModule.getSwerveModulePosition(), m_backRightModule.getSwerveModulePosition(), m_backLeftModule.getSwerveModulePosition()}, new Pose2d());
+    m_odometry = new SwerveDrivePoseEstimator(m_kinematics, getGyroscopeRotation(), new SwerveModulePosition[] {m_frontLeftModule.getSwerveModulePosition(), m_frontRightModule.getSwerveModulePosition(), m_backLeftModule.getSwerveModulePosition(), m_backRightModule.getSwerveModulePosition()}, new Pose2d());
   }
    /**
    * Sets the gyroscope angle to zero. This can be used to set the direction the robot is currently facing to the
@@ -205,7 +205,7 @@ public class DrivetrainSubsystem {
   public void resetOdometry(Pose2d start){
         zeroGyroscope();
         zeroDriveEncoder();
-        SwerveModulePosition[] positionArray =  new SwerveModulePosition[] { //IMPORTANT?
+        SwerveModulePosition[] positionArray =  new SwerveModulePosition[] {
                 new SwerveModulePosition(m_frontLeftModule.getPosition()/Constants.TICKS_PER_METER - tareLFEncoder, new Rotation2d(m_frontLeftModule.getSteerAngle())),
                 new SwerveModulePosition(m_frontRightModule.getPosition()/Constants.TICKS_PER_METER - tareRFEncoder, new Rotation2d(m_frontRightModule.getSteerAngle())), 
                 new SwerveModulePosition(m_backLeftModule.getPosition()/Constants.TICKS_PER_METER - tareLBEncoder, new Rotation2d(m_backLeftModule.getSteerAngle())),
