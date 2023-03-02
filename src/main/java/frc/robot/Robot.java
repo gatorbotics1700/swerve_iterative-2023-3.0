@@ -54,10 +54,11 @@ public class Robot extends TimedRobot {
   public static DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   // whole field: 651.683 
   // center : 325.8415
-  /*private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
+  private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), 0.0);
   private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
-  private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(10, 30, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)));
+  private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(180)), new Pose2d(0, -20*Constants.METERS_PER_INCH, new Rotation2d(180)), new Pose2d(10, 30, new Rotation2d(180)), new Pose2d(0, 20, new Rotation2d(180)), new Pose2d(0, 20, new Rotation2d(180)), new Pose2d(0, 20, new Rotation2d(180)), new Pose2d(0, 20, new Rotation2d(180)), 0.0);
   
+  /*
   // blue alliance 
   private AutonomousBasePD HDplaceTwoEngageB = new AutonomousBasePD(new Pose2d(56.069, 20.19, new Rotation2d(0)), new Pose2d(278.999, 36.19, new Rotation2d(0)), new Pose2d(257.650, 64.004, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)));
   private AutonomousBasePD HBLeaveB = new AutonomousBasePD(new Pose2d(56.069, 200.046, new Rotation2d(0)), new Pose2d(219.915, 200.046, new Rotation2d(0)), new Pose2d(219.915, 200.046, new Rotation2d(0)), new Pose2d(219.915, 200.046, new Rotation2d(0)), new Pose2d(219.915, 200.046, new Rotation2d(0)), new Pose2d(219.915, 200.046, new Rotation2d(0)), new Pose2d(219.915, 200.046, new Rotation2d(0)));
@@ -96,10 +97,10 @@ public class Robot extends TimedRobot {
   */
   @Override
   public void robotInit() { //creates options for different autopaths, names are placeholders
-    /* 
+     
     System.out.println("#I'm Awake");
     m_chooser.setDefaultOption("Default testing auto", testPath);
-    m_chooser.addOption("Nothing! No go!", noGo);
+    /*m_chooser.addOption("Nothing! No go!", noGo);
     m_chooser.addOption("Leave community from Hot Dog", HDLeaveB);
     m_chooser.addOption("Leave community from HamBurger", HBLeaveB); 
     m_chooser.addOption("Timed auto", timedPath);
@@ -136,20 +137,20 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-      m_AprilTagSubsystem.init();
+      //m_AprilTagSubsystem.init();
     //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
     //System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
 
     m_autoSelected = m_chooser.getSelected();
     m_autoSelected.init();
-    m_AprilTagSubsystem.init();
+    //m_AprilTagSubsystem.init();
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-     m_AprilTagSubsystem.periodic();
-     //m_autoSelected.periodic();
+     //m_AprilTagSubsystem.periodic();
+     m_autoSelected.periodic();
      //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
     
   }

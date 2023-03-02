@@ -73,5 +73,6 @@ public final class Constants {
     public static final double TAPE_HEIGHT_ONE = 23.5; //inches
     public static final double TAPE_HEIGHT_TWO = 46; //inches
     public static final double LIMELIGHT_HEIGHT = 52; //inches, from the bottom of the chassis
-    public static final double TICKS_PER_METER = TICKS_PER_REV*GEAR_RATIO/WHEEL_DIAMETER/Math.PI; //talonfx drive encoder
+    public static final double METERS_PER_INCH = 0.0254;
+    public static final double TICKS_PER_METER = TICKS_PER_REV*GEAR_RATIO/WHEEL_DIAMETER/Math.PI*METERS_PER_INCH; //talonfx drive encoder 
 }

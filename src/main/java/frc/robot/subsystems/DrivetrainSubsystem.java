@@ -249,9 +249,9 @@ public class DrivetrainSubsystem {
   public void driveTeleop(){
         //X supplier is INTENTIONALLY y axis
         //Y supplier is INTENTIONALLY x axis
-        DoubleSupplier m_translationXSupplier = () -> -modifyAxis(OI.m_controller.getLeftY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
-        DoubleSupplier m_translationYSupplier = () -> -modifyAxis(OI.m_controller.getLeftX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
-        DoubleSupplier m_rotationSupplier = () -> -modifyAxis(OI.m_controller.getRightX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
+        DoubleSupplier m_translationXSupplier = () -> modifyAxis(OI.m_controller.getLeftY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
+        DoubleSupplier m_translationYSupplier = () -> modifyAxis(OI.m_controller.getLeftX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
+        DoubleSupplier m_rotationSupplier = () -> modifyAxis(OI.m_controller.getRightX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
         
         //setting speed
         setSpeed(
@@ -317,10 +317,10 @@ public class DrivetrainSubsystem {
         m_backLeftModule.set(backLeftSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, backLeftAngle);
         m_backRightModule.set(backRightSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, backRightAngle);*/
         
-        m_frontLeftModule.set(-states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getRadians());
-        m_frontRightModule.set(-states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());
-        m_backLeftModule.set(-states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getRadians());
-        m_backRightModule.set(-states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
+        m_frontLeftModule.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getRadians());
+        m_frontRightModule.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());
+        m_backLeftModule.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getRadians());
+        m_backRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
 
         // System.out.println("The angle of front left module: "+states[0].angle.getDegrees());
         // System.out.println("The angle of front right module: "+states[1].angle.getDegrees());
