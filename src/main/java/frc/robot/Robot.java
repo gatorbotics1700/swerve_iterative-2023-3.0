@@ -76,8 +76,6 @@ public class Robot extends TimedRobot {
   private AutonomousBasePD threeUnderChargeStation = new AutonomousBasePD(new Pose2d(56.069, 17.332, new Rotation2d(0)), new Pose2d(278.999, 37.193, new Rotation2d(0)), new Pose2d(56.222, 43.068, new Rotation2d(0)), new Pose2d(197.484,45.934, new Rotation2d(0)), new Pose2d(279.077, 85.622, new Rotation2d(0)), new Pose2d(197.484,40.000, new Rotation2d(0)), new Pose2d(56.154,66.117, new Rotation2d(0)));
   private AutonomousBasePD threeAboveChargeStation = new AutonomousBasePD(new Pose2d(56.069, 200.046, new Rotation2d(0)), new Pose2d(278.999, 180.683, new Rotation2d(0)), new Pose2d(56.069, 174.725, new Rotation2d(0)), new Pose2d(207.006, 174.725, new Rotation2d(0)), new Pose2d(278.006, 133.515, new Rotation2d(0)), new Pose2d(200.552, 185.151, new Rotation2d(0)), new Pose2d(57.062, 154.368, new Rotation2d(0)));*/
 
-  
-  public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   private final Field2d m_field = new Field2d();
   ChassisSpeeds m_ChassisSpeeds;
 
@@ -192,23 +190,43 @@ public class Robot extends TimedRobot {
     System.out.println("front right module: " + m_drivetrainSubsystem.m_frontRightModule.getSteerAngle());*/
     m_drivetrainSubsystem.driveTeleop();
 
+//driver
+if (OI.m_driver_controller.getBButton()){ 
+  m_drivetrainSubsystem.stopDrive();
+}
 
-    if (OI.m_controller.getBButton()){
-      m_drivetrainSubsystem.stopDrive();
-    }
+if(OI.m_driver_controller.getXButton()){
+  m_drivetrainSubsystem.pitchBalance(0.0);
+}
 
-    if(OI.m_controller.getAButtonReleased()){
-      pneumaticIntakeSubsystem.setState(PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF);
-    }
+//codriver
+if(OI.m_codriver_controller.getAButton()){ 
+  m_drivetrainSubsystem.substation();
+}
 
-    if(OI.m_controller.getXButtonReleased()){
-      if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING || PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF){
-        pneumaticIntakeSubsystem.setState(PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING);
-      } else if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING){
-        pneumaticIntakeSubsystem.setState(PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING); 
-      }
-    }
+if(OI.m_codriver_controller.getBButton()){
+  m_drivetrainSubsystem.scoreHigh();
+}
 
+if(OI.m_codriver_controller.getXButton()){
+  m_drivetrainSubsystem.scoreMid();
+}
+
+if(OI.m_codriver_controller.getYButton()){
+  m_drivetrainSubsystem.scoreLow();
+}
+
+if(OI.m_codriver_controller.getRightBumper()){
+  PneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF);
+}
+
+if(OI.m_driver_controller.getLeftBumperReleased()){ //needs its own button & not enough
+  if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING || PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF){
+    PneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING);
+  } else if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING){
+    PneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING); 
+  }
+}
   }
 
   /** This function is called once when the robot is disabled. */
