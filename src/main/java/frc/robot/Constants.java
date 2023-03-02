@@ -41,10 +41,10 @@ public final class Constants {
     //swervo - might need to be changed to whats in main
     //public static final double offset = Robot.test.getDouble(DRIVETRAIN_PIGEON_ID); 
     
-    // public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(185.713);   //281.07421875-90 //279.316-270
-    // public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(341.982); //343.828125+90 //75.938
-    // public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(229.064);  //231.6796875+90 //320.098
-    // public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(341.904);//343.828125-90 //250.183
+    // public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(279.316);   //281.07421875-90 //279.316-270
+    // public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(90 + 75.938); //343.828125+90 //75.938
+    // public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(90 + 320.098);  //231.6796875+90 //320.098
+    // public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(90 + 250.183);//343.828125-90 //250.183
 
     //even can ids are drive, odd can ids are steer
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 26;
