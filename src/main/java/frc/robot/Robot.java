@@ -10,6 +10,9 @@ import frc.robot.OI;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.*;
+import edu.wpi.first.util.sendable.SendableBuilder.*;
+import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.autonomous.*;
 import frc.robot.Constants;
 
@@ -18,15 +21,16 @@ import com.fasterxml.jackson.core.sym.Name;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTable.*;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -39,6 +43,19 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 //private AutonomousBasePD mScore = new AutonomousBasePD(new Translation2d(222.037, 0), new Translation2d(135.091, -41.307), new Translation2d(0, -44.163), new Translation2d(222.894, -50.377), new Translation2d(0, -65.388), new Translation2d(0, -65.388));
 
 public class Robot extends TimedRobot {
+
+  private static final String kDefaultAuto = "Default";
+  private static final String kCustomAuto = "My Auto";
+  private String m_autoSelected;
+  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  private final AutonomousBase autonomousBasePD = new AutonomousBasePD(new Pose2d(0*Constants.TICKS_PER_INCH, -20*Constants.TICKS_PER_INCH, new Rotation2d(0)), 0.0, new Pose2d(), 0.0);
+  private static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
+  public static double universalPitch=0;
+
+  public static DrivetrainSubsystem getDrivetrainSubsystem(){
+    return m_drivetrainSubsystem;
+  }
+
   private AutonomousBase m_autoSelected;
   private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<AutonomousBase>();
   /*private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
@@ -59,8 +76,6 @@ public class Robot extends TimedRobot {
   private AutonomousBasePD threeUnderChargeStation = new AutonomousBasePD(new Pose2d(56.069, 17.332, new Rotation2d(0)), new Pose2d(278.999, 37.193, new Rotation2d(0)), new Pose2d(56.222, 43.068, new Rotation2d(0)), new Pose2d(197.484,45.934, new Rotation2d(0)), new Pose2d(279.077, 85.622, new Rotation2d(0)), new Pose2d(197.484,40.000, new Rotation2d(0)), new Pose2d(56.154,66.117, new Rotation2d(0)));
   private AutonomousBasePD threeAboveChargeStation = new AutonomousBasePD(new Pose2d(56.069, 200.046, new Rotation2d(0)), new Pose2d(278.999, 180.683, new Rotation2d(0)), new Pose2d(56.069, 174.725, new Rotation2d(0)), new Pose2d(207.006, 174.725, new Rotation2d(0)), new Pose2d(278.006, 133.515, new Rotation2d(0)), new Pose2d(200.552, 185.151, new Rotation2d(0)), new Pose2d(57.062, 154.368, new Rotation2d(0)));*/
 
-  
-  public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   private final Field2d m_field = new Field2d();
   ChassisSpeeds m_ChassisSpeeds;
 
@@ -70,6 +85,9 @@ public class Robot extends TimedRobot {
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
+
+
+   //NOTE TO L: ORDER IS TURN, DRIVE, PITCH, VELO
   @Override
   public void robotInit() { //creates options for different autopaths, names are placeholders
  
@@ -86,11 +104,19 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putData("Auto choices", m_chooser);
 
+    m_drivetrainSubsystem.resetOdometry();
+    // universalPitch = m_drivetrainSubsystem.m_pigeon.getPitch();
+    // System.out.println("universal pitch from robot init: " + universalPitch);
+    // m_drivetrainSubsystem.zeroGyroscope();
+    // m_drivetrainSubsystem.zeroDriveEncoder();
+
+
     // ShuffleboardTab tab = DrivetrainSubsystem.tab;
     //  kP = tab.add("Auto kP", 0.1).getEntry(); 
     //  kI = tab.add("Auto kI", 0.0).getEntry();
     //  kD = tab.add("Auto kD", 0.0).getEntry();
    
+
 
   }
 
@@ -120,10 +146,19 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    pneumaticIntakeSubsystem.init();
 
-    //m_autoSelected = m_chooser.getSelected();
-    //m_autoSelected.init();
+    
+    autonomousBasePD.init();
+    /* 
+    m_autoSelected = m_chooser.getSelected();
+    m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
+    System.out.println("Auto selected: " + m_autoSelected);
+
+    */
+
+    m_autoSelected = m_chooser.getSelected();
+    m_autoSelected.init();
+
   }
 
   /** This function is called periodically during autonomous. */
@@ -155,23 +190,43 @@ public class Robot extends TimedRobot {
     System.out.println("front right module: " + m_drivetrainSubsystem.m_frontRightModule.getSteerAngle());*/
     m_drivetrainSubsystem.driveTeleop();
 
+//driver
+if (OI.m_driver_controller.getBButton()){ 
+  m_drivetrainSubsystem.stopDrive();
+}
 
-    if (OI.m_controller.getBButton()){
-      m_drivetrainSubsystem.stopDrive();
-    }
+if(OI.m_driver_controller.getXButton()){
+  m_drivetrainSubsystem.pitchBalance(0.0);
+}
 
-    if(OI.m_controller.getAButtonReleased()){
-      pneumaticIntakeSubsystem.setState(PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF);
-    }
+//codriver
+if(OI.m_codriver_controller.getAButton()){ 
+  m_drivetrainSubsystem.substation();
+}
 
-    if(OI.m_controller.getXButtonReleased()){
-      if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING || PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF){
-        pneumaticIntakeSubsystem.setState(PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING);
-      } else if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING){
-        pneumaticIntakeSubsystem.setState(PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING); 
-      }
-    }
+if(OI.m_codriver_controller.getBButton()){
+  m_drivetrainSubsystem.scoreHigh();
+}
 
+if(OI.m_codriver_controller.getXButton()){
+  m_drivetrainSubsystem.scoreMid();
+}
+
+if(OI.m_codriver_controller.getYButton()){
+  m_drivetrainSubsystem.scoreLow();
+}
+
+if(OI.m_codriver_controller.getRightBumper()){
+  PneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF);
+}
+
+if(OI.m_driver_controller.getLeftBumperReleased()){ //needs its own button & not enough
+  if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING || PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF){
+    PneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING);
+  } else if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING){
+    PneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING); 
+  }
+}
   }
 
   /** This function is called once when the robot is disabled. */
@@ -185,21 +240,47 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-    //m_autoSelected.init();
+
+    m_drivetrainSubsystem.m_pose = new Pose2d(20, 30, new Rotation2d(Math.PI/4));
+    System.out.println("m_pose: " + m_drivetrainSubsystem.m_pose);
+    autonomousBasePD.init();
+
+//helpful shuffleboard documentation: https://first.wpi.edu/wpilib/allwpilib/docs/release/java/edu/wpi/first/wpilibj/shuffleboard/package-summary.html
+//info about widgets: https://first.wpi.edu/wpilib/allwpilib/docs/release/java/edu/wpi/first/wpilibj/shuffleboard/ComplexWidget.html
+//list of widgets: https://first.wpi.edu/wpilib/allwpilib/docs/release/java/edu/wpi/first/wpilibj/shuffleboard/BuiltInWidgets.html#kPIDCommand
+
+    ShuffleboardTab pidTab = Shuffleboard.getTab("PID Controllers");//creates a new tab for pid controllers
+   pidTab.add("Pitch PID", DrivetrainSubsystem.pitchController).withWidget(BuiltInWidgets.kPIDCommand).withSize(2, 3);
+    /*
+    //following code via https://docs.wpilib.org/en/stable/docs/software/dashboards/shuffleboard/layouts-with-code/organizing-widgets.html
+    ShuffleboardLayout turnPID = pidTab.getLayout("Turn PID", BuiltInLayouts.kPIDCommand).withSize(2, 2);
+    turnPID.add(new ElevatorDownCommand());
+
+    ShuffleboardLayout drivePID = pidTab.getLayout("Drive PID", BuiltInLayouts.kPIDCommand).withSize(2, 2);
+    drivePID.add(new ElevatorDownCommand());//what should we put here instead of the commands? i think this is where we should write the info and ask user for input?
+    drivePID.add(new ElevatorUpCommand());
+*/
+/*
+    ShuffleboardLayout veloPID = pidTab.getLayout("Velocity PID", BuiltInLayouts.kPIDCommand).withSize(2, 2);//change this layout to support input
+    pitchPID.add(new ElevatorDownCommand());//what should we put here instead of the commands? i think this is where we should write the info and ask user for input?
+    pitchPID.add(new ElevatorUpCommand());
+
+    //following code via https://docs.wpilib.org/en/stable/docs/software/dashboards/shuffleboard/advanced-usage/shuffleboard-tuning-pid.html
+    //NetworkTableEntry turnWidget = pidTab.add("Turn PID", 1).getEntry();//NOTE: i think this is an alternative way to create a widget as opposed to what's shown above
+  */
+
+    System.out.println("Trajectory: " + Trajectories.uno);
 
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-    // m_drivetrainSubsystem.setSpeed(
-    //         ChassisSpeeds.fromFieldRelativeSpeeds(1, 0, 
-    //         0, 
-    //         m_drivetrainSubsystem.getGyroscopeRotation())
-    //     ); 
-    //     m_drivetrainSubsystem.drive();
 
-    // System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
+    /*intial test!*/
+    m_drivetrainSubsystem.setSpeed(new ChassisSpeeds(-0.2, -0.2, 0));
+    
+    m_drivetrainSubsystem.drive();
   }
 
   /** This function is called once when the robot is first started up. */
@@ -209,4 +290,11 @@ public class Robot extends TimedRobot {
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {}
+
+  /* 
+  @Override
+  public void initSendable(SendableBuilder builder){ //via https://docs.wpilib.org/en/stable/docs/software/telemetry/writing-sendable-classes.html
+    builder.addDoubleProperty("turnPIDk", this::getSetpoint, this::setSetpoint);//TODO finish adding these, and verify that this works
+  }
+  */
 }

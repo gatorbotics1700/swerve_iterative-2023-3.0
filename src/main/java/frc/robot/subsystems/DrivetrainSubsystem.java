@@ -18,7 +18,11 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import frc.robot.Robot;
+
+import edu.wpi.first.math.controller.PIDController;
 
 import java.util.Arrays;
 import java.util.function.DoubleSupplier;
@@ -73,7 +77,9 @@ public class DrivetrainSubsystem {
   // The important thing about how you configure your gyroscope is that rotating the robot counter-clockwise should
   // cause the angle reading to increase until it wraps back over to zero.
 
-  private final PigeonIMU m_pigeon = new PigeonIMU(DRIVETRAIN_PIGEON_ID);
+  public double MINOUTPUT = 0.1; 
+
+  public final PigeonIMU m_pigeon = new PigeonIMU(DRIVETRAIN_PIGEON_ID);
   // These are our modules. We initialize them in the constructor.
   public final SwerveModule m_frontLeftModule;
   public final SwerveModule m_frontRightModule;
@@ -84,10 +90,21 @@ public class DrivetrainSubsystem {
   private double tareLFEncoder = 0.0;
   private double tareRFEncoder = 0.0;
   private double tareRBEncoder = 0.0;
+  public double error1;
+
+    public static double pitchKP= 0.025; //for no weight on charge station
+    public static double pitchKI= 0.0;
+    public static double pitchKD= 0.001; //^0.001
+    public static double veloKP = 0.25;
+    public static double veloKI = 0.3; 
+    public static double veloKD = 0.35;
+    public static PIDController pitchController = new PIDController(pitchKP, pitchKI, pitchKD);
+    private PIDController velocityController = new PIDController(veloKP, veloKI, veloKD);
 
   public static SwerveDriveOdometry m_odometry; 
   public static Pose2d m_pose = new Pose2d();
   public static ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain"); 
+  public boolean isRedAlliance = true;
 
   //ChassisSpeeds takes in y velocity, x velocity, speed of rotation
   private ChassisSpeeds m_chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
@@ -199,7 +216,7 @@ public class DrivetrainSubsystem {
 
   public void resetOdometry(Pose2d start){
         zeroGyroscope(); //truly resets gyro
-        //zeroDriveEncoder(); 
+        zeroDriveEncoder(); 
         //finds the tare
         SwerveModulePosition [] positionArray =  new SwerveModulePosition[] {
                 m_frontLeftModule.getSwerveModulePosition(),
@@ -207,11 +224,11 @@ public class DrivetrainSubsystem {
                 m_backRightModule.getSwerveModulePosition(),
                 m_backLeftModule.getSwerveModulePosition() };
         m_pose = start;
-        System.out.println("position array: " + positionArray.toString());
-        System.out.println("m_pose: " + m_pose);
+        //System.out.println("position array: " + positionArray.toString());
+        //System.out.println("m_pose: " + m_pose);
         m_odometry.resetPosition(getGyroscopeRotation(), positionArray, m_pose);
-        System.out.println("#resetodometry! new pose: " + m_pose.getX()/SWERVE_TICKS_PER_INCH + " y: " + m_pose.getY()/SWERVE_TICKS_PER_INCH);
-        System.out.println("inputs for the reset: " + getGyroscopeRotation() + m_frontLeftModule.getSwerveModulePosition().distanceMeters + m_frontRightModule.getSwerveModulePosition().distanceMeters + m_backLeftModule.getSwerveModulePosition().distanceMeters + m_backRightModule.getSwerveModulePosition().distanceMeters);
+        //System.out.println("#resetodometry! new pose: " + m_pose.getX()/SWERVE_TICKS_PER_INCH + " y: " + m_pose.getY()/SWERVE_TICKS_PER_INCH);
+        //System.out.println("inputs for the reset: " + getGyroscopeRotation() + m_frontLeftModule.getSwerveModulePosition().distanceMeters + m_frontRightModule.getSwerveModulePosition().distanceMeters + m_backLeftModule.getSwerveModulePosition().distanceMeters + m_backRightModule.getSwerveModulePosition().distanceMeters);
   }
 
   public void zeroDriveEncoder(){
@@ -239,9 +256,9 @@ public class DrivetrainSubsystem {
 //   }
   
   public void driveTeleop(){
-        DoubleSupplier m_translationXSupplier = () -> -modifyAxis(OI.m_controller.getLeftY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
-        DoubleSupplier m_translationYSupplier = () -> -modifyAxis(OI.m_controller.getLeftX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
-        DoubleSupplier m_rotationSupplier = () -> -modifyAxis(OI.m_controller.getRightX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
+        DoubleSupplier m_translationXSupplier = () -> -modifyAxis(OI.m_driver_controller.getLeftY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
+        DoubleSupplier m_translationYSupplier = () -> -modifyAxis(OI.m_driver_controller.getLeftX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
+        DoubleSupplier m_rotationSupplier = () -> -modifyAxis(OI.m_driver_controller.getRightX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
         
         //setting speed
         setSpeed(
@@ -259,7 +276,7 @@ public class DrivetrainSubsystem {
   public void drive() { //runs periodically
     //System.out.println("pose before update: " + m_pose.getX()/TICKS_PER_INCH + " and y: " + m_pose.getY()/TICKS_PER_INCH);
 
-        //System.out.println("inputs for the update: " + getGyroscopeRotation() + m_frontLeftModule.getSwerveModulePosition().distanceMeters + m_frontRightModule.getSwerveModulePosition().distanceMeters + m_backLeftModule.getSwerveModulePosition().distanceMeters + m_backRightModule.getSwerveModulePosition().distanceMeters);
+    //System.out.println("inputs for the update: " + getGyroscopeRotation() + m_frontLeftModule.getSwerveModulePosition().distanceMeters + m_frontRightModule.getSwerveModulePosition().distanceMeters + m_backLeftModule.getSwerveModulePosition().distanceMeters + m_backRightModule.getSwerveModulePosition().distanceMeters);
     m_pose = m_odometry.update(getGyroscopeRotation(), new SwerveModulePosition[] {m_frontLeftModule.getSwerveModulePosition(), m_frontRightModule.getSwerveModulePosition(), m_backLeftModule.getSwerveModulePosition(), m_backRightModule.getSwerveModulePosition()});
     
     System.out.println("new pose after update: " + m_pose.getX()/SWERVE_TICKS_PER_INCH + " and y: " + m_pose.getY()/SWERVE_TICKS_PER_INCH);
@@ -274,6 +291,10 @@ public class DrivetrainSubsystem {
     m_frontRightModule.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());
     m_backLeftModule.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getRadians());
     m_backRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
+
+
+    SmartDashboard.putBoolean("On Red Alliance?", isRedAlliance);
+
   }
 
   private static double deadband(double value, double deadband) {
@@ -307,9 +328,43 @@ public class DrivetrainSubsystem {
             }
     }
 
+    public double getAverage(){
+        double average = (m_frontLeftModule.getDriveVelocity() + m_frontRightModule.getDriveVelocity() + m_backLeftModule.getDriveVelocity() + m_backRightModule.getDriveVelocity()) / 4;
+        return average;
+    }
+
     //AUTO AND FAILSAFE
     public void stopDrive() {
         setSpeed(new ChassisSpeeds(0.0, 0.0, 0.0));
         drive();
    }
+
+   public void pitchBalance(double pitchSetpoint){
+        System.out.println("pitch: " + m_pigeon.getPitch());
+        System.out.println("universal pitch: " + Robot.universalPitch);
+        double pitchAfterCorrection = m_pigeon.getPitch()-Robot.universalPitch;
+        System.out.println("pitch after correcting for universalPitch: " + pitchAfterCorrection);
+        pitchController.setSetpoint(pitchSetpoint); 
+        double output = pitchController.calculate(pitchAfterCorrection, pitchSetpoint);
+        System.out.println("output: " + output); 
+        setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, -output, 0, getGyroscopeRotation()));
+        drive();
+        
+        if (Math.abs(pitchAfterCorrection - pitchSetpoint) < 1.0){
+            setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0,getGyroscopeRotation()));
+            //velocityPD(0);
+        } else{
+                if(Math.abs(output) < MINOUTPUT){
+                   output = Math.signum(output) * MINOUTPUT;
+                }
+        }
+    }
+
+    public void velocityPD(double velocitySetpoint){
+        velocityController.setSetpoint(velocitySetpoint);
+        double outputVelo = velocityController.calculate(getAverage(), velocitySetpoint);
+        System.out.println("outputVelo is: " + outputVelo);
+        System.out.println("error is: " + (velocitySetpoint - outputVelo));
+        setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(outputVelo, 0, 0, getGyroscopeRotation()));
+    }
 }

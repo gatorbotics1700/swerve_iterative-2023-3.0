@@ -11,11 +11,14 @@ public class AutonomousBasePD extends AutonomousBase{
     public static final double turnKP= 0.0002;
     public static final double turnKI= 0.0;
     public static final double turnKD= 0.0;
-    public static final double driveKP= 0.00006; //Robot.kP.getDouble(1.0);//0.00006;
-    public static final double driveKI= 0.0;//Robot.kI.getDouble(0.0);//0.0;
-    public static final double driveKD= 0.0;//Robot.kD.getDouble(2.0);//0.0;
-    private final double DRIVE_DEADBAND = 3;
-    private final double TURN_DEADBAND = 6;
+  
+    public static final double driveKP= 0.00004;
+    public static final double driveKI= 0.0;
+    public static final double driveKD= 0.0;
+    private final double DRIVE_DEADBAND = 7;
+    private final double TURN_DEADBAND = 0.3;
+    private double xdirection;
+    private double ydirection;
     private double hypotenuse;
 
     
@@ -48,11 +51,12 @@ public class AutonomousBasePD extends AutonomousBase{
 
     @Override
     public void init(){
-        drivetrainSubsystem.resetOdometry(startingCoordinate);
-        // directionController.reset();
-        // distanceController.reset();
+
+        drivetrainSubsystem.resetOdometry();
+        directionController.reset();
+        distanceController.reset();
         directionController.setTolerance(TURN_DEADBAND); 
-        distanceController.setTolerance(DRIVE_DEADBAND*Constants.SWERVE_TICKS_PER_INCH);
+        distanceController.setTolerance(DRIVE_DEADBAND*Constants.TICKS_PER_INCH);
         states = States.FIRST;
         System.out.println("INIT!\nINIT!\nINIT!");
 
@@ -70,7 +74,9 @@ public class AutonomousBasePD extends AutonomousBase{
     
     }
 
-    private static States states = States.FIRST; 
+
+    private static States states = States.TURN;
+
 
     public void setState(States newState){
         states = newState;
@@ -79,7 +85,7 @@ public class AutonomousBasePD extends AutonomousBase{
     @Override
     public void periodic()
     {
-        
+
         //System.out.println("state: "+states);
         if (states == States.FIRST){
             desiredTranslation = preDDD(startingCoordinate, goalCoordinate1); 
@@ -90,8 +96,17 @@ public class AutonomousBasePD extends AutonomousBase{
             driveDesiredDistance(desiredTranslation);
             System.out.println("inside drive state! pose: " + DrivetrainSubsystem.m_pose.getX()/Constants.SWERVE_TICKS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getY()/Constants.SWERVE_TICKS_PER_INCH);
             if (distanceController.atSetpoint()){
-                desiredTranslation = preDDD(goalCoordinate1, goalCoordinate2);
-                setState(States.DRIVE2);
+                preTDA(turnSetpoint1);
+                setState(States.TURN);
+            }
+        } else if(states==States.TURN){
+            System.out.println("turning. we are currently at: " + drivetrainSubsystem.getGyroscopeRotation().getDegrees());
+            turnDesiredAngle(turnSetpoint1);
+
+            if(directionController.atSetpoint()){
+                
+                System.out.println("a print statement that says 'we're stopping'");
+                setState(States.STOP);
             }
         } else if(states == States.DRIVE2){
             driveDesiredDistance(desiredTranslation);
@@ -153,14 +168,14 @@ public class AutonomousBasePD extends AutonomousBase{
         System.out.println("current speed: " + speed);
     }
 
-    /**
-    pre turn desired angle 
-    @param uno is current coordinate
-    @param dos is past coordinate 
-    */
-    public void preTDA(Pose2d uno, Pose2d dos){
+
+    //pre turn desired angle
+    public void preTDA(double setpoint){
+        directionController.reset();
         System.out.println("Preturning");
-        desiredTurn = autoCalculateAngle(uno, dos); 
+        directionController.setSetpoint(setpoint);
+        drivetrainSubsystem.resetOdometry();
+
     }
 
     @Override

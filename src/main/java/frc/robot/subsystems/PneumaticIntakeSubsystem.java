@@ -74,17 +74,17 @@ public class PneumaticIntakeSubsystem {
         compressor.enableDigital();
     }
 
-    public void setStatePneumaticIntake(PneumaticIntakeStates newState){
+    public static void setStatePneumaticIntake(PneumaticIntakeStates newState){
         pneumaticIntakeState = newState;
     }
 
     public void switchState_beamBreakSensor (){ //switch state based on sensor reading
         //System.out.println("circuit open? " + beambreakSensor.get());
         if (!beambreakSensor.get()){ //circuit is open meaning it sees something
-            setState(PneumaticIntakeStates.ACTUATING);
+            setStatePneumaticIntake(PneumaticIntakeStates.ACTUATING);
             System.out.println("broken");
         } else{ // circuit is closed meaning it doesn't see something
-            setState(PneumaticIntakeStates.RETRACTING); //confirmed b/c OFF stops/disables the solenoids
+            setStatePneumaticIntake(PneumaticIntakeStates.RETRACTING); //confirmed b/c OFF stops/disables the solenoids
             System.out.println("unbroken");
         }
     }
@@ -162,7 +162,5 @@ public class PneumaticIntakeSubsystem {
         return compressor.getPressureSwitchValue();
     }
 
-    public void setState(PneumaticIntakeStates newPneumaticIntakeState){
-        pneumaticIntakeState = newPneumaticIntakeState;
-    }
+   
 }
