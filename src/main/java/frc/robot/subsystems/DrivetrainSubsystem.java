@@ -216,7 +216,7 @@ public class DrivetrainSubsystem {
 
   public void resetOdometry(Pose2d start){
         zeroGyroscope(); //truly resets gyro
-        //zeroDriveEncoder(); 
+        zeroDriveEncoder(); 
         //finds the tare
         SwerveModulePosition [] positionArray =  new SwerveModulePosition[] {
                 m_frontLeftModule.getSwerveModulePosition(),
@@ -224,11 +224,11 @@ public class DrivetrainSubsystem {
                 m_backRightModule.getSwerveModulePosition(),
                 m_backLeftModule.getSwerveModulePosition() };
         m_pose = start;
-        System.out.println("position array: " + positionArray.toString());
-        System.out.println("m_pose: " + m_pose);
+        //System.out.println("position array: " + positionArray.toString());
+        //System.out.println("m_pose: " + m_pose);
         m_odometry.resetPosition(getGyroscopeRotation(), positionArray, m_pose);
-        System.out.println("#resetodometry! new pose: " + m_pose.getX()/SWERVE_TICKS_PER_INCH + " y: " + m_pose.getY()/SWERVE_TICKS_PER_INCH);
-        System.out.println("inputs for the reset: " + getGyroscopeRotation() + m_frontLeftModule.getSwerveModulePosition().distanceMeters + m_frontRightModule.getSwerveModulePosition().distanceMeters + m_backLeftModule.getSwerveModulePosition().distanceMeters + m_backRightModule.getSwerveModulePosition().distanceMeters);
+        //System.out.println("#resetodometry! new pose: " + m_pose.getX()/SWERVE_TICKS_PER_INCH + " y: " + m_pose.getY()/SWERVE_TICKS_PER_INCH);
+        //System.out.println("inputs for the reset: " + getGyroscopeRotation() + m_frontLeftModule.getSwerveModulePosition().distanceMeters + m_frontRightModule.getSwerveModulePosition().distanceMeters + m_backLeftModule.getSwerveModulePosition().distanceMeters + m_backRightModule.getSwerveModulePosition().distanceMeters);
   }
 
   public void zeroDriveEncoder(){
