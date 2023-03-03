@@ -93,8 +93,6 @@ public class Robot extends TimedRobot {
   // private AutonomousBasePD HDThreeScoreR = new AutonomousBasePD(new Pose2d(595.614 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(372.684 * mpi, 37.193 * mpi, new Rotation2d(0)), new Pose2d(595.461 * mpi, 43.068 * mpi, new Rotation2d(0)), new Pose2d(454.199 * mpi,45.934 * mpi, new Rotation2d(0)), new Pose2d(372.606, 85.622 * mpi, new Rotation2d(0)), new Pose2d(454.199 * mpi,40.000 * mpi, new Rotation2d(0)), new Pose2d(595.529 * mpi,66.117 * mpi, new Rotation2d(0)));
   // private AutonomousBasePD HBThreeScoreR = new AutonomousBasePD(new Pose2d(595.614 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(372.684 * mpi, 180.683 * mpi, new Rotation2d(0)), new Pose2d(595.614 * mpi, 174.725 * mpi, new Rotation2d(0)), new Pose2d(444.677 * mpi, 174.725 * mpi, new Rotation2d(0)), new Pose2d(373.677 * mpi, 133.515 * mpi, new Rotation2d(0)), new Pose2d(451.131 * mpi, 185.151 * mpi, new Rotation2d(0)), new Pose2d(594.621 * mpi, 154.368 * mpi, new Rotation2d(0)));
   // private AutonomousBasePD engageChargeR = new AutonomousBasePD(new Pose2d(553.924 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(553.924 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(553.924 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(553.924 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(553.924 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(553.924 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(553.924 * mpi, 108.015 * mpi, new Rotation2d(0)));
-  private AutonomousBasePD CurrentPath = testPath;
-
 
   PneumaticIntakeSubsystem pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
 
@@ -154,9 +152,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX());
     SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY());
-    
-    //m_field.setRobotPose(DrivetrainSubsystem.m_odometry.getEstimatedPosition());
-    
+
   }
 
   /**
@@ -210,10 +206,7 @@ public class Robot extends TimedRobot {
     if (OI.m_controller.getBButton()){
       m_drivetrainSubsystem.stopDrive();
     }
-    if(OI.m_controller.getAButton()){
-      m_drivetrainSubsystem.resetOdometry(new Pose2d());
-    }
-
+    
     if(OI.m_controller.getAButtonReleased()){
       pneumaticIntakeSubsystem.setState(PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF);
     }

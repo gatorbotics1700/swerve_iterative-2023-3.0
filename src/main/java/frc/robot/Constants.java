@@ -21,13 +21,13 @@ public final class Constants {
      *
      * Should be measured from center to center.
      */
-    public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.4690872; //previously 18.468
+    public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.4690872; //units = meters //previously 18.468
     /**
      * The front-to-back distance between the drivetrain wheels.
      *
      * Should be measured from center to center.
      */
-    public static final double DRIVETRAIN_WHEELBASE_METERS = 0.4690872; //previously 18.468 
+    public static final double DRIVETRAIN_WHEELBASE_METERS = 0.4690872; //units = meter //previously 18.468 
 
     public static final int DRIVETRAIN_PIGEON_ID = 6; 
 
@@ -38,7 +38,6 @@ public final class Constants {
     public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(23.73+90);//fix this one to like -70 or something
     public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(122.87);
     */
-    //swervo - might need to be changed to whats in main
     //public static final double offset = Robot.test.getDouble(DRIVETRAIN_PIGEON_ID); 
     
     public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(279.316);   //281.07421875-90 //279.316-270
@@ -64,7 +63,7 @@ public final class Constants {
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 5; 
 
     public static final double DRIVE_MOTOR_MIN_VOLTAGE = 0.19;
-    public static final double DRIVE_MOTOR_MAX_VOLTAGE = 0.2;
+    public static final double DRIVE_MOTOR_MAX_VOLTAGE = 0.8;
     public static final double STEER_MOTOR_MIN_VOLTAGE = 0.525; 
     public static final double STEER_MOTOR_MAX_VOLTAGE = 0.8;
     public static final double SWERVE_GEAR_RATIO = 6.75;
