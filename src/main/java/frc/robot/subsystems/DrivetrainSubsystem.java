@@ -24,9 +24,13 @@ import frc.robot.subsystems.ArmTelescopingSubsystem.TelescopingStates;
 import edu.wpi.first.math.controller.PIDController;
 import frc.robot.Robot;
 import frc.robot.subsystems.PneumaticIntakeSubsystem;
-import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;;
+import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
 import java.util.Arrays;
 import java.util.function.DoubleSupplier;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem.ElevatorStates;
+import frc.robot.subsystems.ArmPneumaticPivot;
+import frc.robot.subsystems.ArmPneumaticPivot.PneumaticPivotStates;
 
 import static frc.robot.Constants.*;
 import frc.robot.OI;
@@ -79,6 +83,9 @@ public class DrivetrainSubsystem {
           // Back right
           new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0)
   );
+
+  public static final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+  public static final ArmPneumaticPivot armPneumaticPivotSubsystem = new ArmPneumaticPivot();
 
   // By default we use a Pigeon for our gyroscope. But if you use another gyroscope, like a NavX, you can change this.
   // The important thing about how you configure your gyroscope is that rotating the robot counter-clockwise should
@@ -179,7 +186,19 @@ public class DrivetrainSubsystem {
     
     m_odometry = new SwerveDriveOdometry(m_kinematics, getGyroscopeRotation(), new SwerveModulePosition[] {m_frontLeftModule.getSwerveModulePosition(), m_frontRightModule.getSwerveModulePosition(), m_backRightModule.getSwerveModulePosition(), m_backLeftModule.getSwerveModulePosition()}, new Pose2d(20, 30, new Rotation2d(Math.PI/4)));
     
+
+
   }
+
+public void stopAllMech(){
+        PneumaticIntakeSubsystem.setState(PneumaticIntakeStates.OFF);
+        stopDrive();
+        armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
+        elevatorSubsystem.setState(ElevatorStates.ZERO);
+        armPneumaticPivotSubsystem.setState(PneumaticPivotStates.OFF);
+
+        
+}
 
    /**
    * Sets the gyroscope angle to zero. This can be used to set the direction the robot is currently facing to the

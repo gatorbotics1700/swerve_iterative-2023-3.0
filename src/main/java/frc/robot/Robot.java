@@ -32,6 +32,9 @@ import edu.wpi.first.math.geometry.Translation2d;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 
+import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
+import frc.robot.subsystems.PneumaticIntakeSubsystem;
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -248,12 +251,13 @@ if(OI.m_codriver_controller.getLeftBumperReleased()){ //needs its own button & n
 }
 
 if (OI.m_codriver_controller.getStartButton()){
-
+  m_drivetrainSubsystem.stopAllMech();
 }
 
 if (OI.m_codriver_controller.getBackButton()){
 
 }
+
 
 
 
