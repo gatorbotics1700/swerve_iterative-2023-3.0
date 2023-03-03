@@ -200,20 +200,40 @@ if(OI.m_driver_controller.getXButton()){
 }
 
 //codriver
-if(OI.m_codriver_controller.getAButton()){ 
-  m_drivetrainSubsystem.substation();
-}
 
-if(OI.m_codriver_controller.getBButton()){
+if (OI.m_codriver_controller.getPOV() == 0){
+  System.out.println("dpad 0: high node");
   m_drivetrainSubsystem.scoreHigh();
 }
 
-if(OI.m_codriver_controller.getXButton()){
+if (OI.m_codriver_controller.getPOV() == 90){
+  System.out.println("dpad 90: mid node");
   m_drivetrainSubsystem.scoreMid();
+
+}
+
+if (OI.m_codriver_controller.getPOV() == 270){
+  System.out.println("dpad 270: substation");
+  m_drivetrainSubsystem.substation();
+
+}
+
+if (OI.m_codriver_controller.getPOV() == 180){
+  System.out.println("dpad 180: low node");
+  m_drivetrainSubsystem.scoreLow();
+}
+
+if(OI.m_codriver_controller.getAButton()){ 
+}
+
+if(OI.m_codriver_controller.getBButton()){
+}
+
+if(OI.m_codriver_controller.getXButton()){
 }
 
 if(OI.m_codriver_controller.getYButton()){
-  m_drivetrainSubsystem.scoreLow();
+
 }
 
 if(OI.m_codriver_controller.getRightBumper()){
@@ -235,23 +255,6 @@ if (OI.m_codriver_controller.getBackButton()){
 
 }
 
-if (OI.m_codriver_controller.getPOV() == 0){
-  System.out.println("dpad 0: high node");
-}
-
-if (OI.m_codriver_controller.getPOV() == 90){
-  System.out.println("dpad 0: mid node");
-
-}
-
-if (OI.m_codriver_controller.getPOV() == 90){
-  System.out.println("dpad 0: substation");
-
-}
-
-if (OI.m_codriver_controller.getPOV() == 180){
-  System.out.println("dpad 180: low node");
-}
 
 
  }
