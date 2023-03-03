@@ -55,13 +55,13 @@ public final class Constants {
     public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 23; 
     public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 3; 
 
-    public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 24; 
-    public static final int BACK_LEFT_MODULE_STEER_MOTOR = 25; 
-    public static final int BACK_LEFT_MODULE_STEER_ENCODER = 4; 
+    public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 26; 
+    public static final int BACK_LEFT_MODULE_STEER_MOTOR = 27; 
+    public static final int BACK_LEFT_MODULE_STEER_ENCODER = 5; 
 
-    public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 26; 
-    public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 27; 
-    public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 5; 
+    public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 24; 
+    public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 25; 
+    public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 4; 
 
     public static final double DRIVE_MOTOR_MIN_VOLTAGE = 0.19;
     public static final double DRIVE_MOTOR_MAX_VOLTAGE = 0.2;

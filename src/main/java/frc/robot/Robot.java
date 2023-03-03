@@ -259,15 +259,19 @@ public class Robot extends TimedRobot {
     /*if(m_drivetrainSubsystem.getGyroscopeRotation().getDegrees() <= 370){
       m_drivetrainSubsystem.setSpeed(new ChassisSpeeds(0, 0.2, 0));
     }*/
-    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.0, Math.toRadians(0), m_drivetrainSubsystem.getGyroscopeRotation()));
+    //m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.0, Math.toRadians(0), m_drivetrainSubsystem.getGyroscopeRotation()));
     
     //m_autoSelected.turnDesiredAngle(180);
-    m_drivetrainSubsystem.drive();
+    //m_drivetrainSubsystem.drive();
     // m_drivetrainSubsystem.m_frontLeftModule.set(0.4, t);
     // t+=0.1;
 
     
-    System.out.println(m_drivetrainSubsystem.getGyroscopeRotation());
+    //System.out.println(m_drivetrainSubsystem.getGyroscopeRotation());
+    System.out.println("Front Left Module Postion: " + m_drivetrainSubsystem.m_frontLeftModule.getPosition());
+    //System.out.println("Front Right Module Position: " + m_drivetrainSubsystem.m_frontRightModule.getPosition());
+    //System.out.println("Back Left Module Position: " + m_drivetrainSubsystem.m_backLeftModule.getPosition());
+    //System.out.println("Back Right Module Position: " + m_drivetrainSubsystem.m_backRightModule.getPosition());
   }
 
   /** This function is called once when the robot is first started up. */
