@@ -15,7 +15,7 @@ public class AutonomousBasePD extends AutonomousBase{
     public static final double driveKI= 0.0; //Robot.kI.getDouble(0.0);//0.0;
     public static final double driveKD= 0.0; //Robot.kD.getDouble(0.0);//0.0;
     private final double DRIVE_DEADBAND = 3.0*Constants.METERS_PER_INCH;//0.152; //meters - previously 3 inches
-    private final double TURN_DEADBAND = 6; 
+    private final double TURN_DEADBAND = 6.0*Constants.METERS_PER_INCH; 
 
     
     private Pose2d startingCoordinate;
@@ -218,6 +218,7 @@ public class AutonomousBasePD extends AutonomousBase{
             speedRotat = Math.signum(speedRotat)*Math.max(Constants.STEER_MOTOR_MIN_VOLTAGE, Math.min(Constants.STEER_MOTOR_MAX_VOLTAGE, Math.abs(speedRotat)));
             System.out.println("Current pose: " + DrivetrainSubsystem.m_pose);
             System.out.println("Y Error: " + yController.getPositionError());
+            System.out.println("X Error: " + xController.getPositionError());
           //  System.out.println("Speed rotat after: " + speedRotat);
         }
 

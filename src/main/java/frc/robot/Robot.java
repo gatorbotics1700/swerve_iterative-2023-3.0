@@ -158,7 +158,7 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    //m_drivetrainSubsystem.resetOdometry(new Pose2d(0.0,0.0, new Rotation2d(Math.toRadians(0.0))));
+    m_drivetrainSubsystem.resetOdometry(new Pose2d(0.0,0.0, new Rotation2d(Math.toRadians(0.0))));
     //m_AprilTagSubsystem.init();
   }
 
@@ -171,11 +171,11 @@ public class Robot extends TimedRobot {
     //m_AprilTagSubsystem.detectTag();
 
     if(OI.m_controller.getBackButton()){
-      m_VisionSubsystem.setState(VisionSubsystem.VisionStates.DETECTTAPE);
+      //m_VisionSubsystem.setState(VisionSubsystem.VisionStates.DETECTTAPE);
     }
 
     if(OI.m_controller.getStartButton()){
-      m_VisionSubsystem.setState(VisionSubsystem.VisionStates.DETECTAPRILTAG);
+      //m_VisionSubsystem.setState(VisionSubsystem.VisionStates.DETECTAPRILTAG);
     }
 
     //low level
