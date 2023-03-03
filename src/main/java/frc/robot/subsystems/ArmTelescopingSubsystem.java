@@ -10,7 +10,7 @@ public class ArmTelescopingSubsystem {
     //PIDController armLengthController = new PIDController(armLengthKP, armLengthKI, armLengthKD);
     public static TelescopingStates tState = TelescopingStates.RETRACTED;//should this be retracted or mid? what is the equivalent to off?
 
-    TalonFX telescopingMotor = new TalonFX(Constants.TELESCOPING_MOTOR_ID);//maybe this motor should be renamed to make it more descriptive
+    public TalonFX telescopingMotor = new TalonFX(Constants.TELESCOPING_MOTOR_ID);//maybe this motor should be renamed to make it more descriptive
     private double startTime;
     private double desiredInches;
     private double desiredTicks;
@@ -53,8 +53,7 @@ public class ArmTelescopingSubsystem {
             desiredInches = 3; //official 2/13
             determineRightTicks();
             System.out.println("desired ticks: " + desiredTicks);
-            System.out.println("tare encoder: " + tareEncoder);
-            telescopingMotor.set(ControlMode.Position, desiredTicks-tareEncoder);
+            telescopingMotor.set(ControlMode.Position, 80000);
             System.out.println("error: " + (desiredTicks - telescopingMotor.getSelectedSensorPosition()));
             telescopeDeadband();
         } else if (tState == TelescopingStates.SHELF_ARM_LENGTH){

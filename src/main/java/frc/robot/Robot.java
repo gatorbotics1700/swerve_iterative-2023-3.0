@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
 import frc.robot.Constants;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.fasterxml.jackson.core.sym.Name;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -116,10 +117,10 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
    
-    //armTelescopingSubsystem.timedMoveArm(0.5, false); //you can change forwards to be false to go backwards; time is in seconds
-
-    armTelescopingSubsystem.setTState(TelescopingStates.HIGH_ARM_LENGTH);
-    armTelescopingSubsystem.periodic();
+    armTelescopingSubsystem.telescopingMotor.set(ControlMode.PercentOutput, 0.2);
+    System.out.println("telescoping ticks: " + armTelescopingSubsystem.telescopingMotor.getSelectedSensorPosition());
+    // armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
+    // armTelescopingSubsystem.periodic();
 
   }
 
@@ -167,7 +168,8 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-
+    //armTelescopingSubsystem.telescopingMotor.set(ControlMode.PercentOutput, -0.1);
+    //System.out.println("telescoping ticks: " + armTelescopingSubsystem.telescopingMotor.getSelectedSensorPosition());
     armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
     armTelescopingSubsystem.periodic();
 
