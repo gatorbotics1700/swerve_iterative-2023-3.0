@@ -159,15 +159,15 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     //m_drivetrainSubsystem.resetOdometry(new Pose2d(0.0,0.0, new Rotation2d(Math.toRadians(0.0))));
-    m_AprilTagSubsystem.init();
+    //m_AprilTagSubsystem.init();
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    //m_drivetrainSubsystem.driveTeleop();
+    m_drivetrainSubsystem.driveTeleop();
     //System.out.println("i am in teleop");
-    m_AprilTagSubsystem.periodic();
+    //m_AprilTagSubsystem.periodic();
     //m_AprilTagSubsystem.detectTag();
 
     if(OI.m_controller.getBackButton()){
@@ -215,7 +215,7 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic(){
     //m_drivetrainSubsystem.resetOdometry(new Pose2d(0.0, 0.0, new Rotation2d(Math.toRadians(180.0))));
-    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.2, 0.0, m_drivetrainSubsystem.getGyroscopeRotation()));
+    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0, 0.0, m_drivetrainSubsystem.getGyroscopeRotation()));
     m_drivetrainSubsystem.drive();
     //System.out.println("Our pose: " + DrivetrainSubsystem.m_pose);
     //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();

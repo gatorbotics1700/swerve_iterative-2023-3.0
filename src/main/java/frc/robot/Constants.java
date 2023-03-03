@@ -31,28 +31,21 @@ public final class Constants {
 
     public static final int DRIVETRAIN_PIGEON_ID = 6; 
 
-    //green
-
-    //public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(194.41-90);
-    //public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(305.15625-90);
-    //public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(23.73);//fix this one to like -70 or something
-    //public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(122.87-90);
-
-    //swervo - might need to be changed to whats in main
-    //green
+//green
     /* 
     public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(194.41); //194.41
     public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(305.15625);
     public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(23.73+90);//fix this one to like -70 or something
     public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(122.87);
     */
+    
     //swervo - might need to be changed to whats in main
     //public static final double offset = Robot.test.getDouble(DRIVETRAIN_PIGEON_ID); 
     
     public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(279.316);   //281.07421875-90 //279.316-270
     public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(90 + 75.938); //343.828125+90 //75.938
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(90 + 320.098);  //231.6796875+90 //320.098
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(90 + 250.183);//343.828125-90 //250.183
+    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(180 + 320.098);  //231.6796875+90 //320.098
+    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(250.183);//343.828125-90 //250.183
 
     //even can ids are drive, odd can ids are steer
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 20;
@@ -70,6 +63,8 @@ public final class Constants {
     public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 24; 
     public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 25; 
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 4; 
+
+
     public static final double DRIVE_MOTOR_MIN_VOLTAGE = 0.19;
     public static final double DRIVE_MOTOR_MAX_VOLTAGE = 0.2;
     public static final double STEER_MOTOR_MIN_VOLTAGE = 0.02; 
