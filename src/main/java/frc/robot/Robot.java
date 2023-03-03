@@ -156,6 +156,10 @@ public class Robot extends TimedRobot {
     m_drivetrainSubsystem.driveTeleop();
 
 
+    if (OI.m_controller.getPOV() == 0){
+      System.out.println("Dpad 0: high node");
+    }
+
     if (OI.m_controller.getBButton()){
       m_drivetrainSubsystem.stopDrive();
     }
