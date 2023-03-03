@@ -87,8 +87,8 @@ public class AprilTagSubsystem {
     //Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectory);
     
     public void init(){
-        limeLightSubsystem.setPipeline(0.0);
-        Robot.m_drivetrainSubsystem.resetOdometry(new Pose2d(AprilTagLocation.scoringPoses[1].getX() -24.0, AprilTagLocation.scoringPoses[13].getY() - 12.0, new Rotation2d(Math.toRadians(180.0))));
+        limeLightSubsystem.setPipeline(1.0);
+        Robot.m_drivetrainSubsystem.resetOdometry(new Pose2d(AprilTagLocation.scoringPoses[4].getX() -36.5, AprilTagLocation.scoringPoses[4].getY() - 12.0, new Rotation2d(Math.toRadians(0.00))));
         System.out.println("resetted odometry in INIT to: " + DrivetrainSubsystem.m_pose);
         System.loadLibrary("opencv_java460");
         //camera0 = new UsbCamera("USB Camera 0", 0);

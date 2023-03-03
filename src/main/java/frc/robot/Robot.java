@@ -158,16 +158,16 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    m_drivetrainSubsystem.resetOdometry(new Pose2d(0.0,0.0, new Rotation2d(Math.toRadians(0.0))));
-    //m_AprilTagSubsystem.init();
+    //m_drivetrainSubsystem.resetOdometry(new Pose2d(0.0,0.0, new Rotation2d(Math.toRadians(0.0))));
+    m_AprilTagSubsystem.init();
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    m_drivetrainSubsystem.driveTeleop();
+    //m_drivetrainSubsystem.driveTeleop();
     //System.out.println("i am in teleop");
-    //m_AprilTagSubsystem.periodic();
+    m_AprilTagSubsystem.periodic();
     //m_AprilTagSubsystem.detectTag();
 
     if(OI.m_controller.getBackButton()){
