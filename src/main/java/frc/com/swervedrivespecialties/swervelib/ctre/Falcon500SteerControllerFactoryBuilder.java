@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import frc.com.swervedrivespecialties.swervelib.*;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
+import com.ctre.phoenix.sensors.CANCoder;
 
 import frc.com.swervedrivespecialties.swervelib.ctre.CtreUtils;
 
@@ -175,6 +176,11 @@ public final class Falcon500SteerControllerFactoryBuilder {
         @Override
         public double getReferenceAngle() {
             return referenceAngleRadians;
+        }
+
+        @Override
+        public CANCoder getCANCoderSC(){
+            return absoluteEncoder.getCANCoder();
         }
 
         @Override

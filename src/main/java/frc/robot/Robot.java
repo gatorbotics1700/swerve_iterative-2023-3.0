@@ -13,7 +13,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
 import frc.robot.Constants;
 
-import com.fasterxml.jackson.core.sym.Name;
+import com.ctre.phoenix.ErrorCode;
+import com.ctre.phoenix.sensors.CANCoderConfiguration;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -26,6 +28,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import frc.robot.Constants;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 /**
@@ -41,57 +46,70 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 public class Robot extends TimedRobot {
   private AutonomousBase m_autoSelected;
   private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<AutonomousBase>();
-  /*private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
-  private AutonomousBasePD placeNLeave = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)), new Pose2d(160.0, 0, new Rotation2d(0)));
-  private AutonomousBasePD antiCharge = new AutonomousBasePD(new Pose2d(86.840, -45.282, new Rotation2d(0)), new Pose2d(221.978, 19.463, new Rotation2d(0)), new Pose2d(135.091, -19.421, new Rotation2d(0)), new Pose2d(0, -22.277, new Rotation2d(0)), new Pose2d(222.491, -28.492, new Rotation2d(0)), new Pose2d(0, -43.502, new Rotation2d(0)), new Pose2d(0, -43.502, new Rotation2d(0)));
-  private AutonomousBasePD antiChargeOpposite = new AutonomousBasePD(new Pose2d(86.840, 45.282, new Rotation2d(0)), new Pose2d(221.978, -19.463, new Rotation2d(0)), new Pose2d(135.091, 19.421, new Rotation2d(0)), new Pose2d(0, 22.277, new Rotation2d(0)), new Pose2d(222.491, 28.492, new Rotation2d(0)), new Pose2d(0, 43.502, new Rotation2d(0)), new Pose2d(0, 43.502, new Rotation2d(0)));
-  private AutonomousBasePD engageCharge = new AutonomousBasePD(new Pose2d(97.759, 0, new Rotation2d(0)), new Pose2d(97.759, 0, new Rotation2d(0)), new Pose2d(97.759, 0, new Rotation2d(0)), new Pose2d(97.759, 0, new Rotation2d(0)), new Pose2d(97.759, 0, new Rotation2d(0)), new Pose2d(97.759, 0, new Rotation2d(0)), new Pose2d(97.759, 0, new Rotation2d(0)));
-  private AutonomousBasePD placeTwoEngage = new AutonomousBasePD(new Pose2d(223.014, 16.468, new Rotation2d(0)), new Pose2d(0, 22.683, new Rotation2d(0)), new Pose2d(135.615, 25.539, new Rotation2d(0)), new Pose2d(222.191, 64.230, new Rotation2d(0)), new Pose2d(97.711, 64.230, new Rotation2d(0)), new Pose2d(97.711, 64.230, new Rotation2d(0)), new Pose2d(97.711, 64.230, new Rotation2d(0)));
-  private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
-  private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)), new Pose2d(0, 20, new Rotation2d(0)));
-  private AutonomousBaseMP motionProfiling = new AutonomousBaseMP(Trajectories.uno, Trajectories.dos, Trajectories.tres);
-  
-  //above coordinates didn't work
-  private AutonomousBasePD leave = new AutonomousBasePD(new Pose2d(56.069, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)), new Pose2d(219.915, 17.332, new Rotation2d(0)));
-  private AutonomousBasePD placeTwoEngageReal = new AutonomousBasePD(new Pose2d(56.069, 17.332, new Rotation2d(0)), new Pose2d(278.999, 37.193, new Rotation2d(0)), new Pose2d(257.650, 64.004, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)));
-
-  //these paths score 3 balls without touching the charge station, requires 7 Pose2ds!
-  private AutonomousBasePD threeUnderChargeStation = new AutonomousBasePD(new Pose2d(56.069, 17.332, new Rotation2d(0)), new Pose2d(278.999, 37.193, new Rotation2d(0)), new Pose2d(56.222, 43.068, new Rotation2d(0)), new Pose2d(197.484,45.934, new Rotation2d(0)), new Pose2d(279.077, 85.622, new Rotation2d(0)), new Pose2d(197.484,40.000, new Rotation2d(0)), new Pose2d(56.154,66.117, new Rotation2d(0)));
-  private AutonomousBasePD threeAboveChargeStation = new AutonomousBasePD(new Pose2d(56.069, 200.046, new Rotation2d(0)), new Pose2d(278.999, 180.683, new Rotation2d(0)), new Pose2d(56.069, 174.725, new Rotation2d(0)), new Pose2d(207.006, 174.725, new Rotation2d(0)), new Pose2d(278.006, 133.515, new Rotation2d(0)), new Pose2d(200.552, 185.151, new Rotation2d(0)), new Pose2d(57.062, 154.368, new Rotation2d(0)));*/
-
-  
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   private final Field2d m_field = new Field2d();
+  double t= 0.0;
   ChassisSpeeds m_ChassisSpeeds;
+  double mpi = Constants.METERS_PER_INCH;
 
+ 
+  // whole field: 651.683 (inches)
+  // center : 325.8415 (inches)
+  // private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
+  private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
+  private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0.0, 0.0, new Rotation2d(Math.toRadians(180.0))), new Pose2d(5 * mpi, -40 * mpi, new Rotation2d(Math.toRadians(180))), new Pose2d(40 * mpi, 0, new Rotation2d(0)), new Pose2d(0, 30 * mpi, new Rotation2d(0)), new Pose2d(40 * mpi, 30 * mpi, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(20 * mpi, 20 * mpi, new Rotation2d(0)), 180.0); 
+  
+ 
+// red alliance  
+// half the field (325.8415) - blue x value + half the field (325.8415) = red x value
+  
+
+   
   PneumaticIntakeSubsystem pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
 
+ public static ShuffleboardTab tab = DrivetrainSubsystem.tab;
+    public static GenericEntry test =
+    tab.add("test", 10)
+      .getEntry();
+    public static GenericEntry kP =
+        tab.add("Auto kP", 0.1)
+          .getEntry();
+    public static GenericEntry kI =
+    tab.add("Auto kI", 0.0)
+      .getEntry();
+    public static GenericEntry kD =
+        tab.add("Auto kD", 0.0)
+          .getEntry();
+  
+  
   /**
-   * This function is run when the robot is first started up and should be used for any
-   * initialization code.
-   */
+  * This function is run when the robot is first started up and should be used for any
+  * initialization code.
+  */
   @Override
   public void robotInit() { //creates options for different autopaths, names are placeholders
- 
+
     System.out.println("#I'm Awake");
-    /*m_chooser.setDefaultOption("Default Auto", testPath);
-    m_chooser.addOption("My Auto 1", noGo);
-    m_chooser.addOption("My Auto 2",placeNLeave);
-    m_chooser.addOption("My Auto 3", antiCharge);
-    m_chooser.addOption("My Auto 4", antiChargeOpposite);
-    //m_chooser.addOption(name: "My Auto 5", engageCharge);
-   // m_chooser.addOption(name: "My Auto 6",placeTwoEngage);
-    m_chooser.addOption("My Auto timed", timedPath);
-    m_chooser.addOption("Motion profiling path", motionProfiling);*/
-
-    SmartDashboard.putData("Auto choices", m_chooser);
-
-    // ShuffleboardTab tab = DrivetrainSubsystem.tab;
-    //  kP = tab.add("Auto kP", 0.1).getEntry(); 
-    //  kI = tab.add("Auto kI", 0.0).getEntry();
-    //  kD = tab.add("Auto kD", 0.0).getEntry();
+    
+    m_chooser.setDefaultOption("testPath", testPath);
+    //m_chooser.setDefaultOption("current", CurrentPath);
+    // m_chooser.addOption("noGo!", noGo);
+    // m_chooser.addOption("HDLeaveB", HDLeaveB);
+    // m_chooser.addOption("HBLeaveB", HBLeaveB); 
+    // m_chooser.addOption("timed", timedPath);
+    // m_chooser.addOption("HDThreeScoreB", HDThreeScoreB);
+    // m_chooser.addOption("HBThreeScoreB", HBThreeScoreB);
+    // m_chooser.addOption("HDplaceTwoEngageB", HDplaceTwoEngageB);
+    // m_chooser.addOption("engageChargeB", engageChargeB);
+    // m_chooser.addOption("HDplaceTwoEngageR", HDplaceTwoEngageR);
+    // m_chooser.addOption("HBLeaveR", HBLeaveR);
+    // m_chooser.addOption("HDLeaveR", HDLeaveR);
+    // m_chooser.addOption("HDThreeScoreR", HDThreeScoreR);
+    // m_chooser.addOption("HBThreeScoreR", HBThreeScoreR);
+    // m_chooser.addOption("engageChargeR", engageChargeR);
+    // //m_chooser.addOption("Motion profiling tester path", motionProfiling);
+    // SmartDashboard.putData("Auto choices", m_chooser);
    
-
   }
 
   /**
@@ -103,9 +121,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX()/Constants.SWERVE_TICKS_PER_INCH);
-    SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.SWERVE_TICKS_PER_INCH);
-    m_field.setRobotPose(DrivetrainSubsystem.m_odometry.getPoseMeters());
+    SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX());
+    SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY());
+
   }
 
   /**
@@ -120,19 +138,18 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    pneumaticIntakeSubsystem.init();
 
-    //m_autoSelected = m_chooser.getSelected();
-    //m_autoSelected.init();
+    //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
+    // System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
+    System.out.println("current pose: " + DrivetrainSubsystem.m_pose.getX() + " , " + DrivetrainSubsystem.m_pose.getY());
+    m_autoSelected = m_chooser.getSelected();
+    m_autoSelected.init();
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    System.out.println("Compressor enabled?: " + pneumaticIntakeSubsystem.compressor.isEnabled());
-     //m_drivetrainSubsystem.driveTeleop();
-     System.out.println("compressor current: " + pneumaticIntakeSubsystem.compressor.getCurrent());
-     pneumaticIntakeSubsystem.periodic();
+     m_autoSelected.periodic();
      //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
 
      //m_autoSelected.periodic();
@@ -143,6 +160,8 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
+    //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
+   // System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
 
   }
 
@@ -155,11 +174,10 @@ public class Robot extends TimedRobot {
     System.out.println("front right module: " + m_drivetrainSubsystem.m_frontRightModule.getSteerAngle());*/
     m_drivetrainSubsystem.driveTeleop();
 
-
     if (OI.m_controller.getBButton()){
       m_drivetrainSubsystem.stopDrive();
     }
-
+    
     if(OI.m_controller.getAButtonReleased()){
       pneumaticIntakeSubsystem.setState(PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF);
     }
@@ -185,21 +203,26 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-    //m_autoSelected.init();
+    m_drivetrainSubsystem.zeroGyroscope();
 
   }
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {
-    // m_drivetrainSubsystem.setSpeed(
-    //         ChassisSpeeds.fromFieldRelativeSpeeds(1, 0, 
-    //         0, 
-    //         m_drivetrainSubsystem.getGyroscopeRotation())
-    //     ); 
-    //     m_drivetrainSubsystem.drive();
+  public void testPeriodic(){
+   
+    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.0, Math.toRadians(0), m_drivetrainSubsystem.getGyroscopeRotation()));
+    
+   
+    m_drivetrainSubsystem.drive();
+   
 
-    // System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
+    
+    //System.out.println(m_drivetrainSubsystem.getGyroscopeRotation());
+    System.out.println("Front Left Module Postion: " + m_drivetrainSubsystem.m_frontLeftModule.getPosition());
+    //System.out.println("Front Right Module Position: " + m_drivetrainSubsystem.m_frontRightModule.getPosition());
+    //System.out.println("Back Left Module Position: " + m_drivetrainSubsystem.m_backLeftModule.getPosition());
+    //System.out.println("Back Right Module Position: " + m_drivetrainSubsystem.m_backRightModule.getPosition());
   }
 
   /** This function is called once when the robot is first started up. */
@@ -209,4 +232,5 @@ public class Robot extends TimedRobot {
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {}
+  
 }
