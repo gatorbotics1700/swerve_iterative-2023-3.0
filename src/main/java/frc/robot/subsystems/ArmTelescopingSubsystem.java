@@ -22,12 +22,12 @@ public class ArmTelescopingSubsystem {
     public double tareEncoder;
 
     double _kP = 0.35;
-    double _kI = 0;
+    double _kI = 0.05;
     double _kD = 0;
     public int _kIzone = 0;
     public double _kPeakOutput = 1.0;
 
-    private int deadband = 25000;
+    private int deadband = 15000;
     public Gains telescopeGains = new Gains(_kP, _kI, _kD, _kIzone, _kPeakOutput);
 
     public static enum TelescopingStates{
@@ -42,12 +42,13 @@ public class ArmTelescopingSubsystem {
         System.out.println("telescoping init!! :)");
         telescopingMotor.setInverted(false); //forward = clockwise, changed on 2/9
         telescopingMotor.setNeutralMode(NeutralMode.Brake);
+
         //telescopingMotor.selectProfileSlot(0, 0);
         telescopingMotor.configAllowableClosedloopError(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
         telescopingMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx, Constants.kTimeoutMs);//determine what these values would be for us
         telescopingMotor.config_kP(Constants.kPIDLoopIdx, telescopeGains.kP, Constants.kTimeoutMs);
         telescopingMotor.config_kI(Constants.kPIDLoopIdx, telescopeGains.kI, Constants.kTimeoutMs);
-        telescopingMotor.config_kP(Constants.kPIDLoopIdx, telescopeGains.kD, Constants.kTimeoutMs);
+        telescopingMotor.config_kD(Constants.kPIDLoopIdx, telescopeGains.kD, Constants.kTimeoutMs);
 
     }
 
@@ -66,10 +67,6 @@ public class ArmTelescopingSubsystem {
             telescopingMotor.set(ControlMode.Position, desiredTicks);
             System.out.println("error: " + (desiredTicks - telescopingMotor.getSelectedSensorPosition()));
             telescopeDeadband();
-            System.out.println(telescopingMotor.getClosedLoopError());
-            System.out.println(telescopingMotor.getMotorOutputPercent());
-            System.out.println(telescopingMotor.getClosedLoopTarget());
-            
         } else if (tState == TelescopingStates.SHELF_ARM_LENGTH){
             desiredInches = 6; //official 2/13
             determineRightTicks(); 
@@ -91,17 +88,14 @@ public class ArmTelescopingSubsystem {
     }
 
     public void determineRightTicks(){
-        System.out.println("telescope gains #3!!" + telescopeGains.kP);
-
         if (telescopingMotor.getSelectedSensorPosition() < 2 * Constants.UNDER_TWO_TICKS_PER_INCH){
             desiredTicks = 2 * Constants.UNDER_TWO_TICKS_PER_INCH; 
         } else{
             desiredTicks = (desiredInches-2) * Constants.OVER_TWO_TICKS_PER_INCH;
         }
+        System.out.println("desired ticks from inside method: " + desiredTicks);
     }
     public void telescopeDeadband(){
-        System.out.println("telescope gains #4!!" + telescopeGains.kP);
-
         if (Math.abs(desiredTicks - telescopingMotor.getSelectedSensorPosition()) < deadband){
             telescopingMotor.set(ControlMode.PercentOutput, 0);
             System.out.println("STOPPED");
