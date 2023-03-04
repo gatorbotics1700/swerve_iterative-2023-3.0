@@ -119,7 +119,7 @@ public class Robot extends TimedRobot {
     
 
     //autonomousBasePD.periodic();
-    elevatorSubsystem.setState(ElevatorStates.LOW_ELEVATOR_HEIGHT);
+    elevatorSubsystem.setState(ElevatorStates.SHELF_ELEVATOR_HEIGHT);
     elevatorSubsystem.periodic();
     //m_drivetrainSubsystem.drive();
   }

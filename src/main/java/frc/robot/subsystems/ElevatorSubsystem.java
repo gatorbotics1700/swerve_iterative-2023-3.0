@@ -14,7 +14,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 public class ElevatorSubsystem {
 
     //these values are to be determined (untested)
-    public double _kP = 0.005;
+    public double _kP = 0.05;
     public double _kI = 0.0;
     public double _kD = 0.0;
     public int _kIzone = 0;
@@ -40,7 +40,7 @@ public class ElevatorSubsystem {
 
     public void init(){
         System.out.println("elevator init!!!!");
-        elevatorMotor.setInverted(true); // looking from the front of the robot, clockwise is false (:
+        elevatorMotor.setInverted(false); // looking from the front of the robot, clockwise is false (:
         elevatorMotor.setNeutralMode(NeutralMode.Brake);
 
         //configuring deadband
@@ -56,10 +56,12 @@ public class ElevatorSubsystem {
         if (elevatorState == ElevatorStates.ZERO){ //emergency stop
             elevatorMotor.set(ControlMode.Position, 0);
         } else if (elevatorState == ElevatorStates.LOW_ELEVATOR_HEIGHT){
-            System.out.println("low elevator height");
-            elevatorMotor.set(ControlMode.Position, 5 * Constants.TICKS_PER_INCH); //official 2/13
+            elevatorMotor.set(ControlMode.Position, 5 * Constants.TICKS_PER_INCH); //official 2/13 is 5
         } else if (elevatorState == ElevatorStates.SHELF_ELEVATOR_HEIGHT) {
-            elevatorMotor.set(ControlMode.Position, 39 * Constants.TICKS_PER_INCH); //oficial 2/13
+            elevatorMotor.set(ControlMode.Position, 30 * Constants.TICKS_PER_INCH); //oficial 2/13 is 39
+            System.out.println("desired ticks: " + 30*Constants.TICKS_PER_INCH);
+            System.out.println("current ticks: " + elevatorMotor.getSelectedSensorPosition());
+            System.out.println("error: " + (30*Constants.TICKS_PER_INCH - elevatorMotor.getSelectedSensorPosition()));
         } else if (elevatorState == ElevatorStates.MID_ELEVATOR_HEIGHT){
             elevatorMotor.set(ControlMode.Position, 40 * Constants.TICKS_PER_INCH); //official 2/13
         } else { //high elevator height
