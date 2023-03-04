@@ -78,8 +78,8 @@ public class Robot extends TimedRobot {
   private AutonomousBasePD HBThreeScoreR = new AutonomousBasePD(new Pose2d(595.614, 200.046, new Rotation2d(0)), new Pose2d(372.684, 180.683, new Rotation2d(0)), new Pose2d(595.614, 174.725, new Rotation2d(0)), new Pose2d(444.677, 174.725, new Rotation2d(0)), new Pose2d(373.677, 133.515, new Rotation2d(0)), new Pose2d(451.131, 185.151, new Rotation2d(0)), new Pose2d(594.621, 154.368, new Rotation2d(0)));
   private AutonomousBasePD engageChargeR = new AutonomousBasePD(new Pose2d(553.924, 108.015, new Rotation2d(0)), new Pose2d(553.924, 108.015, new Rotation2d(0)), new Pose2d(553.924, 108.015, new Rotation2d(0)), new Pose2d(553.924, 108.015, new Rotation2d(0)), new Pose2d(553.924, 108.015, new Rotation2d(0)), new Pose2d(553.924, 108.015, new Rotation2d(0)), new Pose2d(553.924, 108.015, new Rotation2d(0)));
  
-*/
- public static ShuffleboardTab tab = DrivetrainSubsystem.tab;
+/
+ /*public static ShuffleboardTab tab = DrivetrainSubsystem.tab;
     public static GenericEntry kP =
         tab.add("Auto kP", 0.1)
           .getEntry();
