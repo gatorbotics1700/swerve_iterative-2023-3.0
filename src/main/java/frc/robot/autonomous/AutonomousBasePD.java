@@ -66,8 +66,10 @@ public class AutonomousBasePD extends AutonomousBase{
     {
         AutoStates states = stateSequence[i].state;
        // System.out.println("state: " + states);
-        if (states == AutoStates.FIRST){
+        if (states == AutoStates.FIRSTHIGHNODE){
             //System.out.println("we've reset to this pose: " + DrivetrainSubsystem.m_pose);
+            //flick intake, elevate, release object
+            //if we are done then we need to i++
             xController.setSetpoint(stateSequence[0].coordinate.getX());
             yController.setSetpoint(stateSequence[0].coordinate.getY());
             turnController.setSetpoint(stateSequence[0].coordinate.getRotation().getDegrees());
@@ -84,11 +86,13 @@ public class AutonomousBasePD extends AutonomousBase{
                 }
             }else if(states == AutoStates.HIGHNODE){
                 //outtake (from vision)
+                //if we are done then we need to i++
                 System.out.println("high node");
             }else if(states == AutoStates.BALANCING){
                 //pitch pd
             }else if(states == AutoStates.INTAKING){
                 //move elevator/intake system (build) and maybe arm pivot?
+                //if we are done then we need to i++
             }else{
                 drivetrainSubsystem.stopDrive();
             }

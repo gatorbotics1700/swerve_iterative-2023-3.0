@@ -23,6 +23,7 @@ public class StateWithCoordinate{
         DRIVE,
         STOP,
         HIGHNODE,
+        FIRSTHIGHNODE,
         // MIDNODE,
         // LOWNODE,
         INTAKING,
