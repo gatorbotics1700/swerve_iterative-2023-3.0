@@ -136,7 +136,7 @@ public final class Falcon500SteerControllerFactoryBuilder {
                             STATUS_FRAME_GENERAL_PERIOD_MS,
                             CAN_TIMEOUT_MS
                     ),
-                    "Failed to configure Falcon status frame period"
+                    "Failed to configure steer Falcon status frame period"
             );
 
             return new ControllerImplementation(motor,

@@ -52,12 +52,14 @@ public class Robot extends TimedRobot {
   private AutonomousBasePD testPath = new AutonomousBasePD(
     new Pose2d(0.0, 0.0, new Rotation2d(Math.toRadians(180.0))), 
     new StateWithCoordinate[]{
-      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(5 * mpi, -40 * mpi, new Rotation2d(Math.toRadians(180)))), 
-      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(40 * mpi, 0, new Rotation2d(0))), 
-      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(0, 30 * mpi, new Rotation2d(0))), 
-      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(40 * mpi, 30 * mpi, new Rotation2d(0))), 
-      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(0, 0, new Rotation2d(0))), 
-      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(20 * mpi, 20 * mpi, new Rotation2d(0)))
+      new StateWithCoordinate(AutoStates.FIRST),
+      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(20 * mpi, 40 * mpi, new Rotation2d(Math.toRadians(180)))), 
+      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(40 * mpi, 0, new Rotation2d(180))), 
+      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(0 * mpi, 30 * mpi, new Rotation2d(180))), 
+      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(40 * mpi, 30 * mpi, new Rotation2d(180))), 
+      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(0 * mpi, 0 * mpi, new Rotation2d(180))), 
+      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(20 * mpi, 20 * mpi, new Rotation2d(180))),
+      new StateWithCoordinate(AutoStates.STOP)
     });
   
  
@@ -122,9 +124,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX());
-    SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY());
-    SmartDashboard.putNumber("angle odometry",DrivetrainSubsystem.m_pose.getRotation().getDegrees());
+    SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX()/Constants.METERS_PER_INCH);
+    SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.METERS_PER_INCH);
+    SmartDashboard.putNumber("angle odometry",DrivetrainSubsystem.m_pose.getRotation().getDegrees()/Constants.METERS_PER_INCH);
 
   }
 

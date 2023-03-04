@@ -15,10 +15,10 @@ public class AutonomousBasePD extends AutonomousBase{
     public static final double turnKP= 0.0001; //increased slight *** not tested
     public static final double turnKI= 0.0; 
     public static final double turnKD= 0.0;
-    public static final double driveKP= 0.02;//Robot.kP.getDouble(0.00006);//0.00006;
+    public static final double driveKP= 0.75;//Robot.kP.getDouble(0.00006);//0.00006;
     public static final double driveKI= 0.0; //Robot.kI.getDouble(0.0);//0.0;
     public static final double driveKD= 0.0; //Robot.kD.getDouble(0.0);//0.0;
-    private static final double DRIVE_DEADBAND = 3*Constants.METERS_PER_INCH; //meters - previously 3 inches
+    private static final double DRIVE_DEADBAND = 1*Constants.METERS_PER_INCH; //meters - previously 3 inches
     private static final double TURN_DEADBAND = 6*Constants.METERS_PER_INCH; 
 
     
@@ -50,7 +50,7 @@ public class AutonomousBasePD extends AutonomousBase{
         xController.reset();
         yController.reset();
         turnController.reset();
-        directionController.setTolerance(TURN_DEADBAND);
+        //directionController.setTolerance(TURN_DEADBAND);
         turnController.setTolerance(TURN_DEADBAND); 
         xController.setTolerance(DRIVE_DEADBAND);
         yController.setTolerance(DRIVE_DEADBAND);
@@ -66,21 +66,25 @@ public class AutonomousBasePD extends AutonomousBase{
     {
         AutoStates states = stateSequence[i].state;
        // System.out.println("state: " + states);
-        if (states == AutoStates.FIRSTHIGHNODE){
+        if (states == AutoStates.FIRST){
+            turnController.setTolerance(TURN_DEADBAND); 
+            xController.setTolerance(DRIVE_DEADBAND);
+            yController.setTolerance(DRIVE_DEADBAND);
+            xController.setSetpoint(0);
+            yController.setSetpoint(0);
+            turnController.setSetpoint(0);
+            i++;
+        } else if (states == AutoStates.FIRSTHIGHNODE){
             //System.out.println("we've reset to this pose: " + DrivetrainSubsystem.m_pose);
             //flick intake, elevate, release object
             //if we are done then we need to i++
-            xController.setSetpoint(stateSequence[0].coordinate.getX());
-            yController.setSetpoint(stateSequence[0].coordinate.getY());
-            turnController.setSetpoint(stateSequence[0].coordinate.getRotation().getDegrees());
-            System.out.println("drive");
             i++;
         } else {
             drivetrainSubsystem.drive();
-            System.out.println("pose in auto: " + DrivetrainSubsystem.m_pose.getX() + " " + DrivetrainSubsystem.m_pose.getY());
+            //System.out.println("pose in auto: " + DrivetrainSubsystem.m_pose.getX()/Constants.METERS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getY()/Constants.METERS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getRotation().getDegrees());
             if (states == AutoStates.DRIVE){
                 driveDesiredDistance(stateSequence[i].coordinate);
-                if(xController.atSetpoint() && yController.atSetpoint() && turnController.atSetpoint()){
+                if(xController.atSetpoint() && yController.atSetpoint() /*&& turnController.atSetpoint()*/){
                     i++;  
                     System.out.println("moving on");
                 }
@@ -155,7 +159,7 @@ public class AutonomousBasePD extends AutonomousBase{
         double errorX = (dPose.getX() - DrivetrainSubsystem.m_pose.getX());
         double errorY = (dPose.getY() - DrivetrainSubsystem.m_pose.getY());
         double errorRotat = (dPose.getRotation().getDegrees() - DrivetrainSubsystem.m_pose.getRotation().getDegrees());
-        // System.out.println("Speed X: " + speedX + " Speed Y: " + speedY + " Speed Rotat: " + speedRotat);
+         System.out.println("Speed X: " + speedX + " Speed Y: " + speedY + " Speed Rotat: " + speedRotat);
         // System.out.println("error:" + errorX + ", " + errorY + ", " + errorRotat);
         //System.out.println("Desired Position: " + dPose.getX() + ", " + dPose.getY());
     }

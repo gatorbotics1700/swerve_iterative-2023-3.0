@@ -78,7 +78,7 @@ public final class Falcon500DriveControllerFactoryBuilder {
                             STATUS_FRAME_GENERAL_PERIOD_MS,
                             CAN_TIMEOUT_MS
                     ),
-                    "Failed to configure Falcon status frame period"
+                    "Failed to configure drive Falcon status frame period"
             );
 
             return new ControllerImplementation(motor, sensorVelocityCoefficient);
