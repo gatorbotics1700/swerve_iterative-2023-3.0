@@ -14,7 +14,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 public class ElevatorSubsystem {
 
     //these values are to be determined (untested)
-    public double _kP = 0.05;
+    public double _kP = 0.005;
     public double _kI = 0.0;
     public double _kD = 0.0;
     public int _kIzone = 0;
@@ -40,7 +40,7 @@ public class ElevatorSubsystem {
 
     public void init(){
         System.out.println("elevator init!!!!");
-        elevatorMotor.setInverted(false); // looking from the front of the robot, clockwise is false (:
+        elevatorMotor.setInverted(true); // looking from the front of the robot, clockwise is false (:
         elevatorMotor.setNeutralMode(NeutralMode.Brake);
 
         //configuring deadband

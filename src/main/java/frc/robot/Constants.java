@@ -59,7 +59,7 @@ public final class Constants {
 
     public static final int TELESCOPING_MOTOR_ID = 7;
     public static final int ARM_ROTATION_MOTOR_ID = 8;
-    public static final int ELEVATOR_CAN_ID = 28;
+    public static final int ELEVATOR_CAN_ID = 9;
     public static final int LEFT_LINK_CAN_ID = 10;
     public static final int RIGHT_LINK_CAN_ID = 11;
 
