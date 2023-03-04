@@ -16,6 +16,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.autonomous.AutonomousBasePD;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -88,7 +89,7 @@ public class AprilTagSubsystem {
     
     public void init(){
         limeLightSubsystem.setPipeline(1.0);
-        Robot.m_drivetrainSubsystem.resetOdometry(new Pose2d(AprilTagLocation.scoringPoses[4].getX() -36.5, AprilTagLocation.scoringPoses[4].getY() - 12.0, new Rotation2d(Math.toRadians(0.00))));
+        Robot.m_drivetrainSubsystem.resetOdometry(new Pose2d(AprilTagLocation.scoringPoses[4].getX() -36.5*Constants.METERS_PER_INCH, AprilTagLocation.scoringPoses[4].getY() - 12.0*Constants.METERS_PER_INCH, new Rotation2d(Math.toRadians(0.00))));
         System.out.println("resetted odometry in INIT to: " + DrivetrainSubsystem.m_pose);
         System.loadLibrary("opencv_java460");
         //camera0 = new UsbCamera("USB Camera 0", 0);
