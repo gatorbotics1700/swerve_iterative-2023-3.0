@@ -1,11 +1,15 @@
 package frc.robot.autonomous;
 
+import javax.swing.SwingWorker.StateValue;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.*;
 import frc.robot.Robot;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.Constants;
+import frc.robot.autonomous.StateWithCoordinate;
+import frc.robot.autonomous.StateWithCoordinate.AutoStates;
 
 public class AutonomousBasePD extends AutonomousBase{
     public static final double turnKP= 0.0001; //increased slight *** not tested
@@ -19,15 +23,9 @@ public class AutonomousBasePD extends AutonomousBase{
 
     
     private static Pose2d startingCoordinate;
-    private static Pose2d goalCoordinate1;
-    private static Pose2d goalCoordinate2; 
-    private static Pose2d goalCoordinate3; 
-    private static Pose2d goalCoordinate4; 
-    private static Pose2d goalCoordinate5;
-    private static Pose2d goalCoordinate6;
-    private static double goalAngle1;
+    private static StateWithCoordinate[] stateSequence;
+    private static int i;
     
-
     public double desiredTurn;
     
     static DrivetrainSubsystem drivetrainSubsystem = Robot.m_drivetrainSubsystem;
@@ -40,28 +38,12 @@ public class AutonomousBasePD extends AutonomousBase{
 
 
     
-    public AutonomousBasePD(Pose2d startingCoordinate, Pose2d goalCoordinate1, Pose2d goalCoordinate2, Pose2d goalCoordinate3, Pose2d goalCoordinate4, Pose2d goalCoordinate5, Pose2d goalCoordinate6, double goalAngle1){
+    public AutonomousBasePD(Pose2d startingCoordinate, StateWithCoordinate[] stateSequence){
         this.startingCoordinate = startingCoordinate;
-        this.goalCoordinate1 = goalCoordinate1;
-        this.goalCoordinate2 = goalCoordinate2;
-        this.goalCoordinate3 = goalCoordinate3;
-        this.goalCoordinate4 = goalCoordinate4;
-        this.goalCoordinate5 = goalCoordinate5;
-        this.goalCoordinate6 = goalCoordinate6;
-        this.goalAngle1 = goalAngle1;
+        this.stateSequence =  stateSequence;
     }
 
-    public AutonomousBasePD(){
-        startingCoordinate = new Pose2d(0.0, 0.0, drivetrainSubsystem.getGyroscopeRotation());
-        goalCoordinate1 = new Pose2d(0.0, 0.0, drivetrainSubsystem.getGyroscopeRotation());
-        goalCoordinate2 = new Pose2d(0.0, 0.0, drivetrainSubsystem.getGyroscopeRotation());
-        goalCoordinate3 = new Pose2d(0.0, 0.0, drivetrainSubsystem.getGyroscopeRotation());
-        goalCoordinate4 = new Pose2d(0.0, 0.0, drivetrainSubsystem.getGyroscopeRotation());
-        goalCoordinate5 = new Pose2d(0.0, 0.0, drivetrainSubsystem.getGyroscopeRotation());
-        goalCoordinate6 = new Pose2d(0.0, 0.0, drivetrainSubsystem.getGyroscopeRotation());
-        //goalAngle1 = drivetrainSubsystem.getGyroscopeRotation();
-    }
-   
+
     public static void initial(){
         drivetrainSubsystem.resetOdometry(startingCoordinate);
         directionController.reset();
@@ -72,95 +54,45 @@ public class AutonomousBasePD extends AutonomousBase{
         turnController.setTolerance(TURN_DEADBAND); 
         xController.setTolerance(DRIVE_DEADBAND);
         yController.setTolerance(DRIVE_DEADBAND);
-
-        // directionController.reset();
+        i = 0;
         // distanceController.reset(); 
         //distanceController.setTolerance(DRIVE_DEADBAND*Constants.SWERVE_TICKS_PER_INCH);
-        states = States.FIRST;
         System.out.println("INIT!\nINIT!\nINIT!");
 
-    }
-
-    public static enum States{
-        FIRST,
-        DRIVE,
-       // TURN1,
-        DRIVE2,
-        DRIVE3,
-        DRIVE4,
-        DRIVE5,
-        DRIVE6,
-        STOP;
-    
-    }
-
-    private static States states = States.FIRST; 
-
-    public void setState(States newState){
-        states = newState;
     }
 
     @Override
     public void periodic()
     {
-        
+        AutoStates states = stateSequence[i].state;
        // System.out.println("state: " + states);
-        if (states == States.FIRST){
+        if (states == AutoStates.FIRSTHIGHNODE){
             //System.out.println("we've reset to this pose: " + DrivetrainSubsystem.m_pose);
-            setState(States.DRIVE);
-            xController.setSetpoint(goalCoordinate1.getX()); 
-            yController.setSetpoint(goalCoordinate1.getY());
-            turnController.setSetpoint(goalCoordinate1.getRotation().getDegrees());
+            //flick intake, elevate, release object
+            //if we are done then we need to i++
+            xController.setSetpoint(stateSequence[0].coordinate.getX());
+            yController.setSetpoint(stateSequence[0].coordinate.getY());
+            turnController.setSetpoint(stateSequence[0].coordinate.getRotation().getDegrees());
             System.out.println("drive");
+            i++;
         } else {
             drivetrainSubsystem.drive();
             System.out.println("pose in auto: " + DrivetrainSubsystem.m_pose.getX() + " " + DrivetrainSubsystem.m_pose.getY());
-            if (states == States.DRIVE){
-                driveDesiredDistance(goalCoordinate1);
-                //System.out.println("inside drive state! pose: " + DrivetrainSubsystem.m_pose.getX() + " " + DrivetrainSubsystem.m_pose.getY());
-            //     if (xController.atSetpoint() && yController.atSetpoint() && turnController.atSetpoint()){
-            //        setState(States.TURN1); 
-            //        System.out.println("Position: " + DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH + ", " + DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
-            //     }
-            // } else if(states == States.TURN1){
-            //     turnDesiredAngle(goalAngle1);
+            if (states == AutoStates.DRIVE){
+                driveDesiredDistance(stateSequence[i].coordinate);
                 if(xController.atSetpoint() && yController.atSetpoint() && turnController.atSetpoint()){
-                    setState(States.STOP);  
-                    System.out.println("drive 2");
-                  //  System.out.println("Position: " + DrivetrainSubsystem.m_pose.getX() + ", " + DrivetrainSubsystem.m_pose.getY());
+                    i++;  
+                    System.out.println("moving on");
                 }
-            } else if(states == States.DRIVE2){
-                driveDesiredDistance(goalCoordinate2);
-                if(xController.atSetpoint() && yController.atSetpoint()){
-                    setState(States.DRIVE3); 
-                    System.out.println("drive 3");
-                //    System.out.println("Position: " + DrivetrainSubsystem.m_pose.getX() + ", " + DrivetrainSubsystem.m_pose.getY());
-                }
-            } else if(states == States.DRIVE3){
-                driveDesiredDistance(goalCoordinate3);
-                if(xController.atSetpoint() && yController.atSetpoint()){
-                    setState(States.DRIVE4);
-                    System.out.println("drive 4"); 
-                 //   System.out.println("Position: " + DrivetrainSubsystem.m_pose.getX() + ", " + DrivetrainSubsystem.m_pose.getY());
-                }
-            } else if(states == States.DRIVE4){
-                driveDesiredDistance(goalCoordinate4);
-                if(xController.atSetpoint() && yController.atSetpoint()){
-                    setState(States.DRIVE5); 
-                  //  System.out.println("Position: " + DrivetrainSubsystem.m_pose.getX() + ", " + DrivetrainSubsystem.m_pose.getY());
-                }
-            }else if(states==States.DRIVE5){
-                driveDesiredDistance(goalCoordinate5);
-                if(xController.atSetpoint() && yController.atSetpoint()){
-                    setState(States.DRIVE6);
-                  //  System.out.println("Position: " + DrivetrainSubsystem.m_pose.getX() + ", " + DrivetrainSubsystem.m_pose.getY());
-                }
-            }else if(states==States.DRIVE6){
-                driveDesiredDistance(goalCoordinate6);
-                if(xController.atSetpoint() && yController.atSetpoint()){
-                    setState(States.STOP);
-                   // System.out.println("Position: " + DrivetrainSubsystem.m_pose.getX() + ", " + DrivetrainSubsystem.m_pose.getY());
-                }    
+            }else if(states == AutoStates.HIGHNODE){
+                //outtake (from vision)
+                //if we are done then we need to i++
+                System.out.println("high node");
+            }else if(states == AutoStates.BALANCING){
+                //pitch pd
+            }else if(states == AutoStates.INTAKING){
+                //move elevator/intake system (build) and maybe arm pivot?
+                //if we are done then we need to i++
             }else{
                 drivetrainSubsystem.stopDrive();
             }
