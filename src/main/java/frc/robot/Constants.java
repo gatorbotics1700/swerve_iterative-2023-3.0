@@ -14,20 +14,20 @@ package frc.robot;
  */
 public final class Constants {
 
-    public static final double BUMPER_WIDTH = 3;
-    public static final double DRIVETRAIN_WIDTH = 12.5;
+    public static final double BUMPER_WIDTH = 0.0762;
+    public static final double DRIVETRAIN_WIDTH = 0.3175;
     /**
      * The left-to-right distance between the drivetrain wheels
      *
      * Should be measured from center to center.
      */
-    public static final double DRIVETRAIN_TRACKWIDTH_METERS = 18.468;
+    public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.4690872;
     /**
      * The front-to-back distance between the drivetrain wheels.
      *
      * Should be measured from center to center.
      */
-    public static final double DRIVETRAIN_WHEELBASE_METERS = 18.468; 
+    public static final double DRIVETRAIN_WHEELBASE_METERS = 0.4690872; 
 
     public static final int DRIVETRAIN_PIGEON_ID = 6; 
 

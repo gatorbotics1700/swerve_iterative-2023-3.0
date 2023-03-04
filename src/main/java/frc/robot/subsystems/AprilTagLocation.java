@@ -20,35 +20,36 @@ public class AprilTagLocation{
         new Pose3d(new Translation3d(1.02743, 2.748026, 0.462788), new Rotation3d(new Quaternion(1.0, 0.0, 0.0, 0.0))),
         new Pose3d(new Translation3d(1.02743, 1.071626, 0.462788), new Rotation3d(new Quaternion(1.0, 0.0, 0.0, 0.0)))}; 
         */
+        
 
     public static final Pose3d aprilTagPoses[] = {
-        new Pose3d(new Translation3d(610.77, 42.19, 18.22), new Rotation3d(0.0, 0.0, 180.0)),
-        new Pose3d(new Translation3d(610.77, 108.19, 18.22), new Rotation3d(0.0, 0.0, 180.0)),
-        new Pose3d(new Translation3d(610.77, 174.19, 18.22), new Rotation3d(0.0, 0.0, 180.0)),
-        new Pose3d(new Translation3d(636.96, 265.74, 27.38), new Rotation3d(0.0, 0.0, 180.0)),
-        new Pose3d(new Translation3d(14.25, 265.74, 27.38), new Rotation3d(0.0, 0.0, 0.0)),
-        new Pose3d(new Translation3d(40.45, 174.19, 18.22), new Rotation3d(0.0, 0.0, 0.0)),
-        new Pose3d(new Translation3d(40.45, 108.19, 18.22), new Rotation3d(0.0, 0.0, 0.0)),
-        new Pose3d(new Translation3d(40.45, 42.19, 18.22), new Rotation3d(0.0, 0.0, 0.0))}; 
+        new Pose3d(new Translation3d(15.514, 1.072, 0.463), new Rotation3d(0.0, 0.0, 180.0)),
+        new Pose3d(new Translation3d(15.514, 2.748, 0.463), new Rotation3d(0.0, 0.0, 180.0)),
+        new Pose3d(new Translation3d(15.514, 4.424, 0.463), new Rotation3d(0.0, 0.0, 180.0)),
+        new Pose3d(new Translation3d(16.179, 6.75, 0.695), new Rotation3d(0.0, 0.0, 180.0)),
+        new Pose3d(new Translation3d(0.362, 6.75, 0.695), new Rotation3d(0.0, 0.0, 0.0)),
+        new Pose3d(new Translation3d(1.027, 4.424, 0.463), new Rotation3d(0.0, 0.0, 0.0)),
+        new Pose3d(new Translation3d(1.027, 2.748, 0.463), new Rotation3d(0.0, 0.0, 0.0)),
+        new Pose3d(new Translation3d(1.027, 1.072, 0.463), new Rotation3d(0.0, 0.0, 0.0))}; 
 
     public static final Pose2d scoringPoses[] = {
-        new Pose2d(new Translation2d(610.77-16-Constants.BUMPER_WIDTH-Constants.DRIVETRAIN_WIDTH, 20.0), new Rotation2d(Math.toRadians(180.0))),
-        new Pose2d(new Translation2d(610.77-16-Constants.BUMPER_WIDTH-Constants.DRIVETRAIN_WIDTH, 42.19), new Rotation2d(Math.toRadians(180.0))),
-        new Pose2d(new Translation2d(610.77-16-Constants.BUMPER_WIDTH-Constants.DRIVETRAIN_WIDTH, 64), new Rotation2d(Math.toRadians(180.0))),
-        new Pose2d(new Translation2d(610.77-16-Constants.BUMPER_WIDTH-Constants.DRIVETRAIN_WIDTH, 86), new Rotation2d(Math.toRadians(180.0))),
-        new Pose2d(new Translation2d(610.77-16-Constants.BUMPER_WIDTH-Constants.DRIVETRAIN_WIDTH, 108.19), new Rotation2d(Math.toRadians(180.0))),
-        new Pose2d(new Translation2d(610.77-16-Constants.BUMPER_WIDTH-Constants.DRIVETRAIN_WIDTH, 130), new Rotation2d(Math.toRadians(180.0))),
-        new Pose2d(new Translation2d(610.77-16-Constants.BUMPER_WIDTH-Constants.DRIVETRAIN_WIDTH, 152), new Rotation2d(Math.toRadians(180.0))),
-        new Pose2d(new Translation2d(610.77-16-Constants.BUMPER_WIDTH-Constants.DRIVETRAIN_WIDTH, 174.19), new Rotation2d(Math.toRadians(180.0))),
-        new Pose2d(new Translation2d(610.77-16-Constants.BUMPER_WIDTH-Constants.DRIVETRAIN_WIDTH, 196), new Rotation2d(Math.toRadians(180.0))),
-        new Pose2d(new Translation2d(54.25+Constants.BUMPER_WIDTH+ Constants.DRIVETRAIN_WIDTH, 196), new Rotation2d(0.0)),
-        new Pose2d(new Translation2d(54.25+ Constants.BUMPER_WIDTH + Constants.DRIVETRAIN_WIDTH, 174.19), new Rotation2d(0.0)),
-        new Pose2d(new Translation2d(54.25+Constants.BUMPER_WIDTH +Constants.DRIVETRAIN_WIDTH, 152), new Rotation2d(0.0)),
-        new Pose2d(new Translation2d(54.25+Constants.BUMPER_WIDTH+Constants.DRIVETRAIN_WIDTH, 130), new Rotation2d(0.0)),
-        new Pose2d(new Translation2d(54.25+Constants.BUMPER_WIDTH + Constants.DRIVETRAIN_WIDTH, 108.19), new Rotation2d(0.0)),
-        new Pose2d(new Translation2d(54.25+ Constants.BUMPER_WIDTH+Constants.DRIVETRAIN_WIDTH, 86), new Rotation2d(0.0)),
-        new Pose2d(new Translation2d(54.25+Constants.BUMPER_WIDTH+ Constants.DRIVETRAIN_WIDTH, 64), new Rotation2d(0.0)),
-        new Pose2d(new Translation2d(54.25+Constants.BUMPER_WIDTH +Constants.DRIVETRAIN_WIDTH, 42.19), new Rotation2d(0.0)),
-        new Pose2d(new Translation2d(54.25+Constants.BUMPER_WIDTH +Constants.DRIVETRAIN_WIDTH, 20), new Rotation2d(0.0))
+        new Pose2d(new Translation2d(15.107-Constants.BUMPER_WIDTH-Constants.DRIVETRAIN_WIDTH, 0.508), new Rotation2d(Math.toRadians(180.0))),
+        new Pose2d(new Translation2d(15.107-Constants.BUMPER_WIDTH-Constants.DRIVETRAIN_WIDTH, 1.072), new Rotation2d(Math.toRadians(180.0))),
+        new Pose2d(new Translation2d(15.107-Constants.BUMPER_WIDTH-Constants.DRIVETRAIN_WIDTH, 1.626), new Rotation2d(Math.toRadians(180.0))),
+        new Pose2d(new Translation2d(15.107-Constants.BUMPER_WIDTH-Constants.DRIVETRAIN_WIDTH, 2.184), new Rotation2d(Math.toRadians(180.0))),
+        new Pose2d(new Translation2d(15.107-Constants.BUMPER_WIDTH-Constants.DRIVETRAIN_WIDTH, 2.748), new Rotation2d(Math.toRadians(180.0))),
+        new Pose2d(new Translation2d(15.107-Constants.BUMPER_WIDTH-Constants.DRIVETRAIN_WIDTH, 3.302), new Rotation2d(Math.toRadians(180.0))),
+        new Pose2d(new Translation2d(15.107-Constants.BUMPER_WIDTH-Constants.DRIVETRAIN_WIDTH, 3.861), new Rotation2d(Math.toRadians(180.0))),
+        new Pose2d(new Translation2d(15.107-Constants.BUMPER_WIDTH-Constants.DRIVETRAIN_WIDTH, 4.424), new Rotation2d(Math.toRadians(180.0))),
+        new Pose2d(new Translation2d(15.107-Constants.BUMPER_WIDTH-Constants.DRIVETRAIN_WIDTH, 4.978), new Rotation2d(Math.toRadians(180.0))),
+        new Pose2d(new Translation2d(1.378+Constants.BUMPER_WIDTH+ Constants.DRIVETRAIN_WIDTH, 4.978), new Rotation2d(0.0)),
+        new Pose2d(new Translation2d(1.378+ Constants.BUMPER_WIDTH + Constants.DRIVETRAIN_WIDTH, 4.424), new Rotation2d(0.0)),
+        new Pose2d(new Translation2d(1.378+Constants.BUMPER_WIDTH +Constants.DRIVETRAIN_WIDTH, 3.861), new Rotation2d(0.0)),
+        new Pose2d(new Translation2d(1.378+Constants.BUMPER_WIDTH+Constants.DRIVETRAIN_WIDTH, 3.302), new Rotation2d(0.0)),
+        new Pose2d(new Translation2d(1.378+Constants.BUMPER_WIDTH + Constants.DRIVETRAIN_WIDTH, 2.748), new Rotation2d(0.0)),
+        new Pose2d(new Translation2d(1.378+ Constants.BUMPER_WIDTH+Constants.DRIVETRAIN_WIDTH, 2.184), new Rotation2d(0.0)),
+        new Pose2d(new Translation2d(1.378+Constants.BUMPER_WIDTH+ Constants.DRIVETRAIN_WIDTH, 1.626), new Rotation2d(0.0)),
+        new Pose2d(new Translation2d(1.378+Constants.BUMPER_WIDTH +Constants.DRIVETRAIN_WIDTH, 1.072), new Rotation2d(0.0)),
+        new Pose2d(new Translation2d(1.378+Constants.BUMPER_WIDTH +Constants.DRIVETRAIN_WIDTH, 0.508), new Rotation2d(0.0))
     };
 }
