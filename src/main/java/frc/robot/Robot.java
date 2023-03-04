@@ -52,12 +52,12 @@ public class Robot extends TimedRobot {
   private AprilTagSubsystem m_AprilTagSubsystem = new AprilTagSubsystem();
   private VisionSubsystem m_VisionSubsystem = new VisionSubsystem();
   public static DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
+  public static LimeLightSubsystem limeLightSubsystem = new LimeLightSubsystem();
   // whole field: 651.683 
   // center : 325.8415
   private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), 0.0);
   private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
   private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(180)), new Pose2d(0, -20*Constants.METERS_PER_INCH, new Rotation2d(180)), new Pose2d(10, 30, new Rotation2d(180)), new Pose2d(0, 20, new Rotation2d(180)), new Pose2d(0, 20, new Rotation2d(180)), new Pose2d(0, 20, new Rotation2d(180)), new Pose2d(0, 20, new Rotation2d(180)), 0.0);
-  
   /*
   // blue alliance 
   private AutonomousBasePD HDplaceTwoEngageB = new AutonomousBasePD(new Pose2d(56.069, 20.19, new Rotation2d(0)), new Pose2d(278.999, 36.19, new Rotation2d(0)), new Pose2d(257.650, 64.004, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)), new Pose2d(156.859, 83.368, new Rotation2d(0)));
@@ -116,13 +116,13 @@ public class Robot extends TimedRobot {
    * <p>This runs after the mode specific periodic functions, but before LiveWindow and
    * SmartDashboard integrated updating.
    */
+
   @Override
   public void robotPeriodic() {
     SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH);
     SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
-    
+    SmartDashboard.putBoolean("Ready to Score", limeLightSubsystem.seeSomething());
     //m_field.setRobotPose(DrivetrainSubsystem.m_odometry.getEstimatedPosition());
-    
   }
 
   /**

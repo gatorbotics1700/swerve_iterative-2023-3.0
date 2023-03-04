@@ -20,6 +20,7 @@ public class LimeLightSubsystem {
     public static double tx;
     public static double ty;
     public static double ta;
+    public static boolean readyToShoot;
 
     public NetworkTable networkTable = NetworkTableInstance.getDefault().getTable("limelight");
 
@@ -92,6 +93,15 @@ public class LimeLightSubsystem {
     }
     public double getTx(){
         return tx;
+    }
+
+    public boolean seeSomething(){
+        if(tv == 1){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
 }
