@@ -121,7 +121,6 @@ public class Robot extends TimedRobot {
     //System.out.println("telescoping ticks: " + armTelescopingSubsystem.telescopingMotor.getSelectedSensorPosition());
      armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
      armTelescopingSubsystem.periodic();
-
   }
 
   /** This function is called once when teleop is enabled. */
