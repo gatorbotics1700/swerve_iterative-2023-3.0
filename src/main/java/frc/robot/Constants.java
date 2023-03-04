@@ -90,4 +90,8 @@ public final class Constants {
 
     public static final double METERS_PER_INCH = 0.0254; 
     public static final double TICKS_PER_METER = TICKS_PER_REV*SWERVE_GEAR_RATIO/SWERVE_WHEEL_DIAMETER/Math.PI/METERS_PER_INCH;
+
+    public static final double TAPE_HEIGHT_ONE = 0.0; //TODO: needs to be changed
+    public static final double LIMELIGHT_HEIGHT = 52 * METERS_PER_INCH;
+    public static final double LIMELIGHT_ANGLE = -24; //in degrees
 }

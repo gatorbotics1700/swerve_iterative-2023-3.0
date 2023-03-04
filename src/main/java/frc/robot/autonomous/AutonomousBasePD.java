@@ -15,7 +15,7 @@ public class AutonomousBasePD extends AutonomousBase{
     public static final double turnKP= 0.0001; //increased slight *** not tested
     public static final double turnKI= 0.0; 
     public static final double turnKD= 0.0;
-    public static final double driveKP= 0.75;//Robot.kP.getDouble(0.00006);//0.00006;
+    public static final double driveKP= 0.75; //Robot.kP.getDouble(0.00006);//0.00006;
     public static final double driveKI= 0.0; //Robot.kI.getDouble(0.0);//0.0;
     public static final double driveKD= 0.0; //Robot.kD.getDouble(0.0);//0.0;
     private static final double DRIVE_DEADBAND = 1*Constants.METERS_PER_INCH; //meters - previously 3 inches
@@ -41,6 +41,9 @@ public class AutonomousBasePD extends AutonomousBase{
     public AutonomousBasePD(Pose2d startingCoordinate, StateWithCoordinate[] stateSequence){
         this.startingCoordinate = startingCoordinate;
         this.stateSequence =  stateSequence;
+    }
+
+    public AutonomousBasePD(){ 
     }
 
 
@@ -103,24 +106,6 @@ public class AutonomousBasePD extends AutonomousBase{
         }
     }
 
-    //predrivedesiredistance
-    public void preDDD(Pose2d cCoordinate, Pose2d dCoordinate){
-        //Rotation2d zDDistance = new Rotation2d(Constants.TICKS_PER_INCH*(dCoordinate.getRotation().getDegrees() - cCoordinate.getRotation().getDegrees()));
-        xController.setSetpoint(dCoordinate.getX()); 
-        yController.setSetpoint(dCoordinate.getY());
-        System.out.println("preDDDing!!!");    
-
-        /*public Pose2d preDDD(Pose2d cCoordinate, Pose2d dCoordinate){
-        double xDDistance = Constants.SWERVE_TICKS_PER_INCH*(dCoordinate.getX() - cCoordinate.getX());
-        double yDDistance = Constants.SWERVE_TICKS_PER_INCH*(dCoordinate.getY() - cCoordinate.getY());
-        Rotation2d zDDistance = new Rotation2d(Constants.SWERVE_TICKS_PER_INCH*(dCoordinate.getRotation().getDegrees() - cCoordinate.getRotation().getDegrees()));
-        hypotenuse = Math.hypot(xDDistance, yDDistance);
-        distanceController.setSetpoint(hypotenuse); 
-        System.out.println("preDDDing: " + xDDistance + ", " + yDDistance);    
-        return new Pose2d (xDDistance, yDDistance, zDDistance);
-         */
-    }
-
     /** 
     @param dTranslation is desired
     */
@@ -159,19 +144,9 @@ public class AutonomousBasePD extends AutonomousBase{
         double errorX = (dPose.getX() - DrivetrainSubsystem.m_pose.getX());
         double errorY = (dPose.getY() - DrivetrainSubsystem.m_pose.getY());
         double errorRotat = (dPose.getRotation().getDegrees() - DrivetrainSubsystem.m_pose.getRotation().getDegrees());
-         System.out.println("Speed X: " + speedX + " Speed Y: " + speedY + " Speed Rotat: " + speedRotat);
-        // System.out.println("error:" + errorX + ", " + errorY + ", " + errorRotat);
+        //System.out.println("Speed X: " + speedX + " Speed Y: " + speedY + " Speed Rotat: " + speedRotat);
+        System.out.println("error:" + errorX + ", " + errorY + ", " + errorRotat);
         //System.out.println("Desired Position: " + dPose.getX() + ", " + dPose.getY());
-    }
-
-    /**
-    pre turn desired angle 
-    @param uno is current coordinate
-    @param dos is past coordinate 
-    */
-    public void preTDA(Pose2d uno, Pose2d dos){
-        System.out.println("Preturning");
-        desiredTurn = autoCalculateAngle(uno, dos); 
     }
 
     @Override
@@ -187,25 +162,6 @@ public class AutonomousBasePD extends AutonomousBase{
         );
        // System.out.println("error: " + directionController.getPositionError());
     }
-
-      public double autoCalculateAngle(Pose2d initPose, Pose2d targetPose){ 
-        double xleg = Math.abs(targetPose.getX() - initPose.getX());
-        double hypo = Math.hypot(targetPose.getX() - initPose.getX(), targetPose.getY() - initPose.getY());
-        double theta = Math.toDegrees(Math.acos(xleg/hypo));
-       // System.out.println("theta: " + theta + " xleg: " + xleg + " hypo: " + hypo);
-        //theta = angle calculated according horizontal distance between initpose and targetpose, as well as hypotenuse
-        if(targetPose.getX() >= initPose.getX() && targetPose.getY() >= initPose.getY()){ //if initpose is considered (0,0), targetpose is in quadrant I
-            return theta - drivetrainSubsystem.getGyroscopeRotation().getDegrees();
-        } else if (targetPose.getX() <= initPose.getX() && targetPose.getY() >= initPose.getY()){ //if targetpose is in quadrant II
-            return 180 - theta - drivetrainSubsystem.getGyroscopeRotation().getDegrees();
-        } else if (targetPose.getX() <= initPose.getX() && targetPose.getY() <= initPose.getY()){ //if targetpose is in quadrant III
-            return 180 + theta - drivetrainSubsystem.getGyroscopeRotation().getDegrees();
-        } else if (targetPose.getX() >= initPose.getX() && targetPose.getY() <= initPose.getY()){ //if targetpose is in quadrant IV
-            return 360 - theta - drivetrainSubsystem.getGyroscopeRotation().getDegrees();
-        }
-        System.out.println("Something wrong w/ angle calculation :(");
-        return 0.0;
-      }
 
     public boolean xAtSetpoint(){
         return xController.atSetpoint();

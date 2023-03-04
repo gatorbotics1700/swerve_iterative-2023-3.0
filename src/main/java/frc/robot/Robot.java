@@ -39,6 +39,7 @@ public class Robot extends TimedRobot {
   private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<AutonomousBase>();
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   private final LimeLightSubsystem m_limeLightSubsystem = new LimeLightSubsystem();
+  private final AprilTagSubsystem m_aprilTagSubsystem = new AprilTagSubsystem();
   private final Field2d m_field = new Field2d();
   double t= 0.0;
   ChassisSpeeds m_ChassisSpeeds;
@@ -51,15 +52,15 @@ public class Robot extends TimedRobot {
   private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
 
   private AutonomousBasePD testPath = new AutonomousBasePD(
-    new Pose2d(0.0, 0.0, new Rotation2d(Math.toRadians(180.0))), 
+    new Pose2d(0.0, 0.0, new Rotation2d(Math.toRadians(0))), 
     new StateWithCoordinate[]{
       new StateWithCoordinate(AutoStates.FIRST),
-      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(20 * mpi, 40 * mpi, new Rotation2d(Math.toRadians(180)))), 
-      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(40 * mpi, 0, new Rotation2d(180))), 
-      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(0 * mpi, 30 * mpi, new Rotation2d(180))), 
-      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(40 * mpi, 30 * mpi, new Rotation2d(180))), 
-      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(0 * mpi, 0 * mpi, new Rotation2d(180))), 
-      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(20 * mpi, 20 * mpi, new Rotation2d(180))),
+      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(20 * mpi, 40 * mpi, new Rotation2d(Math.toRadians(0)))), 
+      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(40 * mpi, 0, new Rotation2d(0))), 
+      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(0 * mpi, 30 * mpi, new Rotation2d(0))), 
+      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(40 * mpi, 30 * mpi, new Rotation2d(0))), 
+      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(0 * mpi, 0 * mpi, new Rotation2d(0))), 
+      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(20 * mpi, 20 * mpi, new Rotation2d(0))),
       new StateWithCoordinate(AutoStates.STOP)
     });
   
@@ -167,6 +168,7 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
+    //m_aprilTagSubsystem.init();
     //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
    // System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
 
@@ -175,10 +177,9 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    //m_drivetrainSubsystem.driveTeleop();
+    m_drivetrainSubsystem.driveTeleop();
     //System.out.println("i am in teleop");
-    //m_AprilTagSubsystem.periodic();
-    //m_AprilTagSubsystem.detectTag();
+    //m_aprilTagSubsystem.periodic();
 
     if(OI.m_controller.getBackButton()){
       //m_VisionSubsystem.setState(VisionSubsystem.VisionStates.DETECTTAPE);
@@ -209,25 +210,26 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-    m_drivetrainSubsystem.zeroGyroscope();
-    m_drivetrainSubsystem.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
-    AutonomousBasePD.initial();
+    m_drivetrainSubsystem.resetOdometry(new Pose2d(0, 0, new Rotation2d(Math.toRadians(180))));
+    //AutonomousBasePD.initial();
+   // m_aprilTagSubsystem.init();
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic(){
-    testPath.driveDesiredDistance(new Pose2d(-20 * Constants.METERS_PER_INCH, 20 * Constants.METERS_PER_INCH, new Rotation2d(0)));
+    //m_aprilTagSubsystem.periodic();
+    testPath.driveDesiredDistance(new Pose2d(20 * Constants.METERS_PER_INCH, 20 * Constants.METERS_PER_INCH, new Rotation2d(Math.toRadians(180))));
     
     //m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.0, Math.toRadians(0), m_drivetrainSubsystem.getPoseRotation()));
     
-   
+    
     m_drivetrainSubsystem.drive();
    
 
     
     //System.out.println(m_drivetrainSubsystem.getGyroscopeRotation());
-    System.out.println("Front Left Module Postion: " + m_drivetrainSubsystem.m_frontLeftModule.getPosition());
+    //System.out.println("Front Left Module Postion: " + m_drivetrainSubsystem.m_frontLeftModule.getPosition());
     //System.out.println("Front Right Module Position: " + m_drivetrainSubsystem.m_frontRightModule.getPosition());
     //System.out.println("Back Left Module Position: " + m_drivetrainSubsystem.m_backLeftModule.getPosition());
     //System.out.println("Back Right Module Position: " + m_drivetrainSubsystem.m_backRightModule.getPosition());

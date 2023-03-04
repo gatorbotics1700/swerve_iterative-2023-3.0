@@ -201,11 +201,6 @@ public class DrivetrainSubsystem {
         }
   }
 
-  public double getDistance(){
-        double[] positions = {getEncoderPosition(m_frontLeftModule), getEncoderPosition(m_frontRightModule), getEncoderPosition(m_backLeftModule), getEncoderPosition(m_backRightModule)};
-        return getMedian(positions);
-  }
-
   public void resetOdometry(Pose2d start){
         zeroGyroscope();
         zeroDriveEncoder();
@@ -366,15 +361,6 @@ public class DrivetrainSubsystem {
         value = Math.copySign(value * value, value);
 
         return value;
-    }
-
-    public double getMedian(double[] num){
-            Arrays.sort(num);
-            if (num.length%2==0){
-                    return (num[num.length/2] + num[(num.length-1)/2])/2;
-            } else {
-                    return num[num.length/2];
-            }
     }
 
     //AUTO AND FAILSAFE
