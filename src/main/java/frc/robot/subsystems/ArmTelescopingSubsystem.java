@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+
+import edu.wpi.first.math.controller.PIDController;
 import frc.robot.Constants;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import frc.robot.Gains;
@@ -10,21 +12,22 @@ public class ArmTelescopingSubsystem {
     //PIDController armLengthController = new PIDController(armLengthKP, armLengthKI, armLengthKD);
     public static TelescopingStates tState = TelescopingStates.RETRACTED;//should this be retracted or mid? what is the equivalent to off?
 
-    public TalonFX telescopingMotor = new TalonFX(Constants.TELESCOPING_MOTOR_ID);//maybe this motor should be renamed to make it more descriptive
+    public TalonFX telescopingMotor = new TalonFX(Constants.TELESCOPING_MOTOR_ID);
     private double startTime;
     private double desiredInches;
     private double desiredTicks;
     public double tareEncoder;
-    //armMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx, Constants.kTimeoutMs);//determine what these values would be for us
+    //telescopingMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx, Constants.kTimeoutMs);//determine what these values would be for us
 
     public int _kIzone = 0;
     public double _kPeakOutput = 1.0;
 
-    double telescopeKP = 0.005;
+    double telescopeKP = 0.05;
     double telescopeKD = 0;
     double telescopeKI = 0;
     private int deadband = 25000;
-    public Gains telescopeGains = new Gains(telescopeKP, telescopeKI, telescopeKD, _kIzone, _kPeakOutput);
+    //public PIDController telescopeController = new PIDController(telescopeKP, telescopeKI, telescopeKD)
+    //public Gains telescopeGains = new Gains(telescopeKP, telescopeKI, telescopeKD, _kIzone, _kPeakOutput);
 
     public static enum TelescopingStates{
         RETRACTED, //zero 
@@ -37,8 +40,9 @@ public class ArmTelescopingSubsystem {
     public void init(){
         System.out.println("telescoping init!! :)");
         telescopingMotor.setInverted(false); //forward = clockwise, changed on 2/9
-        startTime = System.currentTimeMillis();
-
+        telescopingMotor.config_kP(0, telescopeKP);
+        telescopingMotor.config_kI(0, telescopeKI);
+        telescopingMotor.config_kP(0, telescopeKD);
     }
 
     public void periodic(){//sam requests that we can operate arm length by stick on xbox
@@ -53,9 +57,13 @@ public class ArmTelescopingSubsystem {
             desiredInches = 3; //official 2/13
             determineRightTicks();
             System.out.println("desired ticks: " + desiredTicks);
-            telescopingMotor.set(ControlMode.Position, 80000);
+            telescopingMotor.set(ControlMode.Position, desiredTicks);
             System.out.println("error: " + (desiredTicks - telescopingMotor.getSelectedSensorPosition()));
             telescopeDeadband();
+            System.out.println(telescopingMotor.getClosedLoopError());
+            System.out.println(telescopingMotor.getMotorOutputPercent());
+            System.out.println(telescopingMotor.getClosedLoopTarget());
+            
         } else if (tState == TelescopingStates.SHELF_ARM_LENGTH){
             desiredInches = 6; //official 2/13
             determineRightTicks(); 

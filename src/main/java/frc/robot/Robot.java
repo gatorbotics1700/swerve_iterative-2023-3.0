@@ -117,10 +117,10 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
    
-    armTelescopingSubsystem.telescopingMotor.set(ControlMode.PercentOutput, 0.2);
-    System.out.println("telescoping ticks: " + armTelescopingSubsystem.telescopingMotor.getSelectedSensorPosition());
-    // armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
-    // armTelescopingSubsystem.periodic();
+    //armTelescopingSubsystem.telescopingMotor.set(ControlMode.PercentOutput, 0.2);
+    //System.out.println("telescoping ticks: " + armTelescopingSubsystem.telescopingMotor.getSelectedSensorPosition());
+     armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
+     armTelescopingSubsystem.periodic();
 
   }
 
@@ -170,8 +170,8 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
     //armTelescopingSubsystem.telescopingMotor.set(ControlMode.PercentOutput, -0.1);
     //System.out.println("telescoping ticks: " + armTelescopingSubsystem.telescopingMotor.getSelectedSensorPosition());
-    armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
-    armTelescopingSubsystem.periodic();
+     armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
+     armTelescopingSubsystem.periodic();
 
   }
 
