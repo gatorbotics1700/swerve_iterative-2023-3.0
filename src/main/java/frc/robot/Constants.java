@@ -72,4 +72,6 @@ public final class Constants {
     public static final double OVER_TWO_TICKS_PER_INCH = TICKS_PER_REV*TELESCOPING_ARM_GEAR_RATIO/SECOND_WHEEL_DIAMETER/Math.PI; //talonfx drive encoder
 
     public static final int TELESCOPING_MOTOR_ID = 29; //31;
+    public static final int kTimeoutMs = 1000;
+    public static final int kPIDLoopIdx = 0;
 }

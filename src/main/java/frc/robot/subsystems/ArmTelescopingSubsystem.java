@@ -9,7 +9,6 @@ import frc.robot.Gains;
 
 public class ArmTelescopingSubsystem {
 
-    //PIDController armLengthController = new PIDController(armLengthKP, armLengthKI, armLengthKD);
     public static TelescopingStates tState = TelescopingStates.RETRACTED;//should this be retracted or mid? what is the equivalent to off?
 
     public TalonFX telescopingMotor = new TalonFX(Constants.TELESCOPING_MOTOR_ID);
@@ -19,15 +18,15 @@ public class ArmTelescopingSubsystem {
     public double tareEncoder;
     //telescopingMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx, Constants.kTimeoutMs);//determine what these values would be for us
 
+    double _kP = 0.05;
+    double _kI = 0;
+    double _kD = 0;
     public int _kIzone = 0;
     public double _kPeakOutput = 1.0;
 
-    double telescopeKP = 0.05;
-    double telescopeKD = 0;
-    double telescopeKI = 0;
     private int deadband = 25000;
     //public PIDController telescopeController = new PIDController(telescopeKP, telescopeKI, telescopeKD)
-    //public Gains telescopeGains = new Gains(telescopeKP, telescopeKI, telescopeKD, _kIzone, _kPeakOutput);
+    public Gains telescopeGains = new Gains(_kP, _kI, _kD, _kIzone, _kPeakOutput);
 
     public static enum TelescopingStates{
         RETRACTED, //zero 
@@ -40,9 +39,9 @@ public class ArmTelescopingSubsystem {
     public void init(){
         System.out.println("telescoping init!! :)");
         telescopingMotor.setInverted(false); //forward = clockwise, changed on 2/9
-        telescopingMotor.config_kP(0, telescopeKP);
-        telescopingMotor.config_kI(0, telescopeKI);
-        telescopingMotor.config_kP(0, telescopeKD);
+        telescopingMotor.config_kP(Constants.kPIDLoopIdx, telescopeGains.kP, Constants.kTimeoutMs);
+        telescopingMotor.config_kI(Constants.kPIDLoopIdx, telescopeGains.kI, Constants.kTimeoutMs);
+        telescopingMotor.config_kP(Constants.kPIDLoopIdx, telescopeGains.kD, Constants.kTimeoutMs);
     }
 
     public void periodic(){//sam requests that we can operate arm length by stick on xbox
