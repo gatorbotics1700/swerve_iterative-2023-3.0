@@ -138,7 +138,6 @@ public class AutonomousBaseMP extends AutonomousBase{
             DrivetrainSubsystem.m_pose, goal, Rotation2d.fromDegrees(0));
         
         drivetrainSubsystem.setSpeed(adjustedSpeeds);
-        //System.out.println("Actual time elapsed: " + timeElapsed/1000 + "\n" + "Speed: " + adjustedSpeeds.vxMetersPerSecond + ", " + adjustedSpeeds.vyMetersPerSecond + ", " + adjustedSpeeds.omegaRadiansPerSecond + " Goal endpoint: " + goal);
     }
 
     

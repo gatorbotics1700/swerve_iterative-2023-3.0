@@ -21,13 +21,13 @@ public final class Constants {
      *
      * Should be measured from center to center.
      */
-    public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.4690872; //previously 18.468
+    public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.4690872; //units = meters //previously 18.468
     /**
      * The front-to-back distance between the drivetrain wheels.
      *
      * Should be measured from center to center.
      */
-    public static final double DRIVETRAIN_WHEELBASE_METERS = 0.4690872; //previously 18.468 
+    public static final double DRIVETRAIN_WHEELBASE_METERS = 0.4690872; //units = meter //previously 18.468 
 
     public static final int DRIVETRAIN_PIGEON_ID = 6; 
 
@@ -38,13 +38,13 @@ public final class Constants {
     public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(23.73+90);//fix this one to like -70 or something
     public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(122.87);
     */
-    //swervo - might need to be changed to whats in main
     //public static final double offset = Robot.test.getDouble(DRIVETRAIN_PIGEON_ID); 
     
-    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(279.316);   //281.07421875-90 //279.316-270
-    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(90 + 75.938); //343.828125+90 //75.938
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(90 + 320.098);  //231.6796875+90 //320.098
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(90 + 250.183);//343.828125-90 //250.183
+    //swervo
+    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(164.00390625);   //281.07421875-90 //279.316-270
+    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(341.72149658203125); //343.828125+90 //75.938
+    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(278.5308837890625);  //231.6796875+90 //320.098
+    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(52.525390625);//343.828125-90 //250.183
 
     //even can ids are drive, odd can ids are steer
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 20;
@@ -57,16 +57,16 @@ public final class Constants {
 
     public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 26; 
     public static final int BACK_LEFT_MODULE_STEER_MOTOR = 27; 
-    public static final int BACK_LEFT_MODULE_STEER_ENCODER = 4; 
+    public static final int BACK_LEFT_MODULE_STEER_ENCODER = 5; 
 
     public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 24; 
     public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 25; 
-    public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 5; 
+    public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 4; 
 
     public static final double DRIVE_MOTOR_MIN_VOLTAGE = 0.19;
-    public static final double DRIVE_MOTOR_MAX_VOLTAGE = 0.2;
+    public static final double DRIVE_MOTOR_MAX_VOLTAGE = 0.8;
     public static final double STEER_MOTOR_MIN_VOLTAGE = 0.525; 
-    public static final double STEER_MOTOR_MAX_VOLTAGE = 0.8;
+    public static final double STEER_MOTOR_MAX_VOLTAGE = 0.5;
     public static final double SWERVE_GEAR_RATIO = 6.75;
     public static final double TELESCOPING_ARM_GEAR_RATIO = 36.0; // as of 2/6
     public static final double FIRST_WHEEL_DIAMETER= 0.9; //0.75 inches - rough estimate by sara 2/2

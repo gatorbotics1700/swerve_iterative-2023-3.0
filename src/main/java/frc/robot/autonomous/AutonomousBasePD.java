@@ -13,7 +13,7 @@ import frc.robot.autonomous.StateWithCoordinate.AutoStates;
 
 public class AutonomousBasePD extends AutonomousBase{
     public static final double turnKP= 0.0001; //increased slight *** not tested
-    public static final double turnKI= 0.0;
+    public static final double turnKI= 0.0; 
     public static final double turnKD= 0.0;
     public static final double driveKP= 0.02;//Robot.kP.getDouble(0.00006);//0.00006;
     public static final double driveKI= 0.0; //Robot.kI.getDouble(0.0);//0.0;
@@ -147,7 +147,7 @@ public class AutonomousBasePD extends AutonomousBase{
           //  System.out.println("Speed rotat after: " + speedRotat);
         }
 
-        drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speedX, speedY, speedRotat, drivetrainSubsystem.getGyroscopeRotation()));  
+        drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speedX, speedY, speedRotat, drivetrainSubsystem.getPoseRotation()));  
         double errorX = (dPose.getX() - DrivetrainSubsystem.m_pose.getX());
         double errorY = (dPose.getY() - DrivetrainSubsystem.m_pose.getY());
         double errorRotat = (dPose.getRotation().getDegrees() - DrivetrainSubsystem.m_pose.getRotation().getDegrees());
@@ -170,7 +170,7 @@ public class AutonomousBasePD extends AutonomousBase{
     public void turnDesiredAngle(double desiredTurn){
       //  System.out.println("desired turn: " + desiredTurn);
         directionController.enableContinuousInput(0, 360); //so it goes shortest angle to get to correct
-        double pidturnval = directionController.calculate(drivetrainSubsystem.getGyroscopeRotation().getDegrees(), desiredTurn);
+        double pidturnval = directionController.calculate(drivetrainSubsystem.getPoseRotation().getDegrees(), desiredTurn);
        // System.out.println("pid val: " + pidturnval);
         drivetrainSubsystem.setSpeed(
             ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 
