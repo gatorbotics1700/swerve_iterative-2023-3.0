@@ -157,7 +157,7 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-
+    ElevatorSubsystem.elevatorMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
     //m_drivetrainSubsystem.m_pose = new Pose2d(20, 30, new Rotation2d(Math.PI/4));
     //System.out.println("m_pose: " + m_drivetrainSubsystem.m_pose);
     //autonomousBasePD.init();
@@ -167,8 +167,8 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
 
-    elevatorSubsystem.setState(ElevatorStates.ZERO);
-    elevatorSubsystem.periodic();
+    //elevatorSubsystem.setState(ElevatorStates.ZERO);
+    //elevatorSubsystem.periodic();
 
     /*intial test!*/
    // m_drivetrainSubsystem.setSpeed(new ChassisSpeeds(-0.2, -0.2, 0));

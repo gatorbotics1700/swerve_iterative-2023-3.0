@@ -13,14 +13,11 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 public class ElevatorSubsystem {
 
-    //these values are to be determined (untested)
     public double _kP = 0.05;
     public double _kI = 0.0;
     public double _kD = 0.0;
     public int _kIzone = 0;
     public double _kPeakOutput = 1.0;
-
-    public double scaleDown = 1.214; //this value was determined using tested values and plotted by lauren mcdonald in loggerpro!
 
     public static TalonFX elevatorMotor = new TalonFX(Constants.ELEVATOR_CAN_ID);
     public static ElevatorStates elevatorState = ElevatorStates.LOW_ELEVATOR_HEIGHT;
