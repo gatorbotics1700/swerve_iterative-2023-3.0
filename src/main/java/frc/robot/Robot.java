@@ -57,7 +57,7 @@ public class Robot extends TimedRobot {
   // center : 325.8415 (inches)
   // private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
   private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
-  private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0.0, 0.0, new Rotation2d(Math.toRadians(180.0))), new Pose2d(5 * mpi, -40 * mpi, new Rotation2d(Math.toRadians(180))), new Pose2d(40 * mpi, 0, new Rotation2d(0)), new Pose2d(0, 30 * mpi, new Rotation2d(0)), new Pose2d(40 * mpi, 30 * mpi, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(20 * mpi, 20 * mpi, new Rotation2d(0)), 180.0); 
+  private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0.0, 0.0, new Rotation2d(Math.toRadians(0.0))), new Pose2d(-5 * mpi, 20 * mpi, new Rotation2d(Math.toRadians(0))), new Pose2d(40 * mpi, 0, new Rotation2d(0)), new Pose2d(0, 30 * mpi, new Rotation2d(0)), new Pose2d(40 * mpi, 30 * mpi, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(20 * mpi, 20 * mpi, new Rotation2d(0)), 180.0); 
   
  
 // red alliance  
@@ -144,7 +144,7 @@ public class Robot extends TimedRobot {
     // System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
     System.out.println("current pose: " + DrivetrainSubsystem.m_pose.getX() + " , " + DrivetrainSubsystem.m_pose.getY());
     m_autoSelected = m_chooser.getSelected();
-    m_autoSelected.init();
+    AutonomousBasePD.initial();
   }
 
   /** This function is called periodically during autonomous. */
@@ -205,14 +205,16 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     m_drivetrainSubsystem.zeroGyroscope();
-
+    m_drivetrainSubsystem.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
+    AutonomousBasePD.initial();
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic(){
-   
-    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.0, Math.toRadians(0), m_drivetrainSubsystem.getPoseRotation()));
+    testPath.driveDesiredDistance(new Pose2d(-20 * Constants.METERS_PER_INCH, 20 * Constants.METERS_PER_INCH, new Rotation2d(0)));
+    
+    //m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.0, Math.toRadians(0), m_drivetrainSubsystem.getPoseRotation()));
     
    
     m_drivetrainSubsystem.drive();

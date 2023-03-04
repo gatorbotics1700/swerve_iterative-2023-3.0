@@ -14,29 +14,29 @@ public class AutonomousBasePD extends AutonomousBase{
     public static final double driveKP= 0.02;//Robot.kP.getDouble(0.00006);//0.00006;
     public static final double driveKI= 0.0; //Robot.kI.getDouble(0.0);//0.0;
     public static final double driveKD= 0.0; //Robot.kD.getDouble(0.0);//0.0;
-    private final double DRIVE_DEADBAND = 3*Constants.METERS_PER_INCH; //meters - previously 3 inches
-    private final double TURN_DEADBAND = 6*Constants.METERS_PER_INCH; 
+    private static final double DRIVE_DEADBAND = 3*Constants.METERS_PER_INCH; //meters - previously 3 inches
+    private static final double TURN_DEADBAND = 6*Constants.METERS_PER_INCH; 
 
     
-    private Pose2d startingCoordinate;
-    private Pose2d goalCoordinate1;
-    private Pose2d goalCoordinate2; 
-    private Pose2d goalCoordinate3; 
-    private Pose2d goalCoordinate4; 
-    private Pose2d goalCoordinate5;
-    private Pose2d goalCoordinate6;
-    private double goalAngle1;
+    private static Pose2d startingCoordinate;
+    private static Pose2d goalCoordinate1;
+    private static Pose2d goalCoordinate2; 
+    private static Pose2d goalCoordinate3; 
+    private static Pose2d goalCoordinate4; 
+    private static Pose2d goalCoordinate5;
+    private static Pose2d goalCoordinate6;
+    private static double goalAngle1;
     
 
     public double desiredTurn;
     
-    DrivetrainSubsystem drivetrainSubsystem = Robot.m_drivetrainSubsystem;
+    static DrivetrainSubsystem drivetrainSubsystem = Robot.m_drivetrainSubsystem;
 
     //pids
-    private PIDController directionController = new PIDController(turnKP, turnKI, turnKD);
-    private PIDController turnController = new PIDController(turnKP, turnKI, turnKD); 
-    private PIDController xController = new PIDController(driveKP, driveKI, driveKD);
-    private PIDController yController = new PIDController(driveKP, driveKI, driveKD);
+    private static PIDController directionController = new PIDController(turnKP, turnKI, turnKD);
+    private static PIDController turnController = new PIDController(turnKP, turnKI, turnKD); 
+    private static PIDController xController = new PIDController(driveKP, driveKI, driveKD);
+    private static PIDController yController = new PIDController(driveKP, driveKI, driveKD);
 
 
     
@@ -61,8 +61,8 @@ public class AutonomousBasePD extends AutonomousBase{
         goalCoordinate6 = new Pose2d(0.0, 0.0, drivetrainSubsystem.getGyroscopeRotation());
         //goalAngle1 = drivetrainSubsystem.getGyroscopeRotation();
     }
-    @Override
-    public void init(){
+   
+    public static void initial(){
         drivetrainSubsystem.resetOdometry(startingCoordinate);
         directionController.reset();
         xController.reset();
@@ -219,7 +219,7 @@ public class AutonomousBasePD extends AutonomousBase{
           //  System.out.println("Speed rotat after: " + speedRotat);
         }
 
-        drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speedX, speedY, speedRotat, drivetrainSubsystem.getPoseRotation()));  
+        drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speedX, speedY, 0, drivetrainSubsystem.getPoseRotation()));  
         double errorX = (dPose.getX() - DrivetrainSubsystem.m_pose.getX());
         double errorY = (dPose.getY() - DrivetrainSubsystem.m_pose.getY());
         double errorRotat = (dPose.getRotation().getDegrees() - DrivetrainSubsystem.m_pose.getRotation().getDegrees());
