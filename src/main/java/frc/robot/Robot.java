@@ -38,6 +38,7 @@ public class Robot extends TimedRobot {
   private AutonomousBase m_autoSelected;
   private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<AutonomousBase>();
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
+  private final LimeLightSubsystem m_limeLightSubsystem = new LimeLightSubsystem();
   private final Field2d m_field = new Field2d();
   double t= 0.0;
   ChassisSpeeds m_ChassisSpeeds;
@@ -91,7 +92,7 @@ public class Robot extends TimedRobot {
   */
   @Override
   public void robotInit() { //creates options for different autopaths, names are placeholders
-
+     
     System.out.println("#I'm Awake");
     
     m_chooser.setDefaultOption("testPath", testPath);
@@ -122,12 +123,13 @@ public class Robot extends TimedRobot {
    * <p>This runs after the mode specific periodic functions, but before LiveWindow and
    * SmartDashboard integrated updating.
    */
+
   @Override
   public void robotPeriodic() {
     SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX()/Constants.METERS_PER_INCH);
     SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.METERS_PER_INCH);
     SmartDashboard.putNumber("angle odometry",DrivetrainSubsystem.m_pose.getRotation().getDegrees()/Constants.METERS_PER_INCH);
-
+    SmartDashboard.putBoolean("Ready to Score", m_limeLightSubsystem.seeSomething());
   }
 
   /**
@@ -153,6 +155,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+     //m_AprilTagSubsystem.periodic();
      m_autoSelected.periodic();
      //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
 
@@ -172,14 +175,13 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    /*System.out.println("back left module: " + m_drivetrainSubsystem.m_backLeftModule.getAbsoluteAngle());
-    System.out.println("back right module: " + m_drivetrainSubsystem.m_backRightModule.getSteerAngle());
-    System.out.println("front left module: " + m_drivetrainSubsystem.m_frontLeftModule.getSteerAngle());
-    System.out.println("front right module: " + m_drivetrainSubsystem.m_frontRightModule.getSteerAngle());*/
-    m_drivetrainSubsystem.driveTeleop();
+    //m_drivetrainSubsystem.driveTeleop();
+    //System.out.println("i am in teleop");
+    //m_AprilTagSubsystem.periodic();
+    //m_AprilTagSubsystem.detectTag();
 
-    if (OI.m_controller.getBButton()){
-      m_drivetrainSubsystem.stopDrive();
+    if(OI.m_controller.getBackButton()){
+      //m_VisionSubsystem.setState(VisionSubsystem.VisionStates.DETECTTAPE);
     }
     
     if(OI.m_controller.getAButtonReleased()){

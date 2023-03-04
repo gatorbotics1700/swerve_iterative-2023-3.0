@@ -16,6 +16,9 @@ import edu.wpi.first.networktables.GenericEntry;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+    public static final double BUMPER_WIDTH = 0.0762;
+    public static final double DRIVETRAIN_WIDTH = 0.3175;
     /**
      * The left-to-right distance between the drivetrain wheels
      *
