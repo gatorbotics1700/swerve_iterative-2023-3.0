@@ -1,8 +1,9 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.BaseTalon;
+import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 
-import edu.wpi.first.math.controller.PIDController;
 import frc.robot.Constants;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -42,10 +43,11 @@ public class ArmTelescopingSubsystem {
         telescopingMotor.setInverted(false); //forward = clockwise, changed on 2/9
         telescopingMotor.setNeutralMode(NeutralMode.Brake);
         //telescopingMotor.selectProfileSlot(0, 0);
+        telescopingMotor.configAllowableClosedloopError(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+        telescopingMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx, Constants.kTimeoutMs);//determine what these values would be for us
         telescopingMotor.config_kP(Constants.kPIDLoopIdx, telescopeGains.kP, Constants.kTimeoutMs);
         telescopingMotor.config_kI(Constants.kPIDLoopIdx, telescopeGains.kI, Constants.kTimeoutMs);
         telescopingMotor.config_kP(Constants.kPIDLoopIdx, telescopeGains.kD, Constants.kTimeoutMs);
-        telescopingMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx, Constants.kTimeoutMs);//determine what these values would be for us
 
     }
 
@@ -89,6 +91,8 @@ public class ArmTelescopingSubsystem {
     }
 
     public void determineRightTicks(){
+        System.out.println("telescope gains #3!!" + telescopeGains.kP);
+
         if (telescopingMotor.getSelectedSensorPosition() < 2 * Constants.UNDER_TWO_TICKS_PER_INCH){
             desiredTicks = 2 * Constants.UNDER_TWO_TICKS_PER_INCH; 
         } else{
@@ -96,6 +100,8 @@ public class ArmTelescopingSubsystem {
         }
     }
     public void telescopeDeadband(){
+        System.out.println("telescope gains #4!!" + telescopeGains.kP);
+
         if (Math.abs(desiredTicks - telescopingMotor.getSelectedSensorPosition()) < deadband){
             telescopingMotor.set(ControlMode.PercentOutput, 0);
             System.out.println("STOPPED");

@@ -60,7 +60,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() { //creates options for different autopaths, names are placeholders
- 
+    System.out.println("robot init");
   //   System.out.println("#I'm Awake");
   //   m_chooser.setDefaultOption("Default Auto", testPath);
   //   m_chooser.addOption("My Auto 1", noGo);
@@ -160,8 +160,9 @@ public class Robot extends TimedRobot {
     // m_drivetrainSubsystem.m_pose = new Pose2d(20, 30, new Rotation2d(Math.PI/4));
     // System.out.println("m_pose: " + m_drivetrainSubsystem.m_pose);
     // autonomousBasePD.init();
-    armTelescopingSubsystem.init();
-    armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+    ElevatorSubsystem.elevatorMotor.config_kP(Constants.kPIDLoopIdx, armTelescopingSubsystem.telescopeGains.kP, Constants.kTimeoutMs);
+    //armTelescopingSubsystem.init();
+    //armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
 
   }
 
@@ -170,7 +171,7 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
     //armTelescopingSubsystem.telescopingMotor.set(ControlMode.PercentOutput, -0.1);
     //System.out.println("telescoping ticks: " + armTelescopingSubsystem.telescopingMotor.getSelectedSensorPosition());
-    // armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
+    // armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
     // armTelescopingSubsystem.periodic();
 
   }
