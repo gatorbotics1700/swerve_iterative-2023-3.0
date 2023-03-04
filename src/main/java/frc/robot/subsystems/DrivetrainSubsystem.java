@@ -182,7 +182,11 @@ public class DrivetrainSubsystem {
   
   //returns the direction of the robot, originally in radians, but fromDegrees switches into degrees
   public Rotation2d getGyroscopeRotation() {
-        return m_pose.getRotation();
+        return new Rotation2d(Math.toRadians(m_pigeon.getYaw()));
+  }
+
+  public Rotation2d getPoseRotation() {
+        return m_pose.getRotation(); 
   }
 
   public double getEncoderPosition(SwerveModule module) {
@@ -257,7 +261,7 @@ public class DrivetrainSubsystem {
                         m_translationXSupplier.getAsDouble(),
                         m_translationYSupplier.getAsDouble(),
                         m_rotationSupplier.getAsDouble(),
-                        getGyroscopeRotation()
+                        getPoseRotation()
                 )
         );
         //using speed to go
@@ -373,7 +377,7 @@ public class DrivetrainSubsystem {
 
     //AUTO AND FAILSAFE
     public void stopDrive() {
-        setSpeed(new ChassisSpeeds(0.0, 0.0, 0.0));
+        setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.0, 0.0, 0.0, getPoseRotation()));
         drive();
    }
 }

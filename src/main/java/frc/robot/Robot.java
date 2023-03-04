@@ -123,7 +123,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX());
     SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY());
-    SmartDashboard.putNumber("angle odometry",DrivetrainSubsystem.m_pose.getRotation());
+    SmartDashboard.putNumber("angle odometry",DrivetrainSubsystem.m_pose.getRotation().getDegrees());
 
   }
 
@@ -212,7 +212,7 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic(){
    
-    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.0, Math.toRadians(0), m_drivetrainSubsystem.getGyroscopeRotation()));
+    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.0, Math.toRadians(0), m_drivetrainSubsystem.getPoseRotation()));
     
    
     m_drivetrainSubsystem.drive();
