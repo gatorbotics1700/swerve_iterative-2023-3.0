@@ -123,6 +123,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX());
     SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY());
+    SmartDashboard.putNumber("angle odometry",DrivetrainSubsystem.m_pose.getRotation());
 
   }
 
