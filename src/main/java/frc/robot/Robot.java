@@ -6,32 +6,21 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.*;
-import frc.robot.OI;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
-import frc.robot.Constants;
 
-import com.ctre.phoenix.ErrorCode;
-import com.ctre.phoenix.sensors.CANCoderConfiguration;
-import com.ctre.phoenix.sensors.SensorInitializationStrategy;
-
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTable.*;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import frc.robot.Constants;
-import com.ctre.phoenix.motorcontrol.ControlMode;
+import frc.robot.autonomous.StateWithCoordinate.AutoStates;
+import frc.robot.autonomous.StateWithCoordinate;
 //Sam's Imports Below This
 /**import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.I2C;
@@ -70,30 +59,40 @@ public class Robot extends TimedRobot {
   // center : 325.8415 (inches)
   // private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
   private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
-  private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0.0, 0.0, new Rotation2d(Math.toRadians(180.0))), new Pose2d(5 * mpi, -40 * mpi, new Rotation2d(Math.toRadians(180))), new Pose2d(40 * mpi, 0, new Rotation2d(0)), new Pose2d(0, 30 * mpi, new Rotation2d(0)), new Pose2d(40 * mpi, 30 * mpi, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(20 * mpi, 20 * mpi, new Rotation2d(0)), 180.0); 
+
+  private AutonomousBasePD testPath = new AutonomousBasePD(
+    new Pose2d(0.0, 0.0, new Rotation2d(Math.toRadians(180.0))), 
+    new StateWithCoordinate[]{
+      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(5 * mpi, -40 * mpi, new Rotation2d(Math.toRadians(180)))), 
+      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(40 * mpi, 0, new Rotation2d(0))), 
+      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(0, 30 * mpi, new Rotation2d(0))), 
+      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(40 * mpi, 30 * mpi, new Rotation2d(0))), 
+      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(0, 0, new Rotation2d(0))), 
+      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(20 * mpi, 20 * mpi, new Rotation2d(0)))
+    });
   
   // blue alliance 
   // private AutonomousBasePD HDplaceTwoEngageB = new AutonomousBasePD(new Pose2d(56.069 * mpi, 20.19 * mpi,  new Rotation2d(0)), new Pose2d(278.999 * mpi, 36.19 * mpi, new Rotation2d(0)), new Pose2d(257.650 * mpi, 64.004 * mpi, new Rotation2d(0)), new Pose2d(156.859 * mpi, 83.368 * mpi, new Rotation2d(0)), new Pose2d(156.859 * mpi, 83.368 * mpi, new Rotation2d(0)), new Pose2d(156.859 * mpi, 83.368 * mpi, new Rotation2d(0)), new Pose2d(156.859 * mpi, 83.368 * mpi, new Rotation2d(0)));
-  // private AutonomousBasePD HBLeaveB = new AutonomousBasePD(new Pose2d(56.069 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(219.915 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(219.915 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(219.915 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(219.915 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(219.915 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(219.915 * mpi, 200.046 * mpi, new Rotation2d(0)));
+  // private AutonomousBasePD HBLeaveB = new AutonomousBasePD(new Pose2d(56.069 * mpi, 200.0346 * mpi, new Rotation2d(0)), new Pose2d(219.915 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(219.915 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(219.915 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(219.915 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(219.915 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(219.915 * mpi, 200.046 * mpi, new Rotation2d(0)));
   // private AutonomousBasePD HDLeaveB = new AutonomousBasePD(new Pose2d(56.069 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(219.91 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(219.915 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(219.915 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(219.915 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(219.915 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(219.915 * mpi, 20.19 * mpi, new Rotation2d(0)));
   // private AutonomousBasePD HDThreeScoreB = new AutonomousBasePD(new Pose2d(56.069 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(278.999 * mpi, 37.193 * mpi, new Rotation2d(0)), new Pose2d(56.222 * mpi, 43.068 * mpi, new Rotation2d(0)), new Pose2d(197.484 * mpi,45.934 * mpi, new Rotation2d(0)), new Pose2d(279.077 * mpi, 85.622 * mpi, new Rotation2d(0)), new Pose2d(197.484 * mpi,40.000 * mpi, new Rotation2d(0)), new Pose2d(56.154 * mpi,66.117 * mpi, new Rotation2d(0)));
   // private AutonomousBasePD HBThreeScoreB = new AutonomousBasePD(new Pose2d(56.069 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(278.999 * mpi, 180.683 * mpi, new Rotation2d(0)), new Pose2d(56.069 * mpi, 174.725 * mpi, new Rotation2d(0)), new Pose2d(207.006 * mpi, 174.725 * mpi, new Rotation2d(0)), new Pose2d(278.006 * mpi, 133.515 * mpi, new Rotation2d(0)), new Pose2d(200.552 * mpi, 185.151 * mpi, new Rotation2d(0)), new Pose2d(57.062 * mpi, 154.368 * mpi, new Rotation2d(0)));
   // private AutonomousBasePD engageChargeB = new AutonomousBasePD(new Pose2d(56.069 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(152.812 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(152.812 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(152.812 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(152.812 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(152.812 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(152.812 * mpi, 108.015 * mpi, new Rotation2d(0)));
   //these paths score 3 balls without touching the charge station, requires 7 Pose2ds!
-  private AutonomousBasePD threeUnderChargeStation = new AutonomousBasePD(new Pose2d(56.069, 17.332, new Rotation2d(0)), new Pose2d(278.999, 37.193, new Rotation2d(0)), new Pose2d(56.222, 43.068, new Rotation2d(0)), new Pose2d(197.484,45.934, new Rotation2d(0)), new Pose2d(279.077, 85.622, new Rotation2d(0)), new Pose2d(197.484,40.000, new Rotation2d(0)), new Pose2d(56.154,66.117, new Rotation2d(0)), 0);
-  private AutonomousBasePD threeAboveChargeStation = new AutonomousBasePD(new Pose2d(56.069, 200.046, new Rotation2d(0)), new Pose2d(278.999, 180.683, new Rotation2d(0)), new Pose2d(56.069, 174.725, new Rotation2d(0)), new Pose2d(207.006, 174.725, new Rotation2d(0)), new Pose2d(278.006, 133.515, new Rotation2d(0)), new Pose2d(200.552, 185.151, new Rotation2d(0)), new Pose2d(57.062, 154.368, new Rotation2d(0)),0);
+  //private AutonomousBasePD threeUnderChargeStation = new AutonomousBasePD("threeUnderChargeStation", new Pose2d(56.069, 17.332, new Rotation2d(0)), new Pose2d(278.999, 37.193, new Rotation2d(0)), new Pose2d(56.222, 43.068, new Rotation2d(0)), new Pose2d(197.484,45.934, new Rotation2d(0)), new Pose2d(279.077, 85.622, new Rotation2d(0)), new Pose2d(197.484,40.000, new Rotation2d(0)), new Pose2d(56.154,66.117, new Rotation2d(0)), 0);
+  //private AutonomousBasePD threeAboveChargeStation = new AutonomousBasePD("threeAboveChargeStation", new Pose2d(56.069, 200.046, new Rotation2d(0)), new Pose2d(278.999, 180.683, new Rotation2d(0)), new Pose2d(56.069, 174.725, new Rotation2d(0)), new Pose2d(207.006, 174.725, new Rotation2d(0)), new Pose2d(278.006, 133.515, new Rotation2d(0)), new Pose2d(200.552, 185.151, new Rotation2d(0)), new Pose2d(57.062, 154.368, new Rotation2d(0)),0);
 
 // red alliance  
 // half the field (325.8415) - blue x value + half the field (325.8415) = red x value
   
-  private AutonomousBasePD HDplaceTwoEngageR = new AutonomousBasePD(new Pose2d(595.614 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(372.684 * mpi, 36.19 * mpi, new Rotation2d(0)), new Pose2d(394.033 * mpi, 64.004 * mpi, new Rotation2d(0)), new Pose2d(494.824 * mpi, 83.368 * mpi, new Rotation2d(0)), new Pose2d(494.824 * mpi, 83.368 * mpi, new Rotation2d(0)), new Pose2d(494.824 * mpi, 83.368 * mpi, new Rotation2d(0)), new Pose2d(494.824 * mpi, 83.368 * mpi, new Rotation2d(0)), 0);
+  //private AutonomousBasePD HDplaceTwoEngageR = new AutonomousBasePD("HDplaceTwoEngageR", new Pose2d(595.614 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(372.684 * mpi, 36.19 * mpi, new Rotation2d(0)), new Pose2d(394.033 * mpi, 64.004 * mpi, new Rotation2d(0)), new Pose2d(494.824 * mpi, 83.368 * mpi, new Rotation2d(0)), new Pose2d(494.824 * mpi, 83.368 * mpi, new Rotation2d(0)), new Pose2d(494.824 * mpi, 83.368 * mpi, new Rotation2d(0)), new Pose2d(494.824 * mpi, 83.368 * mpi, new Rotation2d(0)), 0);
    //elise added a goal angle to make the code happy
   // private AutonomousBasePD HBLeaveR = new AutonomousBasePD(new Pose2d(595.614 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(431.768 * mpi, 200.04 * mpi, new Rotation2d(0)), new Pose2d(431.768 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(431.768 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(431.768 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(431.768 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(431.768 * mpi, 200.046 * mpi, new Rotation2d(0)));
   // private AutonomousBasePD HDLeaveR = new AutonomousBasePD(new Pose2d(595.614 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(431.768 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(431.768 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(431.768 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(431.768 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(431.768 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(431.768 * mpi, 20.19 * mpi, new Rotation2d(0)));
   // private AutonomousBasePD HDThreeScoreR = new AutonomousBasePD(new Pose2d(595.614 * mpi, 20.19 * mpi, new Rotation2d(0)), new Pose2d(372.684 * mpi, 37.193 * mpi, new Rotation2d(0)), new Pose2d(595.461 * mpi, 43.068 * mpi, new Rotation2d(0)), new Pose2d(454.199 * mpi,45.934 * mpi, new Rotation2d(0)), new Pose2d(372.606, 85.622 * mpi, new Rotation2d(0)), new Pose2d(454.199 * mpi,40.000 * mpi, new Rotation2d(0)), new Pose2d(595.529 * mpi,66.117 * mpi, new Rotation2d(0)));
   // private AutonomousBasePD HBThreeScoreR = new AutonomousBasePD(new Pose2d(595.614 * mpi, 200.046 * mpi, new Rotation2d(0)), new Pose2d(372.684 * mpi, 180.683 * mpi, new Rotation2d(0)), new Pose2d(595.614 * mpi, 174.725 * mpi, new Rotation2d(0)), new Pose2d(444.677 * mpi, 174.725 * mpi, new Rotation2d(0)), new Pose2d(373.677 * mpi, 133.515 * mpi, new Rotation2d(0)), new Pose2d(451.131 * mpi, 185.151 * mpi, new Rotation2d(0)), new Pose2d(594.621 * mpi, 154.368 * mpi, new Rotation2d(0)));
   // private AutonomousBasePD engageChargeR = new AutonomousBasePD(new Pose2d(553.924 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(553.924 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(553.924 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(553.924 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(553.924 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(553.924 * mpi, 108.015 * mpi, new Rotation2d(0)), new Pose2d(553.924 * mpi, 108.015 * mpi, new Rotation2d(0)));
-  private AutonomousBasePD CurrentPath = testPath;
+ // private AutonomousBasePD CurrentPath = testPath;
 
 
   PneumaticIntakeSubsystem pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
