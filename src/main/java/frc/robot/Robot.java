@@ -161,6 +161,7 @@ public class Robot extends TimedRobot {
     // System.out.println("m_pose: " + m_drivetrainSubsystem.m_pose);
     // autonomousBasePD.init();
     armTelescopingSubsystem.init();
+    armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
 
   }
 
@@ -169,8 +170,8 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
     //armTelescopingSubsystem.telescopingMotor.set(ControlMode.PercentOutput, -0.1);
     //System.out.println("telescoping ticks: " + armTelescopingSubsystem.telescopingMotor.getSelectedSensorPosition());
-     armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
-     armTelescopingSubsystem.periodic();
+    // armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
+    // armTelescopingSubsystem.periodic();
 
   }
 

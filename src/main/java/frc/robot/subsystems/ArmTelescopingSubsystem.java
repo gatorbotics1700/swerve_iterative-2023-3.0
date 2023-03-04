@@ -5,27 +5,28 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.math.controller.PIDController;
 import frc.robot.Constants;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
+
 import frc.robot.Gains;
 
 public class ArmTelescopingSubsystem {
 
-    public static TelescopingStates tState = TelescopingStates.RETRACTED;//should this be retracted or mid? what is the equivalent to off?
+    public static TelescopingStates tState = TelescopingStates.RETRACTED; //should this be retracted or mid? what is the equivalent to off?
 
     public TalonFX telescopingMotor = new TalonFX(Constants.TELESCOPING_MOTOR_ID);
     private double startTime;
     private double desiredInches;
     private double desiredTicks;
     public double tareEncoder;
-    //telescopingMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx, Constants.kTimeoutMs);//determine what these values would be for us
 
-    double _kP = 0.05;
+    double _kP = 0.35;
     double _kI = 0;
     double _kD = 0;
     public int _kIzone = 0;
     public double _kPeakOutput = 1.0;
 
     private int deadband = 25000;
-    //public PIDController telescopeController = new PIDController(telescopeKP, telescopeKI, telescopeKD)
     public Gains telescopeGains = new Gains(_kP, _kI, _kD, _kIzone, _kPeakOutput);
 
     public static enum TelescopingStates{
@@ -39,9 +40,13 @@ public class ArmTelescopingSubsystem {
     public void init(){
         System.out.println("telescoping init!! :)");
         telescopingMotor.setInverted(false); //forward = clockwise, changed on 2/9
+        telescopingMotor.setNeutralMode(NeutralMode.Brake);
+        //telescopingMotor.selectProfileSlot(0, 0);
         telescopingMotor.config_kP(Constants.kPIDLoopIdx, telescopeGains.kP, Constants.kTimeoutMs);
         telescopingMotor.config_kI(Constants.kPIDLoopIdx, telescopeGains.kI, Constants.kTimeoutMs);
         telescopingMotor.config_kP(Constants.kPIDLoopIdx, telescopeGains.kD, Constants.kTimeoutMs);
+        telescopingMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx, Constants.kTimeoutMs);//determine what these values would be for us
+
     }
 
     public void periodic(){//sam requests that we can operate arm length by stick on xbox
