@@ -27,6 +27,7 @@ public class StateWithCoordinate{
         // MIDNODE,
         // LOWNODE,
         INTAKING,
+        OUTTAKING,
         BALANCING;
     } 
 }

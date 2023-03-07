@@ -10,6 +10,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.Constants;
 import frc.robot.autonomous.StateWithCoordinate;
 import frc.robot.autonomous.StateWithCoordinate.AutoStates;
+import frc.robot.subsystems.PneumaticIntakeSubsystem;
+import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
 
 public class AutonomousBasePD extends AutonomousBase{
     public static final double turnKP= 0.0001; //increased slight *** not tested
@@ -29,6 +31,8 @@ public class AutonomousBasePD extends AutonomousBase{
     public double desiredTurn;
     
     static DrivetrainSubsystem drivetrainSubsystem = Robot.m_drivetrainSubsystem;
+
+    static PneumaticIntakeSubsystem pneumaticIntakeSubsystem = Robot.m_pneumaticIntakeSubsystem;
 
     //pids
     private static PIDController directionController = new PIDController(turnKP, turnKI, turnKD);
@@ -101,9 +105,25 @@ public class AutonomousBasePD extends AutonomousBase{
             }else if(states == AutoStates.INTAKING){
                 //move elevator/intake system (build) and maybe arm pivot?
                 //if we are done then we need to i++
+                //double beginIntake = System.currentTimeMillis();
+                pneumaticIntakeSubsystem.setState(PneumaticIntakeStates.ACTUATING);
+                //if(beginIntake == beginIntake + 0.5){
+                    //i++;
+                //}
+                
+
+
+            }else if(states == AutoStates.OUTTAKING){
+                pneumaticIntakeSubsystem.setState(PneumaticIntakeStates.RETRACTING);
+
             }else{
                 drivetrainSubsystem.stopDrive();
+            
             }
+                
+            
+            
+                
         }
     }
 

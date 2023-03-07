@@ -11,6 +11,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.fasterxml.jackson.core.sym.Name;
+import com.ctre.phoenix.ErrorCode;
+import com.ctre.phoenix.sensors.CANCoderConfiguration;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
@@ -20,9 +27,12 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.Constants;
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import frc.robot.autonomous.StateWithCoordinate.AutoStates;
 import frc.robot.autonomous.StateWithCoordinate;
+import frc.robot.subsystems.ArmTelescopingSubsystem.TelescopingStates;
+import edu.wpi.first.math.geometry.Translation2d;
+
+
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -35,21 +45,21 @@ import frc.robot.autonomous.StateWithCoordinate;
 //private AutonomousBasePD mScore = new AutonomousBasePD(new Translation2d(222.037, 0), new Translation2d(135.091, -41.307), new Translation2d(0, -44.163), new Translation2d(222.894, -50.377), new Translation2d(0, -65.388), new Translation2d(0, -65.388));
 
 public class Robot extends TimedRobot {
+
   private AutonomousBase m_autoSelected;
   private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<AutonomousBase>();
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
+  public static PneumaticIntakeSubsystem m_pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
   private final LimeLightSubsystem m_limeLightSubsystem = new LimeLightSubsystem();
   private final AprilTagSubsystem m_aprilTagSubsystem = new AprilTagSubsystem();
+  private static ArmTelescopingSubsystem armTelescopingSubsystem = new ArmTelescopingSubsystem();
   private final Field2d m_field = new Field2d();
   double t= 0.0;
   ChassisSpeeds m_ChassisSpeeds;
   double mpi = Constants.METERS_PER_INCH;
-
  
   // whole field: 651.683 (inches)
-  // center : 325.8415 (inches)
   // private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
-  private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
 
   private AutonomousBasePD testPath = new AutonomousBasePD(
     new Pose2d(0.0, 0.0, new Rotation2d(Math.toRadians(0))), 
@@ -67,8 +77,6 @@ public class Robot extends TimedRobot {
  
 // red alliance  
 // half the field (325.8415) - blue x value + half the field (325.8415) = red x value
-  
-
    
   PneumaticIntakeSubsystem pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
 
@@ -145,12 +153,17 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+  
+    armTelescopingSubsystem.setTState(TelescopingStates.SHELF_ARM_LENGTH); //moved from auto periodic to init
+    armTelescopingSubsystem.init();
+    armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs); //VERY VERY IMPORTANT
 
     //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
     // System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
     System.out.println("current pose: " + DrivetrainSubsystem.m_pose.getX() + " , " + DrivetrainSubsystem.m_pose.getY());
     m_autoSelected = m_chooser.getSelected();
-    AutonomousBasePD.initial();
+    m_autoSelected.init();
+
   }
 
   /** This function is called periodically during autonomous. */
@@ -160,9 +173,9 @@ public class Robot extends TimedRobot {
      m_autoSelected.periodic();
      //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
 
-     //m_autoSelected.periodic();
+     armTelescopingSubsystem.periodic();
+
      //m_drivetrainSubsystem.drive();
-    
   }
 
   /** This function is called once when teleop is enabled. */
@@ -210,9 +223,16 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
+
+    // m_drivetrainSubsystem.m_pose = new Pose2d(20, 30, new Rotation2d(Math.PI/4));
+    // System.out.println("m_pose: " + m_drivetrainSubsystem.m_pose);
+    // autonomousBasePD.init();
+    // armTelescopingSubsystem.init();
+    // armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs); //VERY VERY IMPORTANT
+    m_drivetrainSubsystem.zeroGyroscope();
     m_drivetrainSubsystem.resetOdometry(new Pose2d(0, 0, new Rotation2d(Math.toRadians(180))));
     //AutonomousBasePD.initial();
-   // m_aprilTagSubsystem.init();
+
   }
 
   /** This function is called periodically during test mode. */
@@ -221,8 +241,7 @@ public class Robot extends TimedRobot {
     //m_aprilTagSubsystem.periodic();
     testPath.driveDesiredDistance(new Pose2d(20 * Constants.METERS_PER_INCH, 20 * Constants.METERS_PER_INCH, new Rotation2d(Math.toRadians(180))));
     
-    //m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.0, Math.toRadians(0), m_drivetrainSubsystem.getPoseRotation()));
-    
+    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.0, Math.toRadians(0), m_drivetrainSubsystem.getGyroscopeRotation()));
     
     m_drivetrainSubsystem.drive();
    
@@ -242,5 +261,5 @@ public class Robot extends TimedRobot {
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {}
-  
 }
+
