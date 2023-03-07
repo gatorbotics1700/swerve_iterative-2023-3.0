@@ -22,6 +22,7 @@ import edu.wpi.first.math.estimator.*;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.controller.PIDController;
 
+
 import java.util.Arrays;
 import java.util.function.DoubleSupplier;
 
@@ -31,6 +32,13 @@ import frc.robot.Constants;
 import frc.robot.OI;
 
 public class DrivetrainSubsystem {
+   public static double pitchKP = 0.025;
+   public static double pitchKI = 0.0;
+   public static double pitchKD = 0.001;
+   private PIDController pitchController = new PIDController(pitchKP, pitchKI, pitchKD);
+   public static double MINOUTPUT = 0.1;
+   public static double universalPitch = 0;
+        
 
   /**
    * The maximum voltage that will be delivered to the motors.
@@ -368,4 +376,25 @@ public class DrivetrainSubsystem {
         setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.0, 0.0, 0.0, getPoseRotation()));
         drive();
    }
+
+   public void pitchBalance(double pitchSetpoint){
+        System.out.println("pitch: " + m_pigeon.getPitch());
+        System.out.println("universal pitch: " + universalPitch);
+        double pitchAfterCorrection = m_pigeon.getPitch()- universalPitch;
+        System.out.println("pitch after correcting for universalPitch: " + pitchAfterCorrection);
+        pitchController.setSetpoint(pitchSetpoint); 
+        double output = pitchController.calculate(pitchAfterCorrection, pitchSetpoint);
+        System.out.println("output: " + output); 
+        setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, -output, 0, getGyroscopeRotation()));
+        drive();
+        
+        if (Math.abs(pitchAfterCorrection - pitchSetpoint) < 1.0){
+            setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0,getGyroscopeRotation()));
+            //velocityPD(0);
+        } else{
+                if(Math.abs(output) < MINOUTPUT){
+                   output = Math.signum(output) * MINOUTPUT;
+                }
+        }
+    }
 }

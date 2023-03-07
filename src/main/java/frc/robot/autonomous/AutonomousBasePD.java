@@ -97,6 +97,7 @@ public class AutonomousBasePD extends AutonomousBase{
                 System.out.println("high node");
             }else if(states == AutoStates.BALANCING){
                 //pitch pd
+                Robot.m_drivetrainSubsystem.pitchBalance(0.0);
             }else if(states == AutoStates.INTAKING){
                 //move elevator/intake system (build) and maybe arm pivot?
                 //if we are done then we need to i++
