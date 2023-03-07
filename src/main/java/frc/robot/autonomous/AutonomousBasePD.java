@@ -10,6 +10,9 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.Constants;
 import frc.robot.autonomous.StateWithCoordinate;
 import frc.robot.autonomous.StateWithCoordinate.AutoStates;
+import frc.robot.subsystems.PneumaticIntakeSubsystem;
+import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
+import frc.robot.subsystems.Mechanisms;
 
 public class AutonomousBasePD extends AutonomousBase{
     public static final double turnKP= 0.0001; //increased slight *** not tested
@@ -27,6 +30,8 @@ public class AutonomousBasePD extends AutonomousBase{
     private int i;
     
     static DrivetrainSubsystem drivetrainSubsystem = Robot.m_drivetrainSubsystem;
+    static Mechanisms mechanisms = Robot.m_mechanisms;
+    static PneumaticIntakeSubsystem pneumaticIntakeSubsystem = Robot.m_pneumaticIntakeSubsystem;
 
     //pids
     public PIDController turnController = new PIDController(turnKP, turnKI, turnKD); 
@@ -91,17 +96,25 @@ public class AutonomousBasePD extends AutonomousBase{
                 i++;  
                 System.out.println("moving on to " + stateSequence[i]);
             }else if(states == AutoStates.BALANCING){
-                //pitch pd
-                i++;  
-                System.out.println("moving on to " + stateSequence[i]);
+                //TODO: make it so the paths that balance end with balancing rather than ending with stop
+                Robot.m_drivetrainSubsystem.pitchBalance(0.0);
             }else if(states == AutoStates.INTAKING){
-                //move elevator/intake system (build) and maybe arm pivot?
-                //if we are done then we need to i++
-                i++;  
-                System.out.println("moving on to " + stateSequence[i]);
+                //double beginIntake = System.currentTimeMillis();
+                pneumaticIntakeSubsystem.setState(PneumaticIntakeStates.ACTUATING); //unclear if we need... based on beam break
+                //if(System.currentTimeMillis() == beginIntake + 0.5){
+                    //i++;
+                //}
+            }else if(states == AutoStates.OUTTAKING){
+                pneumaticIntakeSubsystem.setState(PneumaticIntakeStates.RETRACTING);
+                //if done, i++
             }else{
                 drivetrainSubsystem.stopDrive();
+            
             }
+                
+            
+            
+                
         }
     }
 

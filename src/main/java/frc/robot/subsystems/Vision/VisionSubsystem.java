@@ -1,7 +1,6 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.Vision;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.LimeLightSubsystem.LimelightStates;
-//d = (h2-h1)/tan(a1+a2)
+import frc.robot.subsystems.Vision.LimeLightSubsystem.LimelightStates;
 
 public class VisionSubsystem {
     public static enum VisionStates{
