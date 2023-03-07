@@ -72,7 +72,7 @@ public class AprilTagSubsystem {
         } else if(states == AprilTagSequence.CORRECTPOSITION){
             //addVisionToOdometry();
             double[] tempArray = limeLightSubsystem.networkTable.getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
-            DrivetrainSubsystem.m_pose = new Pose2d (tempArray[0], tempArray[1], new Rotation2d(tempArray[5]));
+            DrivetrainSubsystem.m_pose = new Pose2d (tempArray[0], tempArray[1], new Rotation2d(Math.toRadians(tempArray[5])));
             correctPosition();
             if(autonomousBasePD.xAtSetpoint() && autonomousBasePD.yAtSetpoint() && autonomousBasePD.turnAtSetpoint()){
                 setState(AprilTagSequence.OFF);

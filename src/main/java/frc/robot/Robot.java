@@ -129,7 +129,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX()/Constants.METERS_PER_INCH);
     SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.METERS_PER_INCH);
-    SmartDashboard.putNumber("angle odometry",DrivetrainSubsystem.m_pose.getRotation().getDegrees()/Constants.METERS_PER_INCH);
+    SmartDashboard.putNumber("angle odometry",DrivetrainSubsystem.m_pose.getRotation().getDegrees()%360);
     SmartDashboard.putBoolean("Ready to Score", m_limeLightSubsystem.seeSomething());
   }
 
@@ -150,7 +150,7 @@ public class Robot extends TimedRobot {
     // System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
     System.out.println("current pose: " + DrivetrainSubsystem.m_pose.getX() + " , " + DrivetrainSubsystem.m_pose.getY());
     m_autoSelected = m_chooser.getSelected();
-    AutonomousBasePD.initial();
+    m_autoSelected.init();
   }
 
   /** This function is called periodically during autonomous. */
@@ -168,7 +168,7 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    //m_aprilTagSubsystem.init();
+    m_aprilTagSubsystem.init();
     //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
    // System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
 
@@ -177,9 +177,9 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    m_drivetrainSubsystem.driveTeleop();
+    //m_drivetrainSubsystem.driveTeleop();
     //System.out.println("i am in teleop");
-    //m_aprilTagSubsystem.periodic();
+    m_aprilTagSubsystem.periodic();
 
     if(OI.m_controller.getBackButton()){
       //m_VisionSubsystem.setState(VisionSubsystem.VisionStates.DETECTTAPE);
@@ -210,8 +210,9 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-    m_drivetrainSubsystem.resetOdometry(new Pose2d(0, 0, new Rotation2d(Math.toRadians(180))));
-    //AutonomousBasePD.initial();
+    m_drivetrainSubsystem.resetOdometry(new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))));
+    testPath.init();
+    
    // m_aprilTagSubsystem.init();
   }
 
@@ -219,13 +220,13 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic(){
     //m_aprilTagSubsystem.periodic();
-    testPath.driveDesiredDistance(new Pose2d(20 * Constants.METERS_PER_INCH, 20 * Constants.METERS_PER_INCH, new Rotation2d(Math.toRadians(180))));
+    testPath.driveDesiredDistance(new Pose2d(20 * Constants.METERS_PER_INCH, 20 * Constants.METERS_PER_INCH, new Rotation2d(Math.toRadians(0))));
     
-    //m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.0, Math.toRadians(0), m_drivetrainSubsystem.getPoseRotation()));
+    //m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.2, Math.toRadians(0), m_drivetrainSubsystem.getPoseRotation()));
     
     
     m_drivetrainSubsystem.drive();
-   
+    //System.out.println("rotation: " + DrivetrainSubsystem.m_pose.getRotation());
 
     
     //System.out.println(m_drivetrainSubsystem.getGyroscopeRotation());

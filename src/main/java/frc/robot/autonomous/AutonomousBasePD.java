@@ -18,25 +18,20 @@ public class AutonomousBasePD extends AutonomousBase{
     public static final double driveKP= 0.75; //Robot.kP.getDouble(0.00006);//0.00006;
     public static final double driveKI= 0.0; //Robot.kI.getDouble(0.0);//0.0;
     public static final double driveKD= 0.0; //Robot.kD.getDouble(0.0);//0.0;
-    private static final double DRIVE_DEADBAND = 1*Constants.METERS_PER_INCH; //meters - previously 3 inches
+    private static final double DRIVE_DEADBAND = 2*Constants.METERS_PER_INCH; //meters - previously 3 inches
     private static final double TURN_DEADBAND = 6*Constants.METERS_PER_INCH; 
 
     
-    private static Pose2d startingCoordinate;
-    private static StateWithCoordinate[] stateSequence;
-    private static int i;
-    
-    public double desiredTurn;
+    private Pose2d startingCoordinate;
+    private StateWithCoordinate[] stateSequence;
+    private int i;
     
     static DrivetrainSubsystem drivetrainSubsystem = Robot.m_drivetrainSubsystem;
 
     //pids
-    private static PIDController directionController = new PIDController(turnKP, turnKI, turnKD);
-    private static PIDController turnController = new PIDController(turnKP, turnKI, turnKD); 
-    private static PIDController xController = new PIDController(driveKP, driveKI, driveKD);
-    private static PIDController yController = new PIDController(driveKP, driveKI, driveKD);
-
-
+    public PIDController turnController = new PIDController(turnKP, turnKI, turnKD); 
+    public PIDController xController = new PIDController(driveKP, driveKI, driveKD);
+    public PIDController yController = new PIDController(driveKP, driveKI, driveKD);
     
     public AutonomousBasePD(Pose2d startingCoordinate, StateWithCoordinate[] stateSequence){
         this.startingCoordinate = startingCoordinate;
@@ -46,20 +41,16 @@ public class AutonomousBasePD extends AutonomousBase{
     public AutonomousBasePD(){ 
     }
 
-
-    public static void initial(){
+    @Override
+    public void init(){
         drivetrainSubsystem.resetOdometry(startingCoordinate);
-        directionController.reset();
         xController.reset();
         yController.reset();
         turnController.reset();
-        //directionController.setTolerance(TURN_DEADBAND);
         turnController.setTolerance(TURN_DEADBAND); 
         xController.setTolerance(DRIVE_DEADBAND);
         yController.setTolerance(DRIVE_DEADBAND);
         i = 0;
-        // distanceController.reset(); 
-        //distanceController.setTolerance(DRIVE_DEADBAND*Constants.SWERVE_TICKS_PER_INCH);
         System.out.println("INIT!\nINIT!\nINIT!");
 
     }
@@ -76,12 +67,14 @@ public class AutonomousBasePD extends AutonomousBase{
             xController.setSetpoint(0);
             yController.setSetpoint(0);
             turnController.setSetpoint(0);
-            i++;
+            i++;  
+            System.out.println("moving on to " + stateSequence[i]);
         } else if (states == AutoStates.FIRSTHIGHNODE){
             //System.out.println("we've reset to this pose: " + DrivetrainSubsystem.m_pose);
             //flick intake, elevate, release object
             //if we are done then we need to i++
-            i++;
+            i++;  
+                    System.out.println("moving on to " + stateSequence[i]);
         } else {
             drivetrainSubsystem.drive();
             //System.out.println("pose in auto: " + DrivetrainSubsystem.m_pose.getX()/Constants.METERS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getY()/Constants.METERS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getRotation().getDegrees());
@@ -89,17 +82,23 @@ public class AutonomousBasePD extends AutonomousBase{
                 driveDesiredDistance(stateSequence[i].coordinate);
                 if(xController.atSetpoint() && yController.atSetpoint() /*&& turnController.atSetpoint()*/){
                     i++;  
-                    System.out.println("moving on");
+                    System.out.println("moving on to " + stateSequence[i]);
                 }
             }else if(states == AutoStates.HIGHNODE){
                 //outtake (from vision)
                 //if we are done then we need to i++
                 System.out.println("high node");
+                i++;  
+                System.out.println("moving on to " + stateSequence[i]);
             }else if(states == AutoStates.BALANCING){
                 //pitch pd
+                i++;  
+                System.out.println("moving on to " + stateSequence[i]);
             }else if(states == AutoStates.INTAKING){
                 //move elevator/intake system (build) and maybe arm pivot?
                 //if we are done then we need to i++
+                i++;  
+                System.out.println("moving on to " + stateSequence[i]);
             }else{
                 drivetrainSubsystem.stopDrive();
             }
@@ -111,6 +110,9 @@ public class AutonomousBasePD extends AutonomousBase{
     */
     @Override
     public void driveDesiredDistance(Pose2d dPose){      
+        System.out.println("xcontroller setpoint: " + xController.getSetpoint());
+        System.out.println("cur pose: " + DrivetrainSubsystem.m_pose);
+        System.out.println("desired pose: " + dPose);
         double speedX = xController.calculate(DrivetrainSubsystem.m_pose.getX(), dPose.getX());
         double speedY = yController.calculate(DrivetrainSubsystem.m_pose.getY(), dPose.getY());
         //System.out.println("m_pose deg: " + DrivetrainSubsystem.m_pose.getRotation().getDegrees() % 360);
@@ -119,19 +121,21 @@ public class AutonomousBasePD extends AutonomousBase{
         //System.out.println("DDDing");
         //System.out.println("speed rotate: " + speedRotat);
         
-        if(xController.atSetpoint()){
+        if(Math.abs(xController.getPositionError()) <= DRIVE_DEADBAND){
             speedX = 0; 
+            System.out.println("In x deadband.\nX controller error: " + xController.getPositionError() + " in meters.");
         } else {
             speedX = Math.signum(speedX)*Math.max(Constants.DRIVE_MOTOR_MIN_VOLTAGE, Math.min(Constants.DRIVE_MOTOR_MAX_VOLTAGE, Math.abs(speedX)));  
         }
  
-        if(yController.atSetpoint()){
+        if(Math.abs(yController.getPositionError()) <= DRIVE_DEADBAND){
             speedY = 0; 
+            System.out.println("In y deadband.");
         } else {
             speedY = Math.signum(speedY)*Math.max(Constants.DRIVE_MOTOR_MIN_VOLTAGE, Math.min(Constants.DRIVE_MOTOR_MAX_VOLTAGE, Math.abs(speedY)));
         }
 
-        if(turnController.atSetpoint()){
+        if(Math.abs(turnController.getPositionError()) <= TURN_DEADBAND){
             speedRotat = 0;
             //System.out.println("At setpoint");
         } else {
@@ -144,22 +148,20 @@ public class AutonomousBasePD extends AutonomousBase{
         double errorX = (dPose.getX() - DrivetrainSubsystem.m_pose.getX());
         double errorY = (dPose.getY() - DrivetrainSubsystem.m_pose.getY());
         double errorRotat = (dPose.getRotation().getDegrees() - DrivetrainSubsystem.m_pose.getRotation().getDegrees());
-        //System.out.println("Speed X: " + speedX + " Speed Y: " + speedY + " Speed Rotat: " + speedRotat);
-        System.out.println("error:" + errorX + ", " + errorY + ", " + errorRotat);
+        System.out.println("Speed X: " + speedX + " Speed Y: " + speedY);
+        //System.out.println("error:" + errorX + ", " + errorY + ", " + errorRotat);
         //System.out.println("Desired Position: " + dPose.getX() + ", " + dPose.getY());
     }
 
     @Override
     public void turnDesiredAngle(double desiredTurn){
       //  System.out.println("desired turn: " + desiredTurn);
-        directionController.enableContinuousInput(0, 360); //so it goes shortest angle to get to correct
-        double pidturnval = directionController.calculate(drivetrainSubsystem.getPoseRotation().getDegrees(), desiredTurn);
        // System.out.println("pid val: " + pidturnval);
-        drivetrainSubsystem.setSpeed(
-            ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 
-            Math.signum(pidturnval)*Math.max(Constants.DRIVE_MOTOR_MIN_VOLTAGE-0.1, Math.min(Constants.DRIVE_MOTOR_MAX_VOLTAGE, Math.abs(pidturnval))), 
-            drivetrainSubsystem.getGyroscopeRotation())
-        );
+        //drivetrainSubsystem.setSpeed(
+            //ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 
+            //Math.signum(pidturnval)*Math.max(Constants.DRIVE_MOTOR_MIN_VOLTAGE-0.1, Math.min(Constants.DRIVE_MOTOR_MAX_VOLTAGE, Math.abs(pidturnval))), 
+            //drivetrainSubsystem.getGyroscopeRotation())
+        //);
        // System.out.println("error: " + directionController.getPositionError());
     }
 
