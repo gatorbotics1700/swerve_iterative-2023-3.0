@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
 import frc.robot.Constants;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.fasterxml.jackson.core.sym.Name;
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
@@ -25,13 +27,13 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTable.*;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.subsystems.ArmTelescopingSubsystem.TelescopingStates;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import frc.robot.Constants;
-import com.ctre.phoenix.motorcontrol.ControlMode;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -44,9 +46,11 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 //private AutonomousBasePD mScore = new AutonomousBasePD(new Translation2d(222.037, 0), new Translation2d(135.091, -41.307), new Translation2d(0, -44.163), new Translation2d(222.894, -50.377), new Translation2d(0, -65.388), new Translation2d(0, -65.388));
 
 public class Robot extends TimedRobot {
+
   private AutonomousBase m_autoSelected;
   private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<AutonomousBase>();
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
+  private static ArmTelescopingSubsystem armTelescopingSubsystem = new ArmTelescopingSubsystem();
   private final Field2d m_field = new Field2d();
   double t= 0.0;
   ChassisSpeeds m_ChassisSpeeds;
@@ -62,8 +66,6 @@ public class Robot extends TimedRobot {
  
 // red alliance  
 // half the field (325.8415) - blue x value + half the field (325.8415) = red x value
-  
-
    
   PneumaticIntakeSubsystem pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
 
@@ -119,8 +121,9 @@ public class Robot extends TimedRobot {
    * <p>This runs after the mode specific periodic functions, but before LiveWindow and
    * SmartDashboard integrated updating.
    */
-  @Override
+ // @Override
   public void robotPeriodic() {
+
     SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX());
     SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY());
 
@@ -138,23 +141,27 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+  
+    armTelescopingSubsystem.setTState(TelescopingStates.SHELF_ARM_LENGTH); //moved from auto periodic to init
+    armTelescopingSubsystem.init();
+    armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs); //VERY VERY IMPORTANT
 
     //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
     // System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
     System.out.println("current pose: " + DrivetrainSubsystem.m_pose.getX() + " , " + DrivetrainSubsystem.m_pose.getY());
     m_autoSelected = m_chooser.getSelected();
     m_autoSelected.init();
+
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-     m_autoSelected.periodic();
-     //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
 
-     //m_autoSelected.periodic();
+     armTelescopingSubsystem.periodic();
+     m_autoSelected.periodic();
+
      //m_drivetrainSubsystem.drive();
-    
   }
 
   /** This function is called once when teleop is enabled. */
@@ -203,26 +210,26 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
+
+    // m_drivetrainSubsystem.m_pose = new Pose2d(20, 30, new Rotation2d(Math.PI/4));
+    // System.out.println("m_pose: " + m_drivetrainSubsystem.m_pose);
+    // autonomousBasePD.init();
+    // armTelescopingSubsystem.init();
+    // armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs); //VERY VERY IMPORTANT
     m_drivetrainSubsystem.zeroGyroscope();
 
   }
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic(){
+  public void testPeriodic() {
+    //armTelescopingSubsystem.telescopingMotor.set(ControlMode.PercentOutput, -0.1);
+    //System.out.println("telescoping ticks: " + armTelescopingSubsystem.telescopingMotor.getSelectedSensorPosition());
+    // armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
+    // armTelescopingSubsystem.periodic();
    
     m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.0, Math.toRadians(0), m_drivetrainSubsystem.getGyroscopeRotation()));
-    
-   
     m_drivetrainSubsystem.drive();
-   
-
-    
-    //System.out.println(m_drivetrainSubsystem.getGyroscopeRotation());
-    System.out.println("Front Left Module Postion: " + m_drivetrainSubsystem.m_frontLeftModule.getPosition());
-    //System.out.println("Front Right Module Position: " + m_drivetrainSubsystem.m_frontRightModule.getPosition());
-    //System.out.println("Back Left Module Position: " + m_drivetrainSubsystem.m_backLeftModule.getPosition());
-    //System.out.println("Back Right Module Position: " + m_drivetrainSubsystem.m_backRightModule.getPosition());
   }
 
   /** This function is called once when the robot is first started up. */
@@ -232,5 +239,5 @@ public class Robot extends TimedRobot {
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {}
-  
 }
+

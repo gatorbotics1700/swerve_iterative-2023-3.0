@@ -4,6 +4,7 @@
 package frc.robot;
 
 public class Gains { //Gain is a proportional value that shows the relationship between the magnitude of an input signal to the magnitude of an output signal at steady-state.
+
     public final double kP;
     public final double kI;
     public final double kD;
@@ -18,5 +19,4 @@ public class Gains { //Gain is a proportional value that shows the relationship 
         kIzone = _kIzone;
         kPeakOutput = _kPeakOutput;
     }
-
 }
