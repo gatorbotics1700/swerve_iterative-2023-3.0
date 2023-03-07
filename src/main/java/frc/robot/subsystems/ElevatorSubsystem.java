@@ -53,16 +53,16 @@ public class ElevatorSubsystem {
         if (elevatorState == ElevatorStates.ZERO){ //emergency stop
             elevatorMotor.set(ControlMode.Position, 0);
         } else if (elevatorState == ElevatorStates.LOW_ELEVATOR_HEIGHT){
-            elevatorMotor.set(ControlMode.Position, 5 * Constants.TICKS_PER_INCH); //official 2/13 is 5
+            elevatorMotor.set(ControlMode.Position, 5 * Constants.SWERVE_TICKS_PER_INCH); //official 2/13 is 5
         } else if (elevatorState == ElevatorStates.SHELF_ELEVATOR_HEIGHT) {
-            elevatorMotor.set(ControlMode.Position, 30 * Constants.TICKS_PER_INCH); //oficial 2/13 is 39
-            System.out.println("desired ticks: " + 30*Constants.TICKS_PER_INCH);
+            elevatorMotor.set(ControlMode.Position, 30 * Constants.SWERVE_TICKS_PER_INCH); //oficial 2/13 is 39
+            System.out.println("desired ticks: " + 30*Constants.SWERVE_TICKS_PER_INCH);
             System.out.println("current ticks: " + elevatorMotor.getSelectedSensorPosition());
-            System.out.println("error: " + (30*Constants.TICKS_PER_INCH - elevatorMotor.getSelectedSensorPosition()));
+            System.out.println("error: " + (30*Constants.SWERVE_TICKS_PER_INCH - elevatorMotor.getSelectedSensorPosition()));
         } else if (elevatorState == ElevatorStates.MID_ELEVATOR_HEIGHT){
-            elevatorMotor.set(ControlMode.Position, 40 * Constants.TICKS_PER_INCH); //official 2/13
+            elevatorMotor.set(ControlMode.Position, 40 * Constants.SWERVE_TICKS_PER_INCH); //official 2/13
         } else if(elevatorState == ElevatorStates.HIGH_ELEVATOR_HEIGHT){ //high elevator height
-            elevatorMotor.set(ControlMode.Position, 48 * Constants.TICKS_PER_INCH); //change value once we know robot dimensions
+            elevatorMotor.set(ControlMode.Position, 48 * Constants.SWERVE_TICKS_PER_INCH); //change value once we know robot dimensions
         }
         else { //emergency stop again for safety
             elevatorMotor.set(ControlMode.Position, 0);

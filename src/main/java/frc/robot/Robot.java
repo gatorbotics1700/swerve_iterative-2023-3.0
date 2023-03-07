@@ -30,6 +30,8 @@ import frc.robot.Constants;
 import frc.robot.autonomous.StateWithCoordinate.AutoStates;
 import frc.robot.autonomous.StateWithCoordinate;
 import frc.robot.subsystems.ArmTelescopingSubsystem.TelescopingStates;
+import frc.robot.subsystems.Vision.AprilTagSubsystem;
+import frc.robot.subsystems.Vision.LimeLightSubsystem;
 import edu.wpi.first.math.geometry.Translation2d;
 
 
@@ -52,7 +54,7 @@ public class Robot extends TimedRobot {
   public static PneumaticIntakeSubsystem m_pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
   private final LimeLightSubsystem m_limeLightSubsystem = new LimeLightSubsystem();
   private final AprilTagSubsystem m_aprilTagSubsystem = new AprilTagSubsystem();
-  private static ArmTelescopingSubsystem armTelescopingSubsystem = new ArmTelescopingSubsystem();
+  private static Mechanisms m_mechanisms = new Mechanisms();
   private final Field2d m_field = new Field2d();
   double t= 0.0;
   ChassisSpeeds m_ChassisSpeeds;
@@ -153,11 +155,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-  
-    armTelescopingSubsystem.setTState(TelescopingStates.SHELF_ARM_LENGTH); //moved from auto periodic to init
-    armTelescopingSubsystem.init();
-    armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs); //VERY VERY IMPORTANT
-
+    m_mechanisms.init();
     //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
     // System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
     System.out.println("current pose: " + DrivetrainSubsystem.m_pose.getX() + " , " + DrivetrainSubsystem.m_pose.getY());
@@ -170,10 +168,9 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
      //m_AprilTagSubsystem.periodic();
+    m_mechanisms.periodic();
      m_autoSelected.periodic();
      //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
-
-     armTelescopingSubsystem.periodic();
 
      //m_drivetrainSubsystem.drive();
   }
@@ -191,6 +188,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     m_drivetrainSubsystem.driveTeleop();
+    m_mechanisms.periodic();
     //System.out.println("i am in teleop");
     //m_aprilTagSubsystem.periodic();
 
