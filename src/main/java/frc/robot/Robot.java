@@ -50,11 +50,13 @@ public class Robot extends TimedRobot {
 
   private AutonomousBase m_autoSelected;
   private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<AutonomousBase>();
+
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   public static PneumaticIntakeSubsystem m_pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
+  public static Mechanisms m_mechanisms = new Mechanisms();
+
   private final LimeLightSubsystem m_limeLightSubsystem = new LimeLightSubsystem();
   private final AprilTagSubsystem m_aprilTagSubsystem = new AprilTagSubsystem();
-  private static Mechanisms m_mechanisms = new Mechanisms();
   private final Field2d m_field = new Field2d();
   double t= 0.0;
   ChassisSpeeds m_ChassisSpeeds;
