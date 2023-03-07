@@ -47,7 +47,7 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
  // private final AutonomousBase autonomousBasePD = new AutonomousBasePD(new Pose2d(0*Constants.TICKS_PER_INCH, -20*Constants.TICKS_PER_INCH, new Rotation2d(0)), 0.0, new Pose2d(), 0.0);
-  public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
+  private static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private static ArmTelescopingSubsystem armTelescopingSubsystem = new ArmTelescopingSubsystem();
 
   public static DrivetrainSubsystem getDrivetrainSubsystem(){
@@ -90,11 +90,11 @@ public class Robot extends TimedRobot {
    * SmartDashboard integrated updating.
    */
  // @Override
-  // public void robotPeriodic() {
-  //   SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH);
-  //   SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
+  public void robotPeriodic() {
+    SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH);
+    SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
   //   m_field.setRobotPose(DrivetrainSubsystem.m_odometry.getPoseMeters());
-  // }
+  }
 
   /**
    * This autonomous (along with the chooser code above) shows how to select between different
@@ -108,6 +108,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    armTelescopingSubsystem.setTState(TelescopingStates.SHELF_ARM_LENGTH); //moved from auto periodic to init
     armTelescopingSubsystem.init();
     armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs); //VERY VERY IMPORTANT
   }
@@ -115,7 +116,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-     armTelescopingSubsystem.setTState(TelescopingStates.SHELF_ARM_LENGTH);
      armTelescopingSubsystem.periodic();
   }
 
