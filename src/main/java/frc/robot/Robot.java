@@ -47,7 +47,7 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
  // private final AutonomousBase autonomousBasePD = new AutonomousBasePD(new Pose2d(0*Constants.TICKS_PER_INCH, -20*Constants.TICKS_PER_INCH, new Rotation2d(0)), 0.0, new Pose2d(), 0.0);
-  private static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
+  public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private static ArmTelescopingSubsystem armTelescopingSubsystem = new ArmTelescopingSubsystem();
 
   public static DrivetrainSubsystem getDrivetrainSubsystem(){
