@@ -79,10 +79,16 @@ public class ArmTelescopingSubsystem {
             telescopingMotor.set(ControlMode.Position, desiredTicks-tareEncoder); // goes with 90 degrees rotation 
             System.out.println("error: " + (desiredTicks - telescopingMotor.getSelectedSensorPosition()));
             telescopeDeadband();
-        }else{ //high arm length
+        }else if(tState == TelescopingStates.HIGH_ARM_LENGTH){ //high arm length
             desiredInches = 32; //official 2/13
             determineRightTicks();
             telescopingMotor.set(ControlMode.Position, desiredTicks-tareEncoder); 
+            telescopeDeadband();
+        }
+        else { //retracted again for safety
+            telescopingMotor.set(ControlMode.Position, 0);
+            desiredInches = 0; 
+            desiredTicks = 0;
             telescopeDeadband();
         }
     }

@@ -61,8 +61,11 @@ public class ElevatorSubsystem {
             System.out.println("error: " + (30*Constants.TICKS_PER_INCH - elevatorMotor.getSelectedSensorPosition()));
         } else if (elevatorState == ElevatorStates.MID_ELEVATOR_HEIGHT){
             elevatorMotor.set(ControlMode.Position, 40 * Constants.TICKS_PER_INCH); //official 2/13
-        } else { //high elevator height
+        } else if(elevatorState == ElevatorStates.HIGH_ELEVATOR_HEIGHT){ //high elevator height
             elevatorMotor.set(ControlMode.Position, 48 * Constants.TICKS_PER_INCH); //change value once we know robot dimensions
+        }
+        else { //emergency stop again for safety
+            elevatorMotor.set(ControlMode.Position, 0);
         }
 
         // if(top_limit_switch.get() || bottom_limit_switch.get()){
