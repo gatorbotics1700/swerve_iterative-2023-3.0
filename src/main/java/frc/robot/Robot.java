@@ -28,6 +28,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTable.*;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.subsystems.ArmTelescopingSubsystem.TelescopingStates;
+import frc.robot.subsystems.ElevatorSubsystem.ElevatorStates;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -51,6 +52,7 @@ public class Robot extends TimedRobot {
   private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<AutonomousBase>();
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   private static ArmTelescopingSubsystem armTelescopingSubsystem = new ArmTelescopingSubsystem();
+  private static ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
   private final Field2d m_field = new Field2d();
   double t= 0.0;
   ChassisSpeeds m_ChassisSpeeds;
@@ -142,25 +144,29 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
   
-    armTelescopingSubsystem.setTState(TelescopingStates.SHELF_ARM_LENGTH); //moved from auto periodic to init
-    armTelescopingSubsystem.init();
-    armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs); //VERY VERY IMPORTANT
+    elevatorSubsystem.init();
+    elevatorSubsystem.elevatorMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+    //armTelescopingSubsystem.init();
+    //armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs); //VERY VERY IMPORTANT
 
     //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
     // System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
-    System.out.println("current pose: " + DrivetrainSubsystem.m_pose.getX() + " , " + DrivetrainSubsystem.m_pose.getY());
-    m_autoSelected = m_chooser.getSelected();
-    m_autoSelected.init();
+    // System.out.println("current pose: " + DrivetrainSubsystem.m_pose.getX() + " , " + DrivetrainSubsystem.m_pose.getY());
+    // m_autoSelected = m_chooser.getSelected();
+    // m_autoSelected.init();
 
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+    elevatorSubsystem.setState(ElevatorStates.LOW_ELEVATOR_HEIGHT);
+    elevatorSubsystem.periodic();
 
-     armTelescopingSubsystem.periodic();
-     m_autoSelected.periodic();
+    //armTelescopingSubsystem.setTState(TelescopingStates.SHELF_ARM_LENGTH); //moved from auto periodic to init
+    //armTelescopingSubsystem.periodic();
 
+    //  m_autoSelected.periodic();
      //m_drivetrainSubsystem.drive();
   }
 
@@ -217,19 +223,20 @@ public class Robot extends TimedRobot {
     // armTelescopingSubsystem.init();
     // armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs); //VERY VERY IMPORTANT
     m_drivetrainSubsystem.zeroGyroscope();
+    elevatorSubsystem.init();
 
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-    //armTelescopingSubsystem.telescopingMotor.set(ControlMode.PercentOutput, -0.1);
-    //System.out.println("telescoping ticks: " + armTelescopingSubsystem.telescopingMotor.getSelectedSensorPosition());
+    elevatorSubsystem.setState(ElevatorStates.ZERO);
+    elevatorSubsystem.periodic();
     // armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
     // armTelescopingSubsystem.periodic();
    
-    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.0, Math.toRadians(0), m_drivetrainSubsystem.getGyroscopeRotation()));
-    m_drivetrainSubsystem.drive();
+    // m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.0, Math.toRadians(0), m_drivetrainSubsystem.getGyroscopeRotation()));
+    // m_drivetrainSubsystem.drive();
   }
 
   /** This function is called once when the robot is first started up. */
