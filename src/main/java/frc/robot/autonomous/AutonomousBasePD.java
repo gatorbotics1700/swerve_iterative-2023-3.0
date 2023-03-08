@@ -76,7 +76,7 @@ public class AutonomousBasePD extends AutonomousBase{
     public void periodic()
     {
         AutoStates states = stateSequence[i].state;
-       // System.out.println("state: " + states);
+        System.out.println("state: " + states);
         if (states == AutoStates.FIRST){
             turnController.setTolerance(TURN_DEADBAND); 
             xController.setTolerance(DRIVE_DEADBAND);
@@ -101,7 +101,7 @@ public class AutonomousBasePD extends AutonomousBase{
                     System.out.println("moving on to " + stateSequence[i]);
                 }
             }else if(states == AutoStates.HIGHNODE){ 
-                mechanisms.setState(MechanismStates.HIGH_NODE);
+                //mechanisms.setState(MechanismStates.HIGH_NODE);
                 //elevator height, arm length, 0.5 sec then i++ 
                 //outtake (from vision)
                 //if we are done then we need to i++
@@ -118,18 +118,8 @@ public class AutonomousBasePD extends AutonomousBase{
                 System.out.println("moving on to " + stateSequence[i]);
             }else if(states == AutoStates.BALANCING){
                 //TODO: make it so the paths that balance end with balancing rather than ending with stop
-                Robot.m_drivetrainSubsystem.pitchBalance(0.0);
+                //Robot.m_drivetrainSubsystem.pitchBalance(0.0);
             }else if(states == AutoStates.INTAKING){
-<<<<<<< HEAD
-                //double beginIntake = System.currentTimeMillis();
-                //pneumaticIntakeSubsystem.setState(PneumaticIntakeStates.ACTUATING); //unclear if we need... based on beam break
-                //if(System.currentTimeMillis() == beginIntake + 0.5){
-                    //i++;
-                //}
-            }else if(states == AutoStates.OUTTAKING){
-                //pneumaticIntakeSubsystem.setState(PneumaticIntakeStates.RETRACTING);
-                //if done, i++
-=======
                 if(uno == -1){
                     startTimeIntake = System.currentTimeMillis(); 
                 }
@@ -137,8 +127,7 @@ public class AutonomousBasePD extends AutonomousBase{
                     i++;
                     uno = -1;
                 }
-                pneumaticIntakeSubsystem.setState(PneumaticIntakeStates.ACTUATING); //unclear if we need... based on beam break
->>>>>>> 24044504d113d6f35309773323022b16758805dc
+                //pneumaticIntakeSubsystem.setState(PneumaticIntakeStates.ACTUATING); //unclear if we need... based on beam break
             }else{
                 drivetrainSubsystem.stopDrive();
             
@@ -189,16 +178,11 @@ public class AutonomousBasePD extends AutonomousBase{
           //  System.out.println("Speed rotat after: " + speedRotat);
         }
 
-<<<<<<< HEAD
         drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speedX, speedY, speedRotat, drivetrainSubsystem.getPoseRotation()));  
         double errorX = (dPose.getX() - DrivetrainSubsystem.m_pose.getX());
         double errorY = (dPose.getY() - DrivetrainSubsystem.m_pose.getY());
         double errorRotat = (dPose.getRotation().getDegrees() - DrivetrainSubsystem.m_pose.getRotation().getDegrees());
         System.out.println("Speed X: " + speedX + " Speed Y: " + speedY + " Speed R: " + speedRotat);
-=======
-        drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speedX, speedY, 0, drivetrainSubsystem.getPoseRotation()));  
-        System.out.println("Speed X: " + speedX + " Speed Y: " + speedY);
->>>>>>> 24044504d113d6f35309773323022b16758805dc
         //System.out.println("error:" + errorX + ", " + errorY + ", " + errorRotat);
         //System.out.println("Desired Position: " + dPose.getX() + ", " + dPose.getY());
     }
