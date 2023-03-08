@@ -31,6 +31,8 @@ public class AutonomousBasePD extends AutonomousBase{
     private int i;
     private int uno = -1; 
     private int dos = -1; 
+    private double startTimeIntake;
+    private double startTimeHigh; 
     
     static DrivetrainSubsystem drivetrainSubsystem = Robot.m_drivetrainSubsystem;
     static Mechanisms mechanisms = Robot.m_mechanisms;
@@ -99,12 +101,11 @@ public class AutonomousBasePD extends AutonomousBase{
                 //outtake (from vision)
                 //if we are done then we need to i++
                 System.out.println("high node");
-                double startTimeD;
                if(mechanisms.isDoneHigh()==true){
                    if(dos == -1){
-                    startTimeD = System.currentTimeMillis();
+                    startTimeHigh = System.currentTimeMillis();
                    } 
-                if(System.currentTimeMillis()-startTimeD==0.5){
+                if(System.currentTimeMillis()-startTimeHigh==0.5){
                     i++;
                     dos = -1;
                 }
@@ -114,11 +115,10 @@ public class AutonomousBasePD extends AutonomousBase{
                 //TODO: make it so the paths that balance end with balancing rather than ending with stop
                 Robot.m_drivetrainSubsystem.pitchBalance(0.0);
             }else if(states == AutoStates.INTAKING){
-               double startTime;
                 if(uno == -1){
-                    startTime = System.currentTimeMillis(); 
+                    startTimeIntake = System.currentTimeMillis(); 
                 }
-                if(System.currentTimeMillis()-startTime==0.5){
+                if(System.currentTimeMillis()-startTimeIntake==0.5){
                     i++;
                     uno = -1;
                 }
