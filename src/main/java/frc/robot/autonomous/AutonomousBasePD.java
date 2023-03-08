@@ -11,6 +11,7 @@ import frc.robot.Constants;
 import frc.robot.autonomous.StateWithCoordinate;
 import frc.robot.autonomous.StateWithCoordinate.AutoStates;
 import frc.robot.subsystems.PneumaticIntakeSubsystem;
+import frc.robot.subsystems.Mechanisms.MechanismStates;
 import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
 import frc.robot.subsystems.Mechanisms;
 
@@ -28,15 +29,20 @@ public class AutonomousBasePD extends AutonomousBase{
     private Pose2d startingCoordinate;
     private StateWithCoordinate[] stateSequence;
     private int i;
+    private int uno = -1; 
+    private int dos = -1; 
+    private double startTimeIntake;
+    private double startTimeHigh; 
     
     static DrivetrainSubsystem drivetrainSubsystem = Robot.m_drivetrainSubsystem;
     static Mechanisms mechanisms = Robot.m_mechanisms;
     static PneumaticIntakeSubsystem pneumaticIntakeSubsystem = Robot.m_pneumaticIntakeSubsystem;
 
+
     //pids
-    public PIDController turnController = new PIDController(turnKP, turnKI, turnKD); 
-    public PIDController xController = new PIDController(driveKP, driveKI, driveKD);
-    public PIDController yController = new PIDController(driveKP, driveKI, driveKD);
+    private PIDController turnController = new PIDController(turnKP, turnKI, turnKD); 
+    private PIDController xController = new PIDController(driveKP, driveKI, driveKD);
+    private PIDController yController = new PIDController(driveKP, driveKI, driveKD);
     
     public AutonomousBasePD(Pose2d startingCoordinate, StateWithCoordinate[] stateSequence){
         this.startingCoordinate = startingCoordinate;
@@ -80,12 +86,11 @@ public class AutonomousBasePD extends AutonomousBase{
             turnController.setSetpoint(0);
             i++;  
             System.out.println("moving on to " + stateSequence[i]);
-        } else if (states == AutoStates.FIRSTHIGHNODE){
+        } else if (states == AutoStates.FIRSTHIGHNODE){ //WE HAVE THIS BECAUSE OF APRILTAGS
             //System.out.println("we've reset to this pose: " + DrivetrainSubsystem.m_pose);
-            //flick intake, elevate, release object
             //if we are done then we need to i++
             i++;  
-                    System.out.println("moving on to " + stateSequence[i]);
+            System.out.println("moving on to " + stateSequence[i]);
         } else {
             drivetrainSubsystem.drive();
             //System.out.println("pose in auto: " + DrivetrainSubsystem.m_pose.getX()/Constants.METERS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getY()/Constants.METERS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getRotation().getDegrees());
@@ -95,16 +100,27 @@ public class AutonomousBasePD extends AutonomousBase{
                     i++;  
                     System.out.println("moving on to " + stateSequence[i]);
                 }
-            }else if(states == AutoStates.HIGHNODE){
+            }else if(states == AutoStates.HIGHNODE){ 
+                mechanisms.setState(MechanismStates.HIGH_NODE);
+                //elevator height, arm length, 0.5 sec then i++ 
                 //outtake (from vision)
                 //if we are done then we need to i++
                 System.out.println("high node");
-                i++;  
+               if(mechanisms.isDoneHigh()==true){
+                   if(dos == -1){
+                    startTimeHigh = System.currentTimeMillis();
+                   } 
+                if(System.currentTimeMillis()-startTimeHigh==0.5){
+                    i++;
+                    dos = -1;
+                }
+               } 
                 System.out.println("moving on to " + stateSequence[i]);
             }else if(states == AutoStates.BALANCING){
                 //TODO: make it so the paths that balance end with balancing rather than ending with stop
                 Robot.m_drivetrainSubsystem.pitchBalance(0.0);
             }else if(states == AutoStates.INTAKING){
+<<<<<<< HEAD
                 //double beginIntake = System.currentTimeMillis();
                 //pneumaticIntakeSubsystem.setState(PneumaticIntakeStates.ACTUATING); //unclear if we need... based on beam break
                 //if(System.currentTimeMillis() == beginIntake + 0.5){
@@ -113,6 +129,16 @@ public class AutonomousBasePD extends AutonomousBase{
             }else if(states == AutoStates.OUTTAKING){
                 //pneumaticIntakeSubsystem.setState(PneumaticIntakeStates.RETRACTING);
                 //if done, i++
+=======
+                if(uno == -1){
+                    startTimeIntake = System.currentTimeMillis(); 
+                }
+                if(System.currentTimeMillis()-startTimeIntake==0.5){
+                    i++;
+                    uno = -1;
+                }
+                pneumaticIntakeSubsystem.setState(PneumaticIntakeStates.ACTUATING); //unclear if we need... based on beam break
+>>>>>>> 24044504d113d6f35309773323022b16758805dc
             }else{
                 drivetrainSubsystem.stopDrive();
             
@@ -163,11 +189,16 @@ public class AutonomousBasePD extends AutonomousBase{
           //  System.out.println("Speed rotat after: " + speedRotat);
         }
 
+<<<<<<< HEAD
         drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speedX, speedY, speedRotat, drivetrainSubsystem.getPoseRotation()));  
         double errorX = (dPose.getX() - DrivetrainSubsystem.m_pose.getX());
         double errorY = (dPose.getY() - DrivetrainSubsystem.m_pose.getY());
         double errorRotat = (dPose.getRotation().getDegrees() - DrivetrainSubsystem.m_pose.getRotation().getDegrees());
         System.out.println("Speed X: " + speedX + " Speed Y: " + speedY + " Speed R: " + speedRotat);
+=======
+        drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speedX, speedY, 0, drivetrainSubsystem.getPoseRotation()));  
+        System.out.println("Speed X: " + speedX + " Speed Y: " + speedY);
+>>>>>>> 24044504d113d6f35309773323022b16758805dc
         //System.out.println("error:" + errorX + ", " + errorY + ", " + errorRotat);
         //System.out.println("Desired Position: " + dPose.getX() + ", " + dPose.getY());
     }

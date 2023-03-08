@@ -9,10 +9,10 @@ public class VisionSubsystem {
         OFF;
     }
 
-    public VisionStates visionState = VisionStates.OFF; 
+    private VisionStates visionState = VisionStates.OFF; 
 
-    public LimeLightSubsystem limeLightSubsystem = new LimeLightSubsystem(); 
-    public AprilTagSubsystem aprilTagSubsystem = new AprilTagSubsystem();
+    private LimeLightSubsystem limeLightSubsystem = new LimeLightSubsystem(); 
+    private AprilTagSubsystem aprilTagSubsystem = new AprilTagSubsystem();
     public static int level;
     
     public void setState(VisionStates state){

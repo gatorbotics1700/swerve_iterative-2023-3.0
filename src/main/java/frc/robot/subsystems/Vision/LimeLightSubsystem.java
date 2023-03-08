@@ -71,12 +71,7 @@ public class LimeLightSubsystem {
         System.out.println("distance from ideal: " + distanceFromIdeal);
         return distanceFromIdeal;
     }*/
-    public void scanPipeline(){
-        reset();
-        if(tv==1.0){
-            //do stuff
-        }
-    }
+    
     public boolean isThereTarget(){
         if(tv != 0){
             return true;

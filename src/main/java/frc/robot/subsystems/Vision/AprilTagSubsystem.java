@@ -1,5 +1,16 @@
 package frc.robot.subsystems.Vision;
 
+<<<<<<< HEAD
+=======
+import edu.wpi.first.apriltag.AprilTagDetection;
+import edu.wpi.first.apriltag.AprilTagDetector;
+
+//import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSink;
+//import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoSink;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+>>>>>>> 24044504d113d6f35309773323022b16758805dc
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants;
@@ -33,7 +44,11 @@ public class AprilTagSubsystem {
     public void periodic(){
         if(states == AprilTagSequence.DETECT){
             limeLightSubsystem.reset();
+<<<<<<< HEAD
             if(LimeLightSubsystem.tv!=0){
+=======
+            if(LimeLightSubsystem.tv!=0){ //made private in limelightss but changed due to pull request- ask katherine!
+>>>>>>> 24044504d113d6f35309773323022b16758805dc
                 System.out.println("APRIL TAG DETECTED!!!!!!");
                 setState(AprilTagSequence.CORRECTPOSITION);
                 autonomousBasePD.resetControllers();

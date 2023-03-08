@@ -142,4 +142,11 @@ public class ArmTelescopingSubsystem {
         return telescopingMotor.getSelectedSensorPosition() - tareEncoder;
     }
 
+    public boolean isHigh(){
+        if(Math.abs(desiredInches-telescopingMotor.getSelectedSensorPosition()-32)<3*Constants.UNDER_TWO_TICKS_PER_INCH){
+            return true;
+        }
+        return false; 
+    }
+
 }
