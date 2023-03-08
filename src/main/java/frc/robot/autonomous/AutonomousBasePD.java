@@ -95,7 +95,6 @@ public class AutonomousBasePD extends AutonomousBase{
                 }
             }else if(states == AutoStates.HIGHNODE){ 
                 mechanisms.setState(MechanismStates.HIGH_NODE);
-                if()
                 //elevator height, arm length, 0.5 sec then i++ 
                 //outtake (from vision)
                 //if we are done then we need to i++
