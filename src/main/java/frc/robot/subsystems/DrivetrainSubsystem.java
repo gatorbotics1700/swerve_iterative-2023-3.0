@@ -32,9 +32,9 @@ import frc.robot.Constants;
 import frc.robot.OI;
 
 public class DrivetrainSubsystem {
-   public static double pitchKP = 0.025;
-   public static double pitchKI = 0.0;
-   public static double pitchKD = 0.001;
+   private static double pitchKP = 0.025;
+   private static double pitchKI = 0.0;
+   private static double pitchKD = 0.001;
    private PIDController pitchController = new PIDController(pitchKP, pitchKI, pitchKD);
    public static double MINOUTPUT = 0.1;
    public static double universalPitch = 0;
