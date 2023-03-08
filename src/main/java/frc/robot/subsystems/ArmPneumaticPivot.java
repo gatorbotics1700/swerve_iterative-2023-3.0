@@ -17,7 +17,7 @@ public class ArmPneumaticPivot { //actuate = down, retract = up
     public PneumaticPivotStates pneumaticPivotState = PneumaticPivotStates.OFF;
 
     private Compressor compressor = new Compressor(PneumaticsModuleType.REVPH); 
-    private DoubleSolenoid solenoid = new DoubleSolenoid(2, PneumaticsModuleType.REVPH, 8, 9); 
+    private DoubleSolenoid solenoid = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 4, 5); 
 
     public void init() {
         solenoid.set(kOff);

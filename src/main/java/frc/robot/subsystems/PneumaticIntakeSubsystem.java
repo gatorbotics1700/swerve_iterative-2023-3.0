@@ -28,12 +28,11 @@ public class PneumaticIntakeSubsystem {
 
     public static final double COLOR_THRESHOLD = 0.03;
     //confirm we are using double solenoid
-    private DoubleSolenoid solenoidOne = new DoubleSolenoid(2, PneumaticsModuleType.REVPH, 8, 9); 
+    private DoubleSolenoid solenoidOne = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 6, 7); 
     //what compressor are we using?
     private Compressor compressor = new Compressor(PneumaticsModuleType.REVPH); 
     // Initializes a DigitalInput on DIO 0 (roborio is built in w/ 10 DIOs (digital input-output ports))
     private DigitalInput beambreakSensor = new DigitalInput(Constants.INTAKE_SENSOR); 
-
     /**
      * Change the I2C port below to match the connection of your color sensor
      */
