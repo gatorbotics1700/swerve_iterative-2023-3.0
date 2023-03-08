@@ -76,7 +76,7 @@ public class LimeLightSubsystem {
         System.out.println("distance from ideal: " + distanceFromIdeal);
         return distanceFromIdeal;
     }*/
-
+    
     public boolean isThereTarget(){
         if(tv != 0){
             return true;

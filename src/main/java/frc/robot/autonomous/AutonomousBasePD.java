@@ -34,9 +34,9 @@ public class AutonomousBasePD extends AutonomousBase{
     static PneumaticIntakeSubsystem pneumaticIntakeSubsystem = Robot.m_pneumaticIntakeSubsystem;
 
     //pids
-    public PIDController turnController = new PIDController(turnKP, turnKI, turnKD); 
-    public PIDController xController = new PIDController(driveKP, driveKI, driveKD);
-    public PIDController yController = new PIDController(driveKP, driveKI, driveKD);
+    private PIDController turnController = new PIDController(turnKP, turnKI, turnKD); 
+    private PIDController xController = new PIDController(driveKP, driveKI, driveKD);
+    private PIDController yController = new PIDController(driveKP, driveKI, driveKD);
     
     public AutonomousBasePD(Pose2d startingCoordinate, StateWithCoordinate[] stateSequence){
         this.startingCoordinate = startingCoordinate;
@@ -76,10 +76,9 @@ public class AutonomousBasePD extends AutonomousBase{
             System.out.println("moving on to " + stateSequence[i]);
         } else if (states == AutoStates.FIRSTHIGHNODE){
             //System.out.println("we've reset to this pose: " + DrivetrainSubsystem.m_pose);
-            //flick intake, elevate, release object
             //if we are done then we need to i++
             i++;  
-                    System.out.println("moving on to " + stateSequence[i]);
+            System.out.println("moving on to " + stateSequence[i]);
         } else {
             drivetrainSubsystem.drive();
             //System.out.println("pose in auto: " + DrivetrainSubsystem.m_pose.getX()/Constants.METERS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getY()/Constants.METERS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getRotation().getDegrees());
@@ -158,9 +157,6 @@ public class AutonomousBasePD extends AutonomousBase{
         }
 
         drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speedX, speedY, 0, drivetrainSubsystem.getPoseRotation()));  
-        double errorX = (dPose.getX() - DrivetrainSubsystem.m_pose.getX());
-        double errorY = (dPose.getY() - DrivetrainSubsystem.m_pose.getY());
-        double errorRotat = (dPose.getRotation().getDegrees() - DrivetrainSubsystem.m_pose.getRotation().getDegrees());
         System.out.println("Speed X: " + speedX + " Speed Y: " + speedY);
         //System.out.println("error:" + errorX + ", " + errorY + ", " + errorRotat);
         //System.out.println("Desired Position: " + dPose.getX() + ", " + dPose.getY());

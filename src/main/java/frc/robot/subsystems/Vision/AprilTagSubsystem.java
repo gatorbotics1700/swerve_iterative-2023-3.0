@@ -4,9 +4,7 @@ import org.opencv.imgproc.Imgproc;
 
 import edu.wpi.first.apriltag.AprilTagDetection;
 import edu.wpi.first.apriltag.AprilTagDetector;
-import edu.wpi.first.apriltag.AprilTagPoseEstimator;
 
-import edu.wpi.first.apriltag.AprilTagPoseEstimator.Config;
 //import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSink;
 //import edu.wpi.first.cscore.UsbCamera;
@@ -62,15 +60,13 @@ public class AprilTagSubsystem {
     public void periodic(){
         if(states == AprilTagSequence.DETECT){
             limeLightSubsystem.reset();
-            //detectTag();
-            if(LimeLightSubsystem.tv!=0){
+            if(LimeLightSubsystem.tv!=0){ //made private in limelightss but changed due to pull request- ask katherine!
                 System.out.println("APRIL TAG DETECTED!!!!!!");
                 setState(AprilTagSequence.CORRECTPOSITION);
                 //Robot.m_drivetrainSubsystem.resetOdometry(new Pose2d(35, 72, new Rotation2d(0))); //DELETE THIS WHEN DONE WITH TESTING
                 System.out.println("Reset odometry to this m_pose: " + DrivetrainSubsystem.m_pose);
                 }
         } else if(states == AprilTagSequence.CORRECTPOSITION){
-            //addVisionToOdometry();
             double[] tempArray = limeLightSubsystem.networkTable.getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
             DrivetrainSubsystem.m_pose = new Pose2d (tempArray[0], tempArray[1], new Rotation2d(Math.toRadians(tempArray[5])));
             correctPosition();

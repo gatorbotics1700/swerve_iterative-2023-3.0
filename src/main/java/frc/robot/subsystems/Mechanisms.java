@@ -17,6 +17,8 @@ public class Mechanisms {
         armTelescopingSubsystem.setTState(TelescopingStates.SHELF_ARM_LENGTH); //moved from auto periodic to init
         armTelescopingSubsystem.init();
         armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs); //VERY VERY IMPORTANT
+    
+        mechState = MechanismStates.HOLDING; 
     }
 
     public static enum MechanismStates{
