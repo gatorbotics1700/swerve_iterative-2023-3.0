@@ -18,6 +18,12 @@ public class ElevatorSubsystem {
     public double _kD = 0.0;
     public int _kIzone = 0;
     public double _kPeakOutput = 1.0;
+    private final double HIGHHEIGHT = 48; 
+    private final double MIDHEIGHT = 40; 
+    private final double LOWHEIGHT = 30; 
+    private final double SHELF = 5; 
+
+
 
     public static TalonFX elevatorMotor = new TalonFX(Constants.ELEVATOR_CAN_ID);
     public static ElevatorStates elevatorState = ElevatorStates.LOW_ELEVATOR_HEIGHT;
@@ -77,4 +83,12 @@ public class ElevatorSubsystem {
     public void setState(ElevatorStates newElevatorState){
         elevatorState = newElevatorState;
     }
+
+    public boolean isAtHigh(){
+        if(Math.abs(elevatorMotor.getSelectedSensorPosition()-HIGHHEIGHT)<3*Constants.SWERVE_TICKS_PER_INCH){
+            return true; 
+        }
+        return false; 
+    }
+
 }

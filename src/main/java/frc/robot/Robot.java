@@ -55,6 +55,7 @@ public class Robot extends TimedRobot {
   public static PneumaticIntakeSubsystem m_pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
   public static Mechanisms m_mechanisms = new Mechanisms();
 
+
   private final LimeLightSubsystem m_limeLightSubsystem = new LimeLightSubsystem();
   private final AprilTagSubsystem m_aprilTagSubsystem = new AprilTagSubsystem();
   private final Field2d m_field = new Field2d();
@@ -172,6 +173,7 @@ public class Robot extends TimedRobot {
      //m_AprilTagSubsystem.periodic();
      m_mechanisms.periodic();
      m_autoSelected.periodic();
+     
      //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
 
      //m_drivetrainSubsystem.drive();
