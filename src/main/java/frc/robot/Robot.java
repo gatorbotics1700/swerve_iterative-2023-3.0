@@ -62,10 +62,11 @@ public class Robot extends TimedRobot {
   double t= 0.0;
   ChassisSpeeds m_ChassisSpeeds;
   double mpi = Constants.METERS_PER_INCH;
- 
+
   // whole field: 651.683 (inches)
   // private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
-
+  private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
+  
   private AutonomousBasePD testPath = new AutonomousBasePD(
     new Pose2d(0.0, 0.0, new Rotation2d(Math.toRadians(0))), 
     new StateWithCoordinate[]{
@@ -170,7 +171,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
      //m_AprilTagSubsystem.periodic();
-    m_mechanisms.periodic();
+     m_mechanisms.periodic();
      m_autoSelected.periodic();
      
      //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
