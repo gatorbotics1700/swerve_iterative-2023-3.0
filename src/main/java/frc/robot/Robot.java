@@ -144,10 +144,9 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
   
-    elevatorSubsystem.init();
-    elevatorSubsystem.elevatorMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
-    //armTelescopingSubsystem.init();
-    //armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs); //VERY VERY IMPORTANT
+    // elevatorSubsystem.init();
+    // elevatorSubsystem.elevatorMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+    armTelescopingSubsystem.init();
 
     //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
     // System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
@@ -160,11 +159,11 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    elevatorSubsystem.setState(ElevatorStates.LOW_ELEVATOR_HEIGHT);
-    elevatorSubsystem.periodic();
+    //elevatorSubsystem.setState(ElevatorStates.LOW_ELEVATOR_HEIGHT);
+    //elevatorSubsystem.periodic();
 
-    //armTelescopingSubsystem.setTState(TelescopingStates.SHELF_ARM_LENGTH); //moved from auto periodic to init
-    //armTelescopingSubsystem.periodic();
+    armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH); //moved from auto periodic to init
+    armTelescopingSubsystem.periodic();
 
     //  m_autoSelected.periodic();
      //m_drivetrainSubsystem.drive();
@@ -220,20 +219,25 @@ public class Robot extends TimedRobot {
     // m_drivetrainSubsystem.m_pose = new Pose2d(20, 30, new Rotation2d(Math.PI/4));
     // System.out.println("m_pose: " + m_drivetrainSubsystem.m_pose);
     // autonomousBasePD.init();
+
     // armTelescopingSubsystem.init();
     // armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs); //VERY VERY IMPORTANT
-    m_drivetrainSubsystem.zeroGyroscope();
-    elevatorSubsystem.init();
 
+    //m_drivetrainSubsystem.zeroGyroscope();
+
+    armTelescopingSubsystem.init();
+    // armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs); //VERY VERY IMPORTANT
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-    elevatorSubsystem.setState(ElevatorStates.ZERO);
-    elevatorSubsystem.periodic();
-    // armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
-    // armTelescopingSubsystem.periodic();
+    // elevatorSubsystem.setState(ElevatorStates.ZERO);
+    // elevatorSubsystem.periodic();
+    
+    //armTelescopingSubsystem.telescopingMotor.set(ControlMode.PercentOutput, -0.1);
+    armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
+    armTelescopingSubsystem.periodic();
    
     // m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.0, Math.toRadians(0), m_drivetrainSubsystem.getGyroscopeRotation()));
     // m_drivetrainSubsystem.drive();

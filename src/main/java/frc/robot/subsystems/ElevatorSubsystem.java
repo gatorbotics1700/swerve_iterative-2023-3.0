@@ -58,7 +58,7 @@ public class ElevatorSubsystem {
             System.out.println("error: " + (0 - elevatorMotor.getSelectedSensorPosition()));
             elevatorDeadband(0);
         } else if (elevatorState == ElevatorStates.LOW_ELEVATOR_HEIGHT){
-            desiredInches = 2; //official 2/13
+            desiredInches = 5; //official 2/13
             double desiredTicks = determineRightTicks();
             elevatorMotor.set(ControlMode.Position, desiredTicks); //official 2/13 is 5
             System.out.println("desired ticks: " + desiredTicks);
@@ -92,7 +92,7 @@ public class ElevatorSubsystem {
         // }
     }
     public double determineRightTicks(){
-        return desiredInches * Constants.UNDER_TWO_TICKS_PER_INCH; 
+        return desiredInches * Constants.ELEVATOR_TICKS_PER_INCH; 
     }
 
 
