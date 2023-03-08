@@ -28,15 +28,15 @@ public class PneumaticIntakeSubsystem {
 
     public static final double COLOR_THRESHOLD = 0.03;
     //confirm we are using double solenoid
-    private DoubleSolenoid solenoidOne = new DoubleSolenoid(7, PneumaticsModuleType.REVPH, 8, 10); 
+    //private DoubleSolenoid solenoidOne = new DoubleSolenoid(7, PneumaticsModuleType.REVPH, 8, 10); 
     //what compressor are we using?
-    public Compressor compressor = new Compressor(PneumaticsModuleType.REVPH); 
+    //public Compressor compressor = new Compressor(PneumaticsModuleType.REVPH); 
     // Initializes a DigitalInput on DIO 0 (roborio is built in w/ 10 DIOs (digital input-output ports))
-    private DigitalInput beambreakSensor = new DigitalInput(Constants.BEAM_BREAK_RECEIVER); 
+    //private DigitalInput beambreakSensor = new DigitalInput(Constants.BEAM_BREAK_RECEIVER); 
 
-    /**
+    /*
      * Change the I2C port below to match the connection of your color sensor
-     */
+    /*
     private final I2C.Port i2cPort = I2C.Port.kOnboard;
 
     /**
@@ -44,7 +44,7 @@ public class PneumaticIntakeSubsystem {
      * parameter. The device will be automatically initialized with default 
      * parameters.
      */
-    private ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
+    //private ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
 
     /**
      * A Rev Color Match object is used to register and detect known colors. This can 
@@ -66,19 +66,19 @@ public class PneumaticIntakeSubsystem {
     private final Color kUnknownTarget = new Color(0,0,0); //black
 
     public void init(){
-        solenoidOne.set(kOff);
+        //solenoidOne.set(kOff);
         System.out.println("solenoid set to off");
         colorMatcher.addColorMatch(kPurpleTarget);
         colorMatcher.addColorMatch(kYellowTarget);
         colorMatcher.addColorMatch(kUnknownTarget);
-        compressor.enableDigital();
+        //compressor.enableDigital();
     }
 
     public void setStatePneumaticIntake(PneumaticIntakeStates newState){
         pneumaticIntakeState = newState;
     }
 
-    public void switchState_beamBreakSensor (){ //switch state based on sensor reading
+    /*public void switchState_beamBreakSensor (){ //switch state based on sensor reading
         //System.out.println("circuit open? " + beambreakSensor.get());
         if (!beambreakSensor.get()){ //circuit is open meaning it sees something
             setState(PneumaticIntakeStates.ACTUATING);
@@ -87,17 +87,17 @@ public class PneumaticIntakeSubsystem {
             setState(PneumaticIntakeStates.RETRACTING); //confirmed b/c OFF stops/disables the solenoids
             System.out.println("unbroken");
         }
-    }
+    }*/
 
     public void switchState_colorSensor(){
-        Color detectedColor = colorSensor.getColor();
+        //Color detectedColor = colorSensor.getColor();
 
-         /**
+         /*
          * Run the color match algorithm on our detected color
          */
-        ColorMatchResult match = colorMatcher.matchClosestColor(detectedColor);
+        //ColorMatchResult match = colorMatcher.matchClosestColor(detectedColor);
 
-        boolean purpleNotRedThreshold = (Math.abs(detectedColor.red-kPurpleTarget.red)>COLOR_THRESHOLD);
+        /*boolean purpleNotRedThreshold = (Math.abs(detectedColor.red-kPurpleTarget.red)>COLOR_THRESHOLD);
         boolean purpleNotGreenThreshold = (Math.abs(detectedColor.green-kPurpleTarget.green)>COLOR_THRESHOLD);
         boolean purpleNotBlueThreshold = (Math.abs(detectedColor.blue-kPurpleTarget.blue)>COLOR_THRESHOLD);
 
@@ -119,9 +119,9 @@ public class PneumaticIntakeSubsystem {
                 //match should become black here
                 match = colorMatcher.matchClosestColor(new Color(0,0,0));
             }
-        } 
+        }*/ 
         
-        if (match.color == kPurpleTarget) {
+        /*if (match.color == kPurpleTarget) {
             colorString = "Purple";
         } else if (match.color == kYellowTarget){//means its yellow :DDD
             colorString = "Yellow";
@@ -135,14 +135,14 @@ public class PneumaticIntakeSubsystem {
          * Open Smart Dashboard or Shuffleboard to see the color detected by the 
          * sensor.
          */
-        SmartDashboard.putNumber("Red", detectedColor.red);
+        /*SmartDashboard.putNumber("Red", detectedColor.red);
         SmartDashboard.putNumber("Green", detectedColor.green);
         SmartDashboard.putNumber("Blue", detectedColor.blue);
         SmartDashboard.putNumber("Confidence", match.confidence);
         SmartDashboard.putString("Detected Color", colorString);
-    }
+    }*/
 
-    public void periodic(){
+    /*public void periodic(){
         switchState_beamBreakSensor();
        if(pneumaticIntakeState == PneumaticIntakeStates.ACTUATING){
             solenoidOne.set(kForward);
@@ -164,5 +164,5 @@ public class PneumaticIntakeSubsystem {
 
     public void setState(PneumaticIntakeStates newPneumaticIntakeState){
         pneumaticIntakeState = newPneumaticIntakeState;
-    }
+    */}
 }

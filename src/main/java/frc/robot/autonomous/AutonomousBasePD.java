@@ -22,7 +22,7 @@ public class AutonomousBasePD extends AutonomousBase{
     public static final double driveKI= 0.0; //Robot.kI.getDouble(0.0);//0.0;
     public static final double driveKD= 0.0; //Robot.kD.getDouble(0.0);//0.0;
     private static final double DRIVE_DEADBAND = 2*Constants.METERS_PER_INCH; //meters - previously 3 inches
-    private static final double TURN_DEADBAND = 6*Constants.METERS_PER_INCH; 
+    private static final double TURN_DEADBAND = 6.0; 
 
     
     private Pose2d startingCoordinate;
@@ -60,6 +60,12 @@ public class AutonomousBasePD extends AutonomousBase{
 
     }
 
+    public void resetControllers(){
+        xController.reset();
+        yController.reset();
+        turnController.reset();
+    }
+
     @Override
     public void periodic()
     {
@@ -85,7 +91,7 @@ public class AutonomousBasePD extends AutonomousBase{
             //System.out.println("pose in auto: " + DrivetrainSubsystem.m_pose.getX()/Constants.METERS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getY()/Constants.METERS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getRotation().getDegrees());
             if (states == AutoStates.DRIVE){
                 driveDesiredDistance(stateSequence[i].coordinate);
-                if(xController.atSetpoint() && yController.atSetpoint() /*&& turnController.atSetpoint()*/){
+                if(xController.atSetpoint() && yController.atSetpoint() && turnController.atSetpoint()){
                     i++;  
                     System.out.println("moving on to " + stateSequence[i]);
                 }
@@ -100,12 +106,12 @@ public class AutonomousBasePD extends AutonomousBase{
                 Robot.m_drivetrainSubsystem.pitchBalance(0.0);
             }else if(states == AutoStates.INTAKING){
                 //double beginIntake = System.currentTimeMillis();
-                pneumaticIntakeSubsystem.setState(PneumaticIntakeStates.ACTUATING); //unclear if we need... based on beam break
+                //pneumaticIntakeSubsystem.setState(PneumaticIntakeStates.ACTUATING); //unclear if we need... based on beam break
                 //if(System.currentTimeMillis() == beginIntake + 0.5){
                     //i++;
                 //}
             }else if(states == AutoStates.OUTTAKING){
-                pneumaticIntakeSubsystem.setState(PneumaticIntakeStates.RETRACTING);
+                //pneumaticIntakeSubsystem.setState(PneumaticIntakeStates.RETRACTING);
                 //if done, i++
             }else{
                 drivetrainSubsystem.stopDrive();
@@ -123,9 +129,9 @@ public class AutonomousBasePD extends AutonomousBase{
     */
     @Override
     public void driveDesiredDistance(Pose2d dPose){      
-        System.out.println("xcontroller setpoint: " + xController.getSetpoint());
-        System.out.println("cur pose: " + DrivetrainSubsystem.m_pose);
-        System.out.println("desired pose: " + dPose);
+        //System.out.println("xcontroller setpoint: " + xController.getSetpoint());
+        //System.out.println("cur pose: " + DrivetrainSubsystem.m_pose);
+        //System.out.println("desired pose: " + dPose);
         double speedX = xController.calculate(DrivetrainSubsystem.m_pose.getX(), dPose.getX());
         double speedY = yController.calculate(DrivetrainSubsystem.m_pose.getY(), dPose.getY());
         //System.out.println("m_pose deg: " + DrivetrainSubsystem.m_pose.getRotation().getDegrees() % 360);
@@ -134,21 +140,21 @@ public class AutonomousBasePD extends AutonomousBase{
         //System.out.println("DDDing");
         //System.out.println("speed rotate: " + speedRotat);
         
-        if(Math.abs(xController.getPositionError()) <= DRIVE_DEADBAND){
+        if(xAtSetpoint()){
             speedX = 0; 
             System.out.println("In x deadband.\nX controller error: " + xController.getPositionError() + " in meters.");
         } else {
             speedX = Math.signum(speedX)*Math.max(Constants.DRIVE_MOTOR_MIN_VOLTAGE, Math.min(Constants.DRIVE_MOTOR_MAX_VOLTAGE, Math.abs(speedX)));  
         }
  
-        if(Math.abs(yController.getPositionError()) <= DRIVE_DEADBAND){
+        if(yAtSetpoint()){
             speedY = 0; 
             System.out.println("In y deadband.");
         } else {
             speedY = Math.signum(speedY)*Math.max(Constants.DRIVE_MOTOR_MIN_VOLTAGE, Math.min(Constants.DRIVE_MOTOR_MAX_VOLTAGE, Math.abs(speedY)));
         }
 
-        if(Math.abs(turnController.getPositionError()) <= TURN_DEADBAND){
+        if(turnAtSetpoint()){
             speedRotat = 0;
             //System.out.println("At setpoint");
         } else {
@@ -157,11 +163,11 @@ public class AutonomousBasePD extends AutonomousBase{
           //  System.out.println("Speed rotat after: " + speedRotat);
         }
 
-        drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speedX, speedY, 0, drivetrainSubsystem.getPoseRotation()));  
+        drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speedX, speedY, speedRotat, drivetrainSubsystem.getPoseRotation()));  
         double errorX = (dPose.getX() - DrivetrainSubsystem.m_pose.getX());
         double errorY = (dPose.getY() - DrivetrainSubsystem.m_pose.getY());
         double errorRotat = (dPose.getRotation().getDegrees() - DrivetrainSubsystem.m_pose.getRotation().getDegrees());
-        System.out.println("Speed X: " + speedX + " Speed Y: " + speedY);
+        System.out.println("Speed X: " + speedX + " Speed Y: " + speedY + " Speed R: " + speedRotat);
         //System.out.println("error:" + errorX + ", " + errorY + ", " + errorRotat);
         //System.out.println("Desired Position: " + dPose.getX() + ", " + dPose.getY());
     }
@@ -179,15 +185,15 @@ public class AutonomousBasePD extends AutonomousBase{
     }
 
     public boolean xAtSetpoint(){
-        return xController.atSetpoint();
+        return Math.abs(xController.getPositionError()) <= DRIVE_DEADBAND;
     }
 
     public boolean yAtSetpoint(){
-        return yController.atSetpoint();
+        return Math.abs(yController.getPositionError()) <= DRIVE_DEADBAND;
     }
 
     public boolean turnAtSetpoint(){
-        return turnController.atSetpoint();
+        return Math.abs(turnController.getPositionError()) <= TURN_DEADBAND;
     }
 
 }

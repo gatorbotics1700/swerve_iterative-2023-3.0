@@ -13,9 +13,6 @@ public class LimeLightSubsystem {
     public final double ROBOTHEIGHT = 20.0; //inches change
     public final double IDEALDISTANCE = 40.0; //inches change
     public static double initialPosition;
-    public static double tx_0;
-    public static double tx_1;
-    public static double tx_2;
     public static double tv;
     public static double tx;
     public static double ty;
@@ -53,8 +50,6 @@ public class LimeLightSubsystem {
     public void init(){
         setState(LimelightStates.SCANTAPE);
         //initialPosition = DrivetrainSubsystem.getTicks();
-        tx_0 = 0.0;
-        tx_1 = 0.0;
 
     }
     public void periodic(){
