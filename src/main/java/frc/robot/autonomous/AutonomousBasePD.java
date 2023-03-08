@@ -11,6 +11,7 @@ import frc.robot.Constants;
 import frc.robot.autonomous.StateWithCoordinate;
 import frc.robot.autonomous.StateWithCoordinate.AutoStates;
 import frc.robot.subsystems.PneumaticIntakeSubsystem;
+import frc.robot.subsystems.Mechanisms.MechanismStates;
 import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
 import frc.robot.subsystems.Mechanisms;
 
@@ -28,10 +29,13 @@ public class AutonomousBasePD extends AutonomousBase{
     private Pose2d startingCoordinate;
     private StateWithCoordinate[] stateSequence;
     private int i;
+    private int uno = -1; 
+    private int dos = -1; 
     
     static DrivetrainSubsystem drivetrainSubsystem = Robot.m_drivetrainSubsystem;
     static Mechanisms mechanisms = Robot.m_mechanisms;
     static PneumaticIntakeSubsystem pneumaticIntakeSubsystem = Robot.m_pneumaticIntakeSubsystem;
+
 
     //pids
     public PIDController turnController = new PIDController(turnKP, turnKI, turnKD); 
@@ -74,7 +78,7 @@ public class AutonomousBasePD extends AutonomousBase{
             turnController.setSetpoint(0);
             i++;  
             System.out.println("moving on to " + stateSequence[i]);
-        } else if (states == AutoStates.FIRSTHIGHNODE){
+        } else if (states == AutoStates.FIRSTHIGHNODE){ //WE HAVE THIS BECAUSE OF APRILTAGS
             //System.out.println("we've reset to this pose: " + DrivetrainSubsystem.m_pose);
             //flick intake, elevate, release object
             //if we are done then we need to i++
@@ -89,24 +93,37 @@ public class AutonomousBasePD extends AutonomousBase{
                     i++;  
                     System.out.println("moving on to " + stateSequence[i]);
                 }
-            }else if(states == AutoStates.HIGHNODE){
+            }else if(states == AutoStates.HIGHNODE){ 
+                mechanisms.setState(MechanismStates.HIGH_NODE);
+                if()
+                //elevator height, arm length, 0.5 sec then i++ 
                 //outtake (from vision)
                 //if we are done then we need to i++
                 System.out.println("high node");
-                i++;  
+                double startTimeD;
+               if(mechanisms.isDoneHigh()==true){
+                   if(dos == -1){
+                    startTimeD = System.currentTimeMillis();
+                   } 
+                if(System.currentTimeMillis()-startTimeD==0.5){
+                    i++;
+                    dos = -1;
+                }
+               } 
                 System.out.println("moving on to " + stateSequence[i]);
             }else if(states == AutoStates.BALANCING){
                 //TODO: make it so the paths that balance end with balancing rather than ending with stop
                 Robot.m_drivetrainSubsystem.pitchBalance(0.0);
             }else if(states == AutoStates.INTAKING){
-                //double beginIntake = System.currentTimeMillis();
+               double startTime;
+                if(uno == -1){
+                    startTime = System.currentTimeMillis(); 
+                }
+                if(System.currentTimeMillis()-startTime==0.5){
+                    i++;
+                    uno = -1;
+                }
                 pneumaticIntakeSubsystem.setState(PneumaticIntakeStates.ACTUATING); //unclear if we need... based on beam break
-                //if(System.currentTimeMillis() == beginIntake + 0.5){
-                    //i++;
-                //}
-            }else if(states == AutoStates.OUTTAKING){
-                pneumaticIntakeSubsystem.setState(PneumaticIntakeStates.RETRACTING);
-                //if done, i++
             }else{
                 drivetrainSubsystem.stopDrive();
             
