@@ -83,8 +83,8 @@ public final class Constants {
     public static final double SWERVE_TICKS_PER_INCH = TICKS_PER_REV*SWERVE_GEAR_RATIO/SWERVE_WHEEL_DIAMETER/Math.PI;
     
     public static final int TELESCOPING_MOTOR_ID = 31;
-    public static final int BEAM_BREAK_RECEIVER = 0; //port number of beam break receiver
-    public static final int BEAM_BREAK_SENDER = 1;
+    public static final int BEAM_BREAK_RECEIVER = 8; //port number of beam break receiver
+    public static final int BEAM_BREAK_SENDER = 9;
     
     public static final int ELEVATOR_CAN_ID = 30;
     public static final int kTimeoutMs = 1000;
