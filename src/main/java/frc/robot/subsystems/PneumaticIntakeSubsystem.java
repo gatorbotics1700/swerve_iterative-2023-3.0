@@ -30,7 +30,7 @@ public class PneumaticIntakeSubsystem {
     //confirm we are using double solenoid
     private DoubleSolenoid solenoidOne = new DoubleSolenoid(2, PneumaticsModuleType.REVPH, 8, 9); 
     //what compressor are we using?
-    private Compressor compressor = new Compressor(PneumaticsModuleType.REVPH); 
+    //private Compressor compressor = new Compressor(PneumaticsModuleType.REVPH); 
     // Initializes a DigitalInput on DIO 0 (roborio is built in w/ 10 DIOs (digital input-output ports))
     private DigitalInput beambreakSensor = new DigitalInput(Constants.BEAM_BREAK_RECEIVER); 
 
@@ -155,10 +155,10 @@ public class PneumaticIntakeSubsystem {
         switchState_beamBreakSensor(); 
     }
 
-    public boolean getPSI(){
-        System.out.println(compressor.getCurrent());
-        return compressor.getPressureSwitchValue();
-    }
+    //public boolean getPSI(){
+        //System.out.println(compressor.getCurrent());
+        //return compressor.getPressureSwitchValue();
+    //}
 
     public void setState(PneumaticIntakeStates newPneumaticIntakeState){
         pneumaticIntakeState = newPneumaticIntakeState;
