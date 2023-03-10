@@ -16,6 +16,9 @@ import edu.wpi.first.networktables.GenericEntry;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+    public static final double BUMPER_WIDTH = 0.0762;
+    public static final double DRIVETRAIN_WIDTH = 0.3175;
     /**
      * The left-to-right distance between the drivetrain wheels
      *
@@ -78,6 +81,7 @@ public final class Constants {
     public static final double UNDER_TWO_TICKS_PER_INCH = TICKS_PER_REV*TELESCOPING_ARM_GEAR_RATIO/FIRST_WHEEL_DIAMETER/Math.PI; //talonfx drive encoder
     public static final double OVER_TWO_TICKS_PER_INCH = TICKS_PER_REV*TELESCOPING_ARM_GEAR_RATIO/SECOND_WHEEL_DIAMETER/Math.PI;
     public static final double SWERVE_TICKS_PER_INCH = TICKS_PER_REV*SWERVE_GEAR_RATIO/SWERVE_WHEEL_DIAMETER/Math.PI;
+    public static final double ELEVATOR_TICKS_PER_INCH = 12732; //insanely wrong TODO
     
     public static final int TELESCOPING_MOTOR_ID = 29; //31;
     public static final int BEAM_BREAK_RECEIVER = 0; //port number of beam break receiver
@@ -92,4 +96,8 @@ public final class Constants {
 
     public static final double METERS_PER_INCH = 0.0254; 
     public static final double TICKS_PER_METER = TICKS_PER_REV*SWERVE_GEAR_RATIO/SWERVE_WHEEL_DIAMETER/Math.PI/METERS_PER_INCH;
+
+    public static final double TAPE_HEIGHT_ONE = 0.0; //TODO: needs to be changed
+    public static final double LIMELIGHT_HEIGHT = 52 * METERS_PER_INCH;
+    public static final double LIMELIGHT_ANGLE = -24; //in degrees
 }

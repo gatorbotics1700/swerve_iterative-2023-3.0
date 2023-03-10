@@ -46,7 +46,7 @@ public class AutonomousBaseMP extends AutonomousBase{
 
         double timeCheck = trajectory1.getTotalTimeSeconds();
         end = trajectory1.sample(timeCheck);
-        //System.out.println("total time: " + timeCheck);
+        System.out.println("total time: " + timeCheck);
     }
     
     @Override
@@ -138,6 +138,7 @@ public class AutonomousBaseMP extends AutonomousBase{
             DrivetrainSubsystem.m_pose, goal, Rotation2d.fromDegrees(0));
         
         drivetrainSubsystem.setSpeed(adjustedSpeeds);
+        System.out.println("Actual time elapsed: " + timeElapsed/1000 + "\n" + "Speed: " + adjustedSpeeds.vxMetersPerSecond + ", " + adjustedSpeeds.vyMetersPerSecond + ", " + adjustedSpeeds.omegaRadiansPerSecond + " Goal endpoint: " + goal);
     }
 
     

@@ -10,7 +10,7 @@ import com.ctre.phoenix.sensors.CANCoder;
 import frc.com.swervedrivespecialties.swervelib.ctre.CtreUtils;
 
 public final class Falcon500SteerControllerFactoryBuilder {
-    private static final int CAN_TIMEOUT_MS = 250;
+    private static final int CAN_TIMEOUT_MS = 500; //originally 250, changed to 500 on 03/03
     private static final int STATUS_FRAME_GENERAL_PERIOD_MS = 250;
 
     private static final double TICKS_PER_ROTATION = 2048.0;
@@ -136,7 +136,7 @@ public final class Falcon500SteerControllerFactoryBuilder {
                             STATUS_FRAME_GENERAL_PERIOD_MS,
                             CAN_TIMEOUT_MS
                     ),
-                    "Failed to configure Falcon status frame period"
+                    "Failed to configure steer Falcon status frame period"
             );
 
             return new ControllerImplementation(motor,

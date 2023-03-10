@@ -54,7 +54,7 @@ public class ArmTelescopingSubsystem {
 
     public void periodic(){//sam requests that we can operate arm length by stick on xbox
         //telescopingMotor.set(ControlMode.PercentOutput, 0.2);
-        System.out.println("current telescoping arm motor position:" + telescopingMotor.getSelectedSensorPosition());
+        //System.out.println("current telescoping arm motor position:" + telescopingMotor.getSelectedSensorPosition());
         if (tState == TelescopingStates.RETRACTED){
             telescopingMotor.set(ControlMode.Position, 0);
             desiredInches = 0; 
@@ -104,7 +104,7 @@ public class ArmTelescopingSubsystem {
     public void telescopeDeadband(){
         if (Math.abs(desiredTicks - telescopingMotor.getSelectedSensorPosition()) < deadband){
             telescopingMotor.set(ControlMode.PercentOutput, 0);
-            System.out.println("STOPPED");
+            //System.out.println("STOPPED");
         }
     }
     
@@ -140,6 +140,13 @@ public class ArmTelescopingSubsystem {
     }
     public double getTicks() {
         return telescopingMotor.getSelectedSensorPosition() - tareEncoder;
+    }
+
+    public boolean isAtHigh(){
+        if(Math.abs(desiredInches-telescopingMotor.getSelectedSensorPosition()-32)<3*Constants.UNDER_TWO_TICKS_PER_INCH){
+            return true;
+        }
+        return false; 
     }
 
 }

@@ -59,7 +59,7 @@ public final class Falcon500DriveControllerFactoryBuilder {
             }
 
             TalonFX motor = new TalonFX(driveConfiguration);
-            CtreUtils.checkCtreError(motor.configAllSettings(motorConfiguration), "Failed to configure Falcon 500");
+            CtreUtils.checkCtreError(motor.configAllSettings(motorConfiguration, CAN_TIMEOUT_MS), "Failed to configure Falcon 500"); //added can timeout on 03/03
 
             if (hasVoltageCompensation()) {
                 // Enable voltage compensation
@@ -78,7 +78,7 @@ public final class Falcon500DriveControllerFactoryBuilder {
                             STATUS_FRAME_GENERAL_PERIOD_MS,
                             CAN_TIMEOUT_MS
                     ),
-                    "Failed to configure Falcon status frame period"
+                    "Failed to configure drive Falcon status frame period"
             );
 
             return new ControllerImplementation(motor, sensorVelocityCoefficient);

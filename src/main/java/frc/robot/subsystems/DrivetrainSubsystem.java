@@ -22,6 +22,7 @@ import edu.wpi.first.math.estimator.*;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.controller.PIDController;
 
+
 import java.util.Arrays;
 import java.util.function.DoubleSupplier;
 
@@ -31,6 +32,13 @@ import frc.robot.Constants;
 import frc.robot.OI;
 
 public class DrivetrainSubsystem {
+   private static double pitchKP = 0.025;
+   private static double pitchKI = 0.0;
+   private static double pitchKD = 0.001;
+   private PIDController pitchController = new PIDController(pitchKP, pitchKI, pitchKD);
+   public static double MINOUTPUT = 0.1;
+   public static double universalPitch = 0;
+        
 
   /**
    * The maximum voltage that will be delivered to the motors.
@@ -182,7 +190,11 @@ public class DrivetrainSubsystem {
   
   //returns the direction of the robot, originally in radians, but fromDegrees switches into degrees
   public Rotation2d getGyroscopeRotation() {
-        return m_pose.getRotation();
+        return new Rotation2d(Math.toRadians(m_pigeon.getYaw()));
+  }
+
+  public Rotation2d getPoseRotation() {
+        return m_pose.getRotation(); 
   }
 
   public double getEncoderPosition(SwerveModule module) {
@@ -195,11 +207,6 @@ public class DrivetrainSubsystem {
         } else {
                 return module.getPosition()/Constants.TICKS_PER_METER - tareRFEncoder;
         }
-  }
-
-  public double getDistance(){
-        double[] positions = {getEncoderPosition(m_frontLeftModule), getEncoderPosition(m_frontRightModule), getEncoderPosition(m_backLeftModule), getEncoderPosition(m_backRightModule)};
-        return getMedian(positions);
   }
 
   public void resetOdometry(Pose2d start){
@@ -247,9 +254,11 @@ public class DrivetrainSubsystem {
 //   }
   
   public void driveTeleop(){
-        DoubleSupplier m_translationXSupplier = () -> -modifyAxis(OI.m_controller.getLeftY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
-        DoubleSupplier m_translationYSupplier = () -> -modifyAxis(OI.m_controller.getLeftX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
-        DoubleSupplier m_rotationSupplier = () -> -modifyAxis(OI.m_controller.getRightX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
+        //X supplier is INTENTIONALLY y axis
+        //Y supplier is INTENTIONALLY x axis
+        DoubleSupplier m_translationXSupplier = () -> modifyAxis(OI.m_controller.getLeftY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
+        DoubleSupplier m_translationYSupplier = () -> modifyAxis(OI.m_controller.getLeftX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
+        DoubleSupplier m_rotationSupplier = () -> modifyAxis(OI.m_controller.getRightX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
         
         //setting speed
         setSpeed(
@@ -257,7 +266,7 @@ public class DrivetrainSubsystem {
                         m_translationXSupplier.getAsDouble(),
                         m_translationYSupplier.getAsDouble(),
                         m_rotationSupplier.getAsDouble(),
-                        getGyroscopeRotation()
+                        getPoseRotation()
                 )
         );
         //using speed to go
@@ -362,18 +371,30 @@ public class DrivetrainSubsystem {
         return value;
     }
 
-    public double getMedian(double[] num){
-            Arrays.sort(num);
-            if (num.length%2==0){
-                    return (num[num.length/2] + num[(num.length-1)/2])/2;
-            } else {
-                    return num[num.length/2];
-            }
-    }
-
     //AUTO AND FAILSAFE
     public void stopDrive() {
-        setSpeed(new ChassisSpeeds(0.0, 0.0, 0.0));
+        setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.0, 0.0, 0.0, getPoseRotation()));
         drive();
    }
+
+   public void pitchBalance(double pitchSetpoint){
+        System.out.println("pitch: " + m_pigeon.getPitch());
+        System.out.println("universal pitch: " + universalPitch);
+        double pitchAfterCorrection = m_pigeon.getPitch()- universalPitch;
+        System.out.println("pitch after correcting for universalPitch: " + pitchAfterCorrection);
+        pitchController.setSetpoint(pitchSetpoint); 
+        double output = pitchController.calculate(pitchAfterCorrection, pitchSetpoint);
+        System.out.println("output: " + output); 
+        setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, -output, 0, getGyroscopeRotation()));
+        drive();
+        
+        if (Math.abs(pitchAfterCorrection - pitchSetpoint) < 1.0){
+            setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0,getGyroscopeRotation()));
+            //velocityPD(0);
+        } else{
+                if(Math.abs(output) < MINOUTPUT){
+                   output = Math.signum(output) * MINOUTPUT;
+                }
+        }
+    }
 }
