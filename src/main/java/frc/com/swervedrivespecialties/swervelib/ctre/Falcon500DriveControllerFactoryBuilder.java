@@ -13,7 +13,7 @@ import frc.com.swervedrivespecialties.swervelib.ModuleConfiguration;
 public final class Falcon500DriveControllerFactoryBuilder {
     private static final double TICKS_PER_ROTATION = 2048.0;
 
-    private static final int CAN_TIMEOUT_MS = 250;
+    private static final int CAN_TIMEOUT_MS = 500;
     private static final int STATUS_FRAME_GENERAL_PERIOD_MS = 250;
 
     private double nominalVoltage = Double.NaN;
@@ -59,7 +59,7 @@ public final class Falcon500DriveControllerFactoryBuilder {
             }
 
             TalonFX motor = new TalonFX(driveConfiguration);
-            CtreUtils.checkCtreError(motor.configAllSettings(motorConfiguration), "Failed to configure Falcon 500");
+            CtreUtils.checkCtreError(motor.configAllSettings(motorConfiguration, CAN_TIMEOUT_MS), "Failed to configure drive Falcon 500");
 
             if (hasVoltageCompensation()) {
                 // Enable voltage compensation

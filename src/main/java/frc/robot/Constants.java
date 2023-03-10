@@ -32,19 +32,19 @@ public final class Constants {
     public static final int DRIVETRAIN_PIGEON_ID = 6; 
 
     //green
-    /* 
+    
     public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(194.41); //194.41
     public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(305.15625);
     public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(23.73+90);//fix this one to like -70 or something
     public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(122.87);
-    */
+    
     //public static final double offset = Robot.test.getDouble(DRIVETRAIN_PIGEON_ID); 
     
     //swervo
-    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(164.00390625);   //281.07421875-90 //279.316-270
+    /*public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(164.00390625);   //281.07421875-90 //279.316-270
     public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(341.72149658203125); //343.828125+90 //75.938
     public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(278.5308837890625);  //231.6796875+90 //320.098
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(52.525390625);//343.828125-90 //250.183
+    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(52.525390625);//343.828125-90 //250.183*/
 
     //even can ids are drive, odd can ids are steer
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 20;
@@ -95,4 +95,5 @@ public final class Constants {
 
     public static final double METERS_PER_INCH = 0.0254; 
     public static final double TICKS_PER_METER = TICKS_PER_REV*SWERVE_GEAR_RATIO/SWERVE_WHEEL_DIAMETER/Math.PI/METERS_PER_INCH;
+    public static final double TICKS_PER_INCH = TICKS_PER_METER*METERS_PER_INCH;
 }
