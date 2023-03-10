@@ -24,8 +24,6 @@ public class StateWithCoordinate{
         STOP,
         HIGHNODE,
         FIRSTHIGHNODE,
-        // MIDNODE,
-        // LOWNODE,
         INTAKING,
         OUTTAKING,
         BALANCING;

@@ -61,7 +61,7 @@ public class Mechanisms {
     }
 
     public boolean isDoneHigh(){
-       if(elevatorSubsystem.isAtHigh() && armTelescopingSubsystem.isHigh()){
+       if(elevatorSubsystem.isAtHigh() && armTelescopingSubsystem.isAtHigh()){
             return true;
        }
        return false; 

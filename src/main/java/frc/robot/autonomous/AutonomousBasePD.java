@@ -29,8 +29,8 @@ public class AutonomousBasePD extends AutonomousBase{
     private Pose2d startingCoordinate;
     private StateWithCoordinate[] stateSequence;
     private int i;
-    private int uno = -1; 
-    private int dos = -1; 
+    private int intakeCounter = -1; 
+    private int highNodeCounter = -1; 
     private double startTimeIntake;
     private double startTimeHigh; 
     
@@ -107,12 +107,12 @@ public class AutonomousBasePD extends AutonomousBase{
                 //if we are done then we need to i++
                 System.out.println("high node");
                if(mechanisms.isDoneHigh()==true){
-                   if(dos == -1){
+                   if(highNodeCounter >= -1){
                     startTimeHigh = System.currentTimeMillis();
                    } 
                 if(System.currentTimeMillis()-startTimeHigh==0.5){
                     i++;
-                    dos = -1;
+                    highNodeCounter = -1;
                 }
                } 
                 System.out.println("moving on to " + stateSequence[i]);
@@ -120,12 +120,12 @@ public class AutonomousBasePD extends AutonomousBase{
                 //TODO: make it so the paths that balance end with balancing rather than ending with stop
                 //Robot.m_drivetrainSubsystem.pitchBalance(0.0);
             }else if(states == AutoStates.INTAKING){
-                if(uno == -1){
+                if(intakeCounter >= -1){
                     startTimeIntake = System.currentTimeMillis(); 
                 }
                 if(System.currentTimeMillis()-startTimeIntake==0.5){
                     i++;
-                    uno = -1;
+                    intakeCounter = -1;
                 }
                 //pneumaticIntakeSubsystem.setState(PneumaticIntakeStates.ACTUATING); //unclear if we need... based on beam break
             }else{
