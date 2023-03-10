@@ -179,8 +179,14 @@ public class AprilTagSubsystem {
 
     private void correctPosition(){
         System.out.println("I am correcting position!!!");
-        autonomousBasePD.driveDesiredDistance(AprilTagLocation.scoringPoses[1]);
-        Robot.m_drivetrainSubsystem.drive();
+        while(LimeLightSubsystem.tv!=0){
+            System.out.println("I am still detecting April Tag and driving");
+            autonomousBasePD.driveDesiredDistance(AprilTagLocation.scoringPoses[1]);
+            Robot.m_drivetrainSubsystem.drive();
+        }
+
+        Robot.m_drivetrainSubsystem.stopDrive();
+
     }
     
 
