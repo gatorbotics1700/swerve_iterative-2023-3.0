@@ -34,9 +34,9 @@ public class AutonomousBasePD extends AutonomousBase{
     private double startTimeIntake;
     private double startTimeHigh; 
     
-    static DrivetrainSubsystem drivetrainSubsystem = Robot.m_drivetrainSubsystem;
-    static Mechanisms mechanisms = Robot.m_mechanisms;
-    static PneumaticIntakeSubsystem pneumaticIntakeSubsystem = Robot.m_pneumaticIntakeSubsystem;
+    private static DrivetrainSubsystem drivetrainSubsystem = Robot.m_drivetrainSubsystem;
+    private static Mechanisms mechanisms = Robot.m_mechanisms;
+    private static PneumaticIntakeSubsystem pneumaticIntakeSubsystem = Robot.m_pneumaticIntakeSubsystem;
 
 
     //pids
@@ -88,7 +88,6 @@ public class AutonomousBasePD extends AutonomousBase{
             System.out.println("moving on to " + stateSequence[i]);
         } else if (states == AutoStates.FIRSTHIGHNODE){ //WE HAVE THIS BECAUSE OF APRILTAGS
             //System.out.println("we've reset to this pose: " + DrivetrainSubsystem.m_pose);
-            //if we are done then we need to i++
             i++;  
             System.out.println("moving on to " + stateSequence[i]);
         } else {
@@ -102,28 +101,24 @@ public class AutonomousBasePD extends AutonomousBase{
                 }
             }else if(states == AutoStates.HIGHNODE){ 
                 //mechanisms.setState(MechanismStates.HIGH_NODE);
-                //elevator height, arm length, 0.5 sec then i++ 
-                //outtake (from vision)
-                //if we are done then we need to i++
                 System.out.println("high node");
                if(mechanisms.isDoneHigh()==true){
                    if(highNodeCounter >= -1){
                     startTimeHigh = System.currentTimeMillis();
                    } 
-                if(System.currentTimeMillis()-startTimeHigh==0.5){
+                if(System.currentTimeMillis()-startTimeHigh>=0.5){
                     i++;
                     highNodeCounter = -1;
                 }
                } 
                 System.out.println("moving on to " + stateSequence[i]);
             }else if(states == AutoStates.BALANCING){
-                //TODO: make it so the paths that balance end with balancing rather than ending with stop
                 //Robot.m_drivetrainSubsystem.pitchBalance(0.0);
             }else if(states == AutoStates.INTAKING){
                 if(intakeCounter >= -1){
                     startTimeIntake = System.currentTimeMillis(); 
                 }
-                if(System.currentTimeMillis()-startTimeIntake==0.5){
+                if(System.currentTimeMillis()-startTimeIntake>=0.5){
                     i++;
                     intakeCounter = -1;
                 }
