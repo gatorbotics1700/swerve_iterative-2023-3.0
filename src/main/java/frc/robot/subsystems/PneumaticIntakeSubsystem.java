@@ -4,12 +4,15 @@ import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.kForward;
 import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.kOff;
 import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.kReverse;
 
+import java.util.concurrent.BrokenBarrierException;
+
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorMatch;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -32,7 +35,7 @@ public class PneumaticIntakeSubsystem {
     //what compressor are we using?
     private Compressor compressor = new Compressor(PneumaticsModuleType.REVPH); 
     // Initializes a DigitalInput on DIO 0 (roborio is built in w/ 10 DIOs (digital input-output ports))
-    private DigitalInput beambreakSensor = new DigitalInput(Constants.INTAKE_SENSOR); 
+    private DigitalInput beambreakSensor = new DigitalInput(Constants.BEAM_BREAK_RECEIVER); 
     /**
      * Change the I2C port below to match the connection of your color sensor
      */
@@ -74,14 +77,6 @@ public class PneumaticIntakeSubsystem {
 
     public void setStatePneumaticIntake(PneumaticIntakeStates newState){
         pneumaticIntakeState = newState;
-    }
-
-    public void switchState_beamBreakSensor (){ //switch state based on sensor reading
-        if (beambreakSensor.get()){ //circuit is open meaning it sees something
-            setState(PneumaticIntakeStates.ACTUATING);
-        } else{ // circuit is closed meaning it doesn't seem something
-            setState(PneumaticIntakeStates.RETRACTING); //confirmed b/c OFF stops/disables the solenoids
-        }
     }
 
     public void switchState_colorSensor(){
@@ -148,7 +143,6 @@ public class PneumaticIntakeSubsystem {
             solenoidOne.set(kOff);
             System.out.println("Solenoid Off");
         }
-        //switchState_beamBreakSensor(); //comment out one or the other to test one at a time
     }
 
     public boolean getPSI(){
@@ -158,5 +152,9 @@ public class PneumaticIntakeSubsystem {
 
     public void setState(PneumaticIntakeStates newPneumaticIntakeState){
         pneumaticIntakeState = newPneumaticIntakeState;
+    }
+
+    public boolean beamBreak(){
+        return beambreakSensor.get(); 
     }
 }

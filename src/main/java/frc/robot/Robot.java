@@ -105,6 +105,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH);
     SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
+    SmartDashboard.putBoolean("beam broken?", pneumaticIntakeSubsystem.isbeamBroken());
     m_field.setRobotPose(DrivetrainSubsystem.m_odometry.getPoseMeters());
   }
 
