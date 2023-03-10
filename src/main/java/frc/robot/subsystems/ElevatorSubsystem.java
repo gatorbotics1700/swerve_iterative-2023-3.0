@@ -55,7 +55,7 @@ public class ElevatorSubsystem {
     }
 
     public void periodic(){//still need to scale down the values or figure out why it is overshooting
-        System.out.println("elevator periodic!!!!!!!");
+        //System.out.println("elevator periodic!!!!!!!");
         if (elevatorState == ElevatorStates.ZERO){ //emergency stop
             elevatorMotor.set(ControlMode.Position, 0);
         } else if (elevatorState == ElevatorStates.LOW_ELEVATOR_HEIGHT){

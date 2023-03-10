@@ -48,14 +48,21 @@ public class AprilTagSubsystem {
                 System.out.println("Reset odometry to this m_pose: " + DrivetrainSubsystem.m_pose);
                 }
         } else if(states == AprilTagSequence.CORRECTPOSITION){
-            double[] tempArray = limeLightSubsystem.networkTable.getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
-            drivetrainSubsystem.resetOdometry(new Pose2d(tempArray[0], tempArray[1], new Rotation2d (Math.toRadians(tempArray[5]))));
-            autonomousBasePD.driveDesiredDistance(AprilTagLocation.scoringPoses[4]);
-            Robot.m_drivetrainSubsystem.drive();
-            if(autonomousBasePD.xAtSetpoint() && autonomousBasePD.yAtSetpoint() && autonomousBasePD.turnAtSetpoint()){
-                setState(AprilTagSequence.OFF);
-                System.out.println("finished correcting position!!!!!");
+            if(LimeLightSubsystem.tv != 0){
+                double[] tempArray = limeLightSubsystem.networkTable.getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
+                drivetrainSubsystem.resetOdometry(new Pose2d(tempArray[0], tempArray[1], new Rotation2d (Math.toRadians(tempArray[5]))));
+                autonomousBasePD.driveDesiredDistance(AprilTagLocation.scoringPoses[5]);
+                Robot.m_drivetrainSubsystem.drive();
+
+                if(autonomousBasePD.xAtSetpoint() && autonomousBasePD.yAtSetpoint() && autonomousBasePD.turnAtSetpoint()){
+                    setState(AprilTagSequence.OFF);
+                    System.out.println("finished correcting position!!!!!");
+                }
+                
+            }else{
+                System.out.println("Not detecting");
             }
+            
         }        
     }
 }

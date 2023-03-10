@@ -72,11 +72,11 @@ public class Robot extends TimedRobot {
     new StateWithCoordinate[]{
       new StateWithCoordinate(AutoStates.FIRST),
       new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(20 * mpi, 40 * mpi, new Rotation2d(Math.toRadians(0)))), 
-      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(40 * mpi, 0, new Rotation2d(0))), 
-      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(0 * mpi, 30 * mpi, new Rotation2d(0))), 
-      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(40 * mpi, 30 * mpi, new Rotation2d(0))), 
-      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(0 * mpi, 0 * mpi, new Rotation2d(0))), 
-      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(20 * mpi, 20 * mpi, new Rotation2d(0))),
+      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(40 * mpi, 0, new Rotation2d(60))), 
+      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(0 * mpi, 30 * mpi, new Rotation2d(60))), 
+      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(40 * mpi, 30 * mpi, new Rotation2d(60))), 
+      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(0 * mpi, 0 * mpi, new Rotation2d(150))), 
+      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(20 * mpi, 20 * mpi, new Rotation2d(150))),
       new StateWithCoordinate(AutoStates.STOP)
     });
   
@@ -171,7 +171,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
      //m_AprilTagSubsystem.periodic();
-     m_mechanisms.periodic();
+     //m_mechanisms.periodic();
      m_autoSelected.periodic();
      
      //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());

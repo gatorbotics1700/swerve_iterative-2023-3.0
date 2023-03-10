@@ -144,6 +144,7 @@ public class AutonomousBasePD extends AutonomousBase{
     */
     @Override
     public void driveDesiredDistance(Pose2d dPose){      
+        turnController.enableContinuousInput(0, 360);
         //System.out.println("xcontroller setpoint: " + xController.getSetpoint());
         //System.out.println("cur pose: " + DrivetrainSubsystem.m_pose);
         //System.out.println("desired pose: " + dPose);
@@ -151,20 +152,20 @@ public class AutonomousBasePD extends AutonomousBase{
         double speedY = yController.calculate(DrivetrainSubsystem.m_pose.getY(), dPose.getY());
         //System.out.println("m_pose deg: " + DrivetrainSubsystem.m_pose.getRotation().getDegrees() % 360);
         //System.out.println("d_pose deg: " + dPose.getRotation().getDegrees() % 360);
-        double speedRotat = turnController.calculate(DrivetrainSubsystem.m_pose.getRotation().getDegrees() % 360, dPose.getRotation().getDegrees() % 360);
+        double speedRotat = turnController.calculate(DrivetrainSubsystem.m_pose.getRotation().getDegrees(), dPose.getRotation().getDegrees());
         //System.out.println("DDDing");
         //System.out.println("speed rotate: " + speedRotat);
         
         if(xAtSetpoint()){
             speedX = 0; 
-            System.out.println("In x deadband.\nX controller error: " + xController.getPositionError() + " in meters.");
+            //System.out.println("In x deadband.\nX controller error: " + xController.getPositionError() + " in meters.");
         } else {
             speedX = Math.signum(speedX)*Math.max(Constants.DRIVE_MOTOR_MIN_VOLTAGE, Math.min(Constants.DRIVE_MOTOR_MAX_VOLTAGE, Math.abs(speedX)));  
         }
  
         if(yAtSetpoint()){
             speedY = 0; 
-            System.out.println("In y deadband.");
+            //System.out.println("In y deadband.");
         } else {
             speedY = Math.signum(speedY)*Math.max(Constants.DRIVE_MOTOR_MIN_VOLTAGE, Math.min(Constants.DRIVE_MOTOR_MAX_VOLTAGE, Math.abs(speedY)));
         }
@@ -181,7 +182,8 @@ public class AutonomousBasePD extends AutonomousBase{
         drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speedX, speedY, speedRotat, drivetrainSubsystem.getPoseRotation()));  
         double errorX = (dPose.getX() - DrivetrainSubsystem.m_pose.getX());
         double errorY = (dPose.getY() - DrivetrainSubsystem.m_pose.getY());
-        double errorRotat = (dPose.getRotation().getDegrees() - DrivetrainSubsystem.m_pose.getRotation().getDegrees());
+        double errorRotat = turnController.getPositionError();
+        System.out.println("Rotation error: " + errorRotat + " deadband " + turnController.getPositionTolerance());
         System.out.println("Speed X: " + speedX + " Speed Y: " + speedY + " Speed R: " + speedRotat);
         //System.out.println("error:" + errorX + ", " + errorY + ", " + errorRotat);
         //System.out.println("Desired Position: " + dPose.getX() + ", " + dPose.getY());
