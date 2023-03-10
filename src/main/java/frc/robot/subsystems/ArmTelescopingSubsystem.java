@@ -27,6 +27,7 @@ public class ArmTelescopingSubsystem {
     public double _kPeakOutput = 1.0;
 
     private int deadband = 15000;
+    private double desiredTicks;
     public Gains telescopeGains = new Gains(_kP, _kI, _kD, _kIzone, _kPeakOutput);
 
     public static enum TelescopingStates{
@@ -60,27 +61,26 @@ public class ArmTelescopingSubsystem {
             desiredInches = 0; 
             telescopeDeadband(0);
         } else if (tState == TelescopingStates.LOW_ARM_LENGTH){
-            desiredInches = 10; //official 2/13 og is 3
-            double desiredTicks = determineRightTicks(desiredInches);
+            desiredTicks = 37500; //this is 3 inches
+            //double desiredTicks = determineRightTicks(desiredInches);
             System.out.println("desired ticks: " + desiredTicks);
             telescopingMotor.set(ControlMode.Position, desiredTicks);
             System.out.println("error: " + (desiredTicks - telescopingMotor.getSelectedSensorPosition()));
             telescopeDeadband(desiredTicks);
         } else if (tState == TelescopingStates.SHELF_ARM_LENGTH){
-            desiredInches = 6; //official 2/13
-            double desiredTicks = determineRightTicks(desiredInches);
+            desiredTicks = 75000; //this is 6 inches
             telescopingMotor.set(ControlMode.Position, desiredTicks-tareEncoder); // goes with 90 degrees rotation 
             System.out.println("error: " + (desiredTicks - telescopingMotor.getSelectedSensorPosition()));
             telescopeDeadband(desiredTicks);
         }else if (tState == TelescopingStates.MID_ARM_LENGTH){
-            desiredInches = 23; //official 2/13
-            double desiredTicks = determineRightTicks(desiredInches);
+            desiredTicks = 200000; //official 2/13
+            //double desiredTicks = determineRightTicks(desiredInches);
             telescopingMotor.set(ControlMode.Position, desiredTicks-tareEncoder); // goes with 90 degrees rotation 
             System.out.println("error: " + (desiredTicks - telescopingMotor.getSelectedSensorPosition()));
             telescopeDeadband(desiredTicks);
         }else if(tState == TelescopingStates.HIGH_ARM_LENGTH){ //high arm length
             desiredInches = 32; //official 2/13
-            double desiredTicks = determineRightTicks(desiredInches);
+            //double desiredTicks = determineRightTicks(desiredInches);
             telescopingMotor.set(ControlMode.Position, desiredTicks-tareEncoder); 
             telescopeDeadband(desiredTicks);
         }
@@ -91,14 +91,14 @@ public class ArmTelescopingSubsystem {
         }
     }
 
-    public double determineRightTicks(double desiredInches){
-        if (desiredInches <= 2){
-            System.out.println("under two ticks per inch");
-            return 2 * Constants.UNDER_TWO_TICKS_PER_INCH; 
-        } else{
-            System.out.println("over two ticks per inch");
-            return 2 * Constants.UNDER_TWO_TICKS_PER_INCH + (desiredInches-2) * Constants.OVER_TWO_TICKS_PER_INCH;
-        }
+    public void determineRightTicks(){
+        // if (desiredInches <= 2){
+        //     System.out.println("under two ticks per inch");
+        //     return 2 * Constants.UNDER_TWO_TICKS_PER_INCH; 
+        // } else{
+        //     System.out.println("over two ticks per inch");
+        //     return 2 * Constants.UNDER_TWO_TICKS_PER_INCH + (desiredInches-2) * Constants.OVER_TWO_TICKS_PER_INCH;
+        // }
     }
 
     public void telescopeDeadband(double desiredTicks){

@@ -162,7 +162,7 @@ public class Robot extends TimedRobot {
     //elevatorSubsystem.setState(ElevatorStates.LOW_ELEVATOR_HEIGHT);
     //elevatorSubsystem.periodic();
 
-    armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH); //moved from auto periodic to init
+    armTelescopingSubsystem.setTState(TelescopingStates.MID_ARM_LENGTH); //moved from auto periodic to init
     armTelescopingSubsystem.periodic();
 
     //  m_autoSelected.periodic();
