@@ -50,7 +50,7 @@ public class ElevatorSubsystem {
 		elevatorMotor.config_kD(Constants.kPIDLoopIdx, elevatorGains.kD, Constants.kTimeoutMs);
     }
 
-    public void periodic(){ //still need to scale down the values or figure out why it is overshooting
+    public void periodic(){
         System.out.println("current elevator motor position:" + elevatorMotor.getSelectedSensorPosition());
         if (elevatorState == ElevatorStates.ZERO){ //emergency stop
             elevatorMotor.set(ControlMode.Position, 0);
@@ -65,17 +65,17 @@ public class ElevatorSubsystem {
             System.out.println("error: " + (desiredTicks - elevatorMotor.getSelectedSensorPosition()));
             elevatorDeadband(desiredTicks);
         } else if (elevatorState == ElevatorStates.SHELF_ELEVATOR_HEIGHT) {
-            desiredInches = 30; //official 2/13
+            desiredInches = 30 - 15; //official 2/13
             double desiredTicks = determineRightTicks();
             elevatorMotor.set(ControlMode.Position, desiredTicks); //oficial 2/13 is 39
             elevatorDeadband(desiredTicks);
         } else if (elevatorState == ElevatorStates.MID_ELEVATOR_HEIGHT){
-            desiredInches = 40; //official 2/13
+            desiredInches = 40 - 15; //official 2/13
             double desiredTicks = determineRightTicks();
             elevatorMotor.set(ControlMode.Position, desiredTicks); //official 2/13
             elevatorDeadband(desiredTicks);
         } else if(elevatorState == ElevatorStates.HIGH_ELEVATOR_HEIGHT){ //high elevator height
-            desiredInches = 48; //official 2/13
+            desiredInches = 48 - 15; //official 2/13
             double desiredTicks = determineRightTicks();
             elevatorMotor.set(ControlMode.Position, desiredTicks); //change value once we know robot dimensions
             elevatorDeadband(desiredTicks);
