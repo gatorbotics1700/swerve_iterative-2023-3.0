@@ -13,5 +13,6 @@ public class OI {
 
     public static Button pitchPD = Button.kLeftBumper;//pitch pd for charge station
     public static Button stop = Button.kRightBumper;//stop drive bumper
+    //public static Button aprilTags = Button.xBoxButton;
 
 }

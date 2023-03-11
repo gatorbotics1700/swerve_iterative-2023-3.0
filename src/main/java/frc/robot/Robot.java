@@ -34,7 +34,7 @@ import frc.robot.subsystems.Vision.AprilTagSubsystem;
 import frc.robot.subsystems.Vision.LimeLightSubsystem;
 import edu.wpi.first.math.geometry.Translation2d;
 
-
+import edu.wpi.first.wpilibj.GenericHID;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -55,14 +55,13 @@ public class Robot extends TimedRobot {
   public static PneumaticIntakeSubsystem m_pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
   public static Mechanisms m_mechanisms = new Mechanisms();
 
-
   private final LimeLightSubsystem m_limeLightSubsystem = new LimeLightSubsystem();
   private final AprilTagSubsystem m_aprilTagSubsystem = new AprilTagSubsystem();
   private final Field2d m_field = new Field2d();
   double t= 0.0;
   ChassisSpeeds m_ChassisSpeeds;
   double mpi = Constants.METERS_PER_INCH;
-
+  //private int povButton;
   // whole field: 651.683 (inches)
   // private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
   private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
@@ -237,6 +236,8 @@ public class Robot extends TimedRobot {
     //m_aprilTagSubsystem.periodic();
     testPath.driveDesiredDistance(new Pose2d(20 * Constants.METERS_PER_INCH, 20 * Constants.METERS_PER_INCH, new Rotation2d(Math.toRadians(0))));
     
+    int povButton = OI.m_controller.getPOV();
+    System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " + povButton);
     //m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.2, Math.toRadians(0), m_drivetrainSubsystem.getPoseRotation()));
     
     
