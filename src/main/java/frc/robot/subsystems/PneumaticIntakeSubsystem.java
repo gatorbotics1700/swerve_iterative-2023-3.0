@@ -28,7 +28,6 @@ public class PneumaticIntakeSubsystem {
 
     public static final double COLOR_THRESHOLD = 0.03;
     private DoubleSolenoid solenoidOne = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 5, 7); 
-    public Compressor compressor = new Compressor(PneumaticsModuleType.REVPH); 
     // Initializes a DigitalInput on DIO 0 (roborio is built in w/ 10 DIOs (digital input-output ports))
     private DigitalInput beambreakSensor = new DigitalInput(Constants.BEAM_BREAK_RECEIVER); 
     /**
@@ -62,6 +61,7 @@ public class PneumaticIntakeSubsystem {
     private final Color kYellowTarget = new Color(0.355, 0.547, 0.100); //fake yellow (what it sees - aka marsh green)
     private final Color kUnknownTarget = new Color(0,0,0); //black
 
+    public static Compressor compressor = new Compressor(PneumaticsModuleType.REVPH);
     public void init(){
         solenoidOne.set(kOff);
         System.out.println("solenoid set to off");

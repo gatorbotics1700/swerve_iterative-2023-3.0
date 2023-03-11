@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.ArmPneumaticPivot;
 import frc.robot.subsystems.ArmPneumaticPivot.PneumaticPivotStates;
 import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
 import frc.robot.OI;
@@ -62,7 +63,7 @@ public class Robot extends TimedRobot {
   private AutonomousBasePD threeAboveChargeStation = new AutonomousBasePD(new Pose2d(56.069, 200.046, new Rotation2d(0)), new Pose2d(278.999, 180.683, new Rotation2d(0)), new Pose2d(56.069, 174.725, new Rotation2d(0)), new Pose2d(207.006, 174.725, new Rotation2d(0)), new Pose2d(278.006, 133.515, new Rotation2d(0)), new Pose2d(200.552, 185.151, new Rotation2d(0)), new Pose2d(57.062, 154.368, new Rotation2d(0)));
   
   public static PneumaticIntakeSubsystem pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
-  private ArmPneumaticPivot armPneumaticPivot = new ArmPneumaticPivot();
+ private ArmPneumaticPivot armPneumaticPivot = new ArmPneumaticPivot();
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   private final Field2d m_field = new Field2d();
   ChassisSpeeds m_ChassisSpeeds;
@@ -123,18 +124,14 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    pneumaticIntakeSubsystem.init();
-
-    // m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected.init();
+    armPneumaticPivot.init();
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-     //m_drivetrainSubsystem.driveTeleop();
-    //  armPneumaticPivot.setState(PneumaticPivotStates.ACTUATING);
-    //  armPneumaticPivot.periodic();
+     armPneumaticPivot.setState(PneumaticPivotStates.ACTUATING);
+     armPneumaticPivot.periodic();
     
   }
 
@@ -171,7 +168,6 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-    //m_autoSelected.init();
     armPneumaticPivot.init();
   }
 

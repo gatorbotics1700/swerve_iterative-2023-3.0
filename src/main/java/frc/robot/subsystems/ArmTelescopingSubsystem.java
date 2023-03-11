@@ -1,6 +1,10 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+
 import com.ctre.phoenix.motorcontrol.can.BaseTalon;
 import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 
@@ -19,6 +23,7 @@ public class ArmTelescopingSubsystem {
     private double startTime;
     private double desiredInches;
     public double tareEncoder;
+    // public Compressor compressor = new Compressor(PneumaticsModuleType.REVPH);
 
     double _kP = 0.35;
     double _kI = 0;
