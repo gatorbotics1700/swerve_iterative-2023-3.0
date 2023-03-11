@@ -18,7 +18,7 @@ public class OI {
 
     public static final  Joystick joystick = new Joystick(0);
     public static final JoystickButton button0 = new JoystickButton(joystick, 0);
-    public static final JoystickButton button1 = new JoystickButton(joystick, 1);
+    public static final JoystickButton  = new JoystickButton(joystick, 1);
     public static final JoystickButton button2 = new JoystickButton(joystick, 2);
     public static final JoystickButton button3 = new JoystickButton(joystick, 3);
     public static final JoystickButton button4 = new JoystickButton(joystick, 4);
