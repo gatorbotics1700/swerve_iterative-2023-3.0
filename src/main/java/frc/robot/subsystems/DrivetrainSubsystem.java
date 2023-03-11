@@ -22,6 +22,7 @@ import edu.wpi.first.math.estimator.*;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Robot;
 
 import java.util.Arrays;
 import java.util.function.DoubleSupplier;
@@ -254,8 +255,8 @@ public class DrivetrainSubsystem {
 //   }
   
 public void driveTeleop(){
-        SmartDashboard.putBoolean("Blue", isBlueAlliance); 
-        if(isBlueAlliance){
+        SmartDashboard.putBoolean("Blue", Robot.isBlueAlliance); 
+        if(Robot.isBlueAlliance){
                 DoubleSupplier m_translationXSupplier = () -> -modifyAxis(OI.m_controller.getLeftY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
                 DoubleSupplier m_translationYSupplier = () -> -modifyAxis(OI.m_controller.getLeftX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
                 DoubleSupplier m_rotationSupplier = () -> -modifyAxis(OI.m_controller.getRightX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;

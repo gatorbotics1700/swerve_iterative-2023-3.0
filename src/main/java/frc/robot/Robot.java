@@ -63,8 +63,9 @@ public class Robot extends TimedRobot {
   double t= 0.0;
   ChassisSpeeds m_ChassisSpeeds;
   double mpi = Constants.METERS_PER_INCH;
-  public boolean isBlueAlliance = true;
-  AutoStates level = AutoStates.HIGHNODE;
+  public static boolean isBlueAlliance = true;
+  public static AutoStates level = AutoStates.HIGHNODE;
+  public static int scoringCol = 0;
 
   // whole field: 651.683 (inches)
   // private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
@@ -219,24 +220,130 @@ public class Robot extends TimedRobot {
 
     if(OI.joystick.getRawButton(0)){
       if(isBlueAlliance){
-        if(level == )
+        if(level == AutoStates.LOWNODE){
+          scoringCol = 9;
+        } else {
+          scoringCol = 0;
+        }
+      } else { //red
+        if(level == AutoStates.LOWNODE){
+          scoringCol = 27;
+        } else {
+          scoringCol = 18;
+        }
       }
     } else if (OI.joystick.getRawButton(1)){
-
+      if(isBlueAlliance){
+        if(level == AutoStates.LOWNODE){
+          scoringCol = 10;
+        } else {
+          scoringCol = 1;
+        }
+      } else { //red
+        if(level == AutoStates.LOWNODE){
+          scoringCol = 28;
+        } else {
+          scoringCol = 19;
+        }
+      }
     } else if (OI.joystick.getRawButton(2)){
-
+      if(isBlueAlliance){
+        if(level == AutoStates.LOWNODE){
+          scoringCol = 11;
+        } else {
+          scoringCol = 2;
+        }
+      } else { //red
+        if(level == AutoStates.LOWNODE){
+          scoringCol = 29;
+        } else {
+          scoringCol = 20;
+        }
+      }
     } else if (OI.joystick.getRawButton(3)){
-
+      if(isBlueAlliance){
+        if(level == AutoStates.LOWNODE){
+          scoringCol = 12;
+        } else {
+          scoringCol = 3;
+        }
+      } else { //red
+        if(level == AutoStates.LOWNODE){
+          scoringCol = 30;
+        } else {
+          scoringCol = 21;
+        }
+      }
     } else if (OI.joystick.getRawButton(4)){
-
+      if(isBlueAlliance){
+        if(level == AutoStates.LOWNODE){
+          scoringCol = 13;
+        } else {
+          scoringCol = 4;
+        }
+      } else { //red
+        if(level == AutoStates.LOWNODE){
+          scoringCol = 31;
+        } else {
+          scoringCol = 22;
+        }
+      }
     } else if (OI.joystick.getRawButton(5)){
-
+      if(isBlueAlliance){
+        if(level == AutoStates.LOWNODE){
+          scoringCol = 14;
+        } else {
+          scoringCol = 5;
+        }
+      } else { //red
+        if(level == AutoStates.LOWNODE){
+          scoringCol = 32;
+        } else {
+          scoringCol = 23;
+        }
+      }
     } else if (OI.joystick.getRawButton(6)){
-
+      if(isBlueAlliance){
+        if(level == AutoStates.LOWNODE){
+          scoringCol = 15;
+        } else {
+          scoringCol = 6;
+        }
+      } else { //red
+        if(level == AutoStates.LOWNODE){
+          scoringCol = 33;
+        } else {
+          scoringCol = 24;
+        }
+      }
     } else if (OI.joystick.getRawButton(7)){
-
+      if(isBlueAlliance){
+        if(level == AutoStates.LOWNODE){
+          scoringCol = 16;
+        } else {
+          scoringCol = 7;
+        }
+      } else { //red
+        if(level == AutoStates.LOWNODE){
+          scoringCol = 34;
+        } else {
+          scoringCol = 25;
+        }
+      }
     } else if (OI.joystick.getRawButton(8)){
-
+      if(isBlueAlliance){
+        if(level == AutoStates.LOWNODE){
+          scoringCol = 17;
+        } else {
+          scoringCol = 8;
+        }
+      } else { //red
+        if(level == AutoStates.LOWNODE){
+          scoringCol = 35;
+        } else {
+          scoringCol = 26;
+        }
+      }
     }
   }
 
