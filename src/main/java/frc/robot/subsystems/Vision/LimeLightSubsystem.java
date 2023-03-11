@@ -82,7 +82,7 @@ public class LimeLightSubsystem {
         return networkTable.getEntry("tv").getDouble(0.0);
     }
     public double getTx(){
-        return tx;
+        return networkTable.getEntry("tx").getDouble(0.0);
     }
 
     public boolean seeSomething(){

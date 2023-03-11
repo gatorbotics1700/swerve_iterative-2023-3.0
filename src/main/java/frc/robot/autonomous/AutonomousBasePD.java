@@ -14,6 +14,7 @@ import frc.robot.subsystems.PneumaticIntakeSubsystem;
 import frc.robot.subsystems.Mechanisms.MechanismStates;
 import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
 import frc.robot.subsystems.Mechanisms;
+import frc.robot.subsystems.Vision.LimeLightSubsystem;
 
 public class AutonomousBasePD extends AutonomousBase{
     public static final double turnKP= 0.0001; //increased slight *** not tested
@@ -25,7 +26,6 @@ public class AutonomousBasePD extends AutonomousBase{
     private static final double DRIVE_DEADBAND = 2*Constants.METERS_PER_INCH; //meters - previously 3 inches
     private static final double TURN_DEADBAND = 6.0; 
 
-    
     private Pose2d startingCoordinate;
     private StateWithCoordinate[] stateSequence;
     private int i;
@@ -37,7 +37,7 @@ public class AutonomousBasePD extends AutonomousBase{
     private static DrivetrainSubsystem drivetrainSubsystem = Robot.m_drivetrainSubsystem;
     private static Mechanisms mechanisms = Robot.m_mechanisms;
     private static PneumaticIntakeSubsystem pneumaticIntakeSubsystem = Robot.m_pneumaticIntakeSubsystem;
-
+    private static LimeLightSubsystem limeLightSubsystem = new LimeLightSubsystem();
 
     //pids
     private PIDController turnController = new PIDController(turnKP, turnKI, turnKD); 
@@ -206,6 +206,55 @@ public class AutonomousBasePD extends AutonomousBase{
 
     public boolean turnAtSetpoint(){
         return Math.abs(turnController.getPositionError()) <= TURN_DEADBAND;
+    }
+
+    public void driveDesiredDistanceVision(Pose2d dPose){ 
+        System.out.println("Limelight tv auto: " + limeLightSubsystem.getTv());
+
+        turnController.enableContinuousInput(0, 360);
+        //System.out.println("xcontroller setpoint: " + xController.getSetpoint());
+        //System.out.println("cur pose: " + DrivetrainSubsystem.m_pose);
+        //System.out.println("desired pose: " + dPose);
+        double speedX = xController.calculate(DrivetrainSubsystem.m_pose.getX(), dPose.getX());
+        double speedY = yController.calculate(DrivetrainSubsystem.m_pose.getY(), dPose.getY());
+        //System.out.println("m_pose deg: " + DrivetrainSubsystem.m_pose.getRotation().getDegrees() % 360);
+        //System.out.println("d_pose deg: " + dPose.getRotation().getDegrees() % 360);
+        double speedRotat = turnController.calculate(DrivetrainSubsystem.m_pose.getRotation().getDegrees(), dPose.getRotation().getDegrees());
+        //System.out.println("DDDing");
+        //System.out.println("speed rotate: " + speedRotat);
+        
+        if(xAtSetpoint() || limeLightSubsystem.getTv() == 0.0){
+            speedX = 0; 
+            //System.out.println("In x deadband.\nX controller error: " + xController.getPositionError() + " in meters.");
+        } else {
+            speedX = Math.signum(speedX)*Math.max(Constants.DRIVE_MOTOR_MIN_VOLTAGE, Math.min(Constants.DRIVE_MOTOR_MAX_VOLTAGE, Math.abs(speedX)));  
+        }
+    
+        if(yAtSetpoint() || limeLightSubsystem.getTv() == 0.0){
+            speedY = 0; 
+            //System.out.println("In y deadband.");
+        } else {
+            speedY = Math.signum(speedY)*Math.max(Constants.DRIVE_MOTOR_MIN_VOLTAGE, Math.min(Constants.DRIVE_MOTOR_MAX_VOLTAGE, Math.abs(speedY)));
+        }
+    
+        if(turnAtSetpoint() || limeLightSubsystem.getTv() == 0.0){
+            speedRotat = 0;
+            //System.out.println("At setpoint");
+        } else {
+            //System.out.println("Position error: " + turnController.getPositionError());
+            speedRotat = Math.signum(speedRotat)*Math.max(Constants.STEER_MOTOR_MIN_VOLTAGE, Math.min(Constants.STEER_MOTOR_MAX_VOLTAGE, Math.abs(speedRotat)));
+          //  System.out.println("Speed rotat after: " + speedRotat);
+        }
+    
+        drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speedX, speedY, speedRotat, drivetrainSubsystem.getPoseRotation()));  
+        double errorX = (dPose.getX() - DrivetrainSubsystem.m_pose.getX());
+        double errorY = (dPose.getY() - DrivetrainSubsystem.m_pose.getY());
+        double errorRotat = turnController.getPositionError();
+        System.out.println("Rotation error: " + errorRotat + " deadband " + turnController.getPositionTolerance());
+        System.out.println("Speed X: " + speedX + " Speed Y: " + speedY + " Speed R: " + speedRotat);
+        //System.out.println("error:" + errorX + ", " + errorY + ", " + errorRotat);
+        //System.out.println("Desired Position: " + dPose.getX() + ", " + dPose.getY());
+
     }
 
 }
