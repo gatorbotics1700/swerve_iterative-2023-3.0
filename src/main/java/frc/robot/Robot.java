@@ -55,6 +55,7 @@ public class Robot extends TimedRobot {
   private static ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
   private final Field2d m_field = new Field2d();
   double t= 0.0;
+  boolean override = false;
   ChassisSpeeds m_ChassisSpeeds;
   double mpi = Constants.METERS_PER_INCH;
 
@@ -184,83 +185,98 @@ public class Robot extends TimedRobot {
     System.out.println("back right module: " + m_drivetrainSubsystem.m_backRightModule.getSteerAngle());
     System.out.println("front left module: " + m_drivetrainSubsystem.m_frontLeftModule.getSteerAngle());
     System.out.println("front right module: " + m_drivetrainSubsystem.m_frontRightModule.getSteerAngle());*/
+
     //m_drivetrainSubsystem.driveTeleop();
+    armTelescopingSubsystem.periodic();
+    // elevatorSubsystem.periodic();
+    // pneumaticIntakeSubsystem.periodic();
+    System.out.println("override is " + override);
 
     //driver
-if (OI.m_controller.getBButton()){ 
-  m_drivetrainSubsystem.stopDrive(); //stop all mech?
-}
+    if (OI.m_controller.getBButton()){ 
+      m_drivetrainSubsystem.stopDrive(); //stop all mech?
+    }
 
-if(OI.m_controller.getXButton()){
- // m_drivetrainSubsystem.pitchBalance(0.0);
-}
+    if(OI.m_controller.getXButton()){
+    // m_drivetrainSubsystem.pitchBalance(0.0);
+    }
 
-//codriver
+    //codriver
 
-/*if (OI.m_controller_two.getPOV() == 0){
-  System.out.println("dpad 0: high node");
-  m_drivetrainSubsystem.scoreHigh();
-}
+    /*if (OI.m_controller_two.getPOV() == 0){
+      System.out.println("dpad 0: high node");
+      m_drivetrainSubsystem.scoreHigh();
+    }
 
-if (OI.m_controller_two.getPOV() == 90){
-  System.out.println("dpad 90: mid node");
-  m_drivetrainSubsystem.scoreMid();
-  
-}
+    if (OI.m_controller_two.getPOV() == 180){
+      System.out.println("dpad 180: low node");
+      m_drivetrainSubsystem.scoreLow();
+    }*/
 
-if (OI.m_controller_two.getPOV() == 270){
-  System.out.println("dpad 270: substation");
-  m_drivetrainSubsystem.substation();
+    if(OI.m_controller_two.getAButton()){ 
+      if (!override){
+        System.out.println("xbox: low node");
+        m_drivetrainSubsystem.scoreLow();
+      }
+      //with autoVision
+      // if (!override){
+      //   level = low;
+      // }
+    }
 
-}
+    if(OI.m_controller_two.getBButton()){
+      if (!override){
+        System.out.println("xbox: mid");
+        //m_drivetrainSubsystem.scoreMid();
+        armTelescopingSubsystem.setTState(TelescopingStates.MID_ARM_LENGTH);
+      }
+      
+    }
 
-if (OI.m_controller_two.getPOV() == 180){
-  System.out.println("dpad 180: low node");
-  m_drivetrainSubsystem.scoreLow();
-}*/
+    if(OI.m_controller_two.getYButton()){
+      if (!override){
+        System.out.println("xbox: high node");
+        m_drivetrainSubsystem.scoreHigh();
+      }
 
-if(OI.m_controller_two.getAButton()){ 
-  System.out.println("xbox: low node");
-  m_drivetrainSubsystem.scoreLow();
-}
+    }
 
-if(OI.m_controller_two.getBButton()){//the other letter methods were not working, so we were about to test this.
-//however, it was clean up so we did not get to test. -zoe and lauren j
-  System.out.println("xbox: mid");
-  //m_drivetrainSubsystem.scoreMid();
-  armTelescopingSubsystem.setTState(TelescopingStates.MID_ARM_LENGTH);
- // armTelescopingSubsystem.periodic();
-}
+    if(OI.m_controller_two.getXButton()){ //override button
+      override = true;
+    }
 
-if(OI.m_controller_two.getXButton()){
-  System.out.println("xbox: substation");
-  m_drivetrainSubsystem.substation();
-}
+    if (OI.m_controller_two.getPOV() == 270){
+      if (!override){
+        System.out.println("dpad 270: left substation");
+        m_drivetrainSubsystem.substation();
+      }
+    }
 
-if(OI.m_controller_two.getYButton()){
-  System.out.println("xbox: high node");
-  m_drivetrainSubsystem.scoreHigh();
+    if (OI.m_controller_two.getPOV() == 90){
+      if (!override){
+        System.out.println("dpad 90: right substation");
+        m_drivetrainSubsystem.substation();
+      }
+    }
 
-}
+    if(OI.m_controller_two.getLeftBumperReleased()){ //needs its own button & not enough
+      if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING || PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF){
+        pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING);
+      } else if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING){
+        pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING); 
+      }
+    }
 
-if(OI.m_controller_two.getRightBumper()){
-}
+    if(OI.m_controller_two.getRightBumper()){
+    }
 
-if(OI.m_controller_two.getLeftBumperReleased()){ //needs its own button & not enough
-  if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING || PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF){
-    pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING);
-  } else if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING){
-    pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING); 
-  }
-}
+    if (OI.m_controller_two.getStartButton()){
+      //m_drivetrainSubsystem.stopAllMech();
+    }
 
-if (OI.m_controller_two.getStartButton()){
-  //m_drivetrainSubsystem.stopAllMech();
-}
+    if (OI.m_controller_two.getBackButton()){
 
-if (OI.m_controller_two.getBackButton()){
-
-}
+    }
 
 
   }
