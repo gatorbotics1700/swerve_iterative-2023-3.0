@@ -31,8 +31,12 @@ public class AutonomousBasePD extends AutonomousBase{
     private int i;
     private int intakeCounter = -1; 
     private int highNodeCounter = -1; 
+    private int midNodeCounter = -1;
+    private int lowNodeCounter = -1;
     private double startTimeIntake;
-    private double startTimeHigh; 
+    private double startTimeHigh;
+    private double startTimeMid;
+    private double startTimeLow; 
     
     private static DrivetrainSubsystem drivetrainSubsystem = Robot.m_drivetrainSubsystem;
     private static Mechanisms mechanisms = Robot.m_mechanisms;
@@ -112,6 +116,28 @@ public class AutonomousBasePD extends AutonomousBase{
                 }
                } 
                 System.out.println("moving on to " + stateSequence[i]);
+            }else if(states == AutoStates.MIDNODE){
+                System.out.println("mid node");
+                if(mechanisms.isDoneMid()==true){
+                    if(midNodeCounter >= -1){
+                        startTimeMid = System.currentTimeMillis();
+                    }
+                    if(System.currentTimeMillis()-startTimeMid>=0.5){
+                        i++;
+                        midNodeCounter = -1;
+                    }
+                }
+            }else if(states == AutoStates.LOWNODE){
+                System.out.println("low node");
+                if(mechanisms.isDoneLow()==true){
+                    if(lowNodeCounter >= -1){
+                        startTimeLow = System.currentTimeMillis();
+                    }
+                    if(System.currentTimeMillis()-startTimeLow>=0.5){
+                        i++;
+                        lowNodeCounter = -1;
+                    }
+                }
             }else if(states == AutoStates.BALANCING){
                 //Robot.m_drivetrainSubsystem.pitchBalance(0.0);
             }else if(states == AutoStates.INTAKING){
