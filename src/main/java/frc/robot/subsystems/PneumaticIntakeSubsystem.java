@@ -17,7 +17,10 @@ import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import frc.robot.Constants;
 
+
 public class PneumaticIntakeSubsystem {
+    private static boolean isPurple;
+
     public static enum PneumaticIntakeStates{
         ACTUATING, 
         RETRACTING, 
@@ -120,24 +123,22 @@ public class PneumaticIntakeSubsystem {
            }
        } 
        
-       if (match.color == kPurpleTarget) {
-           colorString = "Purple";
-       } else if (match.color == kYellowTarget){//means its yellow :DDD
-           colorString = "Yellow";
-       } else{
-           colorString = "Unknown"; 
-       }
-       System.out.println(colorString + " detected");
        
 
-       /**
-        * Open Smart Dashboard or Shuffleboard to see the color detected by the 
-        * sensor.
-        */
-       SmartDashboard.putNumber("Red", detectedColor.red);
-       SmartDashboard.putNumber("Green", detectedColor.green);
-       SmartDashboard.putNumber("Blue", detectedColor.blue);
-       SmartDashboard.putNumber("Confidence", match.confidence);
-       SmartDashboard.putString("Detected Color", colorString);
+       if (match.color == kPurpleTarget) {
+           colorString = "Purple";
+           isPurple = true;
+       } else if (match.color == kYellowTarget){//means its yellow :DDD
+           colorString = "Yellow";
+           isPurple = false;
+       } else{
+           colorString = "Unknown"; 
+           isPurple = false;
+       }
+       System.out.println(colorString + " detected");
+    }
+
+    public boolean getPurple(){
+        return isPurple;
     }
 }

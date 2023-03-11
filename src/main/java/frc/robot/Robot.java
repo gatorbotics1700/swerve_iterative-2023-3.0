@@ -33,6 +33,7 @@ import frc.robot.subsystems.ArmTelescopingSubsystem.TelescopingStates;
 import frc.robot.subsystems.Vision.AprilTagSubsystem;
 import frc.robot.subsystems.Vision.LimeLightSubsystem;
 import edu.wpi.first.math.geometry.Translation2d;
+import frc.robot.PDPath;
 
 
 
@@ -86,7 +87,6 @@ public class Robot extends TimedRobot {
 // red alliance  
 // half the field (325.8415) - blue x value + half the field (325.8415) = red x value
    
-  PneumaticIntakeSubsystem pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
 
  public static ShuffleboardTab tab = DrivetrainSubsystem.tab;
     public static GenericEntry test =
@@ -116,23 +116,24 @@ public class Robot extends TimedRobot {
     allianceChooser.setDefaultOption("blue alliance", true);
     allianceChooser.addOption("blue alliance", false);
     m_chooser.setDefaultOption("testPath", testPath);
-    //m_chooser.setDefaultOption("current", CurrentPath);
-    // m_chooser.addOption("noGo!", noGo);
-    // m_chooser.addOption("HDLeaveB", HDLeaveB);
-    // m_chooser.addOption("HBLeaveB", HBLeaveB); 
-    // m_chooser.addOption("timed", timedPath);
-    // m_chooser.addOption("HDThreeScoreB", HDThreeScoreB);
-    // m_chooser.addOption("HBThreeScoreB", HBThreeScoreB);
-    // m_chooser.addOption("HDplaceTwoEngageB", HDplaceTwoEngageB);
-    // m_chooser.addOption("engageChargeB", engageChargeB);
-    // m_chooser.addOption("HDplaceTwoEngageR", HDplaceTwoEngageR);
-    // m_chooser.addOption("HBLeaveR", HBLeaveR);
-    // m_chooser.addOption("HDLeaveR", HDLeaveR);
-    // m_chooser.addOption("HDThreeScoreR", HDThreeScoreR);
-    // m_chooser.addOption("HBThreeScoreR", HBThreeScoreR);
-    // m_chooser.addOption("engageChargeR", engageChargeR);
-    // //m_chooser.addOption("Motion profiling tester path", motionProfiling);
-    // SmartDashboard.putData("Auto choices", m_chooser);
+   // m_chooser.setDefaultOption("current", PDPath.CurrentPath);
+    m_chooser.addOption("noGoR!", PDPath.noGoR);
+    m_chooser.addOption("noGoB!", PDPath.noGoB);
+    m_chooser.addOption("HDLeaveB", PDPath.HDLeaveB);
+    m_chooser.addOption("HBLeaveB", PDPath.HBLeaveB);
+    m_chooser.addOption("HBLeaveR", PDPath.HBLeaveR);
+    m_chooser.addOption("HDLeaveR", PDPath.HDLeaveR); 
+    m_chooser.addOption("timed", timedPath);
+    m_chooser.addOption("engageChargeR", PDPath.engageChargeR);
+    m_chooser.addOption("engageChargeB", PDPath.engageChargeB);
+    m_chooser.addOption("HDIntakeEngageB", PDPath.HDIntakeEngageB);
+    m_chooser.addOption("HDIntakeEngageR", PDPath.HDIntakeEngageR);
+    m_chooser.addOption("HD3ScoreR", PDPath.HD3ScoreR);
+    m_chooser.addOption("HD3ScoreB", PDPath.HD3ScoreB);
+    m_chooser.addOption("HB3ScoreR", PDPath.HB3ScoreR);
+    m_chooser.addOption("HB3ScoreB", PDPath.HB3ScoreB);
+   // m_chooser.addOption("Motion profiling tester path", motionProfiling);
+    SmartDashboard.putData("Auto choices", m_chooser);
    
   }
 
@@ -150,7 +151,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.METERS_PER_INCH);
     SmartDashboard.putNumber("angle odometry",DrivetrainSubsystem.m_pose.getRotation().getDegrees()%360);
     SmartDashboard.putBoolean("Ready to Score", m_limeLightSubsystem.seeSomething());
-    SmartDashboard.putBoolean("beam broken?", pneumaticIntakeSubsystem.isBeamBroken());
+    SmartDashboard.putBoolean("beam broken?", m_pneumaticIntakeSubsystem.isBeamBroken());
+    SmartDashboard.putBoolean("purple?", m_pneumaticIntakeSubsystem.getPurple());
   }
 
   /**

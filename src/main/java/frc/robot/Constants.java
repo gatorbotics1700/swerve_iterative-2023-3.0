@@ -84,8 +84,8 @@ public final class Constants {
     public static final double ELEVATOR_TICKS_PER_INCH = 12732; //insanely wrong TODO
     
     public static final int TELESCOPING_MOTOR_ID = 29; //31;
-    public static final int BEAM_BREAK_RECEIVER = 0; //port number of beam break receiver
-    public static final int BEAM_BREAK_SENDER = 1;
+    public static final int BEAM_BREAK_RECEIVER = 9; //port number of beam break receiver
+    public static final int BEAM_BREAK_SENDER = 10;
     
     public static final int ELEVATOR_CAN_ID = 9;
     public static final int kTimeoutMs = 1000;
