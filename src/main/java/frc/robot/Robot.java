@@ -186,21 +186,81 @@ public class Robot extends TimedRobot {
     System.out.println("front right module: " + m_drivetrainSubsystem.m_frontRightModule.getSteerAngle());*/
     //m_drivetrainSubsystem.driveTeleop();
 
-    if (OI.m_controller.getBButton()){
-      m_drivetrainSubsystem.stopDrive();
-    }
-    
-    if(OI.m_controller.getAButtonReleased()){
-      pneumaticIntakeSubsystem.setState(PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF);
-    }
+    //driver
+if (OI.m_controller.getBButton()){ 
+  m_drivetrainSubsystem.stopDrive(); //stop all mech?
+}
 
-    if(OI.m_controller.getXButtonReleased()){
-      if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING || PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF){
-        pneumaticIntakeSubsystem.setState(PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING);
-      } else if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING){
-        pneumaticIntakeSubsystem.setState(PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING); 
-      }
-    }
+if(OI.m_controller.getXButton()){
+ // m_drivetrainSubsystem.pitchBalance(0.0);
+}
+
+//codriver
+
+/*if (OI.m_controller_two.getPOV() == 0){
+  System.out.println("dpad 0: high node");
+  m_drivetrainSubsystem.scoreHigh();
+}
+
+if (OI.m_controller_two.getPOV() == 90){
+  System.out.println("dpad 90: mid node");
+  m_drivetrainSubsystem.scoreMid();
+  
+}
+
+if (OI.m_controller_two.getPOV() == 270){
+  System.out.println("dpad 270: substation");
+  m_drivetrainSubsystem.substation();
+
+}
+
+if (OI.m_controller_two.getPOV() == 180){
+  System.out.println("dpad 180: low node");
+  m_drivetrainSubsystem.scoreLow();
+}*/
+
+if(OI.m_controller_two.getAButton()){ 
+  System.out.println("xbox: low node");
+  m_drivetrainSubsystem.scoreLow();
+}
+
+if(OI.m_controller_two.getBButton()){
+  System.out.println("xbox: mid node");
+  //m_drivetrainSubsystem.scoreMid();
+  armTelescopingSubsystem.setTState(TelescopingStates.MID_ARM_LENGTH);
+ // armTelescopingSubsystem.periodic();
+}
+
+if(OI.m_controller_two.getXButton()){
+  System.out.println("xbox: substation");
+  m_drivetrainSubsystem.substation();
+}
+
+if(OI.m_controller_two.getYButton()){
+  System.out.println("xbox: high node");
+  m_drivetrainSubsystem.scoreHigh();
+
+}
+
+if(OI.m_controller_two.getRightBumper()){
+}
+
+if(OI.m_controller_two.getLeftBumperReleased()){ //needs its own button & not enough
+  if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING || PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF){
+    pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING);
+  } else if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING){
+    pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING); 
+  }
+}
+
+if (OI.m_controller_two.getStartButton()){
+  //m_drivetrainSubsystem.stopAllMech();
+}
+
+if (OI.m_controller_two.getBackButton()){
+
+}
+
 
   }
 
@@ -235,8 +295,8 @@ public class Robot extends TimedRobot {
     // elevatorSubsystem.setState(ElevatorStates.ZERO);
     // elevatorSubsystem.periodic();
     
-    //armTelescopingSubsystem.telescopingMotor.set(ControlMode.PercentOutput, -0.1);
-    armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
+    //armTelescopingSubsystem.telescopingMotor.set(ControlMode.PercentOutput, 0.1);
+    armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
     armTelescopingSubsystem.periodic();
    
     // m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.0, Math.toRadians(0), m_drivetrainSubsystem.getGyroscopeRotation()));

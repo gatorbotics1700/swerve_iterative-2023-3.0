@@ -29,6 +29,7 @@ import static frc.robot.Constants.*;
 
 import frc.robot.Constants;
 import frc.robot.OI;
+import frc.robot.subsystems.ArmTelescopingSubsystem.TelescopingStates;
 
 public class DrivetrainSubsystem {
 
@@ -94,6 +95,7 @@ public class DrivetrainSubsystem {
   public static SwerveDrivePoseEstimator m_odometry; 
   public static Pose2d m_pose = new Pose2d();
   public static ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain"); 
+  public ArmTelescopingSubsystem armTelescopingSubsystem = new ArmTelescopingSubsystem();
 
   //ChassisSpeeds takes in y velocity, x velocity, speed of rotation
   private ChassisSpeeds m_chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
@@ -376,4 +378,22 @@ public class DrivetrainSubsystem {
         setSpeed(new ChassisSpeeds(0.0, 0.0, 0.0));
         drive();
    }
+
+   public void scoreLow(){
+        armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
+        System.out.println("score low");
+  }
+
+  public void scoreHigh(){
+        armTelescopingSubsystem.setTState(TelescopingStates.HIGH_ARM_LENGTH);
+  }
+
+  public void scoreMid(){
+        armTelescopingSubsystem.setTState(TelescopingStates.MID_ARM_LENGTH);
+        System.out.println("score mid");
+  }
+
+  public void substation(){
+        armTelescopingSubsystem.setTState(TelescopingStates.SHELF_ARM_LENGTH);
+  }
 }

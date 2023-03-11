@@ -63,6 +63,7 @@ public class ArmTelescopingSubsystem {
         } else if (tState == TelescopingStates.LOW_ARM_LENGTH){
             desiredTicks = 0; //37500 ticks is 3 inches
             //double desiredTicks = determineRightTicks(desiredInches);
+            System.out.println("set state to low arm length");
             System.out.println("desired ticks: " + desiredTicks);
             telescopingMotor.set(ControlMode.Position, desiredTicks);
             System.out.println("error: " + (desiredTicks - telescopingMotor.getSelectedSensorPosition()));
