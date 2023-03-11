@@ -19,6 +19,7 @@ import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
+import edu.wpi.first.cscore.CameraServerJNI.TelemetryKind;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -64,7 +65,7 @@ public class Robot extends TimedRobot {
   // center : 325.8415 (inches)
   // private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
   private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
-  private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0.0, 0.0, new Rotation2d(Math.toRadians(180.0))), new Pose2d(5 * mpi, -40 * mpi, new Rotation2d(Math.toRadians(180))), new Pose2d(40 * mpi, 0, new Rotation2d(0)), new Pose2d(0, 30 * mpi, new Rotation2d(0)), new Pose2d(40 * mpi, 30 * mpi, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(20 * mpi, 20 * mpi, new Rotation2d(0)), 180.0); 
+  //private AutonomousBasePD testPath = new AutonomousBasePD(new Pose2d(0.0, 0.0, new Rotation2d(Math.toRadians(180.0))), new Pose2d(5 * mpi, -40 * mpi, new Rotation2d(Math.toRadians(180))), new Pose2d(40 * mpi, 0, new Rotation2d(0)), new Pose2d(0, 30 * mpi, new Rotation2d(0)), new Pose2d(40 * mpi, 30 * mpi, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(20 * mpi, 20 * mpi, new Rotation2d(0)), 180.0); 
   
  
 // red alliance  
@@ -96,7 +97,7 @@ public class Robot extends TimedRobot {
 
     System.out.println("#I'm Awake");
     
-    m_chooser.setDefaultOption("testPath", testPath);
+    //m_chooser.setDefaultOption("testPath", testPath);
     //m_chooser.setDefaultOption("current", CurrentPath);
     // m_chooser.addOption("noGo!", noGo);
     // m_chooser.addOption("HDLeaveB", HDLeaveB);
@@ -175,7 +176,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
    // System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
-
+    armTelescopingSubsystem.init();
   }
 
   /** This function is called periodically during operator control. */
@@ -216,7 +217,8 @@ public class Robot extends TimedRobot {
     if(OI.m_controller_two.getAButton()){ 
       if (!override){
         System.out.println("xbox: low node");
-        m_drivetrainSubsystem.scoreLow();
+        // m_drivetrainSubsystem.scoreLow();
+          armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
       }
       //with autoVision
       // if (!override){
@@ -236,7 +238,8 @@ public class Robot extends TimedRobot {
     if(OI.m_controller_two.getYButton()){
       if (!override){
         System.out.println("xbox: high node");
-        m_drivetrainSubsystem.scoreHigh();
+        // m_drivetrainSubsystem.scoreHigh();
+        armTelescopingSubsystem.setTState(TelescopingStates.HIGH_ARM_LENGTH);
       }
 
     }
@@ -248,7 +251,8 @@ public class Robot extends TimedRobot {
     if (OI.m_controller_two.getPOV() == 270){
       if (!override){
         System.out.println("dpad 270: left substation");
-        m_drivetrainSubsystem.substation();
+        // m_drivetrainSubsystem.substation();
+        armTelescopingSubsystem.setTState(TelescopingStates.SHELF_ARM_LENGTH);
       }
     }
 
