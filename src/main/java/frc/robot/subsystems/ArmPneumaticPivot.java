@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.kForward;
 import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.kOff;
 import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.kReverse;
+import frc.robot.Robot;
 
 public class ArmPneumaticPivot { //actuate = down, retract = up
 
@@ -14,13 +15,16 @@ public class ArmPneumaticPivot { //actuate = down, retract = up
         RETRACTING,
         OFF;
     }
+    
+    public PneumaticIntakeSubsystem piSystem = Robot.pneumaticIntakeSubsystem;
+
     public PneumaticPivotStates pneumaticPivotState = PneumaticPivotStates.OFF;
 
-    private Compressor compressor = new Compressor(PneumaticsModuleType.REVPH); 
-    private DoubleSolenoid solenoid = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 4, 5); 
+    private DoubleSolenoid solenoid = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 4, 6); 
 
     public void init() {
         solenoid.set(kOff);
+        System.out.println("solenoid set to off");
     }
 
     public void periodic(){
@@ -34,8 +38,8 @@ public class ArmPneumaticPivot { //actuate = down, retract = up
     }
 
     public boolean getPSI(){
-        System.out.println(compressor.getCurrent());
-        return compressor.getPressureSwitchValue();
+        System.out.println(piSystem.compressor.getCurrent());
+        return piSystem.compressor.getPressureSwitchValue();
     }
 
 

@@ -6,6 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.ArmPneumaticPivot.PneumaticPivotStates;
+import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
 import frc.robot.OI;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -58,13 +60,13 @@ public class Robot extends TimedRobot {
   //these paths score 3 balls without touching the charge station, requires 7 Pose2ds!
   private AutonomousBasePD threeUnderChargeStation = new AutonomousBasePD(new Pose2d(56.069, 17.332, new Rotation2d(0)), new Pose2d(278.999, 37.193, new Rotation2d(0)), new Pose2d(56.222, 43.068, new Rotation2d(0)), new Pose2d(197.484,45.934, new Rotation2d(0)), new Pose2d(279.077, 85.622, new Rotation2d(0)), new Pose2d(197.484,40.000, new Rotation2d(0)), new Pose2d(56.154,66.117, new Rotation2d(0)));
   private AutonomousBasePD threeAboveChargeStation = new AutonomousBasePD(new Pose2d(56.069, 200.046, new Rotation2d(0)), new Pose2d(278.999, 180.683, new Rotation2d(0)), new Pose2d(56.069, 174.725, new Rotation2d(0)), new Pose2d(207.006, 174.725, new Rotation2d(0)), new Pose2d(278.006, 133.515, new Rotation2d(0)), new Pose2d(200.552, 185.151, new Rotation2d(0)), new Pose2d(57.062, 154.368, new Rotation2d(0)));
-
   
+  public static PneumaticIntakeSubsystem pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
+  private ArmPneumaticPivot armPneumaticPivot = new ArmPneumaticPivot();
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   private final Field2d m_field = new Field2d();
   ChassisSpeeds m_ChassisSpeeds;
 
-  PneumaticIntakeSubsystem pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -105,7 +107,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX()/Constants.TICKS_PER_INCH);
     SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.TICKS_PER_INCH);
-    SmartDashboard.putBoolean("beam broken?", pneumaticIntakeSubsystem.isbeamBroken());
+    SmartDashboard.putBoolean("beam broken?", pneumaticIntakeSubsystem.isBeamBroken());
     m_field.setRobotPose(DrivetrainSubsystem.m_odometry.getPoseMeters());
   }
 
@@ -123,19 +125,16 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     pneumaticIntakeSubsystem.init();
 
-    m_autoSelected = m_chooser.getSelected();
-    m_autoSelected.init();
+    // m_autoSelected = m_chooser.getSelected();
+    // m_autoSelected.init();
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
      //m_drivetrainSubsystem.driveTeleop();
-     pneumaticIntakeSubsystem.periodic();
-     //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
-
-     m_autoSelected.periodic();
-     m_drivetrainSubsystem.drive();
+    //  armPneumaticPivot.setState(PneumaticPivotStates.ACTUATING);
+    //  armPneumaticPivot.periodic();
     
   }
 
@@ -173,20 +172,14 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     //m_autoSelected.init();
-
+    armPneumaticPivot.init();
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-    // m_drivetrainSubsystem.setSpeed(
-    //         ChassisSpeeds.fromFieldRelativeSpeeds(1, 0, 
-    //         0, 
-    //         m_drivetrainSubsystem.getGyroscopeRotation())
-    //     ); 
-    //     m_drivetrainSubsystem.drive();
-
-    // System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
+    armPneumaticPivot.setState(PneumaticPivotStates.RETRACTING);
+    armPneumaticPivot.periodic();
   }
 
   /** This function is called once when the robot is first started up. */

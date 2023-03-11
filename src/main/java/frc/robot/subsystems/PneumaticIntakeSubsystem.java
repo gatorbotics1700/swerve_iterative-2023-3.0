@@ -3,9 +3,6 @@ package frc.robot.subsystems;
 import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.kForward;
 import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.kOff;
 import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.kReverse;
-
-import java.util.concurrent.BrokenBarrierException;
-
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorMatch;
@@ -30,10 +27,8 @@ public class PneumaticIntakeSubsystem {
     public PneumaticIntakeStates pneumaticIntakeState = PneumaticIntakeStates.OFF;
 
     public static final double COLOR_THRESHOLD = 0.03;
-    //confirm we are using double solenoid
-    private DoubleSolenoid solenoidOne = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 6, 7); 
-    //what compressor are we using?
-    private Compressor compressor = new Compressor(PneumaticsModuleType.REVPH); 
+    private DoubleSolenoid solenoidOne = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 5, 7); 
+    public Compressor compressor = new Compressor(PneumaticsModuleType.REVPH); 
     // Initializes a DigitalInput on DIO 0 (roborio is built in w/ 10 DIOs (digital input-output ports))
     private DigitalInput beambreakSensor = new DigitalInput(Constants.BEAM_BREAK_RECEIVER); 
     /**
@@ -99,8 +94,6 @@ public class PneumaticIntakeSubsystem {
            // System.out.println("diff w/ purple red: " + (detectedColor.red-kPurpleTarget.red));
            // System.out.println("diff w/ purple green: " + (detectedColor.green-kPurpleTarget.green));
            // System.out.println("diff w/ purple blue: " + (detectedColor.blue-kPurpleTarget.blue));
-
-            System.out.println("here!!!!");
             if((yellowNotRedThreshold && yellowNotGreenThreshold) || (yellowNotRedThreshold && yellowNotBlueThreshold) || (yellowNotGreenThreshold && yellowNotBlueThreshold)){
                // System.out.println("diff w/ yellow red: " + (detectedColor.red-kYellowTarget.red));
                // System.out.println("diff w/ yellow green: " + (detectedColor.green-kYellowTarget.green));
@@ -154,7 +147,7 @@ public class PneumaticIntakeSubsystem {
         pneumaticIntakeState = newPneumaticIntakeState;
     }
 
-    public boolean beamBreak(){
+    public boolean isBeamBroken(){
         return beambreakSensor.get(); 
     }
 }

@@ -62,10 +62,15 @@ public final class Constants {
     public static final double STEER_MOTOR_MIN_VOLTAGE = 0.02; 
     public static final double STEER_MOTOR_MAX_VOLTAGE = 0.5;
     public static final double GEAR_RATIO = 6.75;
+    public static final int TELESCOPING_MOTOR_ID = 31;
     public static final double WHEEL_DIAMETER= 4; //inches
     public static final double TICKS_PER_REV = 2048;
     public static final double TICKS_PER_INCH = TICKS_PER_REV*GEAR_RATIO/WHEEL_DIAMETER/Math.PI; //talonfx drive encoder
 
     public static final int INTAKE_SENSOR = 0;
+    public static final int BEAM_BREAK_RECEIVER = 8; //ports
+    public static final int BEAM_BREAK_SENDER = 9; //ports
+    public static final int kPIDLoopIdx = 0;
+    public static final int kTimeoutMs = 1000;
 
 }
