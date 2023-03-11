@@ -91,4 +91,18 @@ public class ElevatorSubsystem {
         return false; 
     }
 
+    public boolean isAtMid(){
+        if(Math.abs(elevatorMotor.getSelectedSensorPosition()-MIDHEIGHT)<3*Constants.SWERVE_TICKS_PER_INCH){
+            return true; 
+        }
+        return false; 
+    }
+
+    public boolean isAtLow(){
+        if(Math.abs(elevatorMotor.getSelectedSensorPosition()-LOWHEIGHT)<3*Constants.SWERVE_TICKS_PER_INCH){
+            return true; 
+        }
+        return false; 
+    }
+
 }

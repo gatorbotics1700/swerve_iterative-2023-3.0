@@ -67,4 +67,18 @@ public class Mechanisms {
        return false; 
     }
 
+    public boolean isDoneMid(){
+        if(elevatorSubsystem.isAtMid() && armTelescopingSubsystem.isAtMid()){
+             return true;
+        }
+        return false; 
+     }
+
+     public boolean isDoneLow(){
+        if(elevatorSubsystem.isAtLow() && armTelescopingSubsystem.isAtLow()){
+             return true;
+        }
+        return false; 
+     }
+
 }

@@ -149,4 +149,18 @@ public class ArmTelescopingSubsystem {
         return false; 
     }
 
+    public boolean isAtMid(){
+        if(Math.abs(desiredInches-telescopingMotor.getSelectedSensorPosition()-32)<3*Constants.UNDER_TWO_TICKS_PER_INCH){ // fix 32 //TODO
+            return true; 
+        }
+        return false; 
+    }
+
+    public boolean isAtLow(){
+        if(Math.abs(desiredInches-telescopingMotor.getSelectedSensorPosition()-32)<3*Constants.UNDER_TWO_TICKS_PER_INCH){ // TODO // fix 32
+            return true; 
+        }
+        return false; 
+    }
+
 }
