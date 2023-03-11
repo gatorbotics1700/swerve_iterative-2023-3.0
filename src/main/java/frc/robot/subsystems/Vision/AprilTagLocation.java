@@ -19,6 +19,7 @@ public class AprilTagLocation{
         new Pose3d(new Translation3d(1.027, 1.072, 0.463), new Rotation3d(0.0, 0.0, 0.0))}; 
 
     public static final Pose2d scoringPoses[] = {
+        //mid+high scoring
         new Pose2d(new Translation2d(15.107-Constants.BUMPER_WIDTH-Constants.DRIVETRAIN_WIDTH, 0.508), new Rotation2d(Math.toRadians(0.0))),
         new Pose2d(new Translation2d(15.107-Constants.BUMPER_WIDTH-Constants.DRIVETRAIN_WIDTH, 1.072), new Rotation2d(Math.toRadians(0.0))),
         new Pose2d(new Translation2d(15.107-Constants.BUMPER_WIDTH-Constants.DRIVETRAIN_WIDTH, 1.626), new Rotation2d(Math.toRadians(0.0))),
@@ -28,16 +29,8 @@ public class AprilTagLocation{
         new Pose2d(new Translation2d(15.107-Constants.BUMPER_WIDTH-Constants.DRIVETRAIN_WIDTH, 3.861), new Rotation2d(Math.toRadians(0.0))),
         new Pose2d(new Translation2d(15.107-Constants.BUMPER_WIDTH-Constants.DRIVETRAIN_WIDTH, 4.424), new Rotation2d(Math.toRadians(0.0))),
         new Pose2d(new Translation2d(15.107-Constants.BUMPER_WIDTH-Constants.DRIVETRAIN_WIDTH, 4.978), new Rotation2d(Math.toRadians(0.0))),
-        new Pose2d(new Translation2d(1.378+Constants.BUMPER_WIDTH+ Constants.DRIVETRAIN_WIDTH, 4.978), new Rotation2d(Math.toRadians(180.0))),
-        new Pose2d(new Translation2d(1.378+ Constants.BUMPER_WIDTH + Constants.DRIVETRAIN_WIDTH, 4.424), new Rotation2d(Math.toRadians(180.0))),
-        new Pose2d(new Translation2d(1.378+Constants.BUMPER_WIDTH +Constants.DRIVETRAIN_WIDTH, 3.861), new Rotation2d(Math.toRadians(180.0))),
-        new Pose2d(new Translation2d(1.378+Constants.BUMPER_WIDTH+Constants.DRIVETRAIN_WIDTH, 3.302), new Rotation2d(Math.toRadians(180.0))),
-        new Pose2d(new Translation2d(1.378+Constants.BUMPER_WIDTH + Constants.DRIVETRAIN_WIDTH, 2.748), new Rotation2d(Math.toRadians(180.0))),
-        new Pose2d(new Translation2d(1.378+ Constants.BUMPER_WIDTH+Constants.DRIVETRAIN_WIDTH, 2.184), new Rotation2d(Math.toRadians(180.0))),
-        new Pose2d(new Translation2d(1.378+Constants.BUMPER_WIDTH+ Constants.DRIVETRAIN_WIDTH, 1.626), new Rotation2d(Math.toRadians(180.0))),
-        new Pose2d(new Translation2d(1.378+Constants.BUMPER_WIDTH +Constants.DRIVETRAIN_WIDTH, 1.072), new Rotation2d(Math.toRadians(180.0))),
-        new Pose2d(new Translation2d(1.378+Constants.BUMPER_WIDTH +Constants.DRIVETRAIN_WIDTH, 0.508), new Rotation2d(Math.toRadians(180.0))),
-        //low row scoring 
+        
+        //low row scoring
         new Pose2d(new Translation2d(15.107-0.3048-Constants.BUMPER_WIDTH-Constants.DRIVETRAIN_WIDTH, 0.508), new Rotation2d(Math.toRadians(0.0))),
         new Pose2d(new Translation2d(15.107-0.3048-Constants.BUMPER_WIDTH-Constants.DRIVETRAIN_WIDTH, 1.072), new Rotation2d(Math.toRadians(0.0))),
         new Pose2d(new Translation2d(15.107-0.3048-Constants.BUMPER_WIDTH-Constants.DRIVETRAIN_WIDTH, 1.626), new Rotation2d(Math.toRadians(0.0))),
@@ -47,6 +40,19 @@ public class AprilTagLocation{
         new Pose2d(new Translation2d(15.107-0.3048-Constants.BUMPER_WIDTH-Constants.DRIVETRAIN_WIDTH, 3.861), new Rotation2d(Math.toRadians(0.0))),
         new Pose2d(new Translation2d(15.107-0.3048-Constants.BUMPER_WIDTH-Constants.DRIVETRAIN_WIDTH, 4.424), new Rotation2d(Math.toRadians(0.0))),
         new Pose2d(new Translation2d(15.107-0.3048-Constants.BUMPER_WIDTH-Constants.DRIVETRAIN_WIDTH, 4.978), new Rotation2d(Math.toRadians(0.0))),
+        
+        //mid+high scoring
+        new Pose2d(new Translation2d(1.378+Constants.BUMPER_WIDTH+ Constants.DRIVETRAIN_WIDTH, 4.978), new Rotation2d(Math.toRadians(180.0))),
+        new Pose2d(new Translation2d(1.378+ Constants.BUMPER_WIDTH + Constants.DRIVETRAIN_WIDTH, 4.424), new Rotation2d(Math.toRadians(180.0))),
+        new Pose2d(new Translation2d(1.378+Constants.BUMPER_WIDTH +Constants.DRIVETRAIN_WIDTH, 3.861), new Rotation2d(Math.toRadians(180.0))),
+        new Pose2d(new Translation2d(1.378+Constants.BUMPER_WIDTH+Constants.DRIVETRAIN_WIDTH, 3.302), new Rotation2d(Math.toRadians(180.0))),
+        new Pose2d(new Translation2d(1.378+Constants.BUMPER_WIDTH + Constants.DRIVETRAIN_WIDTH, 2.748), new Rotation2d(Math.toRadians(180.0))),
+        new Pose2d(new Translation2d(1.378+ Constants.BUMPER_WIDTH+Constants.DRIVETRAIN_WIDTH, 2.184), new Rotation2d(Math.toRadians(180.0))),
+        new Pose2d(new Translation2d(1.378+Constants.BUMPER_WIDTH+ Constants.DRIVETRAIN_WIDTH, 1.626), new Rotation2d(Math.toRadians(180.0))),
+        new Pose2d(new Translation2d(1.378+Constants.BUMPER_WIDTH +Constants.DRIVETRAIN_WIDTH, 1.072), new Rotation2d(Math.toRadians(180.0))),
+        new Pose2d(new Translation2d(1.378+Constants.BUMPER_WIDTH +Constants.DRIVETRAIN_WIDTH, 0.508), new Rotation2d(Math.toRadians(180.0))),
+        
+        //low row scoring 
         new Pose2d(new Translation2d(1.378-0.3048+Constants.BUMPER_WIDTH+ Constants.DRIVETRAIN_WIDTH, 4.978), new Rotation2d(Math.toRadians(180.0))),
         new Pose2d(new Translation2d(1.378-0.3048+ Constants.BUMPER_WIDTH + Constants.DRIVETRAIN_WIDTH, 4.424), new Rotation2d(Math.toRadians(180.0))),
         new Pose2d(new Translation2d(1.378-0.3048+Constants.BUMPER_WIDTH +Constants.DRIVETRAIN_WIDTH, 3.861), new Rotation2d(Math.toRadians(180.0))),
@@ -56,7 +62,5 @@ public class AprilTagLocation{
         new Pose2d(new Translation2d(1.378-0.3048+Constants.BUMPER_WIDTH+ Constants.DRIVETRAIN_WIDTH, 1.626), new Rotation2d(Math.toRadians(180.0))),
         new Pose2d(new Translation2d(1.378-0.3048+Constants.BUMPER_WIDTH +Constants.DRIVETRAIN_WIDTH, 1.072), new Rotation2d(Math.toRadians(180.0))),
         new Pose2d(new Translation2d(1.378-0.3048+Constants.BUMPER_WIDTH +Constants.DRIVETRAIN_WIDTH, 0.508), new Rotation2d(Math.toRadians(180.0)))
-
-
     };
 }

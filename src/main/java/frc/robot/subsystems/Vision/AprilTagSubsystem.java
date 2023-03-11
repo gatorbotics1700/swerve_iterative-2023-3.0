@@ -1,5 +1,7 @@
 package frc.robot.subsystems.Vision;
 
+import javax.swing.plaf.nimbus.State;
+
 import edu.wpi.first.apriltag.AprilTagDetection;
 import edu.wpi.first.apriltag.AprilTagDetector;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -14,6 +16,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.autonomous.AutonomousBasePD;
+import frc.robot.autonomous.StateWithCoordinate;
+import frc.robot.autonomous.StateWithCoordinate.AutoStates;
 import frc.robot.subsystems.*;
 
 public class AprilTagSubsystem {
@@ -48,6 +52,12 @@ public class AprilTagSubsystem {
                 System.out.println("APRIL TAG DETECTED!!!!!!");
                 setState(AprilTagSequence.CORRECTPOSITION);
                 autonomousBasePD.resetControllers();
+                AutonomousBasePD  visionPID = new AutonomousBasePD(DrivetrainSubsystem.m_pose, new StateWithCoordinate[]{                    
+                    new StateWithCoordinate(AutoStates.FIRST),
+                    new StateWithCoordinate(AutoStates.DRIVE, AprilTagLocation.scoringPoses[0]),
+                    new StateWithCoordinate(Robot.level)
+                });
+
                 System.out.println("Reset odometry to this m_pose: " + DrivetrainSubsystem.m_pose);
                 }
         } else if(states == AprilTagSequence.CORRECTPOSITION){
@@ -56,10 +66,11 @@ public class AprilTagSubsystem {
             if(limeLightSubsystem.getTv() != 0.0){
                 double[] tempArray = limeLightSubsystem.networkTable.getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
                 drivetrainSubsystem.resetOdometry(new Pose2d(tempArray[0], tempArray[1], new Rotation2d (Math.toRadians(tempArray[5]))));
-                autonomousBasePD.driveDesiredDistanceVision(AprilTagLocation.scoringPoses[5]);
+                autonomousBasePD.periodic();
 
                 if(autonomousBasePD.xAtSetpoint() && autonomousBasePD.yAtSetpoint() && autonomousBasePD.turnAtSetpoint()){
                     setState(AprilTagSequence.OFF);
+                    Robot.m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.0, 0.0, 0.0, Robot.m_drivetrainSubsystem.getPoseRotation()));
                     System.out.println("finished correcting position!!!!!");
                 }     
             }else{
@@ -70,7 +81,6 @@ public class AprilTagSubsystem {
         } else if(states == AprilTagSequence.OFF){
             System.out.println("in off");
 
-            Robot.m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.0, 0.0, 0.0, Robot.m_drivetrainSubsystem.getPoseRotation()));
         }       
     }
 }
