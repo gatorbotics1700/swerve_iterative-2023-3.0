@@ -50,6 +50,7 @@ public class Robot extends TimedRobot {
 
   private AutonomousBase m_autoSelected;
   private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<AutonomousBase>();
+  private final SendableChooser<Boolean> allianceChooser = new SendableChooser<Boolean>();
 
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   public static PneumaticIntakeSubsystem m_pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
@@ -62,7 +63,8 @@ public class Robot extends TimedRobot {
   double t= 0.0;
   ChassisSpeeds m_ChassisSpeeds;
   double mpi = Constants.METERS_PER_INCH;
-  public static AutoStates level;
+  public boolean isBlueAlliance = true;
+  AutoStates level = AutoStates.HIGHNODE;
 
   // whole field: 651.683 (inches)
   // private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
@@ -111,6 +113,8 @@ public class Robot extends TimedRobot {
      
     System.out.println("#I'm Awake");
     
+    allianceChooser.setDefaultOption("blue alliance", true);
+    allianceChooser.addOption("blue alliance", false);
     m_chooser.setDefaultOption("testPath", testPath);
     //m_chooser.setDefaultOption("current", CurrentPath);
     // m_chooser.addOption("noGo!", noGo);
@@ -146,8 +150,6 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.METERS_PER_INCH);
     SmartDashboard.putNumber("angle odometry",DrivetrainSubsystem.m_pose.getRotation().getDegrees()%360);
     SmartDashboard.putBoolean("Ready to Score", m_limeLightSubsystem.seeSomething());
-
-    level = AutoStates.HIGHNODE;
   }
 
   /**
@@ -215,6 +217,27 @@ public class Robot extends TimedRobot {
       }
     }
 
+    if(OI.joystick.getRawButton(0)){
+      if(isBlueAlliance){
+        if(level == )
+      }
+    } else if (OI.joystick.getRawButton(1)){
+
+    } else if (OI.joystick.getRawButton(2)){
+
+    } else if (OI.joystick.getRawButton(3)){
+
+    } else if (OI.joystick.getRawButton(4)){
+
+    } else if (OI.joystick.getRawButton(5)){
+
+    } else if (OI.joystick.getRawButton(6)){
+
+    } else if (OI.joystick.getRawButton(7)){
+
+    } else if (OI.joystick.getRawButton(8)){
+
+    }
   }
 
   /** This function is called once when the robot is disabled. */
