@@ -318,7 +318,7 @@ public class Robot extends TimedRobot {
     }
 
     if(OI.m_controller_two.getXButton()){ //override button
-      override = true;
+      override = !override;
     }
 
     if (OI.m_controller_two.getPOV() == 270){
