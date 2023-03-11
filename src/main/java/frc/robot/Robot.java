@@ -224,8 +224,9 @@ if(OI.m_controller_two.getAButton()){
   m_drivetrainSubsystem.scoreLow();
 }
 
-if(OI.m_controller_two.getBButton()){
-  System.out.println("xbox: mid node");
+if(OI.m_controller_two.getBButton()){//the other letter methods were not working, so we were about to test this.
+//however, it was clean up so we did not get to test. -zoe and lauren j
+  System.out.println("xbox: mid");
   //m_drivetrainSubsystem.scoreMid();
   armTelescopingSubsystem.setTState(TelescopingStates.MID_ARM_LENGTH);
  // armTelescopingSubsystem.periodic();
