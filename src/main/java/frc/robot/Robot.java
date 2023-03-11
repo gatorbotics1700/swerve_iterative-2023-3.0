@@ -62,6 +62,7 @@ public class Robot extends TimedRobot {
   double t= 0.0;
   ChassisSpeeds m_ChassisSpeeds;
   double mpi = Constants.METERS_PER_INCH;
+  public static AutoStates level;
 
   // whole field: 651.683 (inches)
   // private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
@@ -145,6 +146,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.METERS_PER_INCH);
     SmartDashboard.putNumber("angle odometry",DrivetrainSubsystem.m_pose.getRotation().getDegrees()%360);
     SmartDashboard.putBoolean("Ready to Score", m_limeLightSubsystem.seeSomething());
+
+    level = AutoStates.HIGHNODE;
   }
 
   /**
