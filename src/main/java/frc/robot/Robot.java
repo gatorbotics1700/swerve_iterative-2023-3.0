@@ -50,6 +50,8 @@ public class Robot extends TimedRobot {
 
   private AutonomousBase m_autoSelected;
   private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<AutonomousBase>();
+  private final SendableChooser<Boolean> allianceChooser = new SendableChooser<Boolean>();
+
 
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   public static PneumaticIntakeSubsystem m_pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
@@ -99,6 +101,8 @@ public class Robot extends TimedRobot {
     public static GenericEntry kD =
         tab.add("Auto kD", 0.0)
           .getEntry();
+    
+  
   
   
   /**
@@ -106,10 +110,11 @@ public class Robot extends TimedRobot {
   * initialization code.
   */
   @Override
-  public void robotInit() { //creates options for different autopaths, names are placeholders
-     
+  public void robotInit() { //creates options for different autopaths, names are placeholders    
     System.out.println("#I'm Awake");
     
+    allianceChooser.setDefaultOption("blue alliance", true);
+    allianceChooser.addOption("blue alliance", false);
     m_chooser.setDefaultOption("testPath", testPath);
     //m_chooser.setDefaultOption("current", CurrentPath);
     // m_chooser.addOption("noGo!", noGo);
@@ -145,7 +150,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.METERS_PER_INCH);
     SmartDashboard.putNumber("angle odometry",DrivetrainSubsystem.m_pose.getRotation().getDegrees()%360);
     SmartDashboard.putBoolean("Ready to Score", m_limeLightSubsystem.seeSomething());
-    SmartDashboard.putBoolean("Beam break broken", pneumaticIntakeSubsystem.isBroken());
+    SmartDashboard.putBoolean("beam broken?", pneumaticIntakeSubsystem.isBeamBroken());
   }
 
   /**
@@ -165,6 +170,7 @@ public class Robot extends TimedRobot {
     // System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
     System.out.println("current pose: " + DrivetrainSubsystem.m_pose.getX() + " , " + DrivetrainSubsystem.m_pose.getY());
     m_autoSelected = m_chooser.getSelected();
+    m_drivetrainSubsystem.setIsBlueAlliance(allianceChooser.getSelected());
     m_autoSelected.init();
   }
 
