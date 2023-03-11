@@ -138,7 +138,7 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-
+    armPneumaticPivot.init();
   }
 
   /** This function is called periodically during operator control. */
@@ -148,11 +148,19 @@ public class Robot extends TimedRobot {
     System.out.println("back right module: " + m_drivetrainSubsystem.m_backRightModule.getSteerAngle());
     System.out.println("front left module: " + m_drivetrainSubsystem.m_frontLeftModule.getSteerAngle());
     System.out.println("front right module: " + m_drivetrainSubsystem.m_frontRightModule.getSteerAngle());*/
-    m_drivetrainSubsystem.driveTeleop();
-
+    // m_drivetrainSubsystem.driveTeleop();
+    armPneumaticPivot.periodic();
 
     if (OI.m_controller.getBButton()){
       m_drivetrainSubsystem.stopDrive();
+    }
+
+    if(OI.m_controller_two.getLeftBumperReleased()){ //needs its own button & not enough
+      if(pneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING){
+        pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING);
+      } else if(pneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING || pneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF){
+        pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING); 
+      }
     }
 
   }
