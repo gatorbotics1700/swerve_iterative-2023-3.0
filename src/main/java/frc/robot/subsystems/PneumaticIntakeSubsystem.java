@@ -20,6 +20,7 @@ import frc.robot.Constants;
 
 public class PneumaticIntakeSubsystem {
     private static boolean isPurple;
+    private static boolean isYellow;
 
     public static enum PneumaticIntakeStates{
         ACTUATING, 
@@ -128,17 +129,24 @@ public class PneumaticIntakeSubsystem {
        if (match.color == kPurpleTarget) {
            colorString = "Purple";
            isPurple = true;
+           isYellow = false;
        } else if (match.color == kYellowTarget){//means its yellow :DDD
            colorString = "Yellow";
+           isYellow = true;
            isPurple = false;
        } else{
            colorString = "Unknown"; 
            isPurple = false;
+           isYellow = false;
        }
        System.out.println(colorString + " detected");
     }
 
     public boolean getPurple(){
         return isPurple;
+    }
+
+    public boolean getYellow(){
+        return isYellow;
     }
 }
