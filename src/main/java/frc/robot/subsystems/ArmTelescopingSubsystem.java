@@ -52,7 +52,8 @@ public class ArmTelescopingSubsystem {
 
     }
 
-    public void periodic(){//sam requests that we can operate arm length by stick on xbox
+    public void periodic(){
+        //TODO adjust arm lengths based on testing and make sure they work with elevator heights (check that the lengths work given position of auto/vision positioned robot and all possible positions of cine in intake)
         //telescopingMotor.set(ControlMode.PercentOutput, 0.2);
         System.out.println("telescoping arm state: " + tState);
         System.out.println("current telescoping arm motor position: " + telescopingMotor.getSelectedSensorPosition());

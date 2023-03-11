@@ -50,7 +50,10 @@ public class ElevatorSubsystem {
 		elevatorMotor.config_kD(Constants.kPIDLoopIdx, elevatorGains.kD, Constants.kTimeoutMs);
     }
 
-    public void periodic(){
+    public void periodic(){//updated with input from drivers!
+        //input from drivers: they want it to be about an inch above the poles when holding cone from tip
+        //TODO check how low the bottom of the cone is when the robot is holding it from about the middle (a little above?)
+        //then measure and adjust heights below and telescoping arm length (talk to auto/vision group how close does robot get to april tags?) depending on testing
         System.out.println("current elevator motor position:" + elevatorMotor.getSelectedSensorPosition());
         if (elevatorState == ElevatorStates.ZERO){ //emergency stop
             elevatorMotor.set(ControlMode.Position, 0);
