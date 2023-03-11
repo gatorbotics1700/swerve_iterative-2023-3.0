@@ -81,7 +81,7 @@ public class ElevatorSubsystem {
             elevatorMotor.set(ControlMode.Position, desiredTicks); //official 2/13
             elevatorDeadband(desiredTicks);
         } else if(elevatorState == ElevatorStates.HIGH_ELEVATOR_HEIGHT){ //high elevator height
-            desiredInches = 48 - 15; //official 2/13
+            desiredInches = 10; //48 - 15; //official 2/13
             double desiredTicks = determineRightTicks();
             elevatorMotor.set(ControlMode.Position, desiredTicks); //change value once we know robot dimensions
             elevatorDeadband(desiredTicks);

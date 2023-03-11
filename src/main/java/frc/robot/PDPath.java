@@ -80,7 +80,7 @@ public class PDPath {
         new Pose2d( 595.641 * mpi, 20.19 * mpi, new Rotation2d(Math.toRadians(180.0))), //ROTATION MUST BE CHANGED BACK
         new StateWithCoordinate[]{
             new StateWithCoordinate(AutoStates.FIRST),
-            new StateWithCoordinate(AutoStates.FIRSTHIGHNODE),
+            new StateWithCoordinate(AutoStates.HIGHNODE),
             new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(431.768 * mpi, 20.19 * mpi, new Rotation2d(Math.toRadians(0.0)))),
             new StateWithCoordinate(AutoStates.STOP)
         }

@@ -36,10 +36,10 @@ public final class Constants {
 
     //green
     
-    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(194.41); //194.41
-    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(305.15625);
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(23.73+90);//fix this one to like -70 or something
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(122.87);
+    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(306.123046875); //194.41
+    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(287.22656250000006); //305.15625
+    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(123.48632812500001);//23.73+90
+    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(14.238281250000002);//122.87
     
     //public static final double offset = Robot.test.getDouble(DRIVETRAIN_PIGEON_ID); 
     

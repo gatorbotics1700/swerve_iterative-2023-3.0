@@ -5,12 +5,14 @@ import javax.swing.SwingWorker.StateValue;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.*;
 import frc.robot.Robot;
+import frc.robot.subsystems.ArmPneumaticPivot;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.Constants;
 import frc.robot.autonomous.StateWithCoordinate;
 import frc.robot.autonomous.StateWithCoordinate.AutoStates;
 import frc.robot.subsystems.PneumaticIntakeSubsystem;
+import frc.robot.subsystems.ArmPneumaticPivot.PneumaticPivotStates;
 import frc.robot.subsystems.Mechanisms.MechanismStates;
 import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
 import frc.robot.subsystems.Mechanisms;
@@ -42,6 +44,7 @@ public class AutonomousBasePD extends AutonomousBase{
     private double startTimeLeft;
     private double startTimeRight;
     
+    private static ArmPneumaticPivot armPneumaticPivot = new ArmPneumaticPivot();
     private static DrivetrainSubsystem drivetrainSubsystem = Robot.m_drivetrainSubsystem;
     private static Mechanisms mechanisms = Robot.m_mechanisms;
     private static PneumaticIntakeSubsystem pneumaticIntakeSubsystem = Robot.m_pneumaticIntakeSubsystem;
@@ -108,7 +111,7 @@ public class AutonomousBasePD extends AutonomousBase{
                     System.out.println("moving on to " + stateSequence[i]);
                 }
             }else if(states == AutoStates.HIGHNODE){ 
-                //mechanisms.setState(MechanismStates.HIGH_NODE);
+                mechanisms.setState(MechanismStates.HIGH_NODE);
                 System.out.println("high node");
                if(mechanisms.isDoneHigh()==true){
                    if(highNodeCounter >= -1){
@@ -159,7 +162,7 @@ public class AutonomousBasePD extends AutonomousBase{
                 System.out.println("right pickup");
                 if(mechanisms.isDoneShelf() == true){
                     if(rightNodeCounter >= -1){
-                        startTimeRight = System.curentTimeMillis();
+                        startTimeRight = System.currentTimeMillis();
                     }
                     if(System.currentTimeMillis() - startTimeRight >= 0.5){
                         i++;
@@ -167,7 +170,8 @@ public class AutonomousBasePD extends AutonomousBase{
                     }
                 }
             }else if(states == AutoStates.BALANCING){
-                //Robot.m_drivetrainSubsystem.pitchBalance(0.0);
+                armPneumaticPivot.setState(PneumaticPivotStates.ACTUATING);
+                Robot.m_drivetrainSubsystem.pitchBalance(0.0);
             }else if(states == AutoStates.INTAKING){
                 if(intakeCounter >= -1){
                     startTimeIntake = System.currentTimeMillis(); 
