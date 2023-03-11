@@ -50,6 +50,7 @@ public class Robot extends TimedRobot {
 
   private AutonomousBase m_autoSelected;
   private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<AutonomousBase>();
+  private final SendableChooser<Boolean> allianceChooser = new SendableChooser<Boolean>();
 
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   public static PneumaticIntakeSubsystem m_pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
@@ -110,6 +111,8 @@ public class Robot extends TimedRobot {
      
     System.out.println("#I'm Awake");
     
+    allianceChooser.setDefaultOption("blue alliance", true);
+    allianceChooser.addOption("blue alliance", false);
     m_chooser.setDefaultOption("testPath", testPath);
     //m_chooser.setDefaultOption("current", CurrentPath);
     // m_chooser.addOption("noGo!", noGo);
