@@ -17,6 +17,7 @@ import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
+import edu.wpi.first.cscore.CameraServerJNI.TelemetryKind;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -24,6 +25,12 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTable.*;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.subsystems.ArmTelescopingSubsystem.TelescopingStates;
+import frc.robot.subsystems.ElevatorSubsystem.ElevatorStates;
+import frc.robot.subsystems.Mechanisms.MechanismStates;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.Constants;
@@ -59,8 +66,9 @@ public class Robot extends TimedRobot {
 
   private final LimeLightSubsystem m_limeLightSubsystem = new LimeLightSubsystem();
   private final AprilTagSubsystem m_aprilTagSubsystem = new AprilTagSubsystem();
-  private final Field2d m_field = new Field2d();
+  
   double t= 0.0;
+  boolean override = false;
   ChassisSpeeds m_ChassisSpeeds;
   double mpi = Constants.METERS_PER_INCH;
   public static boolean isBlueAlliance = true;
@@ -178,11 +186,12 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
      //m_AprilTagSubsystem.periodic();
-     //m_mechanisms.periodic();
+     m_mechanisms.periodic();
      m_autoSelected.periodic();
      
      //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
 
+    //  m_autoSelected.periodic();
      //m_drivetrainSubsystem.drive();
   }
 
@@ -192,7 +201,7 @@ public class Robot extends TimedRobot {
     m_aprilTagSubsystem.init();
     //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
    // System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
-
+    //armTelescopingSubsystem.init();
   }
 
   /** This function is called periodically during operator control. */
@@ -246,6 +255,106 @@ public class Robot extends TimedRobot {
     } else if (OI.joystick.getRawButton(8)){
       buttonLevel(8);
     }
+    /*System.out.println("back left module: " + m_drivetrainSubsystem.m_backLeftModule.getAbsoluteAngle());
+    System.out.println("back right module: " + m_drivetrainSubsystem.m_backRightModule.getSteerAngle());
+    System.out.println("front left module: " + m_drivetrainSubsystem.m_frontLeftModule.getSteerAngle());
+    System.out.println("front right module: " + m_drivetrainSubsystem.m_frontRightModule.getSteerAngle());*/
+
+    System.out.println("override is " + override);
+
+    //driver
+    if (OI.m_controller.getBButton()){ 
+      m_drivetrainSubsystem.stopDrive(); //stop all mech?
+    }
+
+    if(OI.m_controller.getXButton()){
+    // m_drivetrainSubsystem.pitchBalance(0.0);
+    }
+
+    //codriver
+
+    /*if (OI.m_controller_two.getPOV() == 0){
+      System.out.println("dpad 0: high node");
+      m_drivetrainSubsystem.scoreHigh();
+    }
+
+    if (OI.m_controller_two.getPOV() == 180){
+      System.out.println("dpad 180: low node");
+      m_drivetrainSubsystem.scoreLow();
+    }*/
+
+    if(OI.m_controller_two.getAButton()){ 
+      if (override){
+        System.out.println("xbox: low node");
+        // m_drivetrainSubsystem.scoreLow();
+          //armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
+          m_mechanisms.setState(MechanismStates.LOW_NODE);
+        } else {
+          level = AutoStates.LOWNODE;
+        }
+    }
+
+    if(OI.m_controller_two.getBButton()){
+      if (override){
+        System.out.println("xbox: mid");
+        //m_drivetrainSubsystem.scoreMid();
+        m_mechanisms.setState(MechanismStates.MID_NODE);
+      }else{
+        level = AutoStates.MIDNODE; 
+      }
+      
+    }
+
+    if(OI.m_controller_two.getYButton()){
+      if (override){
+        System.out.println("xbox: high node");
+        // m_drivetrainSubsystem.scoreHigh();
+        m_mechanisms.setState(MechanismStates.HIGH_NODE);
+      }else{
+        level = AutoStates.HIGHNODE; 
+      }
+
+    }
+
+    if(OI.m_controller_two.getXButton()){ //override button
+      override = true;
+    }
+
+    if (OI.m_controller_two.getPOV() == 270){
+      if (!override){
+        System.out.println("dpad 270: left substation");
+        // m_drivetrainSubsystem.substation();
+        level = AutoStates.LEFTPICKUP; 
+      }
+    }
+
+    if (OI.m_controller_two.getPOV() == 90){
+      if (!override){
+        System.out.println("dpad 90: right substation");
+        level = AutoStates.RIGHTPICKUP; 
+      }
+    }
+
+    if(OI.m_controller_two.getLeftBumperReleased()){ //needs its own button & not enough
+      if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING || PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF){
+        pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING);
+      } else if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING){
+        pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING); 
+      }
+    }
+
+    if(OI.m_controller_two.getRightBumper()){
+    }
+
+    if (OI.m_controller_two.getStartButton()){
+      //m_drivetrainSubsystem.stopAllMech();
+    }
+
+    if (OI.m_controller_two.getBackButton()){
+
+    }
+
+
   }
 
   /** This function is called once when the robot is disabled. */

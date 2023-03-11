@@ -157,10 +157,10 @@ public class PneumaticIntakeSubsystem {
          
     }
 
-    public boolean getPSI(){
-        System.out.println(compressor.getCurrent());
-        return compressor.getPressureSwitchValue();
-    }
+    // public boolean getPSI(){
+    //     System.out.println(compressor.getCurrent());
+    //     return compressor.getPressureSwitchValue();
+    // }
 
     public void setState(PneumaticIntakeStates newPneumaticIntakeState){
         pneumaticIntakeState = newPneumaticIntakeState;
