@@ -28,8 +28,12 @@ public class StateWithCoordinate{
         FIRSTHIGHNODE,
         INTAKING,
         OUTTAKING,
-        BALANCING;
+        BALANCING,
+        LEFTPICKUP,
+        RIGHTPICKUP;
     } 
-    
+
+
+
 
 }

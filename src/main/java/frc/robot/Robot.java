@@ -64,8 +64,9 @@ public class Robot extends TimedRobot {
   ChassisSpeeds m_ChassisSpeeds;
   double mpi = Constants.METERS_PER_INCH;
   public static boolean isBlueAlliance = true;
-  public static AutoStates level = AutoStates.HIGHNODE;
+  public static AutoStates level;
   public static int scoringCol = 0;
+  public static AutoStates substationPosition;
 
   // whole field: 651.683 (inches)
   // private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
@@ -201,6 +202,14 @@ public class Robot extends TimedRobot {
     //m_mechanisms.periodic();
     //System.out.println("i am in teleop");
     m_aprilTagSubsystem.periodic();
+
+    if(OI.m_controller.getPOV() >= 225 && OI.m_controller.getPOV() <= 315){
+      substationPosition = AutoStates.LEFTPICKUP;
+    }
+
+    if(OI.m_controller.getPOV() >= 45 && OI.m_controller.getPOV() <= 135){
+      substationPosition = AutoStates.RIGHTPICKUP;
+    }
 
     if(OI.m_controller.getBackButton()){
       //m_VisionSubsystem.setState(VisionSubsystem.VisionStates.DETECTTAPE);

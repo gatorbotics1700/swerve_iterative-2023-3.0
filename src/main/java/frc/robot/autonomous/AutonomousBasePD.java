@@ -33,10 +33,14 @@ public class AutonomousBasePD extends AutonomousBase{
     private int highNodeCounter = -1; 
     private int midNodeCounter = -1;
     private int lowNodeCounter = -1;
+    private int leftNodeCounter = -1;
+    private int rightNodeCounter = -1;
     private double startTimeIntake;
     private double startTimeHigh;
     private double startTimeMid;
     private double startTimeLow; 
+    private double startTimeLeft;
+    private double startTimeRight;
     
     private static DrivetrainSubsystem drivetrainSubsystem = Robot.m_drivetrainSubsystem;
     private static Mechanisms mechanisms = Robot.m_mechanisms;
@@ -136,6 +140,30 @@ public class AutonomousBasePD extends AutonomousBase{
                     if(System.currentTimeMillis()-startTimeLow>=0.5){
                         i++;
                         lowNodeCounter = -1;
+                    }
+                }
+            }else if(states == AutoStates.LEFTPICKUP){
+                System.out.println("left pickup");
+                if(mechanisms.isDoneShelf() == true){
+                    if(leftNodeCounter >= -1){
+                        startTimeLeft = System.currentTimeMillis();
+                    }
+                    if(System.currentTimeMillis() - startTimeLeft >= 0.5){
+                        i++;
+                        leftNodeCounter = -1;
+                    }
+                }
+
+
+            }else if(states == AutoStates.RIGHTPICKUP){
+                System.out.println("right pickup");
+                if(mechanisms.isDoneShelf() == true){
+                    if(rightNodeCounter >= -1){
+                        startTimeRight = System.curentTimeMillis();
+                    }
+                    if(System.currentTimeMillis() - startTimeRight >= 0.5){
+                        i++;
+                        rightNodeCounter = -1;
                     }
                 }
             }else if(states == AutoStates.BALANCING){

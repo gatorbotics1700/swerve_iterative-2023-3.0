@@ -81,4 +81,12 @@ public class Mechanisms {
         return false; 
      }
 
+     public boolean isDoneShelf(){
+        if(elevatorSubsystem.isAtShelf() && armTelescopingSubsystem.isAtShelf()){
+            return true;
+        }
+        return false;
+     }
+
+
 }

@@ -105,4 +105,11 @@ public class ElevatorSubsystem {
         return false; 
     }
 
+    public boolean isAtShelf(){
+        if(Math.abs(elevatorMotor.getSelectedSensorPosition() -SHELF) < 3 * Constants.SWERVE_TICKS_PER_INCH){
+            return true;
+        }
+        return false;
+    }
+
 }
