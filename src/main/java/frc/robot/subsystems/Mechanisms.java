@@ -3,6 +3,9 @@ package frc.robot.subsystems;
 import frc.robot.subsystems.ArmTelescopingSubsystem;
 import frc.robot.subsystems.ArmTelescopingSubsystem.TelescopingStates;
 import frc.robot.subsystems.ElevatorSubsystem.ElevatorStates;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import frc.robot.Constants;
 
 public class Mechanisms {
@@ -87,6 +90,11 @@ public class Mechanisms {
         }
         return false;
      }
+
+     public void retract(){
+        //armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
+        armTelescopingSubsystem.telescopingMotor.set(ControlMode.Position, -32*Constants.TICKS_PER_INCH);
+    }
 
 
 }

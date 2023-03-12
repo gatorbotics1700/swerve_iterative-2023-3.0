@@ -69,7 +69,7 @@ public class Robot extends TimedRobot {
   
   double t= 0.0;
   boolean override = false;
-  ChassisSpeeds m_ChassisSpeeds;
+  ChassisSpeeds m_ChassisSpeeds; 
   double mpi = Constants.METERS_PER_INCH;
   public static boolean isBlueAlliance = true;
   public static AutoStates level;
@@ -199,7 +199,7 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    //m_aprilTagSubsystem.init();
+    m_aprilTagSubsystem.init();
     //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
    // System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
     //armTelescopingSubsystem.init();
@@ -208,28 +208,32 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    m_drivetrainSubsystem.driveTeleop();
+    if(m_aprilTagSubsystem.states != AprilTagSubsystem.AprilTagSequence.CORRECTPOSITION){
+      m_drivetrainSubsystem.driveTeleop();
+    }
+    
     //m_mechanisms.periodic();
     //System.out.println("i am in teleop");
     //m_aprilTagSubsystem.periodic();
 
-    if(OI.m_controller.getPOV() >= 225 && OI.m_controller.getPOV() <= 315){
+    /*if(OI.m_controller_two.getPOV() >= 225 && OI.m_controller.getPOV() <= 315){
       substationPosition = AutoStates.LEFTPICKUP;
-    }
+    }*/
 
-    if(OI.m_controller.getPOV() >= 45 && OI.m_controller.getPOV() <= 135){
+    /*if(OI.m_controller_two.getPOV() >= 45 && OI.m_controller.getPOV() <= 135){
       substationPosition = AutoStates.RIGHTPICKUP;
-    }
+    }*/
 
-    if(OI.m_controller.getBackButton()){
-      //m_VisionSubsystem.setState(VisionSubsystem.VisionStates.DETECTTAPE);
+    if(OI.m_controller_two.getBackButton()){
+      
     }
     
-    if(OI.m_controller.getAButtonReleased()){
+    if(OI.m_controller_two.getAButtonReleased()){
       //pneumaticIntakeSubsystem.setState(PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF);
+    
     }
 
-    if(OI.m_controller.getXButtonReleased()){
+    if(OI.m_controller_two.getXButtonReleased()){
       if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING || PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF){
         //pneumaticIntakeSubsystem.setState(PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING);
       } else if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING){
@@ -261,7 +265,7 @@ public class Robot extends TimedRobot {
     System.out.println("front left module: " + m_drivetrainSubsystem.m_frontLeftModule.getSteerAngle());
     System.out.println("front right module: " + m_drivetrainSubsystem.m_frontRightModule.getSteerAngle());*/
 
-    System.out.println("override is " + override);
+    //System.out.println("override is " + override);
 
     //driver
     if (OI.m_controller.getBButton()){ 
@@ -321,18 +325,32 @@ public class Robot extends TimedRobot {
       override = true;
     }
 
-    if (OI.m_controller_two.getPOV() == 270){
+    /*if (OI.m_controller_two.getPOV() == 270){
       if (!override){
         System.out.println("dpad 270: left substation");
         // m_drivetrainSubsystem.substation();
         level = AutoStates.LEFTPICKUP; 
       }
-    }
+    }*/
 
-    if (OI.m_controller_two.getPOV() == 90){
+    /*if (OI.m_controller_two.getPOV() == 90){
       if (!override){
         System.out.println("dpad 90: right substation");
         level = AutoStates.RIGHTPICKUP; 
+      }
+    }*/
+
+    if(OI.m_controller_two.getPOV() == 0){
+      if(override == false){
+        System.out.println("dpad 0: vision DETECT");
+        m_aprilTagSubsystem.setState(AprilTagSubsystem.AprilTagSequence.DETECT);
+      }
+    }
+
+    if(OI.m_controller_two.getPOV() == 180){
+      if(override == false){
+        System.out.println("dpad 180: vision OFF");
+        m_aprilTagSubsystem.setState(AprilTagSubsystem.AprilTagSequence.OFF);
       }
     }
 
@@ -380,11 +398,11 @@ public class Robot extends TimedRobot {
   public void testPeriodic(){
     //m_aprilTagSubsystem.periodic();
     //testPath.driveDesiredDistance(new Pose2d(20 * Constants.METERS_PER_INCH, 20 * Constants.METERS_PER_INCH, new Rotation2d(Math.toRadians(0))));
+    m_mechanisms.retract();
+    //m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.0, Math.toRadians(0), m_drivetrainSubsystem.getPoseRotation()));
     
-    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.0, Math.toRadians(0), m_drivetrainSubsystem.getPoseRotation()));
     
-    
-    m_drivetrainSubsystem.drive();
+    //m_drivetrainSubsystem.drive();
     //System.out.println("rotation: " + DrivetrainSubsystem.m_pose.getRotation());
 
     
