@@ -42,16 +42,25 @@ public class Mechanisms {
 
         if (mechState == MechanismStates.LOW_NODE){
             elevatorSubsystem.setState(ElevatorStates.LOW_ELEVATOR_HEIGHT);
-            armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
+            if(elevatorSubsystem.isAtLow()){
+                armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
+            }
+            
         } else if (mechState == MechanismStates.MID_NODE){
             elevatorSubsystem.setState(ElevatorStates.MID_ELEVATOR_HEIGHT);
-            armTelescopingSubsystem.setTState(TelescopingStates.MID_ARM_LENGTH);
+            if(elevatorSubsystem.isAtMid()){
+                armTelescopingSubsystem.setTState(TelescopingStates.MID_ARM_LENGTH);
+            }
         } else if (mechState == MechanismStates.HIGH_NODE) {
             elevatorSubsystem.setState(ElevatorStates.HIGH_ELEVATOR_HEIGHT);
-            armTelescopingSubsystem.setTState(TelescopingStates.HIGH_ARM_LENGTH);
+            if(elevatorSubsystem.isAtHigh()){
+                armTelescopingSubsystem.setTState(TelescopingStates.HIGH_ARM_LENGTH);
+            }
         } else if (mechState == MechanismStates.SHELF){
             elevatorSubsystem.setState(ElevatorStates.SHELF_ELEVATOR_HEIGHT);
-            armTelescopingSubsystem.setTState(TelescopingStates.SHELF_ARM_LENGTH);
+            if(elevatorSubsystem.isAtShelf()){
+              armTelescopingSubsystem.setTState(TelescopingStates.SHELF_ARM_LENGTH);
+            }
         } else { 
             elevatorSubsystem.setState(ElevatorStates.ZERO);
             armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
