@@ -1,0 +1,160 @@
+package frc.robot;
+import frc.robot.subsystems.Mechanisms;
+import frc.robot.autonomous.StateWithCoordinate.AutoStates;
+import frc.robot.subsystems.Mechanisms.MechanismStates;
+import frc.robot.subsystems.PneumaticIntakeSubsystem;
+import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.PneumaticIntakeSubsystem;
+public class Buttons {
+    public static int scoringCol = 0;
+    private static boolean override = false;
+    DrivetrainSubsystem m_drivetrainSubsystem = Robot.m_drivetrainSubsystem;
+    PneumaticIntakeSubsystem pneumaticIntakeSubsystem = Robot.pneumaticIntakeSubsystem;
+    public static AutoStates level;
+    Mechanisms m_mechanisms = Robot.m_mechanisms;
+    public void buttonsPeriodic(){
+        if(OI.m_controller.getPOV() >= 225 && OI.m_controller.getPOV() <= 315){
+            if (!override){
+              System.out.println("dpad 270: left substation");
+              level = AutoStates.LEFTPICKUP; 
+            }else{
+              m_mechanisms.setState(MechanismStates.SHELF);
+            }
+          }
+      
+          if(OI.m_controller.getPOV() >= 45 && OI.m_controller.getPOV() <= 135){
+            if (!override){
+              System.out.println("dpad 90: right substation");
+              level = AutoStates.RIGHTPICKUP; 
+            }else{
+              m_mechanisms.setState(MechanismStates.SHELF);
+            }
+          }
+      
+          if(OI.m_controller.getBackButton()){
+            //m_VisionSubsystem.setState(VisionSubsystem.VisionStates.DETECTTAPE);
+          }
+          
+          if(OI.m_controller.getAButtonReleased()){
+            //pneumaticIntakeSubsystem.setState(PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF);
+          }
+      
+          if(OI.m_controller.getXButtonReleased()){
+            if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING || PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF){
+              //pneumaticIntakeSubsystem.setState(PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING);
+            } else if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING){
+              //pneumaticIntakeSubsystem.setState(PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING); 
+            }
+          }
+      
+          if(OI.joystick.getRawButton(0)){
+            buttonLevel(0);
+          } else if (OI.joystick.getRawButton(1)){
+            buttonLevel(1);
+          } else if (OI.joystick.getRawButton(2)){
+            buttonLevel(2);
+          } else if (OI.joystick.getRawButton(3)){
+            buttonLevel(3);
+          } else if (OI.joystick.getRawButton(4)){
+            buttonLevel(4);
+          } else if (OI.joystick.getRawButton(5)){
+            buttonLevel(5);
+          } else if (OI.joystick.getRawButton(6)){
+            buttonLevel(6);
+          } else if (OI.joystick.getRawButton(7)){
+            buttonLevel(7);
+          } else if (OI.joystick.getRawButton(8)){
+            buttonLevel(8);
+          }
+          /*System.out.println("back left module: " + m_drivetrainSubsystem.m_backLeftModule.getAbsoluteAngle());
+          System.out.println("back right module: " + m_drivetrainSubsystem.m_backRightModule.getSteerAngle());
+          System.out.println("front left module: " + m_drivetrainSubsystem.m_frontLeftModule.getSteerAngle());
+          System.out.println("front right module: " + m_drivetrainSubsystem.m_frontRightModule.getSteerAngle());*/
+      
+          System.out.println("override is " + override);
+      
+          //driver
+          if (OI.m_controller.getBButton()){ 
+            m_drivetrainSubsystem.stopDrive(); //stop all mech?
+          }
+      
+          if(OI.m_controller.getXButton()){
+          // m_drivetrainSubsystem.pitchBalance(0.0);
+          }
+      
+      
+          if(OI.m_controller_two.getAButton()){ 
+            if (override){
+              System.out.println("xbox: low node");
+              // m_drivetrainSubsystem.scoreLow();
+                //armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
+                m_mechanisms.setState(MechanismStates.LOW_NODE);
+              } else {
+                level = AutoStates.LOWNODE;
+              }
+          }
+      
+          if(OI.m_controller_two.getBButton()){
+            if (override){
+              System.out.println("xbox: mid");
+              //m_drivetrainSubsystem.scoreMid();
+              m_mechanisms.setState(MechanismStates.MID_NODE);
+            }else{
+              level = AutoStates.MIDNODE; 
+            }
+            
+          }
+      
+          if(OI.m_controller_two.getYButton()){
+            if (override){
+              System.out.println("xbox: high node");
+              // m_drivetrainSubsystem.scoreHigh();
+              m_mechanisms.setState(MechanismStates.HIGH_NODE);
+            }else{
+              level = AutoStates.HIGHNODE; 
+            }
+      
+          }
+      
+          if(OI.m_controller_two.getXButton()){ //override button
+            override = !override;
+          }
+      
+      
+      
+          if(OI.m_controller_two.getLeftBumperReleased()){ //needs its own button & not enough
+            if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING || PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF){
+              pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING);
+            } else if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING){
+              pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING); 
+            }
+          }
+      
+          if(OI.m_controller_two.getRightBumper()){
+          }
+      
+          if (OI.m_controller_two.getStartButton()){
+            //m_drivetrainSubsystem.stopAllMech();
+          }
+      
+          if (OI.m_controller_two.getBackButton()){
+      
+          }
+          
+    }
+    public void buttonLevel(int col){
+        if(Robot.isBlueAlliance){
+          if(level == AutoStates.LOWNODE){
+            scoringCol = col + 9;
+          } else {
+            scoringCol = col;
+          }
+        } else { //red
+          if(level == AutoStates.LOWNODE){
+            scoringCol = col + 27;
+          } else {
+            scoringCol = col + 18;
+          }
+        }
+      }
+}

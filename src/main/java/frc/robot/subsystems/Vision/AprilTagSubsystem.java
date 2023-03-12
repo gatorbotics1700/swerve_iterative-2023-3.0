@@ -19,6 +19,7 @@ import frc.robot.autonomous.AutonomousBasePD;
 import frc.robot.autonomous.StateWithCoordinate;
 import frc.robot.autonomous.StateWithCoordinate.AutoStates;
 import frc.robot.subsystems.*;
+import frc.robot.Buttons;
 
 public class AprilTagSubsystem {
     public static enum AprilTagSequence{
