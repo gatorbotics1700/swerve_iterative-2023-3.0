@@ -125,6 +125,7 @@ public class AutonomousBasePD extends AutonomousBase{
                 System.out.println("moving on to " + stateSequence[i]);
             }else if(states == AutoStates.MIDNODE){
                 System.out.println("mid node");
+                mechanisms.setState(MechanismStates.MID_NODE);
                 if(mechanisms.isDoneMid()==true){
                     if(midNodeCounter >= -1){
                         startTimeMid = System.currentTimeMillis();
@@ -136,6 +137,7 @@ public class AutonomousBasePD extends AutonomousBase{
                 }
             }else if(states == AutoStates.LOWNODE){
                 System.out.println("low node");
+                mechanisms.setState(MechanismStates.LOW_NODE);
                 if(mechanisms.isDoneLow()==true){
                     if(lowNodeCounter >= -1){
                         startTimeLow = System.currentTimeMillis();

@@ -257,7 +257,7 @@ public class DrivetrainSubsystem {
 //   }
   
 public void driveTeleop(){
-        SmartDashboard.putBoolean("Blue", Robot.isBlueAlliance); 
+        SmartDashboard.putBoolean("Alliance: ", Robot.isBlueAlliance); 
         if(Robot.isBlueAlliance){
                 DoubleSupplier m_translationXSupplier = () -> -modifyAxis(OI.m_controller.getLeftY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
                 DoubleSupplier m_translationYSupplier = () -> -modifyAxis(OI.m_controller.getLeftX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;

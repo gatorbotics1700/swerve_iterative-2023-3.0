@@ -53,7 +53,7 @@ public class AprilTagSubsystem {
                 System.out.println("APRIL TAG DETECTED!!!!!!");
                 setState(AprilTagSequence.CORRECTPOSITION);
                 autonomousBasePD.resetControllers();
-                AutonomousBasePD visionPID = new AutonomousBasePD(DrivetrainSubsystem.m_pose, new StateWithCoordinate[]{                    
+                autonomousBasePD = new AutonomousBasePD(DrivetrainSubsystem.m_pose, new StateWithCoordinate[]{                    
                     new StateWithCoordinate(AutoStates.FIRST),
                     new StateWithCoordinate(AutoStates.DRIVE, AprilTagLocation.scoringPoses[4]),
                     //new StateWithCoordinate(Robot.level)

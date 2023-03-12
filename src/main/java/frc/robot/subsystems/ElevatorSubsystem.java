@@ -47,7 +47,7 @@ public class ElevatorSubsystem {
         System.out.println("elevator init!!!!");
         elevatorMotor.setInverted(true); // looking from the front of the robot, clockwise is false (:
         elevatorMotor.setNeutralMode(NeutralMode.Brake);
-
+        elevatorMotor.setSelectedSensorPosition(0);
         //configuring deadband
         elevatorMotor.configAllowableClosedloopError(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
 		/* Config Position Closed Loop gains in slot0, typically kF stays zero. */
@@ -76,7 +76,7 @@ public class ElevatorSubsystem {
             elevatorMotor.set(ControlMode.Position, desiredTicks); //oficial 2/13 is 39
             elevatorDeadband(desiredTicks);
         } else if (elevatorState == ElevatorStates.MID_ELEVATOR_HEIGHT){
-            desiredInches = 40 - 15; //official 2/13
+            desiredInches = (40 - 15); //official 2/13
             double desiredTicks = determineRightTicks();
             elevatorMotor.set(ControlMode.Position, desiredTicks); //official 2/13
             elevatorDeadband(desiredTicks);

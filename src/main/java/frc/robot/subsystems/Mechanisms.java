@@ -102,7 +102,8 @@ public class Mechanisms {
 
      public void retract(){
         //armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
-        armTelescopingSubsystem.telescopingMotor.set(ControlMode.Position, -32*Constants.TICKS_PER_INCH);
+        armTelescopingSubsystem.telescopingMotor.set(ControlMode.PercentOutput, 0.2);
+        System.out.println("retracting + position: " + armTelescopingSubsystem.telescopingMotor.getSelectedSensorPosition());
     }
 
 

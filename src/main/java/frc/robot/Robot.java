@@ -28,6 +28,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.subsystems.ArmTelescopingSubsystem.TelescopingStates;
 import frc.robot.subsystems.ElevatorSubsystem.ElevatorStates;
 import frc.robot.subsystems.Mechanisms.MechanismStates;
+import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -35,7 +36,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.Constants;
 import frc.robot.autonomous.StateWithCoordinate.AutoStates;
-import frc.robot.autonomous.StateWithCoordinate;
 import frc.robot.subsystems.ArmTelescopingSubsystem.TelescopingStates;
 import frc.robot.subsystems.Vision.AprilTagSubsystem;
 import frc.robot.subsystems.Vision.LimeLightSubsystem;
@@ -213,7 +213,7 @@ public class Robot extends TimedRobot {
     
     //m_mechanisms.periodic();
     //System.out.println("i am in teleop");
-    //m_aprilTagSubsystem.periodic();
+    m_aprilTagSubsystem.periodic();
 
     if(OI.m_controller.getPOV() >= 225 && OI.m_controller.getPOV() <= 315){
       if (!override){
