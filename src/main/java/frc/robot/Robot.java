@@ -69,8 +69,8 @@ public class Robot extends TimedRobot {
   private final AprilTagSubsystem m_aprilTagSubsystem = new AprilTagSubsystem();
   
   double t= 0.0;
-
-  ChassisSpeeds m_ChassisSpeeds;
+  boolean override = false;
+  ChassisSpeeds m_ChassisSpeeds; 
   double mpi = Constants.METERS_PER_INCH;
   public static boolean isBlueAlliance = true;
   
@@ -199,7 +199,7 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    //m_aprilTagSubsystem.init();
+    m_aprilTagSubsystem.init();
     //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
    // System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
     //armTelescopingSubsystem.init();
@@ -208,7 +208,10 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    m_drivetrainSubsystem.driveTeleop();
+    if(m_aprilTagSubsystem.states != AprilTagSubsystem.AprilTagSequence.CORRECTPOSITION){
+      m_drivetrainSubsystem.driveTeleop();
+    }
+    
     //m_mechanisms.periodic();
     //System.out.println("i am in teleop");
     //m_aprilTagSubsystem.periodic();
@@ -241,11 +244,11 @@ public class Robot extends TimedRobot {
   public void testPeriodic(){
     //m_aprilTagSubsystem.periodic();
     //testPath.driveDesiredDistance(new Pose2d(20 * Constants.METERS_PER_INCH, 20 * Constants.METERS_PER_INCH, new Rotation2d(Math.toRadians(0))));
+    m_mechanisms.retract();
+    //m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.0, Math.toRadians(0), m_drivetrainSubsystem.getPoseRotation()));
     
-    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.0, Math.toRadians(0), m_drivetrainSubsystem.getPoseRotation()));
     
-    
-    m_drivetrainSubsystem.drive();
+    //m_drivetrainSubsystem.drive();
     //System.out.println("rotation: " + DrivetrainSubsystem.m_pose.getRotation());
 
     

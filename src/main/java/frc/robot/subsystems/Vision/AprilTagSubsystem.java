@@ -28,7 +28,7 @@ public class AprilTagSubsystem {
         OFF;
     }
 
-    private static AprilTagSequence states = AprilTagSequence.DETECT; 
+    public static AprilTagSequence states = AprilTagSequence.DETECT; 
     private static DrivetrainSubsystem drivetrainSubsystem = Robot.m_drivetrainSubsystem;
 
     public void setState(AprilTagSequence newState){
@@ -43,6 +43,7 @@ public class AprilTagSubsystem {
         autonomousBasePD.resetControllers();
         Robot.m_drivetrainSubsystem.resetOdometry(new Pose2d(AprilTagLocation.scoringPoses[4].getX() -36.5*Constants.METERS_PER_INCH, AprilTagLocation.scoringPoses[4].getY() - 12.0*Constants.METERS_PER_INCH, new Rotation2d(Math.toRadians(0.0))));
         System.out.println("resetted odometry in INIT to: " + DrivetrainSubsystem.m_pose);
+        setState(AprilTagSequence.OFF);
     }
     
     public void periodic(){
@@ -55,8 +56,8 @@ public class AprilTagSubsystem {
                 autonomousBasePD.resetControllers();
                 AutonomousBasePD visionPID = new AutonomousBasePD(DrivetrainSubsystem.m_pose, new StateWithCoordinate[]{                    
                     new StateWithCoordinate(AutoStates.FIRST),
-                    new StateWithCoordinate(AutoStates.DRIVE, AprilTagLocation.scoringPoses[0]),
-                    new StateWithCoordinate(Buttons.level)
+                    new StateWithCoordinate(AutoStates.DRIVE, AprilTagLocation.scoringPoses[4]),
+                    //new StateWithCoordinate(Robot.level)
                 });
 
                 System.out.println("Reset odometry to this m_pose: " + DrivetrainSubsystem.m_pose);
