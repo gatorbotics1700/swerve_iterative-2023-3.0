@@ -74,7 +74,6 @@ public class Robot extends TimedRobot {
   public static boolean isBlueAlliance = true;
   public static AutoStates level;
   public static int scoringCol = 0;
-  public static AutoStates substationPosition;
 
   // whole field: 651.683 (inches)
   // private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
@@ -214,11 +213,21 @@ public class Robot extends TimedRobot {
     //m_aprilTagSubsystem.periodic();
 
     if(OI.m_controller.getPOV() >= 225 && OI.m_controller.getPOV() <= 315){
-      substationPosition = AutoStates.LEFTPICKUP;
+      if (!override){
+        System.out.println("dpad 270: left substation");
+        level = AutoStates.LEFTPICKUP; 
+      }else{
+        m_mechanisms.setState(MechanismStates.SHELF);
+      }
     }
 
     if(OI.m_controller.getPOV() >= 45 && OI.m_controller.getPOV() <= 135){
-      substationPosition = AutoStates.RIGHTPICKUP;
+      if (!override){
+        System.out.println("dpad 90: right substation");
+        level = AutoStates.RIGHTPICKUP; 
+      }else{
+        m_mechanisms.setState(MechanismStates.SHELF);
+      }
     }
 
     if(OI.m_controller.getBackButton()){
@@ -272,17 +281,6 @@ public class Robot extends TimedRobot {
     // m_drivetrainSubsystem.pitchBalance(0.0);
     }
 
-    //codriver
-
-    /*if (OI.m_controller_two.getPOV() == 0){
-      System.out.println("dpad 0: high node");
-      m_drivetrainSubsystem.scoreHigh();
-    }
-
-    if (OI.m_controller_two.getPOV() == 180){
-      System.out.println("dpad 180: low node");
-      m_drivetrainSubsystem.scoreLow();
-    }*/
 
     if(OI.m_controller_two.getAButton()){ 
       if (override){
@@ -321,20 +319,7 @@ public class Robot extends TimedRobot {
       override = !override;
     }
 
-    if (OI.m_controller_two.getPOV() == 270){
-      if (!override){
-        System.out.println("dpad 270: left substation");
-        // m_drivetrainSubsystem.substation();
-        level = AutoStates.LEFTPICKUP; 
-      }
-    }
 
-    if (OI.m_controller_two.getPOV() == 90){
-      if (!override){
-        System.out.println("dpad 90: right substation");
-        level = AutoStates.RIGHTPICKUP; 
-      }
-    }
 
     if(OI.m_controller_two.getLeftBumperReleased()){ //needs its own button & not enough
       if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING || PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF){
