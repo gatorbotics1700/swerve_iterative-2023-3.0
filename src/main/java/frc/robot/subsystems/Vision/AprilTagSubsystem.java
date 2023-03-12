@@ -19,6 +19,7 @@ import frc.robot.autonomous.AutonomousBasePD;
 import frc.robot.autonomous.StateWithCoordinate;
 import frc.robot.autonomous.StateWithCoordinate.AutoStates;
 import frc.robot.subsystems.*;
+import frc.robot.Buttons;
 
 public class AprilTagSubsystem {
     public static enum AprilTagSequence{
@@ -55,7 +56,7 @@ public class AprilTagSubsystem {
                 AutonomousBasePD visionPID = new AutonomousBasePD(DrivetrainSubsystem.m_pose, new StateWithCoordinate[]{                    
                     new StateWithCoordinate(AutoStates.FIRST),
                     new StateWithCoordinate(AutoStates.DRIVE, AprilTagLocation.scoringPoses[0]),
-                    new StateWithCoordinate(Robot.level)
+                    new StateWithCoordinate(Buttons.level)
                 });
 
                 System.out.println("Reset odometry to this m_pose: " + DrivetrainSubsystem.m_pose);
