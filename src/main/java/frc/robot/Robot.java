@@ -64,7 +64,6 @@ public class Robot extends TimedRobot {
   public static Mechanisms m_mechanisms = new Mechanisms();
   public static Buttons m_buttons = new Buttons();
 
-
   private final LimeLightSubsystem m_limeLightSubsystem = new LimeLightSubsystem();
   private final AprilTagSubsystem m_aprilTagSubsystem = new AprilTagSubsystem();
   
@@ -75,45 +74,12 @@ public class Robot extends TimedRobot {
   public static boolean isBlueAlliance = true;
   
   
-
-  // whole field: 651.683 (inches)
-  // private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
   private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
-  
   private AutonomousBasePD testPath = PDPath.HDLeaveR;
-  /*new AutonomousBasePD(
-    new Pose2d(0.0, 0.0, new Rotation2d(Math.toRadians(0))), 
-    new StateWithCoordinate[]{
-      new StateWithCoordinate(AutoStates.FIRST),
-      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(20 * mpi, 0 * mpi, new Rotation2d(Math.toRadians(0)))), 
-      //new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(40 * mpi, 0, new Rotation2d(60))), 
-      //new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(0 * mpi, 30 * mpi, new Rotation2d(60))), 
-      //new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(40 * mpi, 30 * mpi, new Rotation2d(60))), 
-      //new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(0 * mpi, 0 * mpi, new Rotation2d(150))), 
-      //new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(20 * mpi, 20 * mpi, new Rotation2d(150))),
-      new StateWithCoordinate(AutoStates.STOP)
-    });*/
-  
  
 // red alliance  
 // half the field (325.8415) - blue x value + half the field (325.8415) = red x value
-   
-  public static PneumaticIntakeSubsystem pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
-
- public static ShuffleboardTab tab = DrivetrainSubsystem.tab;
-    public static GenericEntry test =
-    tab.add("test", 10)
-      .getEntry();
-    public static GenericEntry kP =
-        tab.add("Auto kP", 0.1)
-          .getEntry();
-    public static GenericEntry kI =
-    tab.add("Auto kI", 0.0)
-      .getEntry();
-    public static GenericEntry kD =
-        tab.add("Auto kD", 0.0)
-          .getEntry();
-  
+ // whole field: 651.683 (inches)
   
   /**
   * This function is run when the robot is first started up and should be used for any
@@ -127,23 +93,28 @@ public class Robot extends TimedRobot {
     allianceChooser.setDefaultOption("blue alliance", true);
     allianceChooser.addOption("blue alliance", false);
     m_chooser.setDefaultOption("testPath", testPath);
-    //m_chooser.setDefaultOption("current", CurrentPath);
-    // m_chooser.addOption("noGo!", noGo);
-    // m_chooser.addOption("HDLeaveB", HDLeaveB);
-    // m_chooser.addOption("HBLeaveB", HBLeaveB); 
-    // m_chooser.addOption("timed", timedPath);
-    // m_chooser.addOption("HDThreeScoreB", HDThreeScoreB);
-    // m_chooser.addOption("HBThreeScoreB", HBThreeScoreB);
-    // m_chooser.addOption("HDplaceTwoEngageB", HDplaceTwoEngageB);
-    // m_chooser.addOption("engageChargeB", engageChargeB);
-    // m_chooser.addOption("HDplaceTwoEngageR", HDplaceTwoEngageR);
-    // m_chooser.addOption("HBLeaveR", HBLeaveR);
-    // m_chooser.addOption("HDLeaveR", HDLeaveR);
-    // m_chooser.addOption("HDThreeScoreR", HDThreeScoreR);
-    // m_chooser.addOption("HBThreeScoreR", HBThreeScoreR);
-    // m_chooser.addOption("engageChargeR", engageChargeR);
-    // //m_chooser.addOption("Motion profiling tester path", motionProfiling);
-    // SmartDashboard.putData("Auto choices", m_chooser);
+    m_chooser.addOption("noGoR!", PDPath.noGoR);
+    m_chooser.addOption("noGoB!", PDPath.noGoB);
+    m_chooser.addOption("HDLeaveB", PDPath.HDLeaveB);
+    m_chooser.addOption("HBLeaveB", PDPath.HBLeaveB);
+    m_chooser.addOption("HBLeaveR", PDPath.HBLeaveR);
+    m_chooser.addOption("HDLeaveR", PDPath.HDLeaveR); 
+    m_chooser.addOption("HDLeaveB", PDPath.HDPlaceLeaveB);
+    m_chooser.addOption("HBLeaveB", PDPath.HBPlaceLeaveB);
+    m_chooser.addOption("HDLeaveR", PDPath.HDPlaceLeaveR); 
+    m_chooser.addOption("HBLeaveR", PDPath.HBPlaceLeaveR);
+    m_chooser.addOption("engageChargeR", PDPath.engageChargeR);
+    m_chooser.addOption("engageChargeB", PDPath.engageChargeB);
+    m_chooser.addOption("HDIntakeEngageB", PDPath.HDIntakeEngageB);
+    m_chooser.addOption("HDIntakeEngageR", PDPath.HDIntakeEngageR);
+    m_chooser.addOption("HD3ScoreR", PDPath.HD3ScoreR);
+    m_chooser.addOption("HD3ScoreB", PDPath.HD3ScoreB);
+    m_chooser.addOption("HB3ScoreR", PDPath.HB3ScoreR);
+    m_chooser.addOption("HB3ScoreB", PDPath.HB3ScoreB);
+    m_chooser.addOption("timed", timedPath);
+   // m_chooser.addOption("Motion profiling tester path", motionProfiling);
+    SmartDashboard.putData("Auto choices", m_chooser);
+    SmartDashboard.putData("is blue alliance", allianceChooser);
    
   }
 
@@ -181,6 +152,7 @@ public class Robot extends TimedRobot {
     System.out.println("current pose: " + DrivetrainSubsystem.m_pose.getX() + " , " + DrivetrainSubsystem.m_pose.getY());
     m_autoSelected = m_chooser.getSelected();
     m_autoSelected.init();
+    isBlueAlliance = allianceChooser.getSelected();
   }
 
   /** This function is called periodically during autonomous. */
@@ -200,6 +172,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     m_aprilTagSubsystem.init();
+    isBlueAlliance = allianceChooser.getSelected();
     //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
    // System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
     //armTelescopingSubsystem.init();
