@@ -64,7 +64,6 @@ public class Mechanisms {
         } else { 
             elevatorSubsystem.setState(ElevatorStates.ZERO);
             armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
-
         }
     }
 
