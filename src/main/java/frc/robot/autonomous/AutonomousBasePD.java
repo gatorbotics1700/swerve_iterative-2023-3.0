@@ -74,7 +74,12 @@ public class AutonomousBasePD extends AutonomousBase{
         yController.setTolerance(DRIVE_DEADBAND);
         i = 0;
         System.out.println("INIT!\nINIT!\nINIT!");
-
+        intakeCounter = -1; 
+        highNodeCounter = -1; 
+        midNodeCounter = -1;
+        lowNodeCounter = -1;
+        leftNodeCounter = -1;
+        rightNodeCounter = -1;
     }
 
     public void resetControllers(){
