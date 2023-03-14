@@ -71,7 +71,6 @@ public class ArmTelescopingSubsystem {
         } else if (tState == TelescopingStates.LOW_ARM_LENGTH){
             desiredTicks = LOWARMTICKS; //official 2/13
             System.out.println("desired ticks: " + desiredTicks);
-            telescopingMotor.set(ControlMode.Position, desiredTicks);
             System.out.println("error: " + (desiredTicks - telescopingMotor.getSelectedSensorPosition()));
             telescopeDeadband(LOWARMTICKS);
         } else if (tState == TelescopingStates.SHELF_ARM_LENGTH){

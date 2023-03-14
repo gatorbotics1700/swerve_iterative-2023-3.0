@@ -26,7 +26,7 @@ public class AprilTagSubsystem {
         OFF;
     }
 
-    public static AprilTagSequence states = AprilTagSequence.DETECT; 
+    public static AprilTagSequence states = AprilTagSequence.OFF; 
     private static DrivetrainSubsystem drivetrainSubsystem = Robot.m_drivetrainSubsystem;
 
     public void setState(AprilTagSequence newState){
