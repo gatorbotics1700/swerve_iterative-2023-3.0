@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.Joystick;
 public class Buttons {
     
   DrivetrainSubsystem m_drivetrainSubsystem = Robot.m_drivetrainSubsystem;
-  PneumaticIntakeSubsystem pneumaticIntakeSubsystem = Robot.pneumaticIntakeSubsystem;
+  PneumaticIntakeSubsystem pneumaticIntakeSubsystem = Robot.m_pneumaticIntakeSubsystem;
   Mechanisms m_mechanisms = Robot.m_mechanisms;
   
   public static int scoringCol = 0;
@@ -127,7 +127,7 @@ public class Buttons {
             m_mechanisms.setState(MechanismStates.SHELF);
             System.out.println("xbox: shelf"); 
           }else{
-            level = AutoStates.SHELF;
+            level = AutoStates.RIGHTPICKUP;
           }
         }
     
@@ -143,7 +143,7 @@ public class Buttons {
 
 
   public void buttonLevel(int col){
-      if(Robot.isBlueAlliance){
+      if(Robot.isBlueAlliance.equalsIgnoreCase("blue")){
         if(level == AutoStates.LOWNODE){
           scoringCol = col + 9;
         } else {

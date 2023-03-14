@@ -13,6 +13,9 @@ import frc.robot.autonomous.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.fasterxml.jackson.core.sym.Name;
+
+import java.lang.ProcessBuilder.Redirect;
+
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
@@ -56,8 +59,10 @@ import edu.wpi.first.math.geometry.Translation2d;
 public class Robot extends TimedRobot {
 
   private AutonomousBase m_autoSelected;
-  private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<AutonomousBase>();
-  private final SendableChooser<Boolean> allianceChooser = new SendableChooser<Boolean>();
+  private static final String red = "red";
+  private static final String blue = "blue";
+  private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<>();
+  private final SendableChooser<String> allianceChooser = new SendableChooser<>();
 
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   public static PneumaticIntakeSubsystem m_pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
@@ -71,8 +76,7 @@ public class Robot extends TimedRobot {
   boolean override = false;
   ChassisSpeeds m_ChassisSpeeds; 
   double mpi = Constants.METERS_PER_INCH;
-  public static boolean isBlueAlliance = true;
-  
+  public static String isBlueAlliance = "blue";
   
   private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
   private AutonomousBasePD testPath = PDPath.HDLeaveR;
@@ -90,8 +94,12 @@ public class Robot extends TimedRobot {
      
     System.out.println("#I'm Awake");
     
-    allianceChooser.setDefaultOption("blue alliance", true);
-    allianceChooser.addOption("blue alliance", false);
+
+    allianceChooser.setDefaultOption("Blue Alliance", blue);
+    allianceChooser.addOption("Red Alliance", red);    
+    SmartDashboard.putData("Which alliance?", allianceChooser);
+
+
     m_chooser.setDefaultOption("testPath", testPath);
     m_chooser.addOption("noGoR!", PDPath.noGoR);
     m_chooser.addOption("noGoB!", PDPath.noGoB);
@@ -114,7 +122,6 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("timed", timedPath);
    // m_chooser.addOption("Motion profiling tester path", motionProfiling);
     SmartDashboard.putData("Auto choices", m_chooser);
-    SmartDashboard.putData("is blue alliance", allianceChooser);
    
   }
 

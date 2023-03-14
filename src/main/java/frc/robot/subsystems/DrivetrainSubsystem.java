@@ -257,8 +257,8 @@ public class DrivetrainSubsystem {
 //   }
   
 public void driveTeleop(){
-        SmartDashboard.putBoolean("Alliance: ", Robot.isBlueAlliance); 
-        if(Robot.isBlueAlliance){
+        SmartDashboard.putBoolean("Alliance: ", Robot.isBlueAlliance.equalsIgnoreCase("blue")); 
+        if(Robot.isBlueAlliance.equalsIgnoreCase("blue")){
                 DoubleSupplier m_translationXSupplier = () -> -modifyAxis(OI.m_controller.getLeftY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
                 DoubleSupplier m_translationYSupplier = () -> -modifyAxis(OI.m_controller.getLeftX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
                 DoubleSupplier m_rotationSupplier = () -> -modifyAxis(OI.m_controller.getRightX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
