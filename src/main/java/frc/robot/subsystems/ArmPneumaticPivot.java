@@ -20,7 +20,7 @@ public class ArmPneumaticPivot { //actuate = down, retract = up
 
     public PneumaticPivotStates pneumaticPivotState = PneumaticPivotStates.OFF;
 
-    private DoubleSolenoid solenoid = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 4, 6); 
+    private static DoubleSolenoid solenoid = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 4, 6); 
 
     public void init() {
         solenoid.set(kOff);
@@ -32,6 +32,7 @@ public class ArmPneumaticPivot { //actuate = down, retract = up
             solenoid.set(kForward);
         } else if (pneumaticPivotState == PneumaticPivotStates.RETRACTING){
             solenoid.set(kReverse);
+            System.out.println("retracting");
         } else {
             solenoid.set(kOff);
         }

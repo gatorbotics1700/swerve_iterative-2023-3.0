@@ -27,7 +27,7 @@ public class PneumaticIntakeSubsystem {
     public PneumaticIntakeStates pneumaticIntakeState = PneumaticIntakeStates.OFF;
 
     public static final double COLOR_THRESHOLD = 0.03;
-    private DoubleSolenoid solenoidOne = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 5, 7); 
+    private static DoubleSolenoid solenoidOne = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 5, 7); 
     // Initializes a DigitalInput on DIO 0 (roborio is built in w/ 10 DIOs (digital input-output ports))
     private DigitalInput beambreakSensor = new DigitalInput(Constants.BEAM_BREAK_RECEIVER); 
     /**
