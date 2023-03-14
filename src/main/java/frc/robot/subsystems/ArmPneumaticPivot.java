@@ -16,11 +16,11 @@ public class ArmPneumaticPivot { //actuate = down, retract = up
         OFF;
     }
     
-    //public PneumaticIntakeSubsystem piSystem = Robot.pneumaticIntakeSubsystem;
+    public PneumaticIntakeSubsystem piSystem = Robot.m_pneumaticIntakeSubsystem;
 
     public PneumaticPivotStates pneumaticPivotState = PneumaticPivotStates.OFF;
 
-    private DoubleSolenoid solenoid = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 4, 6); 
+    private static DoubleSolenoid solenoid = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 4, 6); 
 
     public void init() {
         solenoid.set(kOff);
@@ -32,15 +32,16 @@ public class ArmPneumaticPivot { //actuate = down, retract = up
             solenoid.set(kForward);
         } else if (pneumaticPivotState == PneumaticPivotStates.RETRACTING){
             solenoid.set(kReverse);
+            System.out.println("retracting");
         } else {
             solenoid.set(kOff);
         }
     }
 
-   // public boolean getPSI(){
-        // System.out.println(piSystem.compressor.getCurrent());
-        // return piSystem.compressor.getPressureSwitchValue();
-    //}
+    public boolean getPSI(){
+        System.out.println(piSystem.compressor.getCurrent());
+        return piSystem.compressor.getPressureSwitchValue();
+    }
 
 
     public void setState(PneumaticPivotStates newPivotState){

@@ -1,14 +1,7 @@
 package frc.robot.subsystems.Vision;
 
-import javax.swing.plaf.nimbus.State;
-
-import edu.wpi.first.apriltag.AprilTagDetection;
-import edu.wpi.first.apriltag.AprilTagDetector;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
-import edu.wpi.first.cscore.CvSink;
-import edu.wpi.first.cscore.VideoSink;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants;
@@ -17,7 +10,6 @@ import frc.robot.autonomous.AutonomousBasePD;
 import frc.robot.autonomous.StateWithCoordinate;
 import frc.robot.autonomous.StateWithCoordinate.AutoStates;
 import frc.robot.subsystems.*;
-import frc.robot.Buttons;
 
 public class AprilTagSubsystem {
     public static enum AprilTagSequence{
@@ -26,7 +18,7 @@ public class AprilTagSubsystem {
         OFF;
     }
 
-    public static AprilTagSequence states = AprilTagSequence.DETECT; 
+    public static AprilTagSequence states = AprilTagSequence.OFF; 
     private static DrivetrainSubsystem drivetrainSubsystem = Robot.m_drivetrainSubsystem;
 
     public void setState(AprilTagSequence newState){
