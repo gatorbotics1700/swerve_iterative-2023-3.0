@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.Joystick;
 public class Buttons {
     
   DrivetrainSubsystem m_drivetrainSubsystem = Robot.m_drivetrainSubsystem;
-  PneumaticIntakeSubsystem pneumaticIntakeSubsystem = Robot.pneumaticIntakeSubsystem;
+  PneumaticIntakeSubsystem pneumaticIntakeSubsystem = Robot.m_pneumaticIntakeSubsystem;
   Mechanisms m_mechanisms = Robot.m_mechanisms;
   
   public static int scoringCol = 0;

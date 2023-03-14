@@ -6,6 +6,10 @@ package frc.robot;
 import frc.robot.Buttons;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.ArmPneumaticPivot;
+import frc.robot.subsystems.ArmPneumaticPivot.PneumaticPivotStates;
+import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
+import frc.robot.OI;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -61,6 +65,8 @@ public class Robot extends TimedRobot {
 
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   public static PneumaticIntakeSubsystem m_pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
+  public static ArmPneumaticPivot armPneumaticPivot = new ArmPneumaticPivot();
+  
   public static Mechanisms m_mechanisms = new Mechanisms();
   public static Buttons m_buttons = new Buttons();
 
@@ -173,6 +179,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     m_aprilTagSubsystem.init();
     isBlueAlliance = allianceChooser.getSelected();
+    m_mechanisms.init();
     //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
    // System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
     //armTelescopingSubsystem.init();
@@ -190,8 +197,6 @@ public class Robot extends TimedRobot {
     m_aprilTagSubsystem.periodic();
     
     m_buttons.buttonsPeriodic();
-    
-
 
   }
 
@@ -206,30 +211,14 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-    m_drivetrainSubsystem.resetOdometry(new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))));
-    testPath.init();
-    
-   // m_aprilTagSubsystem.init();
+    armPneumaticPivot.init();
   }
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic(){
-    //m_aprilTagSubsystem.periodic();
-    //testPath.driveDesiredDistance(new Pose2d(20 * Constants.METERS_PER_INCH, 20 * Constants.METERS_PER_INCH, new Rotation2d(Math.toRadians(0))));
-    m_mechanisms.retract();
-    //m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.0, Math.toRadians(0), m_drivetrainSubsystem.getPoseRotation()));
-    
-    
-    //m_drivetrainSubsystem.drive();
-    //System.out.println("rotation: " + DrivetrainSubsystem.m_pose.getRotation());
-
-    
-    //System.out.println(m_drivetrainSubsystem.getGyroscopeRotation());
-    //System.out.println("Front Left Module Postion: " + m_drivetrainSubsystem.m_frontLeftModule.getPosition());
-    //System.out.println("Front Right Module Position: " + m_drivetrainSubsystem.m_frontRightModule.getPosition());
-    //System.out.println("Back Left Module Position: " + m_drivetrainSubsystem.m_backLeftModule.getPosition());
-    //System.out.println("Back Right Module Position: " + m_drivetrainSubsystem.m_backRightModule.getPosition());
+  public void testPeriodic() {
+    armPneumaticPivot.setState(PneumaticPivotStates.RETRACTING);
+    armPneumaticPivot.periodic();
   }
 
   /** This function is called once when the robot is first started up. */
