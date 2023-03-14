@@ -128,6 +128,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+    SmartDashboard.putBoolean("Alliance: ", Robot.isBlueAlliance); 
     SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX()/Constants.METERS_PER_INCH);
     SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.METERS_PER_INCH);
     SmartDashboard.putNumber("angle odometry",DrivetrainSubsystem.m_pose.getRotation().getDegrees()%360);
@@ -164,7 +165,6 @@ public class Robot extends TimedRobot {
      
      //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
 
-    //  m_autoSelected.periodic();
      //m_drivetrainSubsystem.drive();
   }
 
