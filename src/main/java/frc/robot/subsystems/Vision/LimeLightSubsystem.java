@@ -1,9 +1,7 @@
 package frc.robot.subsystems.Vision;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardComponent;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import frc.robot.subsystems.*;
 import frc.robot.Constants; 
 
@@ -22,7 +20,7 @@ public class LimeLightSubsystem {
 
     public NetworkTable networkTable = NetworkTableInstance.getDefault().getTable("limelight");
 
-    private static AprilTagSubsystem aprilTagSubsystem = new AprilTagSubsystem();
+    private static AprilTagSubsystem aprilTagSubsystem = new AprilTagSubsystem(); //do we need this?
     // this variable determines whether the Limelight has a valid target
     public void reset(){
         tv = networkTable.getEntry("tv").getDouble(0.0);
@@ -30,6 +28,7 @@ public class LimeLightSubsystem {
         ty = networkTable.getEntry("ty").getDouble(0.0);
         ta = networkTable.getEntry("ta").getDouble(0.0);
     }
+
     public static void limelightData(){
         SmartDashboard.putNumber("tv:" , tv);
         SmartDashboard.putNumber("tx:", tx);
