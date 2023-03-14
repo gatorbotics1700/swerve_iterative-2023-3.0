@@ -46,14 +46,6 @@ public class Buttons {
           //pneumaticIntakeSubsystem.setState(PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF);
         }
     
-        if(OI.m_controller.getXButtonReleased()){
-          if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING || PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF){
-            //pneumaticIntakeSubsystem.setState(PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING);
-          } else if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING){
-            //pneumaticIntakeSubsystem.setState(PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING); 
-          }
-        }
-    
         if(OI.joystick.getRawButton(0)){
           buttonLevel(0);
         } else if (OI.joystick.getRawButton(1)){
@@ -73,10 +65,6 @@ public class Buttons {
         } else if (OI.joystick.getRawButton(8)){
           buttonLevel(8);
         }
-        /*System.out.println("back left module: " + m_drivetrainSubsystem.m_backLeftModule.getAbsoluteAngle());
-        System.out.println("back right module: " + m_drivetrainSubsystem.m_backRightModule.getSteerAngle());
-        System.out.println("front left module: " + m_drivetrainSubsystem.m_frontLeftModule.getSteerAngle());
-        System.out.println("front right module: " + m_drivetrainSubsystem.m_frontRightModule.getSteerAngle());*/
     
         System.out.println("override is " + override);
     
@@ -135,6 +123,12 @@ public class Buttons {
         }
     
         if(OI.m_controller_two.getRightBumper()){
+          if(override){
+            m_mechanisms.setState(MechanismStates.SHELF);
+            System.out.println("xbox: shelf"); 
+          }else{
+            level = AutoStates.SHELF;
+          }
         }
     
         if (OI.m_controller_two.getStartButton()){

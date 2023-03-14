@@ -13,8 +13,8 @@ public class OI {
     public static final XboxController m_controller = new XboxController(0);//main driver/driving controller
     public static final XboxController m_controller_two = new XboxController(1);//buttons/co-driver controller
 
-    public static Button pitchPD = Button.kLeftBumper;//pitch pd for charge station
-    public static Button stop = Button.kRightBumper;//stop drive bumper
+    //public static Button pitchPD = Button.kLeftBumper;//pitch pd for charge station
+    //public static Button stop = Button.kRightBumper;//stop drive bumper
 
     public static final  Joystick joystick = new Joystick(0);
     public static final JoystickButton button0 = new JoystickButton(joystick, 0);
