@@ -50,7 +50,7 @@ import frc.robot.PDPath;
 public class Robot extends TimedRobot {
 
   private AutonomousBase m_autoSelected;
-  private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<AutonomousBase>();
+  private final SendableChooser<AutonomousBase> auto_chooser = new SendableChooser<AutonomousBase>();
   private final SendableChooser<Boolean> allianceChooser = new SendableChooser<Boolean>();
 
 
@@ -86,23 +86,6 @@ public class Robot extends TimedRobot {
  
 // red alliance  
 // half the field (325.8415) - blue x value + half the field (325.8415) = red x value
-   
-
- public static ShuffleboardTab tab = DrivetrainSubsystem.tab;
-    public static GenericEntry test =
-    tab.add("test", 10)
-      .getEntry();
-    public static GenericEntry kP =
-        tab.add("Auto kP", 0.1)
-          .getEntry();
-    public static GenericEntry kI =
-    tab.add("Auto kI", 0.0)
-      .getEntry();
-    public static GenericEntry kD =
-        tab.add("Auto kD", 0.0)
-          .getEntry();
-    
-  
   
   
   /**
@@ -113,28 +96,29 @@ public class Robot extends TimedRobot {
   public void robotInit() { //creates options for different autopaths, names are placeholders    
     System.out.println("#I'm Awake");
     
-    allianceChooser.setDefaultOption("blue alliance", true);
-    allianceChooser.addOption("blue alliance", false);
-    m_chooser.setDefaultOption("testPath", testPath);
-   // m_chooser.setDefaultOption("current", PDPath.CurrentPath);
-    m_chooser.addOption("noGoR!", PDPath.noGoR);
-    m_chooser.addOption("noGoB!", PDPath.noGoB);
-    m_chooser.addOption("HDLeaveB", PDPath.HDLeaveB);
-    m_chooser.addOption("HBLeaveB", PDPath.HBLeaveB);
-    m_chooser.addOption("HBLeaveR", PDPath.HBLeaveR);
-    m_chooser.addOption("HDLeaveR", PDPath.HDLeaveR); 
-    m_chooser.addOption("timed", timedPath);
-    m_chooser.addOption("engageChargeR", PDPath.engageChargeR);
-    m_chooser.addOption("engageChargeB", PDPath.engageChargeB);
-    m_chooser.addOption("HDIntakeEngageB", PDPath.HDIntakeEngageB);
-    m_chooser.addOption("HDIntakeEngageR", PDPath.HDIntakeEngageR);
-    m_chooser.addOption("HD3ScoreR", PDPath.HD3ScoreR);
-    m_chooser.addOption("HD3ScoreB", PDPath.HD3ScoreB);
-    m_chooser.addOption("HB3ScoreR", PDPath.HB3ScoreR);
-    m_chooser.addOption("HB3ScoreB", PDPath.HB3ScoreB);
-   // m_chooser.addOption("Motion profiling tester path", motionProfiling);
-    SmartDashboard.putData("Auto choices", m_chooser);
-   
+    allianceChooser.setDefaultOption("blue alliance", false);
+    allianceChooser.addOption("red alliance", true);
+
+    auto_chooser.setDefaultOption("testPath", testPath);
+   // auto_chooser.setDefaultOption("current", PDPath.CurrentPath);
+    auto_chooser.addOption("noGoR!", PDPath.noGoR);
+    auto_chooser.addOption("noGoB!", PDPath.noGoB);
+    auto_chooser.addOption("HDLeaveB", PDPath.HDLeaveB);
+    auto_chooser.addOption("HBLeaveB", PDPath.HBLeaveB);
+    auto_chooser.addOption("HBLeaveR", PDPath.HBLeaveR);
+    auto_chooser.addOption("HDLeaveR", PDPath.HDLeaveR); 
+    auto_chooser.addOption("timed", timedPath);
+    auto_chooser.addOption("engageChargeR", PDPath.engageChargeR);
+    auto_chooser.addOption("engageChargeB", PDPath.engageChargeB);
+    auto_chooser.addOption("HDIntakeEngageB", PDPath.HDIntakeEngageB);
+    auto_chooser.addOption("HDIntakeEngageR", PDPath.HDIntakeEngageR);
+    auto_chooser.addOption("HD3ScoreR", PDPath.HD3ScoreR);
+    auto_chooser.addOption("HD3ScoreB", PDPath.HD3ScoreB);
+    auto_chooser.addOption("HB3ScoreR", PDPath.HB3ScoreR);
+    auto_chooser.addOption("HB3ScoreB", PDPath.HB3ScoreB);
+   // auto_chooser.addOption("Motion profiling tester path", motionProfiling);
+    SmartDashboard.putData("Auto choices", auto_chooser);
+    SmartDashboard.putData("Which alliance?", allianceChooser);
   }
 
   /**
@@ -154,6 +138,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("beam broken?", m_pneumaticIntakeSubsystem.isBeamBroken());
     SmartDashboard.putBoolean("cube?", m_pneumaticIntakeSubsystem.getPurple());
     SmartDashboard.putBoolean("cone?", m_pneumaticIntakeSubsystem.getYellow());
+    SmartDashboard.putBoolean("alliance", m_drivetrainSubsystem.isBlueAlliance); 
   }
 
   /**
@@ -169,11 +154,10 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_mechanisms.init();
-    //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
-    // System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
-    System.out.println("current pose: " + DrivetrainSubsystem.m_pose.getX() + " , " + DrivetrainSubsystem.m_pose.getY());
-    m_autoSelected = m_chooser.getSelected();
+
     m_drivetrainSubsystem.setIsBlueAlliance(allianceChooser.getSelected());
+    System.out.println("current pose: " + DrivetrainSubsystem.m_pose.getX() + " , " + DrivetrainSubsystem.m_pose.getY());
+    m_autoSelected = auto_chooser.getSelected();
     m_autoSelected.init();
   }
 
