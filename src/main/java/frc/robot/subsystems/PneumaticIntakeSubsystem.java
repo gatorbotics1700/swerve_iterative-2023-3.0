@@ -93,13 +93,7 @@ public class PneumaticIntakeSubsystem {
         boolean yellowNotBlueThreshold = (Math.abs(detectedColor.blue-kYellowTarget.blue)>COLOR_THRESHOLD);
         
         if((purpleNotRedThreshold && purpleNotGreenThreshold) || (purpleNotRedThreshold &&purpleNotBlueThreshold) || (purpleNotGreenThreshold && purpleNotBlueThreshold)){
-           // System.out.println("diff w/ purple red: " + (detectedColor.red-kPurpleTarget.red));
-           // System.out.println("diff w/ purple green: " + (detectedColor.green-kPurpleTarget.green));
-           // System.out.println("diff w/ purple blue: " + (detectedColor.blue-kPurpleTarget.blue));
             if((yellowNotRedThreshold && yellowNotGreenThreshold) || (yellowNotRedThreshold && yellowNotBlueThreshold) || (yellowNotGreenThreshold && yellowNotBlueThreshold)){
-               // System.out.println("diff w/ yellow red: " + (detectedColor.red-kYellowTarget.red));
-               // System.out.println("diff w/ yellow green: " + (detectedColor.green-kYellowTarget.green));
-                //System.out.println("diff w/ yellow blue: " + (detectedColor.blue-kYellowTarget.blue));
                 colorString = "Unknown";
                 //match should become black here
                 match = colorMatcher.matchClosestColor(new Color(0,0,0));
@@ -114,7 +108,7 @@ public class PneumaticIntakeSubsystem {
             colorString = "Unknown"; 
         }
         System.out.println(colorString + " detected");
-        }
+    }
 
     public void periodic(){
        if(pneumaticIntakeState == PneumaticIntakeStates.ACTUATING){
