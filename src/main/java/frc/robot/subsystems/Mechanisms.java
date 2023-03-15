@@ -10,8 +10,8 @@ import frc.robot.Constants;
 
 public class Mechanisms {
     
-    private static ArmTelescopingSubsystem armTelescopingSubsystem = new ArmTelescopingSubsystem();
-    private static ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+    public static ArmTelescopingSubsystem armTelescopingSubsystem = new ArmTelescopingSubsystem();
+    public static ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
     
 
     public void init(){
@@ -19,9 +19,9 @@ public class Mechanisms {
         elevatorSubsystem.init();
 
         //telescope
-        armTelescopingSubsystem.setTState(TelescopingStates.SHELF_ARM_LENGTH); //moved from auto periodic to init
+        armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED); //moved from auto periodic to init
         armTelescopingSubsystem.init();
-        armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs); //VERY VERY IMPORTANT
+        //armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs); //VERY VERY IMPORTANT
     
         mechState = MechanismStates.HOLDING; 
     }
@@ -43,17 +43,19 @@ public class Mechanisms {
         if (mechState == MechanismStates.LOW_NODE){
             elevatorSubsystem.setState(ElevatorStates.LOW_ELEVATOR_HEIGHT);
             if(elevatorSubsystem.isAtLow()){
+                System.out.println("elevator is at low");
                 armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
             }
-            
         } else if (mechState == MechanismStates.MID_NODE){
             elevatorSubsystem.setState(ElevatorStates.MID_ELEVATOR_HEIGHT);
             if(elevatorSubsystem.isAtMid()){
+                System.out.println("elevator is at mid");
                 armTelescopingSubsystem.setTState(TelescopingStates.MID_ARM_LENGTH);
             }
         } else if (mechState == MechanismStates.HIGH_NODE) {
             elevatorSubsystem.setState(ElevatorStates.HIGH_ELEVATOR_HEIGHT);
             if(elevatorSubsystem.isAtHigh()){
+                System.out.println("elevator is at high");
                 armTelescopingSubsystem.setTState(TelescopingStates.HIGH_ARM_LENGTH);
             }
         } else if (mechState == MechanismStates.SHELF){
@@ -62,7 +64,7 @@ public class Mechanisms {
               armTelescopingSubsystem.setTState(TelescopingStates.SHELF_ARM_LENGTH);
             }
         } else { 
-            elevatorSubsystem.setState(ElevatorStates.ZERO);
+            elevatorSubsystem.setState(ElevatorStates.STOPPED);
             armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
         }
     }

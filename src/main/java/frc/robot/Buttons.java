@@ -65,9 +65,7 @@ public class Buttons {
         } else if (OI.joystick.getRawButton(8)){
           buttonLevel(8);
         }
-    
-        System.out.println("override is " + override);
-    
+        
         //driver
         if (OI.m_controller.getBButton()){ 
           m_drivetrainSubsystem.stopDrive(); //stop all mech?
@@ -108,10 +106,11 @@ public class Buttons {
     
         }
     
-        if(OI.m_controller_two.getXButton()){ //override button
+        if(OI.m_controller_two.getXButtonPressed()){ //override button
           override = !override;
         }
-    
+        System.out.println("override is " + override);
+
     
     
         if(OI.m_controller_two.getLeftBumperReleased()){ //needs its own button & not enough

@@ -70,7 +70,10 @@ public class ArmTelescopingSubsystem {
             telescopeDeadband(RETRACTEDTICKS);
         } else if (tState == TelescopingStates.LOW_ARM_LENGTH){
             desiredTicks = LOWARMTICKS; //official 2/13
-            System.out.println("desired ticks: " + desiredTicks);
+            telescopingMotor.set(ControlMode.Position, desiredTicks);
+            System.out.println("tryinggg to go low");
+            System.out.println("our ticks: " + telescopingMotor.getSelectedSensorPosition());
+            System.out.println("desired telescope ticks: " + desiredTicks);
             System.out.println("error: " + (desiredTicks - telescopingMotor.getSelectedSensorPosition()));
             telescopeDeadband(LOWARMTICKS);
         } else if (tState == TelescopingStates.SHELF_ARM_LENGTH){
@@ -81,6 +84,9 @@ public class ArmTelescopingSubsystem {
         }else if (tState == TelescopingStates.MID_ARM_LENGTH){
             desiredTicks = MIDARMTICKS; //should be 2.75 inches
             telescopingMotor.set(ControlMode.Position, desiredTicks-tareEncoder); // goes with 90 degrees rotation 
+            System.out.println("tryinggg to go mid");
+            System.out.println("our ticks: " + telescopingMotor.getSelectedSensorPosition());
+            System.out.println("desired telescope ticks: " + desiredTicks);
             System.out.println("error: " + (desiredTicks - telescopingMotor.getSelectedSensorPosition()));
             telescopeDeadband(MIDARMTICKS);
         }else if(tState == TelescopingStates.HIGH_ARM_LENGTH){ //high arm length
@@ -93,9 +99,10 @@ public class ArmTelescopingSubsystem {
     }
 
     public void telescopeDeadband(double desiredTicks){
+        System.out.println("difference: " + (desiredTicks - telescopingMotor.getSelectedSensorPosition()));
         if (Math.abs(desiredTicks - telescopingMotor.getSelectedSensorPosition()) < deadband){
             telescopingMotor.set(ControlMode.PercentOutput, 0);
-            System.out.println("STOPPED");
+            System.out.println("TELESCOPE STOPPED");
         }
     }
     
