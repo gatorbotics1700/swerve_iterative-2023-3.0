@@ -47,6 +47,7 @@ import frc.robot.subsystems.ArmTelescopingSubsystem.TelescopingStates;
 import frc.robot.subsystems.Vision.AprilTagSubsystem;
 import frc.robot.subsystems.Vision.LimeLightSubsystem;
 import edu.wpi.first.math.geometry.Translation2d;
+import frc.robot.PDPath;
 
 
 
@@ -98,8 +99,7 @@ public class Robot extends TimedRobot {
   * initialization code.
   */
   @Override
-  public void robotInit() { //creates options for different autopaths, names are placeholders
-     
+  public void robotInit() { //creates options for different autopaths, names are placeholders    
     System.out.println("#I'm Awake");
     
 
@@ -147,7 +147,11 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX()/Constants.METERS_PER_INCH);
     SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.METERS_PER_INCH);
     SmartDashboard.putNumber("angle odometry",DrivetrainSubsystem.m_pose.getRotation().getDegrees()%360);
-    //SmartDashboard.putBoolean("Ready to Score", m_limeLightSubsystem.seeSomething());
+    SmartDashboard.putBoolean("Ready to Score", m_limeLightSubsystem.seeSomething());
+    SmartDashboard.putBoolean("beam broken?", m_pneumaticIntakeSubsystem.isBeamBroken());
+    SmartDashboard.putBoolean("cube?", m_pneumaticIntakeSubsystem.getPurple());
+    SmartDashboard.putBoolean("cone?", m_pneumaticIntakeSubsystem.getYellow());
+    SmartDashboard.putBoolean("alliance", m_drivetrainSubsystem.isBlueAlliance); 
   }
 
   /**
@@ -163,10 +167,10 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_mechanisms.init();
-    //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
-    // System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
+
+    m_drivetrainSubsystem.setIsBlueAlliance(allianceChooser.getSelected());
     System.out.println("current pose: " + DrivetrainSubsystem.m_pose.getX() + " , " + DrivetrainSubsystem.m_pose.getY());
-    m_autoSelected = m_chooser.getSelected();
+    m_autoSelected = auto_chooser.getSelected();
     m_autoSelected.init();
     isBlueAlliance = allianceChooser.getSelected();
   }
