@@ -16,7 +16,7 @@ public class OI {
     //public static Button pitchPD = Button.kLeftBumper;//pitch pd for charge station
     //public static Button stop = Button.kRightBumper;//stop drive bumper
 
-    public static final  Joystick joystick = new Joystick(0);
+    public static final  Joystick joystick = new Joystick(2);
     public static final JoystickButton button0 = new JoystickButton(joystick, 0);
     public static final JoystickButton button1 = new JoystickButton(joystick, 1);
     public static final JoystickButton button2 = new JoystickButton(joystick, 2);

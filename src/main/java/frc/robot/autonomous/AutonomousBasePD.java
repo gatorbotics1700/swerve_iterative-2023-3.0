@@ -187,7 +187,8 @@ public class AutonomousBasePD extends AutonomousBase{
                     i++;
                     intakeCounter = -1;
                 }
-                //pneumaticIntakeSubsystem.setState(PneumaticIntakeStates.ACTUATING); //unclear if we need... based on beam break
+                mechanisms.setState(MechanismStates.GROUNDPICKUP);
+                pneumaticIntakeSubsystem.setState(PneumaticIntakeStates.ACTUATING);
             }else{
                 drivetrainSubsystem.stopDrive();
             

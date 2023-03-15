@@ -19,7 +19,7 @@ public class ElevatorSubsystem {
     public int _kIzone = 0;
     public double _kPeakOutput = 1.0;
     private final double HIGHHEIGHT = 48; 
-    private final double MIDHEIGHT = 20; //changed 3/14 245pm //why was this originally 40; 
+    private final double MIDHEIGHT = 30; //changed 3/14 245pm //why was this originally 40; 
     private final double LOWHEIGHT = 10; //old was 30; 
     private final double SHELF = 5; 
 
@@ -64,7 +64,7 @@ public class ElevatorSubsystem {
      * add node safety with 5?
      */
     public void periodic(){
-        System.out.println("current elevator motor position:" + elevatorMotor.getSelectedSensorPosition()/Constants.TICKS_PER_INCH);
+        //System.out.println("current elevator motor position:" + elevatorMotor.getSelectedSensorPosition()/Constants.TICKS_PER_INCH);
         if (elevatorState == ElevatorStates.ZERO){ //emergency stop
             System.out.println("desired ticks: 0");
             System.out.println("error: " + (0 - elevatorMotor.getSelectedSensorPosition()));
@@ -76,19 +76,18 @@ public class ElevatorSubsystem {
             System.out.println("error: " + (desiredTicks - elevatorMotor.getSelectedSensorPosition()));
             elevatorDeadband(desiredTicks);
         } else if (elevatorState == ElevatorStates.SHELF_ELEVATOR_HEIGHT) {
-            desiredInches = 30 - 15; //official 2/13
+            desiredInches = 25; //official 2/13
             double desiredTicks = determineRightTicks();
             elevatorDeadband(desiredTicks);
         } else if (elevatorState == ElevatorStates.MID_ELEVATOR_HEIGHT){
-            desiredInches = (20); //official 2/13 //went 22 inches
+            desiredInches = 34; //official 2/13 //went 22 inches
             double desiredTicks = determineRightTicks();
             elevatorDeadband(desiredTicks);
         } else if(elevatorState == ElevatorStates.HIGH_ELEVATOR_HEIGHT){ //high elevator height
-            desiredInches = 30; //48 - 15; //official 2/13
+            desiredInches = 34; //48 - 15; //official 2/13
             double desiredTicks = determineRightTicks();
             elevatorDeadband(desiredTicks);
-        }
-        else { //emergency stop again for safety
+        } else { //emergency stop again for safety
             elevatorMotor.set(ControlMode.PercentOutput, 0.0);
         }
 

@@ -46,23 +46,23 @@ public class Buttons {
           //pneumaticIntakeSubsystem.setState(PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF);
         }
     
-        if(OI.joystick.getRawButton(0)){
+        if(OI.joystick.getRawButton(1)){
           buttonLevel(0);
-        } else if (OI.joystick.getRawButton(1)){
-          buttonLevel(1);
         } else if (OI.joystick.getRawButton(2)){
-          buttonLevel(2);
+          buttonLevel(1);
         } else if (OI.joystick.getRawButton(3)){
-          buttonLevel(3);
+          buttonLevel(2);
         } else if (OI.joystick.getRawButton(4)){
-          buttonLevel(4);
+          buttonLevel(3);
         } else if (OI.joystick.getRawButton(5)){
-          buttonLevel(5);
+          buttonLevel(4);
         } else if (OI.joystick.getRawButton(6)){
-          buttonLevel(6);
+          buttonLevel(5);
         } else if (OI.joystick.getRawButton(7)){
-          buttonLevel(7);
+          buttonLevel(6);
         } else if (OI.joystick.getRawButton(8)){
+          buttonLevel(7);
+        } else if (OI.joystick.getRawButton(9)){
           buttonLevel(8);
         }
         
@@ -73,7 +73,7 @@ public class Buttons {
         }
     
         if(OI.m_controller.getXButton()){
-        // m_drivetrainSubsystem.pitchBalance(0.0);
+          m_drivetrainSubsystem.pitchBalance(0.0);
         }
     
     
@@ -107,13 +107,15 @@ public class Buttons {
         }
     
         if(OI.m_controller_two.getXButtonPressed()){ //override button
-          override = !override;
+          if(override){
+            m_mechanisms.setState(MechanismStates.GROUNDPICKUP);
+          } else {
+            level = AutoStates.INTAKING;
+          }
         }
-        System.out.println("override is " + override);
-
-    
     
         if(OI.m_controller_two.getLeftBumperReleased()){ //needs its own button & not enough
+          System.out.println("intake");
           if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING || PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF){
             pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING);
           } else if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING){
@@ -131,18 +133,19 @@ public class Buttons {
         }
     
         if (OI.m_controller_two.getStartButton()){
-          
+          override = !override;
+          System.out.println("override is " + override);
         }
     
         if (OI.m_controller_two.getBackButton()){
-    
+          m_mechanisms.setState(MechanismStates.HOLDING);
         }
         
   }
 
 
   public void buttonLevel(int col){
-      if(Robot.isBlueAlliance.equalsIgnoreCase("blue")){
+      if(Robot.isBlueAlliance){
         if(level == AutoStates.LOWNODE){
           scoringCol = col + 9;
         } else {
@@ -155,6 +158,7 @@ public class Buttons {
           scoringCol = col + 18;
         }
       }
+      System.out.println("Scoring Col: " + scoringCol);
     }
 
 }

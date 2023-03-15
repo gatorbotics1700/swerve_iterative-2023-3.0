@@ -63,19 +63,17 @@ import edu.wpi.first.math.geometry.Translation2d;
 public class Robot extends TimedRobot {
 
   private AutonomousBase m_autoSelected;
-  private static final String red = "red";
-  private static final String blue = "blue";
+  private static final Boolean red = false;
+  private static final Boolean blue = true;
   private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<>();
-  private final SendableChooser<String> allianceChooser = new SendableChooser<>();
+  private final SendableChooser<Boolean> allianceChooser = new SendableChooser<>();
 
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   public static PneumaticIntakeSubsystem m_pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
-  public static ArmPneumaticPivot armPneumaticPivot = new ArmPneumaticPivot();
   
   public static Mechanisms m_mechanisms = new Mechanisms();
   public static Buttons m_buttons = new Buttons();
-
-  public static ArmTelescopingSubsystem armTelescopingSubsystem = Mechanisms.armTelescopingSubsystem;
+  public static ArmTelescopingSubsystem armTelescopingSubsystem = new ArmTelescopingSubsystem();
 
   private final LimeLightSubsystem m_limeLightSubsystem = new LimeLightSubsystem();
   private final AprilTagSubsystem m_aprilTagSubsystem = new AprilTagSubsystem();
@@ -84,7 +82,7 @@ public class Robot extends TimedRobot {
   boolean override = false;
   ChassisSpeeds m_ChassisSpeeds; 
   double mpi = Constants.METERS_PER_INCH;
-  public static String isBlueAlliance = "blue";
+  public static Boolean isBlueAlliance = true;
   
   private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
   private AutonomousBasePD testPath = PDPath.HDLeaveR;
@@ -143,10 +141,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    SmartDashboard.putString("Alliance: ", Robot.isBlueAlliance); 
+    // System.out.println(allianceChooser.getSelected());
+    isBlueAlliance = allianceChooser.getSelected();
+    SmartDashboard.putBoolean("Alliance: ", isBlueAlliance); 
     SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX()/Constants.METERS_PER_INCH);
     SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.METERS_PER_INCH);
     SmartDashboard.putNumber("angle odometry",DrivetrainSubsystem.m_pose.getRotation().getDegrees()%360);
+    
     //SmartDashboard.putBoolean("Ready to Score", m_limeLightSubsystem.seeSomething());
   }
 
@@ -204,7 +205,7 @@ public class Robot extends TimedRobot {
     m_mechanisms.periodic();
     //System.out.println("i am in teleop");
     //m_aprilTagSubsystem.periodic();
-    
+    m_pneumaticIntakeSubsystem.periodic();
     m_buttons.buttonsPeriodic();
 
   }
@@ -221,12 +222,15 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     armTelescopingSubsystem.init();
+    //m_mechanisms.init();
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-    if(OI.m_controller.getAButtonPressed()){
+    //m_mechanisms.setState(MechanismStates.HOLDING);
+    //m_mechanisms.periodic();
+    /*if(OI.m_controller.getAButtonPressed()){
       armTelescopingSubsystem.setTState(TelescopingStates.MID_ARM_LENGTH);
     } else if (OI.m_controller.getBButtonPressed()){
       System.out.println("b button --> low");
@@ -235,12 +239,14 @@ public class Robot extends TimedRobot {
       armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
     } else if(OI.m_controller.getYButton()){
       armTelescopingSubsystem.telescopingMotor.set(ControlMode.PercentOutput, -0.2);
-    }
-    else if (OI.m_controller.getLeftBumper()){
+    }*/
+    if (OI.m_controller.getLeftBumper()){
       armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0);
+    } else {
+      armTelescopingSubsystem.telescopingMotor.set(ControlMode.PercentOutput, -0.2);
     }
     
-    //armTelescopingSubsystem.periodic();
+   // armTelescopingSubsystem.periodic();
   }
 
   /** This function is called once when the robot is first started up. */

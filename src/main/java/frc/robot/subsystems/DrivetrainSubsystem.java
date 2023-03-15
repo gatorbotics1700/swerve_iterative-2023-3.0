@@ -34,9 +34,9 @@ import frc.robot.OI;
 import frc.robot.subsystems.ArmTelescopingSubsystem.TelescopingStates;
 
 public class DrivetrainSubsystem {
-   private static double pitchKP = 0.025;
+   private static double pitchKP = 0.035; //0.025;
    private static double pitchKI = 0.0;
-   private static double pitchKD = 0.001;
+   private static double pitchKD = 0.001; //0.001;
    private PIDController pitchController = new PIDController(pitchKP, pitchKI, pitchKD);
    public static double MINOUTPUT = 0.1;
    public static double universalPitch = 0;
@@ -260,7 +260,7 @@ public void driveTeleop(){
         DoubleSupplier m_translationXSupplier;
         DoubleSupplier m_translationYSupplier;
         DoubleSupplier m_rotationSupplier;
-        if(Robot.isBlueAlliance.equalsIgnoreCase("blue")){
+        if(Robot.isBlueAlliance){
                 m_translationXSupplier = () -> -modifyAxis(OI.m_controller.getLeftY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
                 m_translationYSupplier = () -> -modifyAxis(OI.m_controller.getLeftX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
                 m_rotationSupplier = () -> -modifyAxis(OI.m_controller.getRightX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
