@@ -17,7 +17,11 @@ import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import frc.robot.Constants;
 
+
 public class PneumaticIntakeSubsystem {
+    private static boolean isPurple;
+    private static boolean isYellow;
+
     public static enum PneumaticIntakeStates{
         ACTUATING, 
         RETRACTING, 
@@ -93,28 +97,28 @@ public class PneumaticIntakeSubsystem {
         boolean yellowNotBlueThreshold = (Math.abs(detectedColor.blue-kYellowTarget.blue)>COLOR_THRESHOLD);
         
         if((purpleNotRedThreshold && purpleNotGreenThreshold) || (purpleNotRedThreshold &&purpleNotBlueThreshold) || (purpleNotGreenThreshold && purpleNotBlueThreshold)){
-           // System.out.println("diff w/ purple red: " + (detectedColor.red-kPurpleTarget.red));
-           // System.out.println("diff w/ purple green: " + (detectedColor.green-kPurpleTarget.green));
-           // System.out.println("diff w/ purple blue: " + (detectedColor.blue-kPurpleTarget.blue));
             if((yellowNotRedThreshold && yellowNotGreenThreshold) || (yellowNotRedThreshold && yellowNotBlueThreshold) || (yellowNotGreenThreshold && yellowNotBlueThreshold)){
-               // System.out.println("diff w/ yellow red: " + (detectedColor.red-kYellowTarget.red));
-               // System.out.println("diff w/ yellow green: " + (detectedColor.green-kYellowTarget.green));
-                //System.out.println("diff w/ yellow blue: " + (detectedColor.blue-kYellowTarget.blue));
                 colorString = "Unknown";
                 //match should become black here
                 match = colorMatcher.matchClosestColor(new Color(0,0,0));
             }
         }
-        
+
         if (match.color == kPurpleTarget) {
             colorString = "Purple";
+            isPurple = true;
+            isYellow = false;
         } else if (match.color == kYellowTarget){//means its yellow :DDD
             colorString = "Yellow";
+            isYellow = true;
+            isPurple = false;
         } else{
             colorString = "Unknown"; 
+            isPurple = false;
+            isYellow = false;
         }
         System.out.println(colorString + " detected");
-        }
+    }
 
     public void periodic(){
        if(pneumaticIntakeState == PneumaticIntakeStates.ACTUATING){
@@ -129,9 +133,12 @@ public class PneumaticIntakeSubsystem {
         }
     }
 
-    public boolean getPSI(){
-        System.out.println(compressor.getCurrent());
-        return compressor.getPressureSwitchValue();
+    public boolean getYellow(){
+        return isYellow;
+    }
+
+    public boolean getPurple(){
+        return isPurple;
     }
 
     public void setState(PneumaticIntakeStates newPneumaticIntakeState){
@@ -141,4 +148,6 @@ public class PneumaticIntakeSubsystem {
     public boolean isBeamBroken(){
         return beambreakSensor.get(); 
     }
+
+    
 }

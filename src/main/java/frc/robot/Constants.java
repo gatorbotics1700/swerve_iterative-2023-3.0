@@ -71,26 +71,32 @@ public final class Constants {
 
     public static final double SWERVE_GEAR_RATIO = 6.75;
     public static final double TICKS_PER_REV = 2048;
-    public static final double TELESCOPING_ARM_GEAR_RATIO = 36.0;
-    public static final double ELEVATOR_GEAR_RATIO = 25.0;
+    public static final double METERS_PER_INCH = 0.0254;
     public static final double SWERVE_WHEEL_DIAMETER = 4.0;
-    public static final double ELEVATOR_SPROCKET_DIAMETER = 1.28;
-    public static final int ELEVATOR_CAN_ID = 30;
-    public static final double ELEVATOR_TICKS_PER_INCH = TICKS_PER_REV*ELEVATOR_GEAR_RATIO/ELEVATOR_SPROCKET_DIAMETER/Math.PI;
+    public static final double SWERVE_TICKS_PER_INCH = TICKS_PER_REV*SWERVE_GEAR_RATIO/SWERVE_WHEEL_DIAMETER/Math.PI; //talonfx drive encoder
+    public static final double TICKS_PER_METER = SWERVE_TICKS_PER_INCH/METERS_PER_INCH;
+    public static final double TICKS_PER_INCH = TICKS_PER_METER*METERS_PER_INCH;
+
+    //TELESCOPE
+    public static final double TELESCOPING_ARM_GEAR_RATIO = 36.0;
     public static final int TELESCOPING_MOTOR_ID = 31;
 
-    public static final double SWERVE_TICKS_PER_INCH = TICKS_PER_REV*SWERVE_GEAR_RATIO/SWERVE_WHEEL_DIAMETER/Math.PI; //talonfx drive encoder
+    //ELEVATOR
+    public static final double ELEVATOR_SPROCKET_DIAMETER = 1.28;
+    public static final int ELEVATOR_CAN_ID = 30;
+    public static final double ELEVATOR_GEAR_RATIO = 25.0;
+    public static final double ELEVATOR_TICKS_PER_INCH = TICKS_PER_REV*ELEVATOR_GEAR_RATIO/ELEVATOR_SPROCKET_DIAMETER/Math.PI;
 
+    //INTAKE
     public static final int INTAKE_SENSOR = 0;
-
-    public static final double TAPE_HEIGHT_ONE = 0.0; //TODO: needs to be changed
-    public static final double METERS_PER_INCH = 0.0254;
-    public static final double LIMELIGHT_HEIGHT = 52 * METERS_PER_INCH;
-    public static final double TICKS_PER_METER = SWERVE_TICKS_PER_INCH/METERS_PER_INCH;
-    public static final double LIMELIGHT_ANGLE = -24; //in degrees
-    public static final double TICKS_PER_INCH = TICKS_PER_METER*METERS_PER_INCH;
     public static final int BEAM_BREAK_RECEIVER = 9;
     public static final int BEAM_BREAK_SENDER = 10;
+
+    //VISION
+    public static final double TAPE_HEIGHT_ONE = 0.0; //TODO: needs to be changed
+    public static final double LIMELIGHT_HEIGHT = 52 * METERS_PER_INCH;
+    public static final double LIMELIGHT_ANGLE = -24; //in degrees
+   
     public static final int kPIDLoopIdx = 0;
     public static final int kTimeoutMs = 1000;
 }

@@ -22,7 +22,12 @@ import edu.wpi.first.math.estimator.*;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Robot;import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+
 import frc.robot.Robot;
+
 
 import java.util.Arrays;
 import java.util.function.DoubleSupplier;
@@ -48,6 +53,7 @@ public class DrivetrainSubsystem {
    * This can be reduced to cap the robot's maximum speed. Typically, this is useful during initial testing of the robot.
    */
   public static final double MAX_VOLTAGE = 16.3;
+  public boolean isBlueAlliance = true;
   //  The formula for calculating the theoretical maximum velocity is:
   //   <Motor free speed RPM> / 60 * <Drive reduction> * <Wheel diameter meters> * pi
   //  By default this value is setup for a Mk3 standa
@@ -248,6 +254,14 @@ public class DrivetrainSubsystem {
         m_chassisSpeeds = chassisSpeeds;
   }
 
+  public void setIsBlueAlliance(boolean isBlueAlliance) {
+       this.isBlueAlliance = isBlueAlliance;
+  }
+
+  public boolean getIsBlueAlliance(){
+        return isBlueAlliance;
+  }
+
 //   public Pose2d getCurrentPose(){
 //         return m_pose;
 //   }
@@ -275,7 +289,7 @@ public void driveTeleop(){
                         m_translationXSupplier.getAsDouble(),
                         m_translationYSupplier.getAsDouble(),
                         m_rotationSupplier.getAsDouble(),
-                        m_pose.getRotation()
+                        getGyroscopeRotation()
                 )
         );
   }

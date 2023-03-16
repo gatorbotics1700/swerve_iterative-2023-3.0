@@ -64,25 +64,31 @@ public class Buttons {
           //pneumaticIntakeSubsystem.setState(PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF);
         }
     
-        if(OI.joystick.getRawButton(1)){
-          buttonLevel(0);
-        } else if (OI.joystick.getRawButton(2)){
-          buttonLevel(1);
-        } else if (OI.joystick.getRawButton(3)){
-          buttonLevel(2);
-        } else if (OI.joystick.getRawButton(4)){
-          buttonLevel(3);
-        } else if (OI.joystick.getRawButton(5)){
-          buttonLevel(4);
-        } else if (OI.joystick.getRawButton(6)){
-          buttonLevel(5);
-        } else if (OI.joystick.getRawButton(7)){
-          buttonLevel(6);
-        } else if (OI.joystick.getRawButton(8)){
-          buttonLevel(7);
-        } else if (OI.joystick.getRawButton(9)){
-          buttonLevel(8);
+        for (int i = 1; i < 10; i++){
+          if(OI.joystick.getRawButton(i)){
+            buttonLevel(i-1);
+          }
         }
+
+        // if(OI.joystick.getRawButton(0)){
+        //   buttonLevel(0);
+        // } else if (OI.joystick.getRawButton(1)){
+        //   buttonLevel(1);
+        // } else if (OI.joystick.getRawButton(2)){
+        //   buttonLevel(2);
+        // } else if (OI.joystick.getRawButton(3)){
+        //   buttonLevel(3);
+        // } else if (OI.joystick.getRawButton(4)){
+        //   buttonLevel(4);
+        // } else if (OI.joystick.getRawButton(5)){
+        //   buttonLevel(5);
+        // } else if (OI.joystick.getRawButton(6)){
+        //   buttonLevel(6);
+        // } else if (OI.joystick.getRawButton(7)){
+        //   buttonLevel(7);
+        // } else if (OI.joystick.getRawButton(8)){
+        //   buttonLevel(8);
+        // }
         
         //driver
         if (OI.m_controller.getBButton()){ 
