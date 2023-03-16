@@ -119,13 +119,13 @@ public class PneumaticIntakeSubsystem {
     public void periodic(){
        if(pneumaticIntakeState == PneumaticIntakeStates.ACTUATING){
             solenoidOne.set(kForward);
-            System.out.println("Solenoid Actuating");
+            //System.out.println("Solenoid Actuating");
         } else if (pneumaticIntakeState == PneumaticIntakeStates.RETRACTING){
             solenoidOne.set(kReverse);
-            System.out.println("Solenoid Retracting");
+            //System.out.println("Solenoid Retracting");
         }else{
             solenoidOne.set(kOff);
-            System.out.println("Solenoid Off");
+            //System.out.println("Solenoid Off");
         }
     }
 

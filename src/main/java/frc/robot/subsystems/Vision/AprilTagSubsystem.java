@@ -1,7 +1,7 @@
 package frc.robot.subsystems.Vision;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-
+import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants;
@@ -10,6 +10,7 @@ import frc.robot.autonomous.AutonomousBasePD;
 import frc.robot.autonomous.StateWithCoordinate;
 import frc.robot.autonomous.StateWithCoordinate.AutoStates;
 import frc.robot.subsystems.*;
+import frc.robot.Buttons;
 
 public class AprilTagSubsystem {
     public static enum AprilTagSequence{
@@ -31,25 +32,25 @@ public class AprilTagSubsystem {
     public void init(){
         limeLightSubsystem.setPipeline(1.0);
         autonomousBasePD.resetControllers();
-        Robot.m_drivetrainSubsystem.resetOdometry(new Pose2d(AprilTagLocation.scoringPoses[4].getX() -36.5*Constants.METERS_PER_INCH, AprilTagLocation.scoringPoses[4].getY() - 12.0*Constants.METERS_PER_INCH, new Rotation2d(Math.toRadians(0.0))));
-        System.out.println("resetted odometry in INIT to: " + DrivetrainSubsystem.m_pose);
+        //Robot.m_drivetrainSubsystem.resetOdometry(new Pose2d(AprilTagLocation.scoringPoses[4].getX() -36.5*Constants.METERS_PER_INCH, AprilTagLocation.scoringPoses[4].getY() - 12.0*Constants.METERS_PER_INCH, new Rotation2d(Math.toRadians(0.0))));
+        //System.out.println("resetted odometry in INIT to: " + DrivetrainSubsystem.m_pose);
         setState(AprilTagSequence.OFF);
     }
     
     public void periodic(){
-        Robot.m_drivetrainSubsystem.drive();
         if(states == AprilTagSequence.DETECT){
             limeLightSubsystem.reset();
+            // System.out.println("detect");
             if(LimeLightSubsystem.tv!=0){ //made private in limelightss but changed due to pull request- ask katherine!
                 System.out.println("APRIL TAG DETECTED!!!!!!");
                 setState(AprilTagSequence.CORRECTPOSITION);
                 autonomousBasePD.resetControllers();
                 autonomousBasePD = new AutonomousBasePD(DrivetrainSubsystem.m_pose, new StateWithCoordinate[]{                    
                     new StateWithCoordinate(AutoStates.FIRST),
-                    new StateWithCoordinate(AutoStates.DRIVE, AprilTagLocation.scoringPoses[4]),
-                    //new StateWithCoordinate(Robot.level)
+                    new StateWithCoordinate(AutoStates.DRIVE, AprilTagLocation.scoringPoses[Buttons.scoringCol]),
+                    new StateWithCoordinate(Buttons.level)
                 });
-
+                System.out.println("Autonomous Base PD: " + autonomousBasePD);
                 System.out.println("Reset odometry to this m_pose: " + DrivetrainSubsystem.m_pose);
                 }
         } else if(states == AprilTagSequence.CORRECTPOSITION){

@@ -72,11 +72,12 @@ public class Robot extends TimedRobot {
   public static PneumaticIntakeSubsystem m_pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
   
   public static Mechanisms m_mechanisms = new Mechanisms();
-  public static Buttons m_buttons = new Buttons();
   public static ArmTelescopingSubsystem armTelescopingSubsystem = new ArmTelescopingSubsystem();
 
-  private final LimeLightSubsystem m_limeLightSubsystem = new LimeLightSubsystem();
-  private final AprilTagSubsystem m_aprilTagSubsystem = new AprilTagSubsystem();
+  private static LimeLightSubsystem m_limeLightSubsystem = new LimeLightSubsystem();
+  public static AprilTagSubsystem m_aprilTagSubsystem = new AprilTagSubsystem();
+
+  public static Buttons m_buttons = new Buttons();
   
   double t= 0.0;
   boolean override = false;
@@ -187,24 +188,21 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    //m_aprilTagSubsystem.init();
+    m_aprilTagSubsystem.init();
     isBlueAlliance = allianceChooser.getSelected();
     m_mechanisms.init();
-    //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
-   // System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
-    //armTelescopingSubsystem.init();
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    if(m_aprilTagSubsystem.states != AprilTagSubsystem.AprilTagSequence.CORRECTPOSITION){
+    if(AprilTagSubsystem.states != AprilTagSubsystem.AprilTagSequence.CORRECTPOSITION){
       m_drivetrainSubsystem.driveTeleop();
     }
     
+    m_drivetrainSubsystem.drive();
     m_mechanisms.periodic();
-    //System.out.println("i am in teleop");
-    //m_aprilTagSubsystem.periodic();
+    m_aprilTagSubsystem.periodic();
     m_pneumaticIntakeSubsystem.periodic();
     m_buttons.buttonsPeriodic();
 

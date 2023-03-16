@@ -8,34 +8,52 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.PneumaticIntakeSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.subsystems.Vision.AprilTagSubsystem;
+import frc.robot.subsystems.Vision.AprilTagSubsystem.AprilTagSequence;
 
 public class Buttons {
     
-  DrivetrainSubsystem m_drivetrainSubsystem = Robot.m_drivetrainSubsystem;
-  PneumaticIntakeSubsystem pneumaticIntakeSubsystem = Robot.m_pneumaticIntakeSubsystem;
-  Mechanisms m_mechanisms = Robot.m_mechanisms;
+  private DrivetrainSubsystem m_drivetrainSubsystem = Robot.m_drivetrainSubsystem;
+  private PneumaticIntakeSubsystem pneumaticIntakeSubsystem = Robot.m_pneumaticIntakeSubsystem;
+  private Mechanisms m_mechanisms = Robot.m_mechanisms;
+  private AprilTagSubsystem m_AprilTagSubsystem = Robot.m_aprilTagSubsystem;
   
   public static int scoringCol = 0;
   private static boolean override = false;
   public static AutoStates level;
   
   public void buttonsPeriodic(){
-      if(OI.m_controller.getPOV() >= 225 && OI.m_controller.getPOV() <= 315){
+      if(OI.m_controller_two.getPOV() >= 225 && OI.m_controller_two.getPOV() <= 315){
           if (!override){
             System.out.println("dpad 270: left substation");
             level = AutoStates.LEFTPICKUP; 
+            if (Robot.isBlueAlliance){
+              scoringCol = 36;
+            } else {
+              scoringCol = 38;
+            }
+            m_AprilTagSubsystem.setState(AprilTagSequence.DETECT);
           }else{
             m_mechanisms.setState(MechanismStates.SHELF);
           }
+          System.out.println("hi: " + level);
         }
     
-        if(OI.m_controller.getPOV() >= 45 && OI.m_controller.getPOV() <= 135){
+        if(OI.m_controller_two.getPOV() >= 45 && OI.m_controller_two.getPOV() <= 135){
           if (!override){
             System.out.println("dpad 90: right substation");
             level = AutoStates.RIGHTPICKUP; 
+            m_AprilTagSubsystem.setState(AprilTagSequence.DETECT);
+            if (Robot.isBlueAlliance){
+              scoringCol = 37;
+            } else {
+              scoringCol = 39;
+            }
+            // System.out.println("level: " + level);
           }else{
             m_mechanisms.setState(MechanismStates.SHELF);
           }
+          System.out.println("hello: " + level);
         }
     
         if(OI.m_controller.getBackButton()){
@@ -83,6 +101,8 @@ public class Buttons {
               m_mechanisms.setState(MechanismStates.LOW_NODE);
             } else {
               level = AutoStates.LOWNODE;
+              m_AprilTagSubsystem.setState(AprilTagSequence.DETECT);
+              // System.out.println("level: " + level);
             }
         }
     
@@ -92,6 +112,8 @@ public class Buttons {
             m_mechanisms.setState(MechanismStates.MID_NODE);
           }else{
             level = AutoStates.MIDNODE; 
+            m_AprilTagSubsystem.setState(AprilTagSequence.DETECT);
+            // System.out.println("level: " + level);
           }
           
         }
@@ -102,6 +124,8 @@ public class Buttons {
             m_mechanisms.setState(MechanismStates.HIGH_NODE);
           }else{
             level = AutoStates.HIGHNODE; 
+            m_AprilTagSubsystem.setState(AprilTagSequence.DETECT);
+            // System.out.println("level: " + level);
           }
     
         }
@@ -111,6 +135,8 @@ public class Buttons {
             m_mechanisms.setState(MechanismStates.GROUNDPICKUP);
           } else {
             level = AutoStates.INTAKING;
+            m_AprilTagSubsystem.setState(AprilTagSequence.DETECT);
+            // System.out.println("level: " + level);
           }
         }
     
@@ -129,16 +155,26 @@ public class Buttons {
             System.out.println("xbox: shelf"); 
           }else{
             level = AutoStates.RIGHTPICKUP;
+            if (Robot.isBlueAlliance){
+              scoringCol = 37;
+            } else {
+              scoringCol = 39;
+            }
+            m_AprilTagSubsystem.setState(AprilTagSequence.DETECT);
+            // System.out.println("level: " + level);
           }
         }
     
         if (OI.m_controller_two.getStartButton()){
+          //this is the center button on the right with 3 lines
           override = !override;
           System.out.println("override is " + override);
         }
     
         if (OI.m_controller_two.getBackButton()){
+          //this is the center button on left with 2 squares
           m_mechanisms.setState(MechanismStates.HOLDING);
+          System.out.println("BACK BUTTON SAYS HEY");
         }
         
   }

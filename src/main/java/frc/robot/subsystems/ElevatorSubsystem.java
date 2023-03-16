@@ -106,7 +106,7 @@ public class ElevatorSubsystem {
             elevatorMotor.set(ControlMode.Position, desiredTicks); //official 2/13 is 5
         } else {
             elevatorMotor.set(ControlMode.PercentOutput, 0);
-            System.out.println("ELEVATOR STOPPED");
+            //System.out.println("ELEVATOR STOPPED");
         }
     }
 

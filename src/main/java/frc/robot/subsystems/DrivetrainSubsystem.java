@@ -278,8 +278,6 @@ public void driveTeleop(){
                         m_pose.getRotation()
                 )
         );
-        //using speed to go
-        drive();
   }
 
   public void drive() { //runs periodically
