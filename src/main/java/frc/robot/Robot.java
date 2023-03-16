@@ -3,9 +3,13 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
+import frc.robot.Buttons;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.ArmPneumaticPivot;
+// import frc.robot.subsystems.ArmPneumaticPivot.PneumaticPivotStates;
+// import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
+import frc.robot.OI;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -13,10 +17,14 @@ import frc.robot.autonomous.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.fasterxml.jackson.core.sym.Name;
+
+import java.lang.ProcessBuilder.Redirect;
+
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
+import edu.wpi.first.cscore.CameraServerJNI.TelemetryKind;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -24,16 +32,22 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTable.*;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.subsystems.ArmTelescopingSubsystem.TelescopingStates;
+import frc.robot.subsystems.ElevatorSubsystem.ElevatorStates;
+import frc.robot.subsystems.Mechanisms.MechanismStates;
+import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.Constants;
 import frc.robot.autonomous.StateWithCoordinate.AutoStates;
-import frc.robot.autonomous.StateWithCoordinate;
 import frc.robot.subsystems.ArmTelescopingSubsystem.TelescopingStates;
 import frc.robot.subsystems.Vision.AprilTagSubsystem;
 import frc.robot.subsystems.Vision.LimeLightSubsystem;
 import edu.wpi.first.math.geometry.Translation2d;
-import frc.robot.PDPath;
+import frc.robot.autonomous.PDPath;
 
 
 
@@ -50,43 +64,34 @@ import frc.robot.PDPath;
 public class Robot extends TimedRobot {
 
   private AutonomousBase m_autoSelected;
-  private final SendableChooser<AutonomousBase> auto_chooser = new SendableChooser<AutonomousBase>();
-  private final SendableChooser<Boolean> allianceChooser = new SendableChooser<Boolean>();
-
+  private static final Boolean red = false;
+  private static final Boolean blue = true;
+  private final SendableChooser<AutonomousBase> auto_chooser = new SendableChooser<>();
+  private final SendableChooser<Boolean> allianceChooser = new SendableChooser<>();
 
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   public static PneumaticIntakeSubsystem m_pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
+  
   public static Mechanisms m_mechanisms = new Mechanisms();
+  public static ArmTelescopingSubsystem armTelescopingSubsystem = new ArmTelescopingSubsystem();
 
+  private static LimeLightSubsystem m_limeLightSubsystem = new LimeLightSubsystem();
+  public static AprilTagSubsystem m_aprilTagSubsystem = new AprilTagSubsystem();
 
-  private final LimeLightSubsystem m_limeLightSubsystem = new LimeLightSubsystem();
-  private final AprilTagSubsystem m_aprilTagSubsystem = new AprilTagSubsystem();
-  private final Field2d m_field = new Field2d();
+  public static Buttons m_buttons = new Buttons();
+  
   double t= 0.0;
-  ChassisSpeeds m_ChassisSpeeds;
+  boolean override = false;
+  ChassisSpeeds m_ChassisSpeeds; 
   double mpi = Constants.METERS_PER_INCH;
-
-  // whole field: 651.683 (inches)
-  // private AutonomousBasePD noGo = new AutonomousBasePD(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)), new Pose2d(0,0, new Rotation2d(0)));
+  public static Boolean isBlueAlliance = true;
+  
   private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
-  
-  private AutonomousBasePD testPath = new AutonomousBasePD(
-    new Pose2d(0.0, 0.0, new Rotation2d(Math.toRadians(0))), 
-    new StateWithCoordinate[]{
-      new StateWithCoordinate(AutoStates.FIRST),
-      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(20 * mpi, 40 * mpi, new Rotation2d(Math.toRadians(0)))), 
-      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(40 * mpi, 0, new Rotation2d(60))), 
-      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(0 * mpi, 30 * mpi, new Rotation2d(60))), 
-      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(40 * mpi, 30 * mpi, new Rotation2d(60))), 
-      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(0 * mpi, 0 * mpi, new Rotation2d(150))), 
-      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(20 * mpi, 20 * mpi, new Rotation2d(150))),
-      new StateWithCoordinate(AutoStates.STOP)
-    });
-  
+  private AutonomousBasePD testPath = PDPath.HDLeaveR;
  
 // red alliance  
 // half the field (325.8415) - blue x value + half the field (325.8415) = red x value
-  
+ // whole field: 651.683 (inches)
   
   /**
   * This function is run when the robot is first started up and should be used for any
@@ -96,18 +101,23 @@ public class Robot extends TimedRobot {
   public void robotInit() { //creates options for different autopaths, names are placeholders    
     System.out.println("#I'm Awake");
     
-    allianceChooser.setDefaultOption("blue alliance", false);
-    allianceChooser.addOption("red alliance", true);
+
+    allianceChooser.setDefaultOption("Blue Alliance", blue);
+    allianceChooser.addOption("Red Alliance", red);    
+    SmartDashboard.putData("Which alliance?", allianceChooser);
+
 
     auto_chooser.setDefaultOption("testPath", testPath);
-   // auto_chooser.setDefaultOption("current", PDPath.CurrentPath);
     auto_chooser.addOption("noGoR!", PDPath.noGoR);
     auto_chooser.addOption("noGoB!", PDPath.noGoB);
     auto_chooser.addOption("HDLeaveB", PDPath.HDLeaveB);
     auto_chooser.addOption("HBLeaveB", PDPath.HBLeaveB);
     auto_chooser.addOption("HBLeaveR", PDPath.HBLeaveR);
     auto_chooser.addOption("HDLeaveR", PDPath.HDLeaveR); 
-    auto_chooser.addOption("timed", timedPath);
+    auto_chooser.addOption("HDLeaveB", PDPath.HDPlaceLeaveB);
+    auto_chooser.addOption("HBLeaveB", PDPath.HBPlaceLeaveB);
+    auto_chooser.addOption("HDLeaveR", PDPath.HDPlaceLeaveR); 
+    auto_chooser.addOption("HBLeaveR", PDPath.HBPlaceLeaveR);
     auto_chooser.addOption("engageChargeR", PDPath.engageChargeR);
     auto_chooser.addOption("engageChargeB", PDPath.engageChargeB);
     auto_chooser.addOption("HDIntakeEngageB", PDPath.HDIntakeEngageB);
@@ -116,9 +126,10 @@ public class Robot extends TimedRobot {
     auto_chooser.addOption("HD3ScoreB", PDPath.HD3ScoreB);
     auto_chooser.addOption("HB3ScoreR", PDPath.HB3ScoreR);
     auto_chooser.addOption("HB3ScoreB", PDPath.HB3ScoreB);
+    auto_chooser.addOption("timed", timedPath);
    // auto_chooser.addOption("Motion profiling tester path", motionProfiling);
     SmartDashboard.putData("Auto choices", auto_chooser);
-    SmartDashboard.putData("Which alliance?", allianceChooser);
+   
   }
 
   /**
@@ -131,10 +142,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+    // System.out.println(allianceChooser.getSelected());
+    isBlueAlliance = allianceChooser.getSelected();
+    SmartDashboard.putBoolean("Alliance: ", isBlueAlliance); 
     SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX()/Constants.METERS_PER_INCH);
     SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.METERS_PER_INCH);
     SmartDashboard.putNumber("angle odometry",DrivetrainSubsystem.m_pose.getRotation().getDegrees()%360);
-    SmartDashboard.putBoolean("Ready to Score", m_limeLightSubsystem.seeSomething());
+    //SmartDashboard.putBoolean("Ready to Score", m_limeLightSubsystem.seeSomething());
     SmartDashboard.putBoolean("beam broken?", m_pneumaticIntakeSubsystem.isBeamBroken());
     SmartDashboard.putBoolean("cube?", m_pneumaticIntakeSubsystem.getPurple());
     SmartDashboard.putBoolean("cone?", m_pneumaticIntakeSubsystem.getYellow());
@@ -159,13 +173,14 @@ public class Robot extends TimedRobot {
     System.out.println("current pose: " + DrivetrainSubsystem.m_pose.getX() + " , " + DrivetrainSubsystem.m_pose.getY());
     m_autoSelected = auto_chooser.getSelected();
     m_autoSelected.init();
+    isBlueAlliance = allianceChooser.getSelected();
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
      //m_AprilTagSubsystem.periodic();
-     //m_mechanisms.periodic();
+     m_mechanisms.periodic();
      m_autoSelected.periodic();
      
      //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
@@ -177,34 +192,22 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     m_aprilTagSubsystem.init();
-    //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
-   // System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
-
+    isBlueAlliance = allianceChooser.getSelected();
+    m_mechanisms.init();
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    //m_drivetrainSubsystem.driveTeleop();
-    //m_mechanisms.periodic();
-    //System.out.println("i am in teleop");
-    m_aprilTagSubsystem.periodic();
-
-    if(OI.m_controller.getBackButton()){
-      //m_VisionSubsystem.setState(VisionSubsystem.VisionStates.DETECTTAPE);
+    if(AprilTagSubsystem.states != AprilTagSubsystem.AprilTagSequence.CORRECTPOSITION){
+      m_drivetrainSubsystem.driveTeleop();
     }
     
-    if(OI.m_controller.getAButtonReleased()){
-      //pneumaticIntakeSubsystem.setState(PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF);
-    }
-
-    if(OI.m_controller.getXButtonReleased()){
-      if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING || PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF){
-        //pneumaticIntakeSubsystem.setState(PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING);
-      } else if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING){
-        //pneumaticIntakeSubsystem.setState(PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING); 
-      }
-    }
+    m_drivetrainSubsystem.drive();
+    m_mechanisms.periodic();
+    m_aprilTagSubsystem.periodic();
+    m_pneumaticIntakeSubsystem.periodic();
+    m_buttons.buttonsPeriodic();
 
   }
 
@@ -219,30 +222,32 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-    m_drivetrainSubsystem.resetOdometry(new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))));
-    testPath.init();
-    
-   // m_aprilTagSubsystem.init();
+    armTelescopingSubsystem.init();
+    //m_mechanisms.init();
   }
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic(){
-    //m_aprilTagSubsystem.periodic();
-    testPath.driveDesiredDistance(new Pose2d(20 * Constants.METERS_PER_INCH, 20 * Constants.METERS_PER_INCH, new Rotation2d(Math.toRadians(0))));
+  public void testPeriodic() {
+    //m_mechanisms.setState(MechanismStates.HOLDING);
+    //m_mechanisms.periodic();
+    /*if(OI.m_controller.getAButtonPressed()){
+      armTelescopingSubsystem.setTState(TelescopingStates.MID_ARM_LENGTH);
+    } else if (OI.m_controller.getBButtonPressed()){
+      System.out.println("b button --> low");
+      armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
+    } else if (OI.m_controller.getXButtonPressed()){
+      armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
+    } else if(OI.m_controller.getYButton()){
+      armTelescopingSubsystem.telescopingMotor.set(ControlMode.PercentOutput, -0.2);
+    }*/
+    if (OI.m_controller.getLeftBumper()){
+      armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0);
+    } else {
+      armTelescopingSubsystem.telescopingMotor.set(ControlMode.PercentOutput, -0.2);
+    }
     
-    //m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.2, Math.toRadians(0), m_drivetrainSubsystem.getPoseRotation()));
-    
-    
-    m_drivetrainSubsystem.drive();
-    //System.out.println("rotation: " + DrivetrainSubsystem.m_pose.getRotation());
-
-    
-    //System.out.println(m_drivetrainSubsystem.getGyroscopeRotation());
-    //System.out.println("Front Left Module Postion: " + m_drivetrainSubsystem.m_frontLeftModule.getPosition());
-    //System.out.println("Front Right Module Position: " + m_drivetrainSubsystem.m_frontRightModule.getPosition());
-    //System.out.println("Back Left Module Position: " + m_drivetrainSubsystem.m_backLeftModule.getPosition());
-    //System.out.println("Back Right Module Position: " + m_drivetrainSubsystem.m_backRightModule.getPosition());
+   // armTelescopingSubsystem.periodic();
   }
 
   /** This function is called once when the robot is first started up. */
@@ -252,5 +257,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {}
+
+  
 }
 

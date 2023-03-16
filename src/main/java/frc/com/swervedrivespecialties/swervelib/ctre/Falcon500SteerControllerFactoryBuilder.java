@@ -117,7 +117,13 @@ public final class Falcon500SteerControllerFactoryBuilder {
             }
 
             TalonFX motor = new TalonFX(steerConfiguration.getMotorPort());
-            CtreUtils.checkCtreError(motor.configAllSettings(motorConfiguration, CAN_TIMEOUT_MS), "Failed to configure Falcon 500 settings");
+            boolean haveError = CtreUtils.checkCtreError(motor.configAllSettings(motorConfiguration, CAN_TIMEOUT_MS), "Failed to configure steer Falcon 500 settings");
+            for(int i = 0; i < 5; i++){
+                haveError =  CtreUtils.checkCtreError(motor.configAllSettings(motorConfiguration, CAN_TIMEOUT_MS), "Failed to configure steer Falcon 500 settings");
+                if(!haveError){
+                    break;
+                }
+            }
 
             if (hasVoltageCompensation()) {
                 motor.enableVoltageCompensation(true);
@@ -128,7 +134,7 @@ public final class Falcon500SteerControllerFactoryBuilder {
             motor.setNeutralMode(NeutralMode.Brake);
 
             CtreUtils.checkCtreError(motor.setSelectedSensorPosition(absoluteEncoder.getAbsoluteAngle() / sensorPositionCoefficient, 0, CAN_TIMEOUT_MS), "Failed to set Falcon 500 encoder position");
-
+           
             // Reduce CAN status frame rates
             CtreUtils.checkCtreError(
                     motor.setStatusFramePeriod(

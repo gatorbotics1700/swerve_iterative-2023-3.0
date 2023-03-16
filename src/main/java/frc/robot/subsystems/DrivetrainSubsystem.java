@@ -22,8 +22,11 @@ import edu.wpi.first.math.estimator.*;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Robot;import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+
+import frc.robot.Robot;
 
 
 import java.util.Arrays;
@@ -33,11 +36,12 @@ import static frc.robot.Constants.*;
 
 import frc.robot.Constants;
 import frc.robot.OI;
+import frc.robot.subsystems.ArmTelescopingSubsystem.TelescopingStates;
 
 public class DrivetrainSubsystem {
-   private static double pitchKP = 0.025;
+   private static double pitchKP = 0.035; //0.025;
    private static double pitchKI = 0.0;
-   private static double pitchKD = 0.001;
+   private static double pitchKD = 0.001; //0.001;
    private PIDController pitchController = new PIDController(pitchKP, pitchKI, pitchKD);
    public static double MINOUTPUT = 0.1;
    public static double universalPitch = 0;
@@ -106,6 +110,7 @@ public class DrivetrainSubsystem {
   public static SwerveDrivePoseEstimator m_odometry; 
   public static Pose2d m_pose = new Pose2d();
   public static ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain"); 
+  public ArmTelescopingSubsystem armTelescopingSubsystem = new ArmTelescopingSubsystem();
 
   //ChassisSpeeds takes in y velocity, x velocity, speed of rotation
   private ChassisSpeeds m_chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
@@ -265,34 +270,28 @@ public class DrivetrainSubsystem {
 //         return m_odometry;
 //   }
   
-  public void driveTeleop(){
-        if(isBlueAlliance){
-                DoubleSupplier m_translationXSupplier = () -> -modifyAxis(OI.m_controller.getLeftY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
-                DoubleSupplier m_translationYSupplier = () -> -modifyAxis(OI.m_controller.getLeftX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
-                DoubleSupplier m_rotationSupplier = () -> -modifyAxis(OI.m_controller.getRightX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
-                setSpeed(
-                ChassisSpeeds.fromFieldRelativeSpeeds(
-                        m_translationXSupplier.getAsDouble(),
-                        m_translationYSupplier.getAsDouble(),
-                        m_rotationSupplier.getAsDouble(),
-                        getGyroscopeRotation()
-                )
-                );
+public void driveTeleop(){
+        DoubleSupplier m_translationXSupplier;
+        DoubleSupplier m_translationYSupplier;
+        DoubleSupplier m_rotationSupplier;
+        if(Robot.isBlueAlliance){
+                m_translationXSupplier = () -> -modifyAxis(OI.m_controller.getLeftY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
+                m_translationYSupplier = () -> -modifyAxis(OI.m_controller.getLeftX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
+                m_rotationSupplier = () -> -modifyAxis(OI.m_controller.getRightX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
+                
          }else{
-                DoubleSupplier m_translationXSupplier = () -> modifyAxis(OI.m_controller.getLeftY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
-                DoubleSupplier m_translationYSupplier = () -> modifyAxis(OI.m_controller.getLeftX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
-                DoubleSupplier m_rotationSupplier = () -> modifyAxis(OI.m_controller.getRightX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
-                setSpeed(
+                m_translationXSupplier = () -> modifyAxis(OI.m_controller.getLeftY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
+                m_translationYSupplier = () -> modifyAxis(OI.m_controller.getLeftX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
+                m_rotationSupplier = () -> modifyAxis(OI.m_controller.getRightX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
+        }
+        setSpeed(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
                         m_translationXSupplier.getAsDouble(),
                         m_translationYSupplier.getAsDouble(),
                         m_rotationSupplier.getAsDouble(),
                         getGyroscopeRotation()
                 )
-                );
-        }
-        //using speed to go
-        drive();
+        );
   }
 
   public void drive() { //runs periodically
@@ -419,4 +418,6 @@ public class DrivetrainSubsystem {
                 }
         }
     }
+
+   
 }

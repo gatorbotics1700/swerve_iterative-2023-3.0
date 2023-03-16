@@ -13,39 +13,43 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 public class ElevatorSubsystem {
 
-    public double _kP = 0.05;
+    public double _kP = 0.15;
     public double _kI = 0.0;
     public double _kD = 0.0;
     public int _kIzone = 0;
     public double _kPeakOutput = 1.0;
     private final double HIGHHEIGHT = 48; 
-    private final double MIDHEIGHT = 40; 
-    private final double LOWHEIGHT = 30; 
+    private final double MIDHEIGHT = 30; //changed 3/14 245pm //why was this originally 40; 
+    private final double LOWHEIGHT = 10; //old was 30; 
     private final double SHELF = 5; 
 
 
 
-    public static TalonFX elevatorMotor = new TalonFX(Constants.ELEVATOR_CAN_ID);
+    public TalonFX elevatorMotor = new TalonFX(Constants.ELEVATOR_CAN_ID);
     public static ElevatorStates elevatorState = ElevatorStates.LOW_ELEVATOR_HEIGHT;
 
     // DigitalInput top_limit_switch = new DigitalInput(Constants.topLimitSwitchPort);
     // DigitalInput bottom_limit_switch = new DigitalInput(Constants.bottomLimitSwitchPort);
     
     public Gains elevatorGains = new Gains(_kP, _kI, _kD, _kIzone, _kPeakOutput);
+    public double desiredInches;
+    public double deadband = 15000;
 
     public static enum ElevatorStates{
         ZERO, 
         LOW_ELEVATOR_HEIGHT,
         SHELF_ELEVATOR_HEIGHT,
         MID_ELEVATOR_HEIGHT,
-        HIGH_ELEVATOR_HEIGHT;
+        HIGH_ELEVATOR_HEIGHT,
+        STOPPED;
     }
 
     public void init(){
         System.out.println("elevator init!!!!");
-        elevatorMotor.setInverted(false); // looking from the front of the robot, clockwise is false (:
+        elevatorMotor.setInverted(true); // looking from the front of the robot, clockwise is false (:
         elevatorMotor.setNeutralMode(NeutralMode.Brake);
-
+        setState(ElevatorStates.STOPPED);
+        //elevatorMotor.setSelectedSensorPosition(0);
         //configuring deadband
         elevatorMotor.configAllowableClosedloopError(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
 		/* Config Position Closed Loop gains in slot0, typically kF stays zero. */
@@ -54,24 +58,37 @@ public class ElevatorSubsystem {
 		elevatorMotor.config_kD(Constants.kPIDLoopIdx, elevatorGains.kD, Constants.kTimeoutMs);
     }
 
-    public void periodic(){//still need to scale down the values or figure out why it is overshooting
-        //System.out.println("elevator periodic!!!!!!!");
+    /*
+     * went 4 when we said 5
+     * 4 on here means bottom of intake is 8 above ground
+     * add node safety with 5?
+     */
+    public void periodic(){
+        //System.out.println("current elevator motor position:" + elevatorMotor.getSelectedSensorPosition()/Constants.TICKS_PER_INCH);
         if (elevatorState == ElevatorStates.ZERO){ //emergency stop
-            elevatorMotor.set(ControlMode.Position, 0);
+            System.out.println("desired ticks: 0");
+            System.out.println("error: " + (0 - elevatorMotor.getSelectedSensorPosition()));
+            elevatorDeadband(0);
         } else if (elevatorState == ElevatorStates.LOW_ELEVATOR_HEIGHT){
-            elevatorMotor.set(ControlMode.Position, 5 * Constants.ELEVATOR_TICKS_PER_INCH); //official 2/13 is 5
+            desiredInches = 10; //official 2/13 //5 went to 8 above, so safety for node adds 5 more
+            double desiredTicks = determineRightTicks();
+            System.out.println("desired ticks: " + desiredTicks);
+            System.out.println("error: " + (desiredTicks - elevatorMotor.getSelectedSensorPosition()));
+            elevatorDeadband(desiredTicks);
         } else if (elevatorState == ElevatorStates.SHELF_ELEVATOR_HEIGHT) {
-            elevatorMotor.set(ControlMode.Position, 30 * Constants.ELEVATOR_TICKS_PER_INCH); //oficial 2/13 is 39
-            System.out.println("desired ticks: " + 30*Constants.ELEVATOR_TICKS_PER_INCH); //WRONG!!!! ELEVATOR_TICKS_PER_INCH IS SO WRONG
-            System.out.println("current ticks: " + elevatorMotor.getSelectedSensorPosition());
-            System.out.println("error: " + (30*Constants.ELEVATOR_TICKS_PER_INCH - elevatorMotor.getSelectedSensorPosition()));
+            desiredInches = 25; //official 2/13
+            double desiredTicks = determineRightTicks();
+            elevatorDeadband(desiredTicks);
         } else if (elevatorState == ElevatorStates.MID_ELEVATOR_HEIGHT){
-            elevatorMotor.set(ControlMode.Position, 40 * Constants.ELEVATOR_TICKS_PER_INCH); //official 2/13
+            desiredInches = 34; //official 2/13 //went 22 inches
+            double desiredTicks = determineRightTicks();
+            elevatorDeadband(desiredTicks);
         } else if(elevatorState == ElevatorStates.HIGH_ELEVATOR_HEIGHT){ //high elevator height
-            elevatorMotor.set(ControlMode.Position, 48 * Constants.ELEVATOR_TICKS_PER_INCH); //change value once we know robot dimensions
-        }
-        else { //emergency stop again for safety
-            elevatorMotor.set(ControlMode.Position, 0);
+            desiredInches = 34; //48 - 15; //official 2/13
+            double desiredTicks = determineRightTicks();
+            elevatorDeadband(desiredTicks);
+        } else { //emergency stop again for safety
+            elevatorMotor.set(ControlMode.PercentOutput, 0.0);
         }
 
         // if(top_limit_switch.get() || bottom_limit_switch.get()){
@@ -79,16 +96,50 @@ public class ElevatorSubsystem {
         //     System.out.println("Top/bottom limit switch triggered");
         // }
     }
+    public double determineRightTicks(){
+        return desiredInches * Constants.ELEVATOR_TICKS_PER_INCH; 
+    }
+
+
+    public void elevatorDeadband(double desiredTicks){
+        if (Math.abs(desiredTicks - elevatorMotor.getSelectedSensorPosition()) > deadband){
+            elevatorMotor.set(ControlMode.Position, desiredTicks); //official 2/13 is 5
+        } else {
+            elevatorMotor.set(ControlMode.PercentOutput, 0);
+            //System.out.println("ELEVATOR STOPPED");
+        }
+    }
 
     public void setState(ElevatorStates newElevatorState){
         elevatorState = newElevatorState;
     }
 
     public boolean isAtHigh(){
-        if(Math.abs(elevatorMotor.getSelectedSensorPosition()-HIGHHEIGHT)<3*Constants.SWERVE_TICKS_PER_INCH){
+        if(Math.abs(elevatorMotor.getSelectedSensorPosition()-HIGHHEIGHT*Constants.ELEVATOR_TICKS_PER_INCH)<3*Constants.ELEVATOR_TICKS_PER_INCH){
             return true; 
         }
         return false; 
+    }
+
+    public boolean isAtMid(){
+        if(Math.abs(elevatorMotor.getSelectedSensorPosition()-MIDHEIGHT*Constants.ELEVATOR_TICKS_PER_INCH)<3*Constants.ELEVATOR_TICKS_PER_INCH){
+            return true; 
+        }
+        return false; 
+    }
+
+    public boolean isAtLow(){
+        if(Math.abs(elevatorMotor.getSelectedSensorPosition()-LOWHEIGHT*Constants.ELEVATOR_TICKS_PER_INCH)<3*Constants.ELEVATOR_TICKS_PER_INCH){
+            return true; 
+        }
+        return false; 
+    }
+
+    public boolean isAtShelf(){
+        if(Math.abs(elevatorMotor.getSelectedSensorPosition() -SHELF) < 3 * Constants.SWERVE_TICKS_PER_INCH){
+            return true;
+        }
+        return false;
     }
 
 }

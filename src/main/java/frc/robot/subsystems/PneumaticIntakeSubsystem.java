@@ -3,13 +3,13 @@ package frc.robot.subsystems;
 import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.kForward;
 import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.kOff;
 import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.kReverse;
-
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorMatch;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -31,18 +31,14 @@ public class PneumaticIntakeSubsystem {
     public static PneumaticIntakeStates pneumaticIntakeState = PneumaticIntakeStates.ACTUATING;
 
     public static final double COLOR_THRESHOLD = 0.03;
-    //confirm we are using double solenoid
-    //private DoubleSolenoid solenoidOne = new DoubleSolenoid(7, PneumaticsModuleType.REVPH, 8, 10); 
-    //what compressor are we using?
-    //public Compressor compressor = new Compressor(PneumaticsModuleType.REVPH); 
+    private static DoubleSolenoid solenoidOne = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 5, 7); 
     // Initializes a DigitalInput on DIO 0 (roborio is built in w/ 10 DIOs (digital input-output ports))
     private DigitalInput beambreakSensor = new DigitalInput(Constants.BEAM_BREAK_RECEIVER); 
+    public Compressor compressor = new Compressor(PneumaticsModuleType.REVPH); 
 
-    /*
+    /**
      * Change the I2C port below to match the connection of your color sensor
-    /*
     */
-    
     private final I2C.Port i2cPort = I2C.Port.kOnboard;
 
     /**
@@ -84,69 +80,74 @@ public class PneumaticIntakeSubsystem {
         pneumaticIntakeState = newState;
     }
 
-    public boolean isBeamBroken(){
-        if(beambreakSensor.get()){
-            return true; 
-        }else{
-            return false; 
-        }
-    }
-
     public void switchState_colorSensor(){
         Color detectedColor = colorSensor.getColor();
 
-        /**
-        * Run the color match algorithm on our detected color
-        */
-       ColorMatchResult match = colorMatcher.matchClosestColor(detectedColor);
+         /*
+         * Run the color match algorithm on our detected color
+         */
+        ColorMatchResult match = colorMatcher.matchClosestColor(detectedColor);
 
-       boolean purpleNotRedThreshold = (Math.abs(detectedColor.red-kPurpleTarget.red)>COLOR_THRESHOLD);
-       boolean purpleNotGreenThreshold = (Math.abs(detectedColor.green-kPurpleTarget.green)>COLOR_THRESHOLD);
-       boolean purpleNotBlueThreshold = (Math.abs(detectedColor.blue-kPurpleTarget.blue)>COLOR_THRESHOLD);
+        boolean purpleNotRedThreshold = (Math.abs(detectedColor.red-kPurpleTarget.red)>COLOR_THRESHOLD);
+        boolean purpleNotGreenThreshold = (Math.abs(detectedColor.green-kPurpleTarget.green)>COLOR_THRESHOLD);
+        boolean purpleNotBlueThreshold = (Math.abs(detectedColor.blue-kPurpleTarget.blue)>COLOR_THRESHOLD);
 
-       boolean yellowNotRedThreshold = (Math.abs(detectedColor.red-kYellowTarget.red)>COLOR_THRESHOLD);
-       boolean yellowNotGreenThreshold = (Math.abs(detectedColor.green-kYellowTarget.green)>COLOR_THRESHOLD);
-       boolean yellowNotBlueThreshold = (Math.abs(detectedColor.blue-kYellowTarget.blue)>COLOR_THRESHOLD);
-       
-       if((purpleNotRedThreshold && purpleNotGreenThreshold) || (purpleNotRedThreshold &&purpleNotBlueThreshold) || (purpleNotGreenThreshold && purpleNotBlueThreshold)){
-          // System.out.println("diff w/ purple red: " + (detectedColor.red-kPurpleTarget.red));
-          // System.out.println("diff w/ purple green: " + (detectedColor.green-kPurpleTarget.green));
-          // System.out.println("diff w/ purple blue: " + (detectedColor.blue-kPurpleTarget.blue));
+        boolean yellowNotRedThreshold = (Math.abs(detectedColor.red-kYellowTarget.red)>COLOR_THRESHOLD);
+        boolean yellowNotGreenThreshold = (Math.abs(detectedColor.green-kYellowTarget.green)>COLOR_THRESHOLD);
+        boolean yellowNotBlueThreshold = (Math.abs(detectedColor.blue-kYellowTarget.blue)>COLOR_THRESHOLD);
+        
+        if((purpleNotRedThreshold && purpleNotGreenThreshold) || (purpleNotRedThreshold &&purpleNotBlueThreshold) || (purpleNotGreenThreshold && purpleNotBlueThreshold)){
+            if((yellowNotRedThreshold && yellowNotGreenThreshold) || (yellowNotRedThreshold && yellowNotBlueThreshold) || (yellowNotGreenThreshold && yellowNotBlueThreshold)){
+                colorString = "Unknown";
+                //match should become black here
+                match = colorMatcher.matchClosestColor(new Color(0,0,0));
+            }
+        }
 
-           System.out.println("here!!!!");
-           if((yellowNotRedThreshold && yellowNotGreenThreshold) || (yellowNotRedThreshold && yellowNotBlueThreshold) || (yellowNotGreenThreshold && yellowNotBlueThreshold)){
-              // System.out.println("diff w/ yellow red: " + (detectedColor.red-kYellowTarget.red));
-              // System.out.println("diff w/ yellow green: " + (detectedColor.green-kYellowTarget.green));
-               //System.out.println("diff w/ yellow blue: " + (detectedColor.blue-kYellowTarget.blue));
-               colorString = "Unknown";
-               //match should become black here
-               match = colorMatcher.matchClosestColor(new Color(0,0,0));
-           }
-       } 
-       
-       
+        if (match.color == kPurpleTarget) {
+            colorString = "Purple";
+            isPurple = true;
+            isYellow = false;
+        } else if (match.color == kYellowTarget){//means its yellow :DDD
+            colorString = "Yellow";
+            isYellow = true;
+            isPurple = false;
+        } else{
+            colorString = "Unknown"; 
+            isPurple = false;
+            isYellow = false;
+        }
+        System.out.println(colorString + " detected");
+    }
 
-       if (match.color == kPurpleTarget) {
-           colorString = "Purple";
-           isPurple = true;
-           isYellow = false;
-       } else if (match.color == kYellowTarget){//means its yellow :DDD
-           colorString = "Yellow";
-           isYellow = true;
-           isPurple = false;
-       } else{
-           colorString = "Unknown"; 
-           isPurple = false;
-           isYellow = false;
-       }
-       System.out.println(colorString + " detected");
+    public void periodic(){
+       if(pneumaticIntakeState == PneumaticIntakeStates.ACTUATING){
+            solenoidOne.set(kForward);
+            //System.out.println("Solenoid Actuating");
+        } else if (pneumaticIntakeState == PneumaticIntakeStates.RETRACTING){
+            solenoidOne.set(kReverse);
+            //System.out.println("Solenoid Retracting");
+        }else{
+            solenoidOne.set(kOff);
+            //System.out.println("Solenoid Off");
+        }
+    }
+
+    public boolean getYellow(){
+        return isYellow;
     }
 
     public boolean getPurple(){
         return isPurple;
     }
 
-    public boolean getYellow(){
-        return isYellow;
+    public void setState(PneumaticIntakeStates newPneumaticIntakeState){
+        pneumaticIntakeState = newPneumaticIntakeState;
     }
+
+    public boolean isBeamBroken(){
+        return beambreakSensor.get(); 
+    }
+
+    
 }
