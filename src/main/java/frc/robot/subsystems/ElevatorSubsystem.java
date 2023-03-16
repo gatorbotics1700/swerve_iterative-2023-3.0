@@ -27,7 +27,7 @@ public class ElevatorSubsystem {
 
 
 
-    public TalonFX elevatorMotor = new TalonFX(Constants.ELEVATOR_CAN_ID);
+    public static TalonFX elevatorMotor = new TalonFX(Constants.ELEVATOR_CAN_ID);
     public static ElevatorStates elevatorState = ElevatorStates.LOW_ELEVATOR_HEIGHT;
 
     // DigitalInput top_limit_switch = new DigitalInput(Constants.topLimitSwitchPort);
@@ -35,7 +35,7 @@ public class ElevatorSubsystem {
     
     public Gains elevatorGains = new Gains(_kP, _kI, _kD, _kIzone, _kPeakOutput);
     public double desiredInches;
-    public double deadband = 15000;
+    public double deadband = 5000; //15000;
 
     public static enum ElevatorStates{
         ZERO, 
@@ -120,11 +120,13 @@ public class ElevatorSubsystem {
     }
 
     public void manual(){
-        if(elevatorMotor.getSelectedSensorPosition()*Constants.ELEVATOR_TICKS_PER_INCH >= MAX_HEIGHT){
+        if(elevatorMotor.getSelectedSensorPosition()*Constants.ELEVATOR_TICKS_PER_INCH <= MAX_HEIGHT && elevatorMotor.getSelectedSensorPosition()*Constants.ELEVATOR_TICKS_PER_INCH >= 0){
             if(OI.getRightAxis() > 0.2){
                 elevatorMotor.set(ControlMode.PercentOutput, 0.2);
             }else if(OI.getRightAxis() < -0.2) {
                 elevatorMotor.set(ControlMode.PercentOutput, -0.2);
+            }else {
+                elevatorMotor.set(ControlMode.PercentOutput, 0);
             }
         }
     }

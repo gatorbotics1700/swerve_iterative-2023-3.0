@@ -80,8 +80,10 @@ public class Mechanisms {
             }
         } else if (mechState == MechanismStates.MANUAL_ELEVATOR){
             elevatorSubsystem.setState(ElevatorStates.MANUAL);
+            System.out.println("Manual elevator");
         } else if (mechState == MechanismStates.MANUAL_TELESCOPE){
             armTelescopingSubsystem.setTState(TelescopingStates.MANUAL);
+            System.out.println("manual telescope");
         } else { 
             armPneumaticPivot.setState(PneumaticPivotStates.ACTUATING);
             elevatorSubsystem.setState(ElevatorStates.STOPPED);

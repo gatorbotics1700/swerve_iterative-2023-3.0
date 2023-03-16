@@ -26,9 +26,9 @@ public class ArmTelescopingSubsystem {
     private static final int LOWARMTICKS = 0;
     private static final int RETRACTEDTICKS = 0;
     private static final int DEADBAND = 12000;
-    private static final int MAX_TICKS = 0;
+    private static final int MAX_TICKS = 400000;//246875;
     
-    public TalonFX telescopingMotor = new TalonFX(Constants.TELESCOPING_MOTOR_ID);
+    public static TalonFX telescopingMotor = new TalonFX(Constants.TELESCOPING_MOTOR_ID);
     private double startTime;
     public double tareEncoder;
 
@@ -137,11 +137,13 @@ public class ArmTelescopingSubsystem {
     }
 
     public void manual(){
-        if(getArmPosition() >= MAX_TICKS) {
+        if(getArmPosition() <= MAX_TICKS && getArmPosition() >= 0) {
             if(OI.getLeftAxis() > 0.2){
-                telescopingMotor.set(ControlMode.PercentOutput,0.2);
-            }else if(OI.getLeftAxis() < -0.2){
                 telescopingMotor.set(ControlMode.PercentOutput,-0.2);
+            }else if(OI.getLeftAxis() < -0.2){
+                telescopingMotor.set(ControlMode.PercentOutput,0.2);
+            } else {
+                telescopingMotor.set(ControlMode.PercentOutput, 0);
             }
         }
     }

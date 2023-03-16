@@ -23,6 +23,7 @@ public class Buttons {
   public static AutoStates level;
   
   public void buttonsPeriodic(){
+    System.out.println("OVERRIDE: " + override);
 
     //codriver
       if(OI.m_controller_two.getPOV() >= 225 && OI.m_controller_two.getPOV() <= 315){
@@ -187,8 +188,10 @@ public class Buttons {
         } else {
           scoringCol = col + 18;
         }
+      //m_AprilTagSubsystem.setState(AprilTagSequence.DETECT);
       }
       System.out.println("Scoring Col: " + scoringCol);
     }
+   
 
 }

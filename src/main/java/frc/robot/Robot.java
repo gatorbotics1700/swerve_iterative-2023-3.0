@@ -7,6 +7,7 @@ import frc.robot.Buttons;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.ArmPneumaticPivot;
+import frc.robot.subsystems.ArmPneumaticPivot.PneumaticPivotStates;
 // import frc.robot.subsystems.ArmPneumaticPivot.PneumaticPivotStates;
 // import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
 import frc.robot.OI;
@@ -44,8 +45,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.Constants;
 import frc.robot.autonomous.StateWithCoordinate.AutoStates;
 import frc.robot.subsystems.ArmTelescopingSubsystem.TelescopingStates;
-import frc.robot.subsystems.Vision.AprilTagSubsystem;
-import frc.robot.subsystems.Vision.LimeLightSubsystem;
+import frc.robot.subsystems.Vision.*;
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.autonomous.PDPath;
 
@@ -77,6 +77,7 @@ public class Robot extends TimedRobot {
 
   private static LimeLightSubsystem m_limeLightSubsystem = new LimeLightSubsystem();
   public static AprilTagSubsystem m_aprilTagSubsystem = new AprilTagSubsystem();
+  public static ArmPneumaticPivot m_ArmPneumaticPivot = new ArmPneumaticPivot();
 
   public static Buttons m_buttons = new Buttons();
   
@@ -152,6 +153,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("beam broken?", m_pneumaticIntakeSubsystem.isBeamBroken());
     SmartDashboard.putBoolean("cube?", m_pneumaticIntakeSubsystem.getPurple());
     SmartDashboard.putBoolean("cone?", m_pneumaticIntakeSubsystem.getYellow());
+    //System.out.println("x: " + DrivetrainSubsystem.m_pose.getX() + "y: " + DrivetrainSubsystem.m_pose.getY() + "rotation: " + DrivetrainSubsystem.m_pose.getRotation().getDegrees()%360);
   }
 
   /**
@@ -193,6 +195,8 @@ public class Robot extends TimedRobot {
     m_aprilTagSubsystem.init();
     isBlueAlliance = allianceChooser.getSelected();
     m_mechanisms.init();
+    //m_drivetrainSubsystem.resetOdometry(new Pose2d()); //TODO: delete
+    m_drivetrainSubsystem.resetOdometry(new Pose2d(AprilTagLocation.scoringPoses[1].getX() -36.5*Constants.METERS_PER_INCH, AprilTagLocation.scoringPoses[1].getY() - 12.0*Constants.METERS_PER_INCH, new Rotation2d(Math.toRadians(0.0))));
   }
 
   /** This function is called periodically during operator control. */
@@ -221,32 +225,35 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-    armTelescopingSubsystem.init();
+    //armTelescopingSubsystem.init();
     //m_mechanisms.init();
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
+   // System.out.println(m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getAbsolutePosition()%360);
     //m_mechanisms.setState(MechanismStates.HOLDING);
     //m_mechanisms.periodic();
-    /*if(OI.m_controller.getAButtonPressed()){
-      armTelescopingSubsystem.setTState(TelescopingStates.MID_ARM_LENGTH);
-    } else if (OI.m_controller.getBButtonPressed()){
-      System.out.println("b button --> low");
-      armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
-    } else if (OI.m_controller.getXButtonPressed()){
-      armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
-    } else if(OI.m_controller.getYButton()){
-      armTelescopingSubsystem.telescopingMotor.set(ControlMode.PercentOutput, -0.2);
-    }*/
-    if (OI.m_controller.getLeftBumper()){
-      armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0);
+    // if(OI.m_controller.getAButtonPressed()){
+    //   armTelescopingSubsystem.setTState(TelescopingStates.MID_ARM_LENGTH);
+    // } else if (OI.m_controller.getBButtonPressed()){
+    //   System.out.println("b button --> low");
+    //   armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
+    // } else if (OI.m_controller.getXButtonPressed()){
+    //   armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
+    // } else if(OI.m_controller.getYButton()){
+    //   armTelescopingSubsystem.telescopingMotor.set(ControlMode.PercentOutput, -0.2);
+    // }
+    /*if (OI.m_controller.getLeftBumper()){
+      ArmTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0);
     } else {
-      armTelescopingSubsystem.telescopingMotor.set(ControlMode.PercentOutput, -0.2);
-    }
-    
+      ArmTelescopingSubsystem.telescopingMotor.set(ControlMode.PercentOutput, 0.2);
+    }*/
+    m_ArmPneumaticPivot.setState(PneumaticPivotStates.RETRACTING);
    // armTelescopingSubsystem.periodic();
+   //m_limeLightSubsystem.setPipeline(0.0);
+   //System.out.println("Tv: " + m_limeLightSubsystem.getTv());
   }
 
   /** This function is called once when the robot is first started up. */
