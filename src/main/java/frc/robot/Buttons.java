@@ -23,6 +23,8 @@ public class Buttons {
   public static AutoStates level;
   
   public void buttonsPeriodic(){
+
+    //codriver
       if(OI.m_controller_two.getPOV() >= 225 && OI.m_controller_two.getPOV() <= 315){
           if (!override){
             System.out.println("dpad 270: left substation");
@@ -55,52 +57,7 @@ public class Buttons {
           }
           System.out.println("hello: " + level);
         }
-    
-        if(OI.m_controller.getBackButton()){
-          //m_VisionSubsystem.setState(VisionSubsystem.VisionStates.DETECTTAPE);
-        }
-        
-        if(OI.m_controller.getAButtonReleased()){
-          //pneumaticIntakeSubsystem.setState(PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF);
-        }
-    
-        for (int i = 1; i < 10; i++){
-          if(OI.joystick.getRawButton(i)){
-            buttonLevel(i-1);
-          }
-        }
 
-        // if(OI.joystick.getRawButton(0)){
-        //   buttonLevel(0);
-        // } else if (OI.joystick.getRawButton(1)){
-        //   buttonLevel(1);
-        // } else if (OI.joystick.getRawButton(2)){
-        //   buttonLevel(2);
-        // } else if (OI.joystick.getRawButton(3)){
-        //   buttonLevel(3);
-        // } else if (OI.joystick.getRawButton(4)){
-        //   buttonLevel(4);
-        // } else if (OI.joystick.getRawButton(5)){
-        //   buttonLevel(5);
-        // } else if (OI.joystick.getRawButton(6)){
-        //   buttonLevel(6);
-        // } else if (OI.joystick.getRawButton(7)){
-        //   buttonLevel(7);
-        // } else if (OI.joystick.getRawButton(8)){
-        //   buttonLevel(8);
-        // }
-        
-        //driver
-        if (OI.m_controller.getBButton()){ 
-          m_drivetrainSubsystem.stopDrive(); //stop all mech?
-          m_mechanisms.setState(MechanismStates.HOLDING);
-        }
-    
-        if(OI.m_controller.getXButton()){
-          m_drivetrainSubsystem.pitchBalance(0.0);
-        }
-    
-    
         if(OI.m_controller_two.getAButton()){ 
           if (override){
             System.out.println("xbox: low node");
@@ -180,9 +137,40 @@ public class Buttons {
         if (OI.m_controller_two.getBackButton()){
           //this is the center button on left with 2 squares
           m_mechanisms.setState(MechanismStates.HOLDING);
-          System.out.println("BACK BUTTON SAYS HEY");
+          //System.out.println("BACK BUTTON SAYS HEY");
         }
         
+        if(Math.abs(OI.m_controller_two.getLeftY()) > 0.2){
+          m_mechanisms.setState(MechanismStates.MANUAL_TELESCOPE);
+        }
+
+        if(Math.abs(OI.m_controller_two.getRightY()) > 0.2){
+          m_mechanisms.setState(MechanismStates.MANUAL_ELEVATOR);
+        }
+
+        //driver
+        if (OI.m_controller.getBButton()){ 
+          m_drivetrainSubsystem.stopDrive(); //stop all mech?
+          m_mechanisms.setState(MechanismStates.HOLDING);
+        }
+    
+        if(OI.m_controller.getXButton()){
+          m_drivetrainSubsystem.pitchBalance(0.0);
+        }
+
+        if(OI.m_controller.getBackButton()){
+          //m_VisionSubsystem.setState(VisionSubsystem.VisionStates.DETECTTAPE);
+        }
+        
+        if(OI.m_controller.getAButtonReleased()){
+          //pneumaticIntakeSubsystem.setState(PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF);
+        }
+
+        for (int i = 1; i < 10; i++){
+          if(OI.joystick.getRawButton(i)){
+            buttonLevel(i-1);
+          }
+        }
   }
 
 

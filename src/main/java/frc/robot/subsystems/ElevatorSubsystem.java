@@ -3,6 +3,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import frc.robot.Constants;
 import frc.robot.Gains;
+import frc.robot.OI;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -18,10 +19,11 @@ public class ElevatorSubsystem {
     public double _kD = 0.0;
     public int _kIzone = 0;
     public double _kPeakOutput = 1.0;
-    private final double HIGHHEIGHT = 48; 
-    private final double MIDHEIGHT = 30; //changed 3/14 245pm //why was this originally 40; 
+    private final double HIGHHEIGHT = 33; 
+    private final double MIDHEIGHT = 33; //changed 3/14 245pm
     private final double LOWHEIGHT = 10; //old was 30; 
-    private final double SHELF = 5; 
+    private final double SHELF = 33; 
+    private final double MAX_HEIGHT = 33;
 
 
 
@@ -41,6 +43,7 @@ public class ElevatorSubsystem {
         SHELF_ELEVATOR_HEIGHT,
         MID_ELEVATOR_HEIGHT,
         HIGH_ELEVATOR_HEIGHT,
+        MANUAL,
         STOPPED;
     }
 
@@ -87,6 +90,8 @@ public class ElevatorSubsystem {
             desiredInches = 34; //48 - 15; //official 2/13
             double desiredTicks = determineRightTicks();
             elevatorDeadband(desiredTicks);
+        }else if (elevatorState == ElevatorStates.MANUAL){
+            manual();
         } else { //emergency stop again for safety
             elevatorMotor.set(ControlMode.PercentOutput, 0.0);
         }
@@ -112,6 +117,16 @@ public class ElevatorSubsystem {
 
     public void setState(ElevatorStates newElevatorState){
         elevatorState = newElevatorState;
+    }
+
+    public void manual(){
+        if(elevatorMotor.getSelectedSensorPosition()*Constants.ELEVATOR_TICKS_PER_INCH >= MAX_HEIGHT){
+            if(OI.getRightAxis() > 0.2){
+                elevatorMotor.set(ControlMode.PercentOutput, 0.2);
+            }else if(OI.getRightAxis() < -0.2) {
+                elevatorMotor.set(ControlMode.PercentOutput, -0.2);
+            }
+        }
     }
 
     public boolean isAtHigh(){

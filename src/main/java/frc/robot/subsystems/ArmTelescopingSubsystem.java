@@ -14,6 +14,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 
 import frc.robot.Gains;
+import frc.robot.OI;
 
 public class ArmTelescopingSubsystem {
 
@@ -21,10 +22,11 @@ public class ArmTelescopingSubsystem {
 
     private static final int HIGHARMTICKS = 246875;
     private static final int MIDARMTICKS = 34375 + 25000;
-    private static final int SHELFARMTICKS = 0;
+    private static final int SHELFARMTICKS = 312500;
     private static final int LOWARMTICKS = 0;
     private static final int RETRACTEDTICKS = 0;
     private static final int DEADBAND = 12000;
+    private static final int MAX_TICKS = 0;
     
     public TalonFX telescopingMotor = new TalonFX(Constants.TELESCOPING_MOTOR_ID);
     private double startTime;
@@ -44,7 +46,8 @@ public class ArmTelescopingSubsystem {
         LOW_ARM_LENGTH,
         SHELF_ARM_LENGTH,
         MID_ARM_LENGTH,
-        HIGH_ARM_LENGTH;
+        HIGH_ARM_LENGTH,
+        MANUAL;
     }
 
     public void init(){
@@ -88,6 +91,8 @@ public class ArmTelescopingSubsystem {
         }else if(tState == TelescopingStates.HIGH_ARM_LENGTH){ //high arm length
             telescopingMotor.set(ControlMode.Position, HIGHARMTICKS); 
             telescopeDeadband(HIGHARMTICKS);
+        }else if(tState == TelescopingStates.MANUAL){
+            manual();
         } else { //retracted again for safety
             telescopingMotor.set(ControlMode.PercentOutput, 0);
         }
@@ -129,6 +134,16 @@ public class ArmTelescopingSubsystem {
 
     public void setTState(TelescopingStates newState){
         tState = newState;
+    }
+
+    public void manual(){
+        if(getArmPosition() >= MAX_TICKS) {
+            if(OI.getLeftAxis() > 0.2){
+                telescopingMotor.set(ControlMode.PercentOutput,0.2);
+            }else if(OI.getLeftAxis() < -0.2){
+                telescopingMotor.set(ControlMode.PercentOutput,-0.2);
+            }
+        }
     }
   
     public double getTicks() {
