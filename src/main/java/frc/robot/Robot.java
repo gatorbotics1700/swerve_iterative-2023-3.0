@@ -152,7 +152,6 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("beam broken?", m_pneumaticIntakeSubsystem.isBeamBroken());
     SmartDashboard.putBoolean("cube?", m_pneumaticIntakeSubsystem.getPurple());
     SmartDashboard.putBoolean("cone?", m_pneumaticIntakeSubsystem.getYellow());
-    SmartDashboard.putBoolean("alliance", m_drivetrainSubsystem.isBlueAlliance); 
   }
 
   /**
