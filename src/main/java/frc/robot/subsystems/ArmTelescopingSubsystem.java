@@ -55,13 +55,11 @@ public class ArmTelescopingSubsystem {
         telescopingMotor.setInverted(true); //forward = clockwise, changed on 2/9
         telescopingMotor.setNeutralMode(NeutralMode.Brake);
 
-        //telescopingMotor.selectProfileSlot(0, 0);
+        telescopingMotor.selectProfileSlot(0, 0);
         telescopingMotor.configAllowableClosedloopError(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
         telescopingMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx, Constants.kTimeoutMs);//determine what these values would be for us
         telescopingMotor.config_kP(Constants.kPIDLoopIdx, telescopeGains.kP, Constants.kTimeoutMs);
-        telescopingMotor.config_kI(Constants.kPIDLoopIdx, telescopeGains.kI, Constants.kTimeoutMs);
-        telescopingMotor.config_kD(Constants.kPIDLoopIdx, telescopeGains.kD, Constants.kTimeoutMs);
-
+        setTState(TelescopingStates.RETRACTED);
     }
 
     public void periodic(){//sam requests that we can operate arm length by stick on xbox

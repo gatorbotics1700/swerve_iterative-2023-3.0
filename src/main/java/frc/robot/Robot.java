@@ -56,6 +56,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 public class Robot extends TimedRobot {
 
   private AutonomousBase m_autoSelected;
+  private static final Boolean red = false;
+  private static final Boolean blue = true;
   private final SendableChooser<AutonomousBase> m_chooser = new SendableChooser<AutonomousBase>();
   private final SendableChooser<Boolean> allianceChooser = new SendableChooser<Boolean>();
 
@@ -65,7 +67,7 @@ public class Robot extends TimedRobot {
   public static Buttons m_buttons = new Buttons();
 
   private final LimeLightSubsystem m_limeLightSubsystem = new LimeLightSubsystem();
-  private final AprilTagSubsystem m_aprilTagSubsystem = new AprilTagSubsystem();
+  public static final AprilTagSubsystem m_aprilTagSubsystem = new AprilTagSubsystem();
   
   double t= 0.0;
   boolean override = false;
@@ -133,6 +135,11 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.METERS_PER_INCH);
     SmartDashboard.putNumber("angle odometry",DrivetrainSubsystem.m_pose.getRotation().getDegrees()%360);
     SmartDashboard.putBoolean("Ready to Score", m_limeLightSubsystem.seeSomething());
+    isBlueAlliance = allianceChooser.getSelected();
+    SmartDashboard.putBoolean("cube?", m_pneumaticIntakeSubsystem.getPurple());
+    SmartDashboard.putBoolean("cone?", m_pneumaticIntakeSubsystem.getYellow());
+    SmartDashboard.putBoolean("beam broken?", m_pneumaticIntakeSubsystem.isBeamBroken());
+    
   }
 
   /**
@@ -171,8 +178,10 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
+    m_mechanisms.init();
     m_aprilTagSubsystem.init();
     isBlueAlliance = allianceChooser.getSelected();
+    
     //m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getPosition();
    // System.out.println("Error code" + m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getLastError());
     //armTelescopingSubsystem.init();
@@ -186,9 +195,10 @@ public class Robot extends TimedRobot {
     }
     
     m_mechanisms.periodic();
+    m_drivetrainSubsystem.drive(); //TODO: necesssary?
     //System.out.println("i am in teleop");
     m_aprilTagSubsystem.periodic();
-    
+    m_pneumaticIntakeSubsystem.periodic();
     m_buttons.buttonsPeriodic();
     
 

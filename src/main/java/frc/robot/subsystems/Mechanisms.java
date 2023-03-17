@@ -20,12 +20,11 @@ public class Mechanisms {
         elevatorSubsystem.init();
 
         //telescope
-        armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED); //moved from auto periodic to init
-        armTelescopingSubsystem.init();
+        //armTelescopingSubsystem.init();
         //armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs); //VERY VERY IMPORTANT
     
-        armPneumaticPivot.init();
-        mechState = MechanismStates.HOLDING; 
+        //armPneumaticPivot.init();
+        //mechState = MechanismStates.HOLDING; 
     }
 
     public static enum MechanismStates{

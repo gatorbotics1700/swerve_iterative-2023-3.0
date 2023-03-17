@@ -27,4 +27,11 @@ public class OI {
     public static final JoystickButton button7 = new JoystickButton(joystick, 7);
     public static final JoystickButton button8 = new JoystickButton(joystick, 8);
 
+    public static double getLeftAxis(){
+        return m_controller_two.getLeftY();
+    }
+
+    public static double getRightAxis(){
+        return m_controller_two.getRightY();
+    }
 }
