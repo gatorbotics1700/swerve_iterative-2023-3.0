@@ -127,7 +127,7 @@ public class Buttons {
             m_mechanisms.setState(MechanismStates.SHELF);
             System.out.println("xbox: shelf"); 
           }else{
-            level = AutoStates.SHELF;
+          //  level = AutoStates.SHELF;
           }
         }
     

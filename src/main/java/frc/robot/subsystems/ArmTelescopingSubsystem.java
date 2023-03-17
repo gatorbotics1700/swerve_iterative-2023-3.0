@@ -1,6 +1,10 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+
 import com.ctre.phoenix.motorcontrol.can.BaseTalon;
 import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 
@@ -10,20 +14,22 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 
 import frc.robot.Gains;
+import frc.robot.OI;
 
 public class ArmTelescopingSubsystem {
 
     public static TelescopingStates tState = TelescopingStates.RETRACTED; //should this be retracted or mid? what is the equivalent to off?
 
-    public static final int HIGHARMINCHES = 32;
-    public static final int MIDARMINCHES = 23;
-    public static final int SHELFARMINCHES = 0;
-    public static final int LOWARMINCHES = 3;
-    public static final int RETRACTEDINCHES = 0;
+    private static final int HIGHARMTICKS = 246875;
+    private static final int MIDARMTICKS = 34375 + 25000;
+    private static final int SHELFARMTICKS = 312500;
+    private static final int LOWARMTICKS = 0;
+    private static final int RETRACTEDTICKS = 0;
+    private static final int DEADBAND = 12000;
+    private static final int MAX_TICKS = 400000;//246875;
     
-    public TalonFX telescopingMotor = new TalonFX(Constants.TELESCOPING_MOTOR_ID);
+    public static TalonFX telescopingMotor = new TalonFX(Constants.TELESCOPING_MOTOR_ID);
     private double startTime;
-    private double desiredInches;
     public double tareEncoder;
 
     double _kP = 0.35;
@@ -33,7 +39,6 @@ public class ArmTelescopingSubsystem {
     public double _kPeakOutput = 1.0;
 
     private int deadband = 15000;
-    private double desiredTicks;
     public Gains telescopeGains = new Gains(_kP, _kI, _kD, _kIzone, _kPeakOutput);
 
     public static enum TelescopingStates{
@@ -41,7 +46,8 @@ public class ArmTelescopingSubsystem {
         LOW_ARM_LENGTH,
         SHELF_ARM_LENGTH,
         MID_ARM_LENGTH,
-        HIGH_ARM_LENGTH;
+        HIGH_ARM_LENGTH,
+        MANUAL;
     }
 
     public void init(){
@@ -62,41 +68,41 @@ public class ArmTelescopingSubsystem {
         //telescopingMotor.set(ControlMode.PercentOutput, 0.2);
         //System.out.println("current telescoping arm motor position:" + telescopingMotor.getSelectedSensorPosition());
         if (tState == TelescopingStates.RETRACTED){
-            desiredInches = RETRACTEDINCHES; 
-            desiredTicks = 0;
-            telescopeDeadband(RETRACTEDINCHES);
+            telescopingMotor.set(ControlMode.Position, RETRACTEDTICKS);
+            telescopeDeadband(RETRACTEDTICKS);
         } else if (tState == TelescopingStates.LOW_ARM_LENGTH){
-            desiredInches = LOWARMINCHES; //official 2/13
-            //determineRightTicks();
-            System.out.println("desired ticks: " + desiredTicks);
-            System.out.println("error: " + (desiredTicks - telescopingMotor.getSelectedSensorPosition()));
-            telescopeDeadband(desiredTicks);
+            telescopingMotor.set(ControlMode.Position, LOWARMTICKS);
+            System.out.println("tryinggg to go low");
+            System.out.println("our ticks: " + telescopingMotor.getSelectedSensorPosition());
+            System.out.println("desired telescope ticks: " + LOWARMTICKS);
+            System.out.println("error: " + (LOWARMTICKS - telescopingMotor.getSelectedSensorPosition()));
+            telescopeDeadband(LOWARMTICKS);
         } else if (tState == TelescopingStates.SHELF_ARM_LENGTH){
-            desiredInches = SHELFARMINCHES; //official 2/13
-            //determineRightTicks(); 
-            System.out.println("error: " + (desiredTicks - telescopingMotor.getSelectedSensorPosition()));
-            telescopeDeadband(desiredTicks);
+            telescopingMotor.set(ControlMode.Position, SHELFARMTICKS); // goes with 90 degrees rotation 
+            System.out.println("error: " + (SHELFARMTICKS - telescopingMotor.getSelectedSensorPosition()));
+            telescopeDeadband(SHELFARMTICKS);
         }else if (tState == TelescopingStates.MID_ARM_LENGTH){
-            desiredTicks = 34375; //official 2/13
-            //determineRightTicks(); 
-            System.out.println("error: " + (desiredTicks - telescopingMotor.getSelectedSensorPosition()));
-            telescopeDeadband(desiredTicks);
+            telescopingMotor.set(ControlMode.Position, MIDARMTICKS); // goes with 90 degrees rotation 
+            System.out.println("tryinggg to go mid");
+            System.out.println("our ticks: " + telescopingMotor.getSelectedSensorPosition());
+            System.out.println("desired telescope ticks: " + MIDARMTICKS);
+            System.out.println("error: " + (MIDARMTICKS - telescopingMotor.getSelectedSensorPosition()));
+            telescopeDeadband(MIDARMTICKS);
         }else if(tState == TelescopingStates.HIGH_ARM_LENGTH){ //high arm length
-            desiredTicks = 246875; //official 2/13
-            telescopeDeadband(desiredTicks);
-        }
-        else { //retracted again for safety
-            desiredInches = 0; 
-            telescopeDeadband(0);
+            telescopingMotor.set(ControlMode.Position, HIGHARMTICKS); 
+            telescopeDeadband(HIGHARMTICKS);
+        }else if(tState == TelescopingStates.MANUAL){
+            manual();
+        } else { //retracted again for safety
+            telescopingMotor.set(ControlMode.PercentOutput, 0);
         }
     }
 
     public void telescopeDeadband(double desiredTicks){
-        if (Math.abs(desiredTicks - telescopingMotor.getSelectedSensorPosition()) > deadband){
-            telescopingMotor.set(ControlMode.Position, desiredTicks);
-            //System.out.println("STOPPED");
-        } else {
+        //System.out.println("difference: " + (desiredTicks - telescopingMotor.getSelectedSensorPosition()));
+        if (Math.abs(desiredTicks - telescopingMotor.getSelectedSensorPosition()) < deadband){
             telescopingMotor.set(ControlMode.PercentOutput, 0);
+            //System.out.println("TELESCOPE STOPPED");
         }
     }
     
@@ -130,39 +136,40 @@ public class ArmTelescopingSubsystem {
         tState = newState;
     }
 
-    public void tareEncoder() {
-        tareEncoder = telescopingMotor.getSelectedSensorPosition();
-
+    public void manual(){
+        if(getArmPosition() <= MAX_TICKS && getArmPosition() >= 0) {
+            //if(OI.getLeftAxis() > 0.2){
+                telescopingMotor.set(ControlMode.PercentOutput,-0.2);
+            //}else if(OI.getLeftAxis() < -0.2){
+                telescopingMotor.set(ControlMode.PercentOutput,0.2);
+            //} else {
+                telescopingMotor.set(ControlMode.PercentOutput, 0);
+            //}
+        }
     }
+  
     public double getTicks() {
         return telescopingMotor.getSelectedSensorPosition() - tareEncoder;
     }
 
     public boolean isAtHigh(){
-        if(Math.abs(desiredInches-telescopingMotor.getSelectedSensorPosition()- HIGHARMINCHES*Constants.TICKS_PER_INCH)<3*Constants.UNDER_TWO_TICKS_PER_INCH){
-            return true;
-        }
-        return false; 
+        return Math.abs(HIGHARMTICKS-telescopingMotor.getSelectedSensorPosition())<DEADBAND; //a little over an inch deadband
     }
 
     public boolean isAtMid(){
-        if(Math.abs(desiredInches-telescopingMotor.getSelectedSensorPosition()-MIDARMINCHES*Constants.TICKS_PER_INCH)<3*Constants.UNDER_TWO_TICKS_PER_INCH){ // fix 32 //TODO
-            return true; 
-        }
-        return false; 
+        return Math.abs(MIDARMTICKS-telescopingMotor.getSelectedSensorPosition())<DEADBAND;
     }
 
     public boolean isAtLow(){
-        if(Math.abs(desiredInches-telescopingMotor.getSelectedSensorPosition()-LOWARMINCHES*Constants.TICKS_PER_INCH)<3*Constants.UNDER_TWO_TICKS_PER_INCH){ // TODO // fix 32
-            return true; 
-        }
-        return false; 
+        return Math.abs(LOWARMTICKS-telescopingMotor.getSelectedSensorPosition())<DEADBAND;
     }
+
     public boolean isAtShelf(){
-        if(Math.abs(desiredInches - telescopingMotor.getSelectedSensorPosition() -SHELFARMINCHES*Constants.TICKS_PER_INCH) < 3 * Constants.SWERVE_TICKS_PER_INCH){
-            return true;
-        }
-        return false;
+        return Math.abs(SHELFARMTICKS - telescopingMotor.getSelectedSensorPosition()) < DEADBAND;
+    }
+
+    public boolean isAtZero(){
+        return Math.abs(telescopingMotor.getSelectedSensorPosition()) < DEADBAND;
     }
 
 }
