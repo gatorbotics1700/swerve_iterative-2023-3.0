@@ -219,11 +219,11 @@ public class AutonomousBasePD extends AutonomousBase{
         //System.out.println("xcontroller setpoint: " + xController.getSetpoint());
         //System.out.println("cur pose: " + DrivetrainSubsystem.m_pose);
         //System.out.println("desired pose: " + dPose);
-        double speedX = xController.calculate(DrivetrainSubsystem.m_pose.getX(), dPose.getX());
-        double speedY = yController.calculate(DrivetrainSubsystem.m_pose.getY(), dPose.getY());
-        System.out.println("m_pose deg: " + DrivetrainSubsystem.m_pose.getRotation().getDegrees() % 360);
+        double speedX = xController.calculate(drivetrainSubsystem.getMPoseX(), dPose.getX());
+        double speedY = yController.calculate(drivetrainSubsystem.getMPoseY(), dPose.getY());
+        System.out.println("m_pose deg: " + drivetrainSubsystem.getMPoseDegrees() % 360);
         System.out.println("d_pose deg: " + dPose.getRotation().getDegrees() % 360);
-        double speedRotat = turnController.calculate(DrivetrainSubsystem.m_pose.getRotation().getDegrees(), dPose.getRotation().getDegrees());
+        double speedRotat = turnController.calculate(drivetrainSubsystem.getMPoseDegrees(), dPose.getRotation().getDegrees());
         //System.out.println("DDDing");
         //System.out.println("speed rotate: " + speedRotat);
         
@@ -251,8 +251,8 @@ public class AutonomousBasePD extends AutonomousBase{
         }
 
         drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speedX, speedY, speedRotat, drivetrainSubsystem.getPoseRotation()));  
-        double errorX = (dPose.getX() - DrivetrainSubsystem.m_pose.getX());
-        double errorY = (dPose.getY() - DrivetrainSubsystem.m_pose.getY());
+        double errorX = (dPose.getX() - drivetrainSubsystem.getMPoseX());
+        double errorY = (dPose.getY() - drivetrainSubsystem.getMPoseY());
         double errorRotat = turnController.getPositionError();
         System.out.println("Rotation error: " + errorRotat + " deadband " + turnController.getPositionTolerance());
         System.out.println("Speed X: " + speedX + " Speed Y: " + speedY + " Speed R: " + speedRotat);
@@ -296,11 +296,11 @@ public class AutonomousBasePD extends AutonomousBase{
         //System.out.println("xcontroller setpoint: " + xController.getSetpoint());
         //System.out.println("cur pose: " + DrivetrainSubsystem.m_pose);
         //System.out.println("desired pose: " + dPose);
-        double speedX = xController.calculate(DrivetrainSubsystem.m_pose.getX(), dPose.getX());
-        double speedY = yController.calculate(DrivetrainSubsystem.m_pose.getY(), dPose.getY());
+        double speedX = xController.calculate(drivetrainSubsystem.getMPoseX(), dPose.getX());
+        double speedY = yController.calculate(drivetrainSubsystem.getMPoseY(), dPose.getY());
         //System.out.println("m_pose deg: " + DrivetrainSubsystem.m_pose.getRotation().getDegrees() % 360);
         //System.out.println("d_pose deg: " + dPose.getRotation().getDegrees() % 360);
-        double speedRotat = turnController.calculate(DrivetrainSubsystem.m_pose.getRotation().getDegrees(), dPose.getRotation().getDegrees());
+        double speedRotat = turnController.calculate(drivetrainSubsystem.getMPoseDegrees(), dPose.getRotation().getDegrees());
         //System.out.println("DDDing");
         //System.out.println("speed rotate: " + speedRotat);
         
@@ -328,8 +328,8 @@ public class AutonomousBasePD extends AutonomousBase{
         }
     
         drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speedX, speedY, speedRotat, drivetrainSubsystem.getPoseRotation()));  
-        double errorX = (dPose.getX() - DrivetrainSubsystem.m_pose.getX());
-        double errorY = (dPose.getY() - DrivetrainSubsystem.m_pose.getY());
+        double errorX = (dPose.getX() - drivetrainSubsystem.getMPoseX());
+        double errorY = (dPose.getY() - drivetrainSubsystem.getMPoseY());
         double errorRotat = turnController.getPositionError();
         System.out.println("Rotation error: " + errorRotat + " deadband " + turnController.getPositionTolerance());
         System.out.println("Speed X: " + speedX + " Speed Y: " + speedY + " Speed R: " + speedRotat);

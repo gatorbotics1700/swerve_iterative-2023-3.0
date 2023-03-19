@@ -8,16 +8,16 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 import frc.com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import frc.com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 import frc.com.swervedrivespecialties.swervelib.SwerveModule;
-import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.math.estimator.*;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.controller.PIDController;
 import frc.robot.Robot;
@@ -34,9 +34,8 @@ public class DrivetrainSubsystem {
    private static final double pitchKP = 0.035; //0.025;
    private static final double pitchKI = 0.0;
    private static final double pitchKD = 0.001; //0.001;
-   private PIDController pitchController = new PIDController(pitchKP, pitchKI, pitchKD);
-   public static final double MINOUTPUT = 0.1;
-   public static double universalPitch = 0;
+   private PIDController pitchController;
+   private static final double MINOUTPUT = 0.1;
         
 
   /**
@@ -44,7 +43,7 @@ public class DrivetrainSubsystem {
    * <p>
    * This can be reduced to cap the robot's maximum speed. Typically, this is useful during initial testing of the robot.
    */
-  public static final double MAX_VOLTAGE = 16.3;
+  private static final double MAX_VOLTAGE = 16.3;
   //  The formula for calculating the theoretical maximum velocity is:
   //   <Motor free speed RPM> / 60 * <Drive reduction> * <Wheel diameter meters> * pi
   //  By default this value is setup for a Mk3 standa
@@ -56,7 +55,7 @@ public class DrivetrainSubsystem {
    * <p>
    * This is a measure of how fast the robot should be able to drive in a straight line.
    */
-  public static final double MAX_VELOCITY_METERS_PER_SECOND = 6380.0 / 60.0 *
+  private static final double MAX_VELOCITY_METERS_PER_SECOND = 6380.0 / 60.0 *
           SdsModuleConfigurations.MK4_L2.getDriveReduction() *
           SdsModuleConfigurations.MK4_L2.getWheelDiameter() * Math.PI;
           // = 5.38281261
@@ -66,66 +65,58 @@ public class DrivetrainSubsystem {
    * This is a measure of how fast the robot can rotate in place.
    */
   // Here we calculate the theoretical maximum angular velocity. You can also replace this with a measured amount.
-  public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND /
+  private static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND /
           Math.hypot(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0);
 
-  public final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
-          // Setting up location of modules relative to the center of the robot
-          // Front left
-          new Translation2d(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0),
-          //translation2d refers to the robot's x and y position in the larger field coordinate system
-          // Front right
-          new Translation2d(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0), 
-          // Back left
-          new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0),
-          // Back right
-          new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0)
-  );
+  private SwerveDriveKinematics m_kinematics;
 
   // By default we use a Pigeon for our gyroscope. But if you use another gyroscope, like a NavX, you can change this.
   // The important thing about how you configure your gyroscope is that rotating the robot counter-clockwise should
   // cause the angle reading to increase until it wraps back over to zero.
 
-  private final PigeonIMU m_pigeon = new PigeonIMU(DRIVETRAIN_PIGEON_ID);
+  private PigeonIMU m_pigeon;
   // These are our modules. We initialize them in the constructor.
-  public final SwerveModule m_frontLeftModule;
-  public final SwerveModule m_frontRightModule;
-  public final SwerveModule m_backLeftModule;
-  public final SwerveModule m_backRightModule;
+  private SwerveModule m_frontLeftModule;
+  private SwerveModule m_frontRightModule;
+  private SwerveModule m_backLeftModule;
+  private SwerveModule m_backRightModule;
 
-  private double tareLBEncoder = 0.0;
-  private double tareLFEncoder = 0.0;
-  private double tareRFEncoder = 0.0;
-  private double tareRBEncoder = 0.0;
-
-  public static SwerveDrivePoseEstimator m_odometry; 
-  public static Pose2d m_pose = new Pose2d();
-  public static ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain"); 
+  private SwerveDrivePoseEstimator m_odometry; 
+  private Pose2d m_pose;
+  private ShuffleboardTab tab;
 
   //ChassisSpeeds takes in y velocity, x velocity, speed of rotation
-  private ChassisSpeeds m_chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
+  private ChassisSpeeds m_chassisSpeeds;
 
   public DrivetrainSubsystem() {
+        init();
+  }
 
-    // There are 4 methods you can call to create your swerve modules.
-    // The method you use depends on what motors you are using.
-    //
-    // Mk3SwerveModuleHelper.createFalcon500(...)
-    //   Your module has two Falcon 500s on it. One for steering and one for driving.
-    //
-    // Mk3SwerveModuleHelper.createNeo(...)
-    //   Your module has two NEOs on it. One for steering and one for driving.
-    //
-    // Mk3SwerveModuleHelper.createFalcon500Neo(...)
-    //   Your module has a Falcon 500 and a NEO on it. The Falcon 500 is for driving and the NEO is for steering.
-    //
-    // Mk3SwerveModuleHelper.createNeoFalcon500(...)
-    //   Your module has a NEO and a Falcon 500 on it. The NEO is for driving and the Falcon 500 is for steering.
-    //
-    // Similar helpers also exist for Mk4 modules using the Mk4SwerveModuleHelper class.
+  public void init(){
+        System.out.println("Initializing drivetrain subsystem vars");
+        pitchController = new PIDController(pitchKP, pitchKI, pitchKD);
+        m_kinematics = new SwerveDriveKinematics(
+          // Setting up location of modules relative to the center of the robot
+          // Front left
+          new Translation2d(DRIVETRAIN_WHEELBASE_METERS / 2.0, DRIVETRAIN_TRACKWIDTH_METERS / 2.0),
+          //translation2d refers to the robot's x and y position in the larger field coordinate system
+          // Front right
+          new Translation2d(DRIVETRAIN_WHEELBASE_METERS / 2.0, -DRIVETRAIN_TRACKWIDTH_METERS / 2.0), 
+          // Back left
+          new Translation2d(-DRIVETRAIN_WHEELBASE_METERS / 2.0, DRIVETRAIN_TRACKWIDTH_METERS / 2.0),
+          // Back right
+          new Translation2d(-DRIVETRAIN_WHEELBASE_METERS / 2.0, -DRIVETRAIN_TRACKWIDTH_METERS / 2.0)
+        );
+        m_pigeon = new PigeonIMU(DRIVETRAIN_PIGEON_ID);
 
-    // We will use mk4 modules with Falcon 500s with the L2 configuration. 
-    m_frontLeftModule = Mk4SwerveModuleHelper.createFalcon500(
+        m_pose = new Pose2d();
+
+        tab = Shuffleboard.getTab("Drivetrain");
+
+        m_chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
+        
+        // We will use mk4 modules with Falcon 500s with the L2 configuration. 
+        m_frontLeftModule = Mk4SwerveModuleHelper.createFalcon500(
             // This parameter is optional, but will allow you to see the current state of the module on the dashboard.
             tab.getLayout("Front Left Module", BuiltInLayouts.kList)
                     .withSize(2, 4)
@@ -143,6 +134,7 @@ public class DrivetrainSubsystem {
     );
 
     // We will do the same for the other modules
+    //TODO: check if we want to construct on every enable
     m_frontRightModule = Mk4SwerveModuleHelper.createFalcon500(
             tab.getLayout("Front Right Module", BuiltInLayouts.kList)
                     .withSize(2, 4)
@@ -176,47 +168,36 @@ public class DrivetrainSubsystem {
             BACK_RIGHT_MODULE_STEER_OFFSET
     );
     
-    m_odometry = new SwerveDrivePoseEstimator(m_kinematics, getGyroscopeRotation(), new SwerveModulePosition[] {m_frontLeftModule.getSwerveModulePosition(), m_frontRightModule.getSwerveModulePosition(), m_backLeftModule.getSwerveModulePosition(), m_backRightModule.getSwerveModulePosition()}, new Pose2d());
+    m_odometry = new SwerveDrivePoseEstimator(
+        m_kinematics, 
+        getGyroscopeRotation(), 
+        new SwerveModulePosition[] {
+                m_frontLeftModule.getSwerveModulePosition(), 
+                m_frontRightModule.getSwerveModulePosition(), 
+                m_backLeftModule.getSwerveModulePosition(), 
+                m_backRightModule.getSwerveModulePosition()
+        }, 
+        new Pose2d(0, 0, new Rotation2d(Math.toRadians(180)))); //assumes 180 degrees rotation is facing driver station
   }
-   /**
-   * Sets the gyroscope angle to zero. This can be used to set the direction the robot is currently facing to the
-   * 'forwards' direction.
-   * sets angle to go straight ahead
-   */
-  public void setHeading() {
-        m_pigeon.setFusedHeading(0.0);
-  }  
   
-  //returns the direction of the robot, originally in radians, but fromDegrees switches into degrees
-  public Rotation2d getGyroscopeRotation() {
+  //from pigeon used for updating our odometry
+  //in an unknown, arbitrary frame
+  //"do not use unless you know what you are doing" - patricia
+  private Rotation2d getGyroscopeRotation() {
         return new Rotation2d(Math.toRadians(m_pigeon.getYaw()));
   }
-
+  //from odometry used for field-relative rotation
   public Rotation2d getPoseRotation() {
         return m_pose.getRotation(); 
   }
 
-  public double getEncoderPosition(SwerveModule module) {
-        if (module == m_backLeftModule){
-                return module.getPosition()/Constants.TICKS_PER_METER - tareLBEncoder;
-        } else if (module == m_backRightModule){
-                return module.getPosition()/Constants.TICKS_PER_METER - tareRBEncoder;
-        } else if (module == m_frontLeftModule){
-                return module.getPosition()/Constants.TICKS_PER_METER - tareLFEncoder;
-        } else {
-                return module.getPosition()/Constants.TICKS_PER_METER - tareRFEncoder;
-        }
-  }
-
   public void resetOdometry(Pose2d start){
-        zeroGyroscope();
-        zeroDriveEncoder();
         SwerveModulePosition[] positionArray =  new SwerveModulePosition[] {
-                new SwerveModulePosition(m_frontLeftModule.getPosition()/Constants.TICKS_PER_METER - tareLFEncoder, new Rotation2d(m_frontLeftModule.getSteerAngle())),
-                new SwerveModulePosition(m_frontRightModule.getPosition()/Constants.TICKS_PER_METER - tareRFEncoder, new Rotation2d(m_frontRightModule.getSteerAngle())), 
-                new SwerveModulePosition(m_backLeftModule.getPosition()/Constants.TICKS_PER_METER - tareLBEncoder, new Rotation2d(m_backLeftModule.getSteerAngle())),
-                new SwerveModulePosition(m_backRightModule.getPosition()/Constants.TICKS_PER_METER - tareRBEncoder, new Rotation2d(m_backRightModule.getSteerAngle()))};
-        m_pose = start;
+                new SwerveModulePosition(m_frontLeftModule.getPosition()/Constants.TICKS_PER_METER, new Rotation2d(m_frontLeftModule.getSteerAngle())),
+                new SwerveModulePosition(m_frontRightModule.getPosition()/Constants.TICKS_PER_METER, new Rotation2d(m_frontRightModule.getSteerAngle())), 
+                new SwerveModulePosition(m_backLeftModule.getPosition()/Constants.TICKS_PER_METER, new Rotation2d(m_backLeftModule.getSteerAngle())),
+                new SwerveModulePosition(m_backRightModule.getPosition()/Constants.TICKS_PER_METER, new Rotation2d(m_backRightModule.getSteerAngle()))};
+        m_pose = start; //TODO: taken from elsewhere, confirm why we do this
         //System.out.println("position array: " + positionArray.toString());
         //System.out.println("m_pose: " + m_pose.getX() + ", " + m_pose.getY() + ", " + m_pose.getRotation().getDegrees());
         m_odometry.resetPosition(getGyroscopeRotation(), positionArray, m_pose);
@@ -228,18 +209,6 @@ public class DrivetrainSubsystem {
        // System.out.println("#resetodometry! new pose: " + m_pose.getX()/SWERVE_TICKS_PER_INCH + " y: " + m_pose.getY()/SWERVE_TICKS_PER_INCH);
        // System.out.println("inputs for the reset: " + getGyroscopeRotation() + m_frontLeftModule.getSwerveModulePosition().distanceMeters + m_frontRightModule.getSwerveModulePosition().distanceMeters + m_backLeftModule.getSwerveModulePosition().distanceMeters + m_backRightModule.getSwerveModulePosition().distanceMeters);
 
-  public void zeroDriveEncoder(){
-        tareLFEncoder = m_frontLeftModule.getPosition()/Constants.TICKS_PER_METER;
-        tareRFEncoder = m_frontRightModule.getPosition()/Constants.TICKS_PER_METER;
-        tareLBEncoder = m_backLeftModule.getPosition()/Constants.TICKS_PER_METER;
-        tareRBEncoder = m_backRightModule.getPosition()/Constants.TICKS_PER_METER;
-       // System.out.println("tared...  " + getDistance());
-  }
-
-  public void zeroGyroscope() {
-        m_pigeon.setYaw(0.0);
-  }  
-
   public void setSpeed(ChassisSpeeds chassisSpeeds) {
         m_chassisSpeeds = chassisSpeeds;
   }
@@ -248,15 +217,10 @@ public class DrivetrainSubsystem {
         DoubleSupplier m_translationXSupplier;
         DoubleSupplier m_translationYSupplier;
         DoubleSupplier m_rotationSupplier;
-        if(!Robot.isBlueAlliance){
-                m_translationXSupplier = () -> -modifyAxis(OI.m_controller.getLeftY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
-                m_translationYSupplier = () -> -modifyAxis(OI.m_controller.getLeftX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
-                m_rotationSupplier = () -> -modifyAxis(OI.m_controller.getRightX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
-         }else{
-                m_translationXSupplier = () -> modifyAxis(OI.m_controller.getLeftY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
-                m_translationYSupplier = () -> modifyAxis(OI.m_controller.getLeftX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
-                m_rotationSupplier = () -> -modifyAxis(OI.m_controller.getRightX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
-        }
+        //TODO: check negative signs
+        m_translationXSupplier = () -> -modifyAxis(OI.m_controller.getLeftY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
+        m_translationYSupplier = () -> -modifyAxis(OI.m_controller.getLeftX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
+        m_rotationSupplier = () -> -modifyAxis(OI.m_controller.getRightX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
         setSpeed(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
                         m_translationXSupplier.getAsDouble(),
@@ -265,38 +229,20 @@ public class DrivetrainSubsystem {
                         getPoseRotation()
                 )
         );
+        //TODO: check whether drive() is necessary
   }
 
   public void drive() { //runs periodically
         //System.out.println("pose before update: " + m_pose.getX()/TICKS_PER_INCH + " and y: " + m_pose.getY()/TICKS_PER_INCH);
-
+        //TODO: check getSteerAngle() is correct and that we shouldn't be getting from cancoder
         SwerveModulePosition[] array =  {
-        new SwerveModulePosition(m_frontLeftModule.getPosition()/Constants.TICKS_PER_METER - tareLFEncoder, new Rotation2d(m_frontLeftModule.getSteerAngle())),
-        new SwerveModulePosition(m_frontRightModule.getPosition()/Constants.TICKS_PER_METER - tareRFEncoder, new Rotation2d(m_frontRightModule.getSteerAngle())), 
-        new SwerveModulePosition(m_backLeftModule.getPosition()/Constants.TICKS_PER_METER - tareLBEncoder, new Rotation2d(m_backLeftModule.getSteerAngle())),
-        new SwerveModulePosition(m_backRightModule.getPosition()/Constants.TICKS_PER_METER - tareRBEncoder, new Rotation2d(m_backRightModule.getSteerAngle()))};
- 
-        
-        // System.out.println("front left module position: " + m_frontLeftModule.getPosition()/Constants.TICKS_PER_METER);
-        // System.out.println("front right module position: " + m_frontRightModule.getPosition()/Constants.TICKS_PER_METER);
-        // System.out.println("back left module position: " + m_backLeftModule.getPosition()/Constants.TICKS_PER_METER);
-        // System.out.println("back right module position: " + m_backRightModule.getPosition()/Constants.TICKS_PER_METER);
-
-        // System.out.println("front left swerve module position: " + m_frontLeftModule.getSwerveModulePosition().distanceMeters/Constants.TICKS_PER_METER);
-        // System.out.println("front left swerve module position: " + m_frontRightModule.getSwerveModulePosition().distanceMeters/Constants.TICKS_PER_METER);
-        // System.out.println("front left swerve module position: " + m_backLeftModule.getSwerveModulePosition().distanceMeters/Constants.TICKS_PER_METER);
-        // System.out.println("front left swerve module position: " + m_backRightModule.getSwerveModulePosition().distanceMeters/Constants.TICKS_PER_METER);
-        
-
-
-        
-
-        //System.out.println("inputs for the update: " + getGyroscopeRotation() + m_frontLeftModule.getSwerveModulePosition().distanceMeters + m_frontRightModule.getSwerveModulePosition().distanceMeters + m_backLeftModule.getSwerveModulePosition().distanceMeters + m_backRightModule.getSwerveModulePosition().distanceMeters);
+                new SwerveModulePosition(m_frontLeftModule.getPosition()/Constants.TICKS_PER_METER, new Rotation2d(m_frontLeftModule.getSteerAngle())), //from steer motor
+                new SwerveModulePosition(m_frontRightModule.getPosition()/Constants.TICKS_PER_METER, new Rotation2d(m_frontRightModule.getSteerAngle())), 
+                new SwerveModulePosition(m_backLeftModule.getPosition()/Constants.TICKS_PER_METER, new Rotation2d(m_backLeftModule.getSteerAngle())),
+                new SwerveModulePosition(m_backRightModule.getPosition()/Constants.TICKS_PER_METER, new Rotation2d(m_backRightModule.getSteerAngle()))
+        };
         m_pose = m_odometry.update(getGyroscopeRotation(),array); 
-    
-       // System.out.println("new pose after update: " + m_pose.getX() + " and y: " + m_pose.getY());
-    //System.out.println("new pose after update: " + m_pose.getX()/SWERVE_TICKS_PER_INCH + " and y: " + m_pose.getY()/SWERVE_TICKS_PER_INCH);
-    
+
         //array of states filled with the speed and angle for each module (made from linear and angular motion for the whole robot) 
         SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
         //desaturatewheelspeeds checks and fixes if any module's wheel speed is above the max
@@ -338,11 +284,10 @@ public class DrivetrainSubsystem {
         setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.0, 0.0, 0.0, getPoseRotation()));
         drive();
    }
-
+   //TODO: look through this function
    public void pitchBalance(double pitchSetpoint){
         System.out.println("pitch: " + m_pigeon.getPitch());
-        System.out.println("universal pitch: " + universalPitch);
-        double pitchAfterCorrection = m_pigeon.getPitch()- universalPitch;
+        double pitchAfterCorrection = m_pigeon.getPitch();
         System.out.println("pitch after correcting for universalPitch: " + pitchAfterCorrection);
         pitchController.setSetpoint(pitchSetpoint); 
         double output = pitchController.calculate(pitchAfterCorrection, pitchSetpoint);
@@ -360,5 +305,20 @@ public class DrivetrainSubsystem {
         }
     }
 
+    public double getMPoseX(){
+        return m_pose.getX();
+    }
+
+    public double getMPoseY(){
+        return m_pose.getY();
+    }
+
+    public double getMPoseDegrees(){
+        return m_pose.getRotation().getDegrees();
+    }
+
+    public Pose2d getMPose(){ //TODO: do we need this?
+        return m_pose;
+    }
    
 }

@@ -63,7 +63,7 @@ public class Robot extends TimedRobot {
  // whole field: 651.683 (inches)
   
   /**
-  * This function is run when the robot is first started up and should be used for any
+  * This function is run when the robot is turned on and should be used for any
   * initialization code.
   */
   @Override
@@ -114,9 +114,9 @@ public class Robot extends TimedRobot {
     // System.out.println(allianceChooser.getSelected());
     isBlueAlliance = allianceChooser.getSelected();
     SmartDashboard.putBoolean("Alliance: ", isBlueAlliance); 
-    SmartDashboard.putNumber("x odometry",DrivetrainSubsystem.m_pose.getX()/Constants.METERS_PER_INCH);
-    SmartDashboard.putNumber("y odometry",DrivetrainSubsystem.m_pose.getY()/Constants.METERS_PER_INCH);
-    SmartDashboard.putNumber("angle odometry",DrivetrainSubsystem.m_pose.getRotation().getDegrees()%360);
+    SmartDashboard.putNumber("x odometry",m_drivetrainSubsystem.getMPoseX()/Constants.METERS_PER_INCH);
+    SmartDashboard.putNumber("y odometry",m_drivetrainSubsystem.getMPoseY()/Constants.METERS_PER_INCH);
+    SmartDashboard.putNumber("angle odometry",m_drivetrainSubsystem.getMPoseDegrees()%360);
     //SmartDashboard.putBoolean("Ready to Score", m_limeLightSubsystem.seeSomething());
     //SmartDashboard.putBoolean("beam broken?", m_pneumaticIntakeSubsystem.isBeamBroken());
    // SmartDashboard.putBoolean("cube?", m_pneumaticIntakeSubsystem.getPurple());
@@ -137,8 +137,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_mechanisms.init();
-
-    System.out.println("current pose: " + DrivetrainSubsystem.m_pose.getX() + " , " + DrivetrainSubsystem.m_pose.getY());
+    m_drivetrainSubsystem.init();
+    System.out.println("current pose: " + m_drivetrainSubsystem.getMPoseX() + " , " + m_drivetrainSubsystem.getMPoseY());
     m_autoSelected = auto_chooser.getSelected();
     m_autoSelected.init();
     isBlueAlliance = allianceChooser.getSelected();
@@ -158,7 +158,7 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when teleop is enabled. */
   @Override
-  public void teleopInit() {
+  public void teleopInit() { //BEFORE TESTING: MAKE SURE YOU HAVE EITHER DEPLOYED OR ADDED DRIVETRAIN INIT
     //m_autoSelected.setState(StateWithCoordinate.AutoStates.STOP);
     //m_aprilTagSubsystem.init();
     isBlueAlliance = allianceChooser.getSelected();
@@ -168,16 +168,15 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    if(AprilTagSubsystem.states != AprilTagSubsystem.AprilTagSequence.CORRECTPOSITION){
+    /*if(AprilTagSubsystem.states != AprilTagSubsystem.AprilTagSequence.CORRECTPOSITION){
       m_drivetrainSubsystem.driveTeleop();
-    }
-    
-    m_drivetrainSubsystem.drive();
-    m_mechanisms.periodic();
-    m_aprilTagSubsystem.periodic();
-    //m_pneumaticIntakeSubsystem.periodic();
+    }*/
     m_buttons.buttonsPeriodic();
-
+    m_drivetrainSubsystem.driveTeleop(); //only sets speed; does not actually drive
+    m_drivetrainSubsystem.drive();
+    //m_mechanisms.periodic();
+    //m_aprilTagSubsystem.periodic();
+    //m_pneumaticIntakeSubsystem.periodic();
   }
 
   /** This function is called once when the robot is disabled. */
