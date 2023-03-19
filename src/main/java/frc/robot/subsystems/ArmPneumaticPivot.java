@@ -10,41 +10,42 @@ import frc.robot.Robot;
 
 public class ArmPneumaticPivot { //actuate = down, retract = up
 
-    public static enum PneumaticPivotStates{
-        ACTUATING,
-        RETRACTING,
-        OFF;
-    }
+    // public static enum PneumaticPivotStates{
+    //     ACTUATING,
+    //     RETRACTING,
+    //     OFF;
+    // }
     
-    public PneumaticIntakeSubsystem piSystem = Robot.m_pneumaticIntakeSubsystem;
+    // public PneumaticIntakeSubsystem piSystem = Robot.m_pneumaticIntakeSubsystem;
 
-    public PneumaticPivotStates pneumaticPivotState = PneumaticPivotStates.OFF;
+    // public PneumaticPivotStates pneumaticPivotState = PneumaticPivotStates.RETRACTING;
 
-    private static DoubleSolenoid solenoid = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 4, 6); 
+    // public static DoubleSolenoid solenoid = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 4, 6); 
 
-    public void init() {
-        solenoid.set(kOff);
-        System.out.println("solenoid set to off");
-    }
+    // public void init() {
+    //     solenoid.set(kOff);
+    //     System.out.println("solenoid set to off");
+    // }
 
-    public void periodic(){
-        if (pneumaticPivotState == PneumaticPivotStates.ACTUATING){
-            solenoid.set(kForward);
-        } else if (pneumaticPivotState == PneumaticPivotStates.RETRACTING){
-            solenoid.set(kReverse);
-            System.out.println("retracting");
-        } else {
-            solenoid.set(kOff);
-        }
-    }
+    // public void periodic(){
+    //     if (pneumaticPivotState == PneumaticPivotStates.ACTUATING){
+    //         solenoid.set(kForward);
+    //     } else if (pneumaticPivotState == PneumaticPivotStates.RETRACTING){
+    //         solenoid.set(kReverse);
+    //         System.out.println("retracting");
+    //     } else {
+    //         solenoid.set(kOff);
+    //     }
+    // }
 
-    public boolean getPSI(){
-        System.out.println(piSystem.compressor.getCurrent());
-        return piSystem.compressor.getPressureSwitchValue();
-    }
+    // public boolean getPSI(){
+    //     return true;
+    //     //System.out.println(piSystem.compressor.getCurrent());
+    //     //return piSystem.compressor.getPressureSwitchValue();
+    // }
 
 
-    public void setState(PneumaticPivotStates newPivotState){
-        pneumaticPivotState = newPivotState;
-    }
+    // public void setState(PneumaticPivotStates newPivotState){
+    //     pneumaticPivotState = newPivotState;
+    // }
 }

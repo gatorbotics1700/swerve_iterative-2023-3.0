@@ -6,8 +6,7 @@ import frc.robot.subsystems.Mechanisms.MechanismStates;
 import frc.robot.subsystems.PneumaticIntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.PneumaticIntakeSubsystem;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.Joystick;
+//import frc.robot.subsystems.ArmPneumaticPivot.PneumaticPivotStates;
 import frc.robot.subsystems.Vision.AprilTagSubsystem;
 import frc.robot.subsystems.Vision.AprilTagSubsystem.AprilTagSequence;
 
@@ -62,7 +61,7 @@ public class Buttons {
         if(OI.m_controller_two.getAButton()){ 
           if (override){
             System.out.println("xbox: low node");
-              m_mechanisms.setState(MechanismStates.LOW_NODE);
+            m_mechanisms.setState(MechanismStates.LOW_NODE);
             } else {
               level = AutoStates.LOWNODE;
               m_AprilTagSubsystem.setState(AprilTagSequence.DETECT);
@@ -104,14 +103,14 @@ public class Buttons {
           }
         }
     
-        if(OI.m_controller_two.getLeftBumperReleased()){ //needs its own button & not enough
+        /*if(OI.m_controller_two.getLeftBumperReleased()){ //needs its own button & not enough
           System.out.println("intake");
           if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING || PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF){
             pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING);
           } else if(PneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.RETRACTING){
             pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeSubsystem.PneumaticIntakeStates.ACTUATING); 
           }
-        }
+        }*/
     
         if(OI.m_controller_two.getRightBumper()){
           if(override){

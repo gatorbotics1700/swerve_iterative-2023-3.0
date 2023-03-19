@@ -18,4 +18,7 @@ public class AutonomousBase{
 
     }
 
+    public void setState(StateWithCoordinate.AutoStates newAutoState){
+    }
+
 }

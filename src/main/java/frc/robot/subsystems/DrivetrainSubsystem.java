@@ -17,33 +17,25 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.estimator.*;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Robot;import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-
 import frc.robot.Robot;
 
 
-import java.util.Arrays;
 import java.util.function.DoubleSupplier;
 
 import static frc.robot.Constants.*;
 
 import frc.robot.Constants;
 import frc.robot.OI;
-import frc.robot.subsystems.ArmTelescopingSubsystem.TelescopingStates;
 
 public class DrivetrainSubsystem {
-   private static double pitchKP = 0.035; //0.025;
-   private static double pitchKI = 0.0;
-   private static double pitchKD = 0.001; //0.001;
+   private static final double pitchKP = 0.035; //0.025;
+   private static final double pitchKI = 0.0;
+   private static final double pitchKD = 0.001; //0.001;
    private PIDController pitchController = new PIDController(pitchKP, pitchKI, pitchKD);
-   public static double MINOUTPUT = 0.1;
+   public static final double MINOUTPUT = 0.1;
    public static double universalPitch = 0;
         
 
@@ -53,7 +45,6 @@ public class DrivetrainSubsystem {
    * This can be reduced to cap the robot's maximum speed. Typically, this is useful during initial testing of the robot.
    */
   public static final double MAX_VOLTAGE = 16.3;
-  public boolean isBlueAlliance = true;
   //  The formula for calculating the theoretical maximum velocity is:
   //   <Motor free speed RPM> / 60 * <Drive reduction> * <Wheel diameter meters> * pi
   //  By default this value is setup for a Mk3 standa
@@ -110,7 +101,6 @@ public class DrivetrainSubsystem {
   public static SwerveDrivePoseEstimator m_odometry; 
   public static Pose2d m_pose = new Pose2d();
   public static ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain"); 
-  public ArmTelescopingSubsystem armTelescopingSubsystem = new ArmTelescopingSubsystem();
 
   //ChassisSpeeds takes in y velocity, x velocity, speed of rotation
   private ChassisSpeeds m_chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
@@ -253,32 +243,15 @@ public class DrivetrainSubsystem {
   public void setSpeed(ChassisSpeeds chassisSpeeds) {
         m_chassisSpeeds = chassisSpeeds;
   }
-
-  public void setIsBlueAlliance(boolean isBlueAlliance) {
-       this.isBlueAlliance = isBlueAlliance;
-  }
-
-  public boolean getIsBlueAlliance(){
-        return isBlueAlliance;
-  }
-
-//   public Pose2d getCurrentPose(){
-//         return m_pose;
-//   }
-
-//   public SwerveDriveOdometry getOdometry(){
-//         return m_odometry;
-//   }
   
-public void driveTeleop(){
+  public void driveTeleop(){
         DoubleSupplier m_translationXSupplier;
         DoubleSupplier m_translationYSupplier;
         DoubleSupplier m_rotationSupplier;
-        if(Robot.isBlueAlliance){
+        if(!Robot.isBlueAlliance){
                 m_translationXSupplier = () -> -modifyAxis(OI.m_controller.getLeftY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
                 m_translationYSupplier = () -> -modifyAxis(OI.m_controller.getLeftX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
-                m_rotationSupplier = () -> modifyAxis(OI.m_controller.getRightX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
-                
+                m_rotationSupplier = () -> -modifyAxis(OI.m_controller.getRightX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
          }else{
                 m_translationXSupplier = () -> modifyAxis(OI.m_controller.getLeftY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
                 m_translationYSupplier = () -> modifyAxis(OI.m_controller.getLeftX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
@@ -289,7 +262,7 @@ public void driveTeleop(){
                         m_translationXSupplier.getAsDouble(),
                         m_translationYSupplier.getAsDouble(),
                         m_rotationSupplier.getAsDouble(),
-                        getGyroscopeRotation()
+                        getPoseRotation()
                 )
         );
   }
@@ -328,23 +301,7 @@ public void driveTeleop(){
         SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
         //desaturatewheelspeeds checks and fixes if any module's wheel speed is above the max
         SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
-        
-        /*double frontLeftSpeed= m_frontLeftModule.getDriveVelocity() + appliedDrivePID(states[0], m_frontLeftModule);
-        double frontRightSpeed= m_frontRightModule.getDriveVelocity() + appliedDrivePID(states[1], m_frontRightModule);
-        double backLeftSpeed=  m_backLeftModule.getDriveVelocity() + appliedDrivePID(states[2], m_backLeftModule);
-        double backRightSpeed= m_backRightModule.getDriveVelocity() + appliedDrivePID(states[3], m_backRightModule);
 
-        double frontLeftAngle= m_frontLeftModule.getSteerAngle() + appliedAnglePID(states[0], m_frontLeftModule);
-        double frontRightAngle= m_frontRightModule.getSteerAngle() + appliedAnglePID(states[1], m_frontRightModule);
-        double backLeftAngle= m_backLeftModule.getSteerAngle() + appliedAnglePID(states[2], m_backLeftModule);
-        double backRightAngle= m_backRightModule.getSteerAngle() + appliedAnglePID(states[3], m_backRightModule);
-        
-        //parameters are double driveVoltage, double steerAngle
-        m_frontLeftModule.set(frontLeftSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, frontLeftAngle);
-        m_frontRightModule.set(frontRightSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, frontRightAngle);
-        m_backLeftModule.set(backLeftSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, backLeftAngle);
-        m_backRightModule.set(backRightSpeed / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, backRightAngle);*/
-        
         m_frontLeftModule.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getRadians());
         m_frontRightModule.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());
         m_backLeftModule.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getRadians());
@@ -353,22 +310,6 @@ public void driveTeleop(){
         // System.out.println("The angle of front left module: "+states[0].angle.getDegrees());
         // System.out.println("The angle of front right module: "+states[1].angle.getDegrees());
 }
-
-  private double appliedDrivePID(SwerveModuleState state, SwerveModule module){
-        double goalDriveVelocity= state.speedMetersPerSecond;
-        double currentDriveVelocity= module.getDriveVelocity();
-        PIDController pid = new PIDController(0.001, 0.0, 0.0);
-        pid.setTolerance(0.1);
-        return pid.calculate(currentDriveVelocity, goalDriveVelocity);
-  }
-
-  private double appliedAnglePID(SwerveModuleState state, SwerveModule module){
-        double goalAngle= state.angle.getRadians();
-        double currentAngle= module.getSteerAngle();
-        PIDController pid = new PIDController(0.001, 0.0, 0.0);
-        pid.setTolerance(Math.toRadians(1));
-        return pid.calculate(goalAngle, currentAngle);
-  }
 
   private static double deadband(double value, double deadband) {
         if (Math.abs(value) > deadband) {
@@ -406,7 +347,7 @@ public void driveTeleop(){
         pitchController.setSetpoint(pitchSetpoint); 
         double output = pitchController.calculate(pitchAfterCorrection, pitchSetpoint);
         System.out.println("output: " + output); 
-        setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, -output, 0, getGyroscopeRotation()));
+        setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(output, 0, 0, getGyroscopeRotation()));
         drive();
         
         if (Math.abs(pitchAfterCorrection - pitchSetpoint) < 1.0){

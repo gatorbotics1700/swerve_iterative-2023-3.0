@@ -20,13 +20,13 @@ public class ArmTelescopingSubsystem {
 
     public static TelescopingStates tState = TelescopingStates.RETRACTED; //should this be retracted or mid? what is the equivalent to off?
 
-    private static final int HIGHARMTICKS = 246875;
+    private static final int HIGHARMTICKS = 240000;//246875;
     private static final int MIDARMTICKS = 34375 + 25000;
     private static final int SHELFARMTICKS = 312500;
     private static final int LOWARMTICKS = 0;
     private static final int RETRACTEDTICKS = 0;
     private static final int DEADBAND = 12000;
-    private static final int MAX_TICKS = 400000;//246875;
+    private static final int MAX_TICKS = 246875; //400000;//246875;
     
     public static TalonFX telescopingMotor = new TalonFX(Constants.TELESCOPING_MOTOR_ID);
     private double startTime;
@@ -55,13 +55,12 @@ public class ArmTelescopingSubsystem {
         telescopingMotor.setInverted(true); //forward = clockwise, changed on 2/9
         telescopingMotor.setNeutralMode(NeutralMode.Brake);
 
-        //telescopingMotor.selectProfileSlot(0, 0);
-        telescopingMotor.configAllowableClosedloopError(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
-        telescopingMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx, Constants.kTimeoutMs);//determine what these values would be for us
-        telescopingMotor.config_kP(Constants.kPIDLoopIdx, telescopeGains.kP, Constants.kTimeoutMs);
-        telescopingMotor.config_kI(Constants.kPIDLoopIdx, telescopeGains.kI, Constants.kTimeoutMs);
-        telescopingMotor.config_kD(Constants.kPIDLoopIdx, telescopeGains.kD, Constants.kTimeoutMs);
+        telescopingMotor.selectProfileSlot(0, 0);
+        // telescopingMotor.configAllowableClosedloopError(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+        // telescopingMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx, Constants.kTimeoutMs);//determine what these values would be for us
+        // telescopingMotor.config_kP(Constants.kPIDLoopIdx, telescopeGains.kP, Constants.kTimeoutMs);
 
+        setTState(TelescopingStates.RETRACTED);
     }
 
     public void periodic(){//sam requests that we can operate arm length by stick on xbox

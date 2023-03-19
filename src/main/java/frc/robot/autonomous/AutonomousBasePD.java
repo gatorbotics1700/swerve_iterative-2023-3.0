@@ -12,9 +12,9 @@ import frc.robot.Constants;
 import frc.robot.autonomous.StateWithCoordinate;
 import frc.robot.autonomous.StateWithCoordinate.AutoStates;
 import frc.robot.subsystems.PneumaticIntakeSubsystem;
-import frc.robot.subsystems.ArmPneumaticPivot.PneumaticPivotStates;
+//import frc.robot.subsystems.ArmPneumaticPivot.PneumaticPivotStates;
 import frc.robot.subsystems.Mechanisms.MechanismStates;
-import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
+//import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates; TODO uncomment
 import frc.robot.subsystems.Mechanisms;
 import frc.robot.subsystems.Vision.LimeLightSubsystem;
 
@@ -49,6 +49,7 @@ public class AutonomousBasePD extends AutonomousBase{
     private static Mechanisms mechanisms = Robot.m_mechanisms;
     private static PneumaticIntakeSubsystem pneumaticIntakeSubsystem = Robot.m_pneumaticIntakeSubsystem;
     private static LimeLightSubsystem limeLightSubsystem = new LimeLightSubsystem();
+    public AutoStates states;
 
     //pids
     private PIDController turnController = new PIDController(turnKP, turnKI, turnKD); 
@@ -91,7 +92,7 @@ public class AutonomousBasePD extends AutonomousBase{
     @Override
     public void periodic()
     {
-        AutoStates states = stateSequence[i].state;
+         states = stateSequence[i].state;
         System.out.println("state: " + states);
         if (states == AutoStates.FIRST){
             turnController.setTolerance(TURN_DEADBAND); 
@@ -104,8 +105,17 @@ public class AutonomousBasePD extends AutonomousBase{
             System.out.println("moving on to " + stateSequence[i]);
         } else if (states == AutoStates.FIRSTHIGHNODE){ //WE HAVE THIS BECAUSE OF APRILTAGS
             //System.out.println("we've reset to this pose: " + DrivetrainSubsystem.m_pose);
-            i++;  
-            System.out.println("moving on to " + stateSequence[i]);
+            mechanisms.setState(MechanismStates.HIGH_NODE);
+            System.out.println("high node");
+           if(mechanisms.isDoneHigh()==true){
+               if(highNodeCounter >= -1){
+                startTimeHigh = System.currentTimeMillis();
+               } 
+            if(System.currentTimeMillis()-startTimeHigh>=500){
+                i++;
+                highNodeCounter = -1;
+            }
+           } 
         } else {
             drivetrainSubsystem.drive();
             //System.out.println("pose in auto: " + DrivetrainSubsystem.m_pose.getX()/Constants.METERS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getY()/Constants.METERS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getRotation().getDegrees());
@@ -122,7 +132,7 @@ public class AutonomousBasePD extends AutonomousBase{
                    if(highNodeCounter >= -1){
                     startTimeHigh = System.currentTimeMillis();
                    } 
-                if(System.currentTimeMillis()-startTimeHigh>=0.5){
+                if(System.currentTimeMillis()-startTimeHigh>=500){
                     i++;
                     highNodeCounter = -1;
                 }
@@ -135,7 +145,7 @@ public class AutonomousBasePD extends AutonomousBase{
                     if(midNodeCounter >= -1){
                         startTimeMid = System.currentTimeMillis();
                     }
-                    if(System.currentTimeMillis()-startTimeMid>=0.5){
+                    if(System.currentTimeMillis()-startTimeMid>=500){
                         i++;
                         midNodeCounter = -1;
                     }
@@ -147,7 +157,7 @@ public class AutonomousBasePD extends AutonomousBase{
                     if(lowNodeCounter >= -1){
                         startTimeLow = System.currentTimeMillis();
                     }
-                    if(System.currentTimeMillis()-startTimeLow>=0.5){
+                    if(System.currentTimeMillis()-startTimeLow>=500){
                         i++;
                         lowNodeCounter = -1;
                     }
@@ -158,7 +168,7 @@ public class AutonomousBasePD extends AutonomousBase{
                     if(leftNodeCounter >= -1){
                         startTimeLeft = System.currentTimeMillis();
                     }
-                    if(System.currentTimeMillis() - startTimeLeft >= 0.5){
+                    if(System.currentTimeMillis() - startTimeLeft >= 500){
                         i++;
                         leftNodeCounter = -1;
                     }
@@ -171,24 +181,24 @@ public class AutonomousBasePD extends AutonomousBase{
                     if(rightNodeCounter >= -1){
                         startTimeRight = System.currentTimeMillis();
                     }
-                    if(System.currentTimeMillis() - startTimeRight >= 0.5){
+                    if(System.currentTimeMillis() - startTimeRight >= 500){
                         i++;
                         rightNodeCounter = -1;
                     }
                 }
             }else if(states == AutoStates.BALANCING){
-                armPneumaticPivot.setState(PneumaticPivotStates.ACTUATING);
+                //armPneumaticPivot.setState(PneumaticPivotStates.ACTUATING);
                 Robot.m_drivetrainSubsystem.pitchBalance(0.0);
             }else if(states == AutoStates.INTAKING){
                 if(intakeCounter >= -1){
                     startTimeIntake = System.currentTimeMillis(); 
                 }
-                if(System.currentTimeMillis()-startTimeIntake>=0.5){
+                if(System.currentTimeMillis()-startTimeIntake>=500){
                     i++;
                     intakeCounter = -1;
                 }
                 mechanisms.setState(MechanismStates.GROUNDPICKUP);
-                pneumaticIntakeSubsystem.setState(PneumaticIntakeStates.ACTUATING);
+                //pneumaticIntakeSubsystem.setState(PneumaticIntakeStates.ACTUATING);TODO uncomment
             }else{
                 drivetrainSubsystem.stopDrive();
             
@@ -272,6 +282,11 @@ public class AutonomousBasePD extends AutonomousBase{
 
     public boolean turnAtSetpoint(){
         return Math.abs(turnController.getPositionError()) <= TURN_DEADBAND;
+    }
+
+    @Override
+    public void setState(StateWithCoordinate.AutoStates newAutoState){
+        states = newAutoState;
     }
 
     public void driveDesiredDistanceVision(Pose2d dPose){ 

@@ -28,7 +28,7 @@ public class PDPath {
     );
 
     public static AutonomousBasePD noGoR = new AutonomousBasePD(
-        new Pose2d(0.0, 0.0, new Rotation2d(Math.toRadians(0.0))), 
+        new Pose2d(582.27, 0.0, new Rotation2d(Math.toRadians(0.0))), 
         new StateWithCoordinate[]{
           new StateWithCoordinate(AutoStates.FIRST),  
           new StateWithCoordinate(AutoStates.FIRSTHIGHNODE),
@@ -46,7 +46,7 @@ public class PDPath {
     );
 
     public static AutonomousBasePD HDLeaveR = new AutonomousBasePD(
-        new Pose2d( 595.641 * mpi, 20.19 * mpi, new Rotation2d(Math.toRadians(180.0))),
+        new Pose2d(582.27 * mpi, 20.19 * mpi, new Rotation2d(Math.toRadians(0.0))),
         new StateWithCoordinate[]{
             new StateWithCoordinate(AutoStates.FIRST),
             new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(431.768 * mpi, 20.19 * mpi, new Rotation2d(Math.toRadians(0.0)))),
@@ -55,16 +55,16 @@ public class PDPath {
     );
 
     public static AutonomousBasePD HDLeaveB = new AutonomousBasePD(
-        new Pose2d(56.069 * mpi, 200.046 * mpi, new Rotation2d(Math.toRadians(0.0))), 
+        new Pose2d(68.95 * mpi, 200.046 * mpi, new Rotation2d(Math.toRadians(180.0))), 
         new StateWithCoordinate[]{
             new StateWithCoordinate(AutoStates.FIRST),
-            new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(219.915 * mpi, 200.046 * mpi, new Rotation2d(Math.toRadians(0.0)))),
+            new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(219.915 * mpi, 200.046 * mpi, new Rotation2d(Math.toRadians(180.0)))),
             new StateWithCoordinate(AutoStates.STOP)
         }
     );
 
     public static AutonomousBasePD HBLeaveB = new AutonomousBasePD(
-        new Pose2d(56.069 * mpi, 200.046 * mpi, new Rotation2d(Math.toRadians(180.0))), 
+        new Pose2d(68.95 * mpi, 200.046 * mpi, new Rotation2d(Math.toRadians(180.0))), 
         new StateWithCoordinate[]{
         new StateWithCoordinate(AutoStates.FIRST),
         new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(219.915 * mpi, 200.046 * mpi, new Rotation2d(Math.toRadians(180.0)))),
@@ -73,16 +73,16 @@ public class PDPath {
     );
 
     public static AutonomousBasePD HBLeaveR = new AutonomousBasePD(
-        new Pose2d(56.069 * mpi, 200.046 * mpi, new Rotation2d(Math.toRadians(0.0))), 
+        new Pose2d(582.27 * mpi, 200.046 * mpi, new Rotation2d(Math.toRadians(0.0))), 
         new StateWithCoordinate[]{
             new StateWithCoordinate(AutoStates.FIRST),
-            new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(219.915 * mpi, 200.046 * mpi, new Rotation2d(Math.toRadians(0.0)))),
+            new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(431.768 * mpi, 200.046 * mpi, new Rotation2d(Math.toRadians(0.0)))),
             new StateWithCoordinate(AutoStates.STOP)
         }
     );
 
     public static AutonomousBasePD HBPlaceLeaveB = new AutonomousBasePD(
-        new Pose2d(56.069 * mpi, 200.046 * mpi, new Rotation2d(Math.toRadians(180.0))), 
+        new Pose2d(68.95 * mpi, 200.046 * mpi, new Rotation2d(Math.toRadians(180.0))), 
         new StateWithCoordinate[]{
         new StateWithCoordinate(AutoStates.FIRST),
         new StateWithCoordinate(AutoStates.FIRSTHIGHNODE),
@@ -92,57 +92,57 @@ public class PDPath {
     );
 
     public static AutonomousBasePD HBPlaceLeaveR = new AutonomousBasePD(
-        new Pose2d(56.069 * mpi, 200.046 * mpi, new Rotation2d(Math.toRadians(0.0))), 
+        new Pose2d(582.27 * mpi, 200.046 * mpi, new Rotation2d(Math.toRadians(0.0))), 
         new StateWithCoordinate[]{
             new StateWithCoordinate(AutoStates.FIRST),
             new StateWithCoordinate(AutoStates.FIRSTHIGHNODE),
-            new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(219.915 * mpi, 200.046 * mpi, new Rotation2d(Math.toRadians(0.0)))),
+            new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(431.768 * mpi, 200.046 * mpi, new Rotation2d(Math.toRadians(0.0)))),
             new StateWithCoordinate(AutoStates.STOP)
         }
     );
 
     public static AutonomousBasePD HDPlaceLeaveB = new AutonomousBasePD(
-        new Pose2d(20.19 * mpi, 56.069 * mpi, new Rotation2d(Math.toRadians(180.0))), 
+        new Pose2d(68.95 * mpi, 56.069 * mpi, new Rotation2d(Math.toRadians(180.0))), 
         new StateWithCoordinate[]{
             new StateWithCoordinate(AutoStates.FIRST),
-            new StateWithCoordinate(AutoStates.FIRSTHIGHNODE),
+            new StateWithCoordinate(AutoStates.HIGHNODE),
             new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(219.915 * mpi, 20.19 * mpi, new Rotation2d(Math.toRadians(180.0)))),
             new StateWithCoordinate(AutoStates.STOP)
         }
     );
 
     public static AutonomousBasePD HDPlaceLeaveR = new AutonomousBasePD(
-        new Pose2d( 595.641 * mpi, 20.19 * mpi, new Rotation2d(Math.toRadians(0.0))),
+        new Pose2d(582.27 * mpi, 20.19 * mpi, new Rotation2d(Math.toRadians(0.0))),
         new StateWithCoordinate[]{
             new StateWithCoordinate(AutoStates.FIRST),
-            new StateWithCoordinate(AutoStates.MIDNODE), //TODO: CHANGE THIS WAS FOR TESTING PURPOSES ONLY
+            new StateWithCoordinate(AutoStates.FIRSTHIGHNODE), //TODO: CHANGE THIS WAS FOR TESTING PURPOSES ONLY
             new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(431.768 * mpi, 20.19 * mpi, new Rotation2d(Math.toRadians(0.0)))),
             new StateWithCoordinate(AutoStates.STOP)
         }
     );
 
     public static AutonomousBasePD engageChargeB = new AutonomousBasePD(
-        new Pose2d(56.069 * mpi, 108.015* mpi, new Rotation2d(Math.toRadians(180.0))), 
+        new Pose2d(68.95 * mpi, 108.19* mpi, new Rotation2d(Math.toRadians(180.0))), 
         new StateWithCoordinate[]{
         new StateWithCoordinate(AutoStates.FIRST),
-        new StateWithCoordinate(AutoStates.FIRSTHIGHNODE),
-        new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(152.812 * mpi, 108.015 * mpi, new Rotation2d(Math.toRadians(180.0)))),
+        //new StateWithCoordinate(AutoStates.FIRSTHIGHNODE),
+        new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(155.812 * mpi, 108.015 * mpi, new Rotation2d(Math.toRadians(180.0)))),
         new StateWithCoordinate(AutoStates.BALANCING)
         }
     );
 
     public static AutonomousBasePD engageChargeR = new AutonomousBasePD(
-        new Pose2d(56.069 * mpi, 108.015* mpi, new Rotation2d(Math.toRadians(0.0))), 
+        new Pose2d(582.27 * mpi, 108.19* mpi, new Rotation2d(Math.toRadians(0.0))), 
         new StateWithCoordinate[]{
             new StateWithCoordinate(AutoStates.FIRST),
-            new StateWithCoordinate(AutoStates.FIRSTHIGHNODE),
-            new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(152.812 * mpi, 108.015 * mpi, new Rotation2d(Math.toRadians(0.0)))),
+            //new StateWithCoordinate(AutoStates.FIRSTHIGHNODE),
+            new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(498.02 * mpi, 108.015 * mpi, new Rotation2d(Math.toRadians(0.0)))),
             new StateWithCoordinate(AutoStates.BALANCING)
         }
     );
 
-    public static AutonomousBasePD HDIntakeEngageB = new AutonomousBasePD(
-        new Pose2d(595.614 * mpi, 20.19 * mpi, new Rotation2d(Math.toRadians(180.0))), 
+    /*public static AutonomousBasePD HDIntakeEngageB = new AutonomousBasePD(
+        new Pose2d(68.95 * mpi, 20.19 * mpi, new Rotation2d(Math.toRadians(180.0))), 
         new StateWithCoordinate[]{
         new StateWithCoordinate(AutoStates.FIRST),
         new StateWithCoordinate(AutoStates.FIRSTHIGHNODE),
@@ -155,7 +155,7 @@ public class PDPath {
     );
 
     public static AutonomousBasePD HDIntakeEngageR = new AutonomousBasePD(
-        new Pose2d(595.614 * mpi, 20.19 * mpi, new Rotation2d(Math.toRadians(0.0))), 
+        new Pose2d(582.27 * mpi, 20.19 * mpi, new Rotation2d(Math.toRadians(0.0))), 
         new StateWithCoordinate[]{
         new StateWithCoordinate(AutoStates.FIRST),
         new StateWithCoordinate(AutoStates.FIRSTHIGHNODE),
@@ -168,7 +168,7 @@ public class PDPath {
     );
 
     public static AutonomousBasePD HD3ScoreR = new AutonomousBasePD(
-        new Pose2d(595.614 * mpi, 20.19 * mpi, new Rotation2d(Math.toRadians(0.0))), 
+        new Pose2d(582.27 * mpi, 20.19 * mpi, new Rotation2d(Math.toRadians(0.0))), 
         new StateWithCoordinate[]{
         new StateWithCoordinate(AutoStates.FIRST),
         new StateWithCoordinate(AutoStates.FIRSTHIGHNODE),
@@ -186,7 +186,7 @@ public class PDPath {
     );
 
     public static AutonomousBasePD HD3ScoreB = new AutonomousBasePD(
-        new Pose2d(595.614 * mpi, 20.19 * mpi, new Rotation2d(Math.toRadians(180.0))), 
+        new Pose2d(68.95 * mpi, 20.19 * mpi, new Rotation2d(Math.toRadians(180.0))), 
         new StateWithCoordinate[]{
         new StateWithCoordinate(AutoStates.FIRST),
         new StateWithCoordinate(AutoStates.FIRSTHIGHNODE),
@@ -204,7 +204,7 @@ public class PDPath {
     );
 
     public static AutonomousBasePD HB3ScoreR = new AutonomousBasePD(
-        new Pose2d(595.614 * mpi, 200.046 * mpi, new Rotation2d(Math.toRadians(0.0))), 
+        new Pose2d(582.27 * mpi, 200.046 * mpi, new Rotation2d(Math.toRadians(0.0))), 
         new StateWithCoordinate[]{
         new StateWithCoordinate(AutoStates.FIRST),    
         new StateWithCoordinate(AutoStates.FIRSTHIGHNODE),
@@ -222,7 +222,7 @@ public class PDPath {
     );
 
     public static AutonomousBasePD HB3ScoreB = new AutonomousBasePD(
-        new Pose2d(595.614 * mpi, 200.046 * mpi, new Rotation2d(Math.toRadians(180.0))), 
+        new Pose2d(68.95 * mpi, 200.046 * mpi, new Rotation2d(Math.toRadians(180.0))), 
         new StateWithCoordinate[]{
         new StateWithCoordinate(AutoStates.FIRST),
         new StateWithCoordinate(AutoStates.FIRSTHIGHNODE),
@@ -237,6 +237,6 @@ public class PDPath {
         new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(594.621 * mpi, 154.368 * mpi, new Rotation2d(Math.toRadians(180.0)))),
         new StateWithCoordinate(AutoStates.STOP)
         }
-    );
+    );*/
 
 }

@@ -4,7 +4,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import frc.robot.Constants;
 import frc.robot.Gains;
 import frc.robot.OI;
-import edu.wpi.first.wpilibj.DigitalInput;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
@@ -56,12 +55,12 @@ public class ElevatorSubsystem {
         //configuring deadband
         elevatorMotor.configAllowableClosedloopError(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
 		/* Config Position Closed Loop gains in slot0, typically kF stays zero. */
-		elevatorMotor.config_kP(Constants.kPIDLoopIdx, elevatorGains.kP, Constants.kTimeoutMs);
-		elevatorMotor.config_kI(Constants.kPIDLoopIdx, elevatorGains.kI, Constants.kTimeoutMs);
-		elevatorMotor.config_kD(Constants.kPIDLoopIdx, elevatorGains.kD, Constants.kTimeoutMs);
+		//elevatorMotor.config_kP(Constants.kPIDLoopIdx, elevatorGains.kP, Constants.kTimeoutMs);
+		//elevatorMotor.config_kI(Constants.kPIDLoopIdx, elevatorGains.kI, Constants.kTimeoutMs);
+		//elevatorMotor.config_kD(Constants.kPIDLoopIdx, elevatorGains.kD, Constants.kTimeoutMs);
     }
 
-    /*
+    /*666667
      * went 4 when we said 5
      * 4 on here means bottom of intake is 8 above ground
      * add node safety with 5?
@@ -79,15 +78,15 @@ public class ElevatorSubsystem {
             System.out.println("error: " + (desiredTicks - elevatorMotor.getSelectedSensorPosition()));
             elevatorDeadband(desiredTicks);
         } else if (elevatorState == ElevatorStates.SHELF_ELEVATOR_HEIGHT) {
-            desiredInches = 25; //official 2/13
+            desiredInches = SHELF; //official 2/13
             double desiredTicks = determineRightTicks();
             elevatorDeadband(desiredTicks);
         } else if (elevatorState == ElevatorStates.MID_ELEVATOR_HEIGHT){
-            desiredInches = 34; //official 2/13 //went 22 inches
+            desiredInches = MIDHEIGHT; //official 2/13 //went 22 inches
             double desiredTicks = determineRightTicks();
             elevatorDeadband(desiredTicks);
         } else if(elevatorState == ElevatorStates.HIGH_ELEVATOR_HEIGHT){ //high elevator height
-            desiredInches = 34; //48 - 15; //official 2/13
+            desiredInches = HIGHHEIGHT; //48 - 15; //official 2/13
             double desiredTicks = determineRightTicks();
             elevatorDeadband(desiredTicks);
         }else if (elevatorState == ElevatorStates.MANUAL){

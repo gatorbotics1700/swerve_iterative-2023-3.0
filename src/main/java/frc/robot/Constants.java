@@ -34,10 +34,10 @@ public final class Constants {
 
     //green
     
-    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(306.123046875); //194.41
-    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(287.22656250000006); //305.15625
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(123.48632812500001);//23.73+90
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(14.238281250000002);//122.87
+    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(/*211.37 + 45*/212.08007);//306.123046875-90); //194.41
+    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(201.09375);//287.22656250000006-45); //305.15625
+    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(121.8164);//123.48632812500001);//23.73+90
+    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(20.654);//14.238281250000002+90);//122.87
     
     //public static final double offset = Robot.test.getDouble(DRIVETRAIN_PIGEON_ID); 
     
@@ -65,7 +65,7 @@ public final class Constants {
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 4; 
 
     public static final double DRIVE_MOTOR_MIN_VOLTAGE = 0.19;
-    public static final double DRIVE_MOTOR_MAX_VOLTAGE = 0.2; //0.8; TODO: FIX THIS
+    public static final double DRIVE_MOTOR_MAX_VOLTAGE = 0.8;
     public static final double STEER_MOTOR_MIN_VOLTAGE = 0.525; 
     public static final double STEER_MOTOR_MAX_VOLTAGE = 0.5;
 
@@ -98,5 +98,5 @@ public final class Constants {
     public static final double LIMELIGHT_ANGLE = -24; //in degrees
    
     public static final int kPIDLoopIdx = 0;
-    public static final int kTimeoutMs = 1000;
+    public static final int kTimeoutMs = 500;
 }
