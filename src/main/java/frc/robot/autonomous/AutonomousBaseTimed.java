@@ -9,7 +9,7 @@ public class AutonomousBaseTimed extends AutonomousBase{
     DrivetrainSubsystem drivetrainSubsystem = Robot.m_drivetrainSubsystem;
     private double timeStart;
     private double timeElapsed = 0;
-    final double target = 5.0; //units in seconds
+    final double target = 10.0; //units in seconds
 
     @Override
     public void init(){

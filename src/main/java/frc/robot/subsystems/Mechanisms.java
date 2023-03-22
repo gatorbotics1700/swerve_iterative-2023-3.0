@@ -37,11 +37,18 @@ public class Mechanisms {
     }
 
     public void periodic(){
-        if (mechState == MechanismStates.LOW_NODE){
-            elevatorSubsystem.setState(ElevatorStates.LOW_ELEVATOR_HEIGHT);
-            if(elevatorSubsystem.isAtLow()){
-                System.out.println("elevator is at low");
+        if (mechState == MechanismStates.LOW_NODE){ 
+            if(elevatorSubsystem.isAboveLow()){ //if going down, we need to retract first
                 armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
+                if(armTelescopingSubsystem.isAtLow()){
+                    elevatorSubsystem.setState(ElevatorStates.LOW_ELEVATOR_HEIGHT);
+                }
+            } else { //if going up, we need to go up before extending out
+                elevatorSubsystem.setState(ElevatorStates.LOW_ELEVATOR_HEIGHT);
+                if(elevatorSubsystem.isAtLow()){
+                    System.out.println("elevator is at low");
+                    armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
+                }
             }
         } else if (mechState == MechanismStates.MID_NODE){
             elevatorSubsystem.setState(ElevatorStates.MID_ELEVATOR_HEIGHT);

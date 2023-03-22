@@ -118,4 +118,8 @@ public class ElevatorSubsystem {
         return Math.abs(elevatorMotor.getSelectedSensorPosition()-SHELF_HEIGHT_INCHES*ELEVATOR_TICKS_PER_INCH) < DEADBAND;
     }
 
+    public boolean isAboveLow(){
+        return elevatorMotor.getSelectedSensorPosition() > LOW_HEIGHT_INCHES*ELEVATOR_TICKS_PER_INCH;
+    }
+
 }

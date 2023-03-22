@@ -68,13 +68,8 @@ public final class Constants {
     public static final double STEER_MOTOR_MIN_VOLTAGE = 0.525; 
     public static final double STEER_MOTOR_MAX_VOLTAGE = 0.5;
 
-    public static final double SWERVE_GEAR_RATIO = 6.75;
     public static final double TICKS_PER_REV = 2048;
     public static final double METERS_PER_INCH = 0.0254;
-    public static final double SWERVE_WHEEL_DIAMETER = 4.0;
-    public static final double SWERVE_TICKS_PER_INCH = TICKS_PER_REV*SWERVE_GEAR_RATIO/SWERVE_WHEEL_DIAMETER/Math.PI; //talonfx drive encoder
-    public static final double TICKS_PER_METER = SWERVE_TICKS_PER_INCH/METERS_PER_INCH;
-    public static final double TICKS_PER_INCH = TICKS_PER_METER*METERS_PER_INCH;
 
     //TELESCOPE
     public static final int TELESCOPING_MOTOR_ID = 31;
@@ -87,11 +82,6 @@ public final class Constants {
     public static final int INTAKE_SENSOR = 0;
     public static final int BEAM_BREAK_RECEIVER = 9;
     public static final int BEAM_BREAK_SENDER = 10;
-
-    //VISION
-    public static final double TAPE_HEIGHT_ONE = 0.0; //TODO: needs to be changed
-    public static final double LIMELIGHT_HEIGHT = 52 * METERS_PER_INCH;
-    public static final double LIMELIGHT_ANGLE = -24; //in degrees
    
     public static final int kPIDLoopIdx = 0;
     public static final int kTimeoutMs = 500;

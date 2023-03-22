@@ -36,6 +36,10 @@ public class DrivetrainSubsystem {
    private static final double pitchKD = 0.001; //0.001;
    private PIDController pitchController;
    private static final double MINOUTPUT = 0.1;
+   private static final double SWERVE_GEAR_RATIO = 6.75;
+   private static final double SWERVE_WHEEL_DIAMETER = 4.0;
+   private static final double SWERVE_TICKS_PER_INCH = Constants.TICKS_PER_REV*SWERVE_GEAR_RATIO/SWERVE_WHEEL_DIAMETER/Math.PI; //talonfx drive encoder
+   private static final double SWERVE_TICKS_PER_METER = SWERVE_TICKS_PER_INCH/Constants.METERS_PER_INCH;
         
 
   /**
@@ -193,10 +197,10 @@ public class DrivetrainSubsystem {
 
   public void resetOdometry(Pose2d start){
         SwerveModulePosition[] positionArray =  new SwerveModulePosition[] {
-                new SwerveModulePosition(m_frontLeftModule.getPosition()/Constants.TICKS_PER_METER, new Rotation2d(m_frontLeftModule.getSteerAngle())),
-                new SwerveModulePosition(m_frontRightModule.getPosition()/Constants.TICKS_PER_METER, new Rotation2d(m_frontRightModule.getSteerAngle())), 
-                new SwerveModulePosition(m_backLeftModule.getPosition()/Constants.TICKS_PER_METER, new Rotation2d(m_backLeftModule.getSteerAngle())),
-                new SwerveModulePosition(m_backRightModule.getPosition()/Constants.TICKS_PER_METER, new Rotation2d(m_backRightModule.getSteerAngle()))};
+                new SwerveModulePosition(m_frontLeftModule.getPosition()/SWERVE_TICKS_PER_METER, new Rotation2d(m_frontLeftModule.getSteerAngle())),
+                new SwerveModulePosition(m_frontRightModule.getPosition()/SWERVE_TICKS_PER_METER, new Rotation2d(m_frontRightModule.getSteerAngle())), 
+                new SwerveModulePosition(m_backLeftModule.getPosition()/SWERVE_TICKS_PER_METER, new Rotation2d(m_backLeftModule.getSteerAngle())),
+                new SwerveModulePosition(m_backRightModule.getPosition()/SWERVE_TICKS_PER_METER, new Rotation2d(m_backRightModule.getSteerAngle()))};
         m_pose = start; //TODO: taken from elsewhere, confirm why we do this
         //System.out.println("position array: " + positionArray.toString());
         //System.out.println("m_pose: " + m_pose.getX() + ", " + m_pose.getY() + ", " + m_pose.getRotation().getDegrees());
@@ -236,10 +240,10 @@ public class DrivetrainSubsystem {
         //System.out.println("pose before update: " + m_pose.getX()/TICKS_PER_INCH + " and y: " + m_pose.getY()/TICKS_PER_INCH);
         //TODO: check getSteerAngle() is correct and that we shouldn't be getting from cancoder
         SwerveModulePosition[] array =  {
-                new SwerveModulePosition(m_frontLeftModule.getPosition()/Constants.TICKS_PER_METER, new Rotation2d(m_frontLeftModule.getSteerAngle())), //from steer motor
-                new SwerveModulePosition(m_frontRightModule.getPosition()/Constants.TICKS_PER_METER, new Rotation2d(m_frontRightModule.getSteerAngle())), 
-                new SwerveModulePosition(m_backLeftModule.getPosition()/Constants.TICKS_PER_METER, new Rotation2d(m_backLeftModule.getSteerAngle())),
-                new SwerveModulePosition(m_backRightModule.getPosition()/Constants.TICKS_PER_METER, new Rotation2d(m_backRightModule.getSteerAngle()))
+                new SwerveModulePosition(m_frontLeftModule.getPosition()/SWERVE_TICKS_PER_METER, new Rotation2d(m_frontLeftModule.getSteerAngle())), //from steer motor
+                new SwerveModulePosition(m_frontRightModule.getPosition()/SWERVE_TICKS_PER_METER, new Rotation2d(m_frontRightModule.getSteerAngle())), 
+                new SwerveModulePosition(m_backLeftModule.getPosition()/SWERVE_TICKS_PER_METER, new Rotation2d(m_backLeftModule.getSteerAngle())),
+                new SwerveModulePosition(m_backRightModule.getPosition()/SWERVE_TICKS_PER_METER, new Rotation2d(m_backRightModule.getSteerAngle()))
         };
         m_pose = m_odometry.update(getGyroscopeRotation(),array); 
 
