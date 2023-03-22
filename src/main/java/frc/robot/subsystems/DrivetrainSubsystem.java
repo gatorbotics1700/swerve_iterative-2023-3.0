@@ -89,32 +89,8 @@ public class DrivetrainSubsystem {
   private ChassisSpeeds m_chassisSpeeds;
 
   public DrivetrainSubsystem() {
-        init();
-  }
-
-  public void init(){
-        System.out.println("Initializing drivetrain subsystem vars");
-        pitchController = new PIDController(pitchKP, pitchKI, pitchKD);
-        m_kinematics = new SwerveDriveKinematics(
-          // Setting up location of modules relative to the center of the robot
-          // Front left
-          new Translation2d(DRIVETRAIN_WHEELBASE_METERS / 2.0, DRIVETRAIN_TRACKWIDTH_METERS / 2.0),
-          //translation2d refers to the robot's x and y position in the larger field coordinate system
-          // Front right
-          new Translation2d(DRIVETRAIN_WHEELBASE_METERS / 2.0, -DRIVETRAIN_TRACKWIDTH_METERS / 2.0), 
-          // Back left
-          new Translation2d(-DRIVETRAIN_WHEELBASE_METERS / 2.0, DRIVETRAIN_TRACKWIDTH_METERS / 2.0),
-          // Back right
-          new Translation2d(-DRIVETRAIN_WHEELBASE_METERS / 2.0, -DRIVETRAIN_TRACKWIDTH_METERS / 2.0)
-        );
-        m_pigeon = new PigeonIMU(DRIVETRAIN_PIGEON_ID);
-
-        m_pose = new Pose2d();
-
         tab = Shuffleboard.getTab("Drivetrain");
 
-        m_chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
-        
         // We will use mk4 modules with Falcon 500s with the L2 configuration. 
         m_frontLeftModule = Mk4SwerveModuleHelper.createFalcon500(
             // This parameter is optional, but will allow you to see the current state of the module on the dashboard.
@@ -167,6 +143,31 @@ public class DrivetrainSubsystem {
             BACK_RIGHT_MODULE_STEER_ENCODER,
             BACK_RIGHT_MODULE_STEER_OFFSET
     );
+
+    m_pigeon = new PigeonIMU(DRIVETRAIN_PIGEON_ID);
+
+        init();
+  }
+
+  public void init(){
+        System.out.println("Initializing drivetrain subsystem vars");
+        pitchController = new PIDController(pitchKP, pitchKI, pitchKD);
+        m_kinematics = new SwerveDriveKinematics(
+          // Setting up location of modules relative to the center of the robot
+          // Front left
+          new Translation2d(DRIVETRAIN_WHEELBASE_METERS / 2.0, DRIVETRAIN_TRACKWIDTH_METERS / 2.0),
+          //translation2d refers to the robot's x and y position in the larger field coordinate system
+          // Front right
+          new Translation2d(DRIVETRAIN_WHEELBASE_METERS / 2.0, -DRIVETRAIN_TRACKWIDTH_METERS / 2.0), 
+          // Back left
+          new Translation2d(-DRIVETRAIN_WHEELBASE_METERS / 2.0, DRIVETRAIN_TRACKWIDTH_METERS / 2.0),
+          // Back right
+          new Translation2d(-DRIVETRAIN_WHEELBASE_METERS / 2.0, -DRIVETRAIN_TRACKWIDTH_METERS / 2.0)
+        );
+
+        m_pose = new Pose2d();
+
+        m_chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
     
     m_odometry = new SwerveDrivePoseEstimator(
         m_kinematics, 
@@ -177,7 +178,7 @@ public class DrivetrainSubsystem {
                 m_backLeftModule.getSwerveModulePosition(), 
                 m_backRightModule.getSwerveModulePosition()
         }, 
-        new Pose2d(0, 0, new Rotation2d(Math.toRadians(180)))); //assumes 180 degrees rotation is facing driver station
+        new Pose2d(0, 0, new Rotation2d(Math.toRadians(0)))); //changed rotation from 180 to 0 on 3/21//assumes 180 degrees rotation is facing driver station
   }
   
   //from pigeon used for updating our odometry

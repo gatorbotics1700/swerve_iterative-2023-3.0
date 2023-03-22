@@ -163,6 +163,7 @@ public class Robot extends TimedRobot {
     //m_aprilTagSubsystem.init();
     isBlueAlliance = allianceChooser.getSelected();
     m_mechanisms.init();
+    m_drivetrainSubsystem.init();
   }
 
   /** This function is called periodically during operator control. */
@@ -225,6 +226,8 @@ public class Robot extends TimedRobot {
     //System.out.println("Tv: " + m_limeLightSubsystem.getTv());
      m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.0, 0.0, m_drivetrainSubsystem.getPoseRotation()));
      m_drivetrainSubsystem.drive();
+
+    //  autonomousBaseTimed.periodic();
     //ArmTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0);
     //ElevatorSubsystem.elevatorMotor.setSelectedSensorPosition(0);
 
