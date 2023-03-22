@@ -1,33 +1,17 @@
 package frc.robot.subsystems;
 
-import frc.robot.subsystems.ArmTelescopingSubsystem;
 import frc.robot.subsystems.ArmTelescopingSubsystem.TelescopingStates;
 import frc.robot.subsystems.ElevatorSubsystem.ElevatorStates;
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import frc.robot.Constants;
 
 public class Mechanisms {
     
-    public static ArmTelescopingSubsystem armTelescopingSubsystem;
-    public static ElevatorSubsystem elevatorSubsystem;
-
-    public Mechanisms(){
-        armTelescopingSubsystem = new ArmTelescopingSubsystem();
-        elevatorSubsystem = new ElevatorSubsystem();
-        init();
-    }
-
-    public void init(){
-        elevatorSubsystem.init();
-        armTelescopingSubsystem.init();
-    
-        mechState = MechanismStates.HOLDING; 
-    }
+    public ArmTelescopingSubsystem armTelescopingSubsystem;
+    public ElevatorSubsystem elevatorSubsystem;
+    public PneumaticIntakeSubsystem pneumaticIntakeSubsystem;
 
     public static enum MechanismStates{
         LOW_NODE,
         MID_NODE,
-        HIGH_NODE,
         SHELF,
         GROUNDPICKUP,
         MANUAL_ELEVATOR,
@@ -35,7 +19,22 @@ public class Mechanisms {
         HOLDING;
     }
 
-    MechanismStates mechState = MechanismStates.HOLDING;
+    private MechanismStates mechState;
+
+    public Mechanisms(){
+        armTelescopingSubsystem = new ArmTelescopingSubsystem();
+        elevatorSubsystem = new ElevatorSubsystem();
+        pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
+        init();
+    }
+
+    public void init(){
+        elevatorSubsystem.init();
+        armTelescopingSubsystem.init();
+        pneumaticIntakeSubsystem.init();
+    
+        mechState = MechanismStates.HOLDING; 
+    }
 
     public void periodic(){
         if (mechState == MechanismStates.LOW_NODE){
@@ -70,9 +69,9 @@ public class Mechanisms {
             elevatorSubsystem.setState(ElevatorStates.ZERO);
             armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
         }
-
         armTelescopingSubsystem.periodic();
         elevatorSubsystem.periodic();
+        pneumaticIntakeSubsystem.periodic();
     }
 
     public void setState(MechanismStates mechState){
@@ -90,10 +89,4 @@ public class Mechanisms {
      public boolean isDoneShelf(){
         return elevatorSubsystem.isAtShelf() && armTelescopingSubsystem.isAtShelf();
      }
-
-     public void retractArmManually(){
-        armTelescopingSubsystem.setTState(TelescopingStates.MANUAL);
-    }
-
-
 }

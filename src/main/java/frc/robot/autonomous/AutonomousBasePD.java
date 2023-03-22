@@ -47,7 +47,6 @@ public class AutonomousBasePD extends AutonomousBase{
     //private static ArmPneumaticPivot armPneumaticPivot = new ArmPneumaticPivot();
     private static DrivetrainSubsystem drivetrainSubsystem = Robot.m_drivetrainSubsystem;
     private static Mechanisms mechanisms = Robot.m_mechanisms;
-    private static PneumaticIntakeSubsystem pneumaticIntakeSubsystem = Robot.m_pneumaticIntakeSubsystem;
     private static LimeLightSubsystem limeLightSubsystem = new LimeLightSubsystem();
     public AutoStates states;
 

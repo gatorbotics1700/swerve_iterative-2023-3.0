@@ -16,7 +16,7 @@ public class PneumaticIntakeSubsystem {
         OFF;
     }
 
-    private PneumaticIntakeStates pneumaticIntakeState;
+    public PneumaticIntakeStates pneumaticIntakeState;
     private DoubleSolenoid solenoidOne; 
     // Initializes a DigitalInput on DIO 0 (roborio is built in w/ 10 DIOs (digital input-output ports))
     private DigitalInput beambreakSensor;
@@ -39,6 +39,10 @@ public class PneumaticIntakeSubsystem {
         }else{
             solenoidOne.set(kOff);
         }
+    }
+
+    public void setStatePneumaticIntake(PneumaticIntakeStates newIntakeState){
+        pneumaticIntakeState = newIntakeState;
     }
 
     public boolean isBeamBroken(){

@@ -10,9 +10,11 @@ import frc.robot.autonomous.AutonomousBasePD;
 import frc.robot.autonomous.StateWithCoordinate;
 import frc.robot.autonomous.StateWithCoordinate.AutoStates;
 import frc.robot.subsystems.*;
-import frc.robot.Buttons;
+//TODO: cleaner way to do it is have it be a dependency of april tags, not the other way around (circular dependancies oh no)
 
 public class AprilTagSubsystem {
+    private int scoringCol = 0; //TODO: integrate this back into buttons when we need it
+
     public static enum AprilTagSequence{
         DETECT,
         CORRECTPOSITION,
@@ -48,10 +50,10 @@ public class AprilTagSubsystem {
                 //autonomousBasePD.resetControllers();
                 autonomousBasePD = new AutonomousBasePD(drivetrainSubsystem.getMPose(), new StateWithCoordinate[]{                    
                     new StateWithCoordinate(AutoStates.FIRST),
-                    new StateWithCoordinate(AutoStates.DRIVE, AprilTagLocation.scoringPoses[Buttons.scoringCol]),
+                    new StateWithCoordinate(AutoStates.DRIVE, AprilTagLocation.scoringPoses[scoringCol]),
                     //new StateWithCoordinate(Buttons.level)
                 });
-                System.out.println("Setpoint: " + AprilTagLocation.scoringPoses[Buttons.scoringCol]);
+                System.out.println("Setpoint: " + AprilTagLocation.scoringPoses[scoringCol]);
                 autonomousBasePD.init();
                 System.out.println("Autonomous Base PD: " + autonomousBasePD);
                 }
