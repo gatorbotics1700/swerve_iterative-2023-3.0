@@ -114,9 +114,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("y odometry",m_drivetrainSubsystem.getMPoseY()/Constants.METERS_PER_INCH);
     SmartDashboard.putNumber("angle odometry",m_drivetrainSubsystem.getMPoseDegrees()%360);
     //SmartDashboard.putBoolean("Ready to Score", m_limeLightSubsystem.seeSomething());
-    //SmartDashboard.putBoolean("beam broken?", m_pneumaticIntakeSubsystem.isBeamBroken());
-   // SmartDashboard.putBoolean("cube?", m_pneumaticIntakeSubsystem.getPurple());
-    //SmartDashboard.putBoolean("cone?", m_pneumaticIntakeSubsystem.getYellow());
+    SmartDashboard.putBoolean("beam broken?", m_pneumaticIntakeSubsystem.isBeamBroken());
     //System.out.println("x: " + DrivetrainSubsystem.m_pose.getX() + "y: " + DrivetrainSubsystem.m_pose.getY() + "rotation: " + DrivetrainSubsystem.m_pose.getRotation().getDegrees()%360);
   }
 

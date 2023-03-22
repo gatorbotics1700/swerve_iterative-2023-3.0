@@ -80,24 +80,15 @@ public class Mechanisms {
     }
 
     public boolean isDoneMid(){
-        if(elevatorSubsystem.isAtMid() && armTelescopingSubsystem.isAtMid()){
-             return true;
-        }
-        return false; 
+        return elevatorSubsystem.isAtMid() && armTelescopingSubsystem.isAtMid();
      }
 
      public boolean isDoneLow(){
-        if(elevatorSubsystem.isAtLow() && armTelescopingSubsystem.isAtLow()){
-             return true;
-        }
-        return false; 
+        return elevatorSubsystem.isAtLow() && armTelescopingSubsystem.isAtLow();
      }
 
      public boolean isDoneShelf(){
-        if(elevatorSubsystem.isAtShelf() && armTelescopingSubsystem.isAtShelf()){
-            return true;
-        }
-        return false;
+        return elevatorSubsystem.isAtShelf() && armTelescopingSubsystem.isAtShelf();
      }
 
      public void retractArmManually(){

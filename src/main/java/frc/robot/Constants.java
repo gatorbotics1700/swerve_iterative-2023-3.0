@@ -78,8 +78,8 @@ public final class Constants {
     public static final double TICKS_PER_INCH = TICKS_PER_METER*METERS_PER_INCH;
 
     //TELESCOPE
-    //public static final double TELESCOPING_ARM_GEAR_RATIO = 36.0;
     public static final int TELESCOPING_MOTOR_ID = 31;
+    //public static final double TELESCOPING_ARM_GEAR_RATIO = 36.0; //In case we need this later
 
     //ELEVATOR
     public static final int ELEVATOR_CAN_ID = 30;
