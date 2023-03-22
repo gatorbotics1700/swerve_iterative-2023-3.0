@@ -146,7 +146,7 @@ public class DrivetrainSubsystem {
 
     m_pigeon = new PigeonIMU(DRIVETRAIN_PIGEON_ID);
 
-        init();
+    init();
   }
 
   public void init(){
