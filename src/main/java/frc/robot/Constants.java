@@ -78,14 +78,11 @@ public final class Constants {
     public static final double TICKS_PER_INCH = TICKS_PER_METER*METERS_PER_INCH;
 
     //TELESCOPE
-    public static final double TELESCOPING_ARM_GEAR_RATIO = 36.0;
+    //public static final double TELESCOPING_ARM_GEAR_RATIO = 36.0;
     public static final int TELESCOPING_MOTOR_ID = 31;
 
     //ELEVATOR
-    public static final double ELEVATOR_SPROCKET_DIAMETER = 1.28;
     public static final int ELEVATOR_CAN_ID = 30;
-    public static final double ELEVATOR_GEAR_RATIO = 25.0;
-    public static final double ELEVATOR_TICKS_PER_INCH = TICKS_PER_REV*ELEVATOR_GEAR_RATIO/ELEVATOR_SPROCKET_DIAMETER/Math.PI;
 
     //INTAKE
     public static final int INTAKE_SENSOR = 0;

@@ -5,7 +5,7 @@ import javax.swing.SwingWorker.StateValue;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.*;
 import frc.robot.Robot;
-import frc.robot.subsystems.ArmPneumaticPivot;
+//import frc.robot.subsystems.ArmPneumaticPivot;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.Constants;
@@ -44,7 +44,7 @@ public class AutonomousBasePD extends AutonomousBase{
     private double startTimeLeft;
     private double startTimeRight;
     
-    private static ArmPneumaticPivot armPneumaticPivot = new ArmPneumaticPivot();
+    //private static ArmPneumaticPivot armPneumaticPivot = new ArmPneumaticPivot();
     private static DrivetrainSubsystem drivetrainSubsystem = Robot.m_drivetrainSubsystem;
     private static Mechanisms mechanisms = Robot.m_mechanisms;
     private static PneumaticIntakeSubsystem pneumaticIntakeSubsystem = Robot.m_pneumaticIntakeSubsystem;
@@ -103,19 +103,6 @@ public class AutonomousBasePD extends AutonomousBase{
             turnController.setSetpoint(0);
             i++;  
             System.out.println("moving on to " + stateSequence[i]);
-        } else if (states == AutoStates.FIRSTHIGHNODE){ //WE HAVE THIS BECAUSE OF APRILTAGS
-            //System.out.println("we've reset to this pose: " + DrivetrainSubsystem.m_pose);
-            mechanisms.setState(MechanismStates.HIGH_NODE);
-            System.out.println("high node");
-           if(mechanisms.isDoneHigh()==true){
-               if(highNodeCounter >= -1){
-                startTimeHigh = System.currentTimeMillis();
-               } 
-            if(System.currentTimeMillis()-startTimeHigh>=500){
-                i++;
-                highNodeCounter = -1;
-            }
-           } 
         } else {
             drivetrainSubsystem.drive();
             //System.out.println("pose in auto: " + DrivetrainSubsystem.m_pose.getX()/Constants.METERS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getY()/Constants.METERS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getRotation().getDegrees());
@@ -125,19 +112,6 @@ public class AutonomousBasePD extends AutonomousBase{
                     i++;  
                     System.out.println("moving on to " + stateSequence[i]);
                 }
-            }else if(states == AutoStates.HIGHNODE){ 
-                mechanisms.setState(MechanismStates.HIGH_NODE);
-                System.out.println("high node");
-               if(mechanisms.isDoneHigh()==true){
-                   if(highNodeCounter >= -1){
-                    startTimeHigh = System.currentTimeMillis();
-                   } 
-                if(System.currentTimeMillis()-startTimeHigh>=500){
-                    i++;
-                    highNodeCounter = -1;
-                }
-               } 
-                System.out.println("moving on to " + stateSequence[i]);
             }else if(states == AutoStates.MIDNODE){
                 System.out.println("mid node");
                 mechanisms.setState(MechanismStates.MID_NODE);

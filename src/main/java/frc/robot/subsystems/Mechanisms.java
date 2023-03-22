@@ -1,30 +1,26 @@
 package frc.robot.subsystems;
 
 import frc.robot.subsystems.ArmTelescopingSubsystem;
-//import frc.robot.subsystems.ArmPneumaticPivot.PneumaticPivotStates;
 import frc.robot.subsystems.ArmTelescopingSubsystem.TelescopingStates;
 import frc.robot.subsystems.ElevatorSubsystem.ElevatorStates;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
-
 import frc.robot.Constants;
 
 public class Mechanisms {
     
-    public static ArmTelescopingSubsystem armTelescopingSubsystem = new ArmTelescopingSubsystem();
-    public static ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
-    public static ArmPneumaticPivot armPneumaticPivot = new ArmPneumaticPivot();
+    public static ArmTelescopingSubsystem armTelescopingSubsystem;
+    public static ElevatorSubsystem elevatorSubsystem;
+
+    public Mechanisms(){
+        armTelescopingSubsystem = new ArmTelescopingSubsystem();
+        elevatorSubsystem = new ElevatorSubsystem();
+        init();
+    }
 
     public void init(){
-        //elevator
         elevatorSubsystem.init();
-
-        //telescope
-        armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED); //moved from auto periodic to init
         armTelescopingSubsystem.init();
-        //armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs); //VERY VERY IMPORTANT
     
-       // armPneumaticPivot.init();
         mechState = MechanismStates.HOLDING; 
     }
 
@@ -42,41 +38,26 @@ public class Mechanisms {
     MechanismStates mechState = MechanismStates.HOLDING;
 
     public void periodic(){
-        armTelescopingSubsystem.periodic();
-        elevatorSubsystem.periodic();
-      //  armPneumaticPivot.periodic();
-
         if (mechState == MechanismStates.LOW_NODE){
             elevatorSubsystem.setState(ElevatorStates.LOW_ELEVATOR_HEIGHT);
-          //  armPneumaticPivot.setState(PneumaticPivotStates.ACTUATING);
             if(elevatorSubsystem.isAtLow()){
                 System.out.println("elevator is at low");
                 armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
             }
         } else if (mechState == MechanismStates.MID_NODE){
             elevatorSubsystem.setState(ElevatorStates.MID_ELEVATOR_HEIGHT);
-           // armPneumaticPivot.setState(PneumaticPivotStates.ACTUATING);
             if(elevatorSubsystem.isAtMid()){
                 System.out.println("elevator is at mid");
                 armTelescopingSubsystem.setTState(TelescopingStates.MID_ARM_LENGTH);
             }
-        } else if (mechState == MechanismStates.HIGH_NODE) {
-            elevatorSubsystem.setState(ElevatorStates.HIGH_ELEVATOR_HEIGHT);
-           // armPneumaticPivot.setState(PneumaticPivotStates.ACTUATING);
-            if(elevatorSubsystem.isAtHigh()){
-                System.out.println("elevator is at high");
-                armTelescopingSubsystem.setTState(TelescopingStates.HIGH_ARM_LENGTH);
-            }
         } else if (mechState == MechanismStates.SHELF){
             elevatorSubsystem.setState(ElevatorStates.SHELF_ELEVATOR_HEIGHT);
-           // armPneumaticPivot.setState(PneumaticPivotStates.ACTUATING);
             if(elevatorSubsystem.isAtShelf()){
               armTelescopingSubsystem.setTState(TelescopingStates.SHELF_ARM_LENGTH);
             }
         } else if(mechState == MechanismStates.GROUNDPICKUP){
             armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
-           // armPneumaticPivot.setState(PneumaticPivotStates.ACTUATING);
-            if(armTelescopingSubsystem.isAtZero()){
+            if(armTelescopingSubsystem.isAtRetracted()){
              elevatorSubsystem.setState(ElevatorStates.ZERO);
             }
         } else if (mechState == MechanismStates.MANUAL_ELEVATOR){
@@ -86,21 +67,16 @@ public class Mechanisms {
             armTelescopingSubsystem.setTState(TelescopingStates.MANUAL);
             System.out.println("manual telescope");
         } else { 
-          //  armPneumaticPivot.setState(PneumaticPivotStates.RETRACTING);
             elevatorSubsystem.setState(ElevatorStates.ZERO);
             armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
         }
+
+        armTelescopingSubsystem.periodic();
+        elevatorSubsystem.periodic();
     }
 
     public void setState(MechanismStates mechState){
         this.mechState = mechState; 
-    }
-
-    public boolean isDoneHigh(){
-       if(elevatorSubsystem.isAtHigh() && armTelescopingSubsystem.isAtHigh()){
-            return true;
-       }
-       return false; 
     }
 
     public boolean isDoneMid(){
@@ -124,10 +100,8 @@ public class Mechanisms {
         return false;
      }
 
-     public void retract(){
-        //armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
-        armTelescopingSubsystem.telescopingMotor.set(ControlMode.PercentOutput, 0.2);
-        System.out.println("retracting + position: " + armTelescopingSubsystem.telescopingMotor.getSelectedSensorPosition());
+     public void retractArmManually(){
+        armTelescopingSubsystem.setTState(TelescopingStates.MANUAL);
     }
 
 

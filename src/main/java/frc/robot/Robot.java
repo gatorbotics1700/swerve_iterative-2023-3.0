@@ -5,7 +5,6 @@
 package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.ArmPneumaticPivot;
 //import frc.robot.subsystems.ArmPneumaticPivot.PneumaticPivotStates;
 // import frc.robot.subsystems.ArmPneumaticPivot.PneumaticPivotStates;
 // import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
@@ -39,13 +38,10 @@ public class Robot extends TimedRobot {
 
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   public static PneumaticIntakeSubsystem m_pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
-  
-  public static Mechanisms m_mechanisms = new Mechanisms();
-  public static ArmTelescopingSubsystem armTelescopingSubsystem = new ArmTelescopingSubsystem();
 
+  public static Mechanisms m_mechanisms = new Mechanisms();
   private static LimeLightSubsystem m_limeLightSubsystem = new LimeLightSubsystem();
   public static AprilTagSubsystem m_aprilTagSubsystem = new AprilTagSubsystem();
-  public static ArmPneumaticPivot m_ArmPneumaticPivot = new ArmPneumaticPivot();
 
   public static Buttons m_buttons = new Buttons();
   
