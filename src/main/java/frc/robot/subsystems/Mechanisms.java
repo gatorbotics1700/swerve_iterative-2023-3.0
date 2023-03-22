@@ -14,6 +14,8 @@ public class Mechanisms {
     public static ArmTelescopingSubsystem armTelescopingSubsystem = new ArmTelescopingSubsystem();
     public static ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
     public static ArmPneumaticPivot armPneumaticPivot = new ArmPneumaticPivot();
+    public static PneumaticIntakeSubsystem m_pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
+
 
     public void init(){
         //elevator

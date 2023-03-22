@@ -18,7 +18,6 @@ public class StateWithCoordinate{
     }
 
     public static enum AutoStates{
-        
         FIRST,
         DRIVE,
         STOP,

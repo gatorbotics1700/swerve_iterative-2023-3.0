@@ -13,7 +13,7 @@ import frc.robot.subsystems.Vision.AprilTagSubsystem.AprilTagSequence;
 public class Buttons {
     
   private DrivetrainSubsystem m_drivetrainSubsystem = Robot.m_drivetrainSubsystem;
-  private PneumaticIntakeSubsystem pneumaticIntakeSubsystem = Robot.m_pneumaticIntakeSubsystem;
+  private PneumaticIntakeSubsystem pneumaticIntakeSubsystem = Mechanisms.m_pneumaticIntakeSubsystem;
   private Mechanisms m_mechanisms = Robot.m_mechanisms;
   private AprilTagSubsystem m_AprilTagSubsystem = Robot.m_aprilTagSubsystem;
   

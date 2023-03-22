@@ -6,10 +6,6 @@ public class AutonomousBase{
 
     }
 
-    public void turnDesiredAngle(double turnSetpoint){
-
-    }
-
     public void init(){
 
     }

@@ -26,12 +26,11 @@ public class AprilTagSubsystem {
         states = newState;
     }
     
-    private static LimeLightSubsystem limeLightSubsystem = new LimeLightSubsystem();
+    public static LimeLightSubsystem limeLightSubsystem = new LimeLightSubsystem();
     private static AutonomousBasePD autonomousBasePD;
 
     public void init(){
         limeLightSubsystem.setPipeline(0.0);
-        //autonomousBasePD.resetControllers();
         //Robot.m_drivetrainSubsystem.resetOdometry(new Pose2d(AprilTagLocation.scoringPoses[4].getX() -36.5*Constants.METERS_PER_INCH, AprilTagLocation.scoringPoses[4].getY() - 12.0*Constants.METERS_PER_INCH, new Rotation2d(Math.toRadians(0.0))));
         //System.out.println("resetted odometry in INIT to: " + DrivetrainSubsystem.m_pose);
         setState(AprilTagSequence.OFF);
@@ -45,7 +44,6 @@ public class AprilTagSubsystem {
             if(LimeLightSubsystem.tv!=0){ //made private in limelightss but changed due to pull request- ask katherine!
                 System.out.println("APRIL TAG DETECTED!!!!!!");
                 setState(AprilTagSequence.CORRECTPOSITION);
-                //autonomousBasePD.resetControllers();
                 autonomousBasePD = new AutonomousBasePD(drivetrainSubsystem.getMPose(), new StateWithCoordinate[]{                    
                     new StateWithCoordinate(AutoStates.FIRST),
                     new StateWithCoordinate(AutoStates.DRIVE, AprilTagLocation.scoringPoses[Buttons.scoringCol]),

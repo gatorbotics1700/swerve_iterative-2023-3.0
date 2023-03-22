@@ -29,34 +29,22 @@ import frc.robot.autonomous.PDPath;
 
 public class Robot extends TimedRobot {
 
-  private AutonomousBase m_autoSelected;
+  private AutonomousBase m_auto;
   private static final Boolean red = false;
   private static final Boolean blue = true;
   // DoubleSolenoid solenoidOne = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 4, 3); 
 
-  private final SendableChooser<AutonomousBase> auto_chooser = new SendableChooser<>();
+  private final SendableChooser<PDPath.AUTO_OPTIONS> auto_chooser = new SendableChooser<>();
   private final SendableChooser<Boolean> allianceChooser = new SendableChooser<>();
 
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
-  public static PneumaticIntakeSubsystem m_pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
-  
   public static Mechanisms m_mechanisms = new Mechanisms();
-  public static ArmTelescopingSubsystem armTelescopingSubsystem = new ArmTelescopingSubsystem();
-
-  private static LimeLightSubsystem m_limeLightSubsystem = new LimeLightSubsystem();
   public static AprilTagSubsystem m_aprilTagSubsystem = new AprilTagSubsystem();
-  public static ArmPneumaticPivot m_ArmPneumaticPivot = new ArmPneumaticPivot();
-
   public static Buttons m_buttons = new Buttons();
   
-  double t= 0.0;
   boolean override = false;
-  ChassisSpeeds m_ChassisSpeeds; 
   double mpi = Constants.METERS_PER_INCH;
   public static Boolean isBlueAlliance = true;
-  
-  private AutonomousBaseTimed timedPath = new AutonomousBaseTimed();
-  private AutonomousBasePD testPath = PDPath.HDLeaveR;
  
 // red alliance  
 // half the field (325.8415) - blue x value + half the field (325.8415) = red x value
@@ -75,27 +63,27 @@ public class Robot extends TimedRobot {
     allianceChooser.addOption("Red Alliance", red);    
     SmartDashboard.putData("Which alliance?", allianceChooser);
 
-
-    auto_chooser.setDefaultOption("testPath", testPath);
-    auto_chooser.addOption("noGoR!", PDPath.noGoR);
-    auto_chooser.addOption("noGoB!", PDPath.noGoB);
-    auto_chooser.addOption("HDLeaveB", PDPath.HDLeaveB);
-    auto_chooser.addOption("HBLeaveB", PDPath.HBLeaveB);
-    auto_chooser.addOption("HBLeaveR", PDPath.HBLeaveR);
-    auto_chooser.addOption("HDLeaveR", PDPath.HDLeaveR); 
-    auto_chooser.addOption("HDPlaceLeaveB", PDPath.HDPlaceLeaveB);
-    auto_chooser.addOption("HBPlaceLeaveB", PDPath.HBPlaceLeaveB);
-    auto_chooser.addOption("HDPlaceLeaveR", PDPath.HDPlaceLeaveR); 
-    auto_chooser.addOption("HBPlaceLeaveR", PDPath.HBPlaceLeaveR);
-    auto_chooser.addOption("engageChargeR", PDPath.engageChargeR);
-    auto_chooser.addOption("engageChargeB", PDPath.engageChargeB);
+    //TODO: make the names come from the enum with a for loop cycling through everything in it?
+    auto_chooser.setDefaultOption("testPath", PDPath.AUTO_OPTIONS.TESTPATH);
+    auto_chooser.addOption("noGoR!", PDPath.AUTO_OPTIONS.NOGO);
+    //auto_chooser.addOption("noGoB!", PDPath.noGoB);
+    auto_chooser.addOption("HDLeaveB", PDPath.AUTO_OPTIONS.HDLEAVEB);
+    auto_chooser.addOption("HBLeaveB", PDPath.AUTO_OPTIONS.HBLEAVEB);
+    //auto_chooser.addOption("HBLeaveR", PDPath.HBLeaveR);
+    //auto_chooser.addOption("HDLeaveR", PDPath.HDLeaveR); 
+    auto_chooser.addOption("HDPlaceLeaveB", PDPath.AUTO_OPTIONS.HDPLACELEAVEB);
+    auto_chooser.addOption("HBPlaceLeaveB", PDPath.AUTO_OPTIONS.HBPLACELEAVEB);
+    //auto_chooser.addOption("HDPlaceLeaveR", PDPath.HDPlaceLeaveR); 
+    //auto_chooser.addOption("HBPlaceLeaveR", PDPath.HBPlaceLeaveR);
+    //auto_chooser.addOption("engageChargeR", PDPath.engageChargeR);
+    auto_chooser.addOption("engageChargeB", PDPath.AUTO_OPTIONS.ENGAGECHARGE);
     // auto_chooser.addOption("HDIntakeEngageB", PDPath.HDIntakeEngageB);
     // auto_chooser.addOption("HDIntakeEngageR", PDPath.HDIntakeEngageR);
     // auto_chooser.addOption("HD3ScoreR", PDPath.HD3ScoreR);
     // auto_chooser.addOption("HD3ScoreB", PDPath.HD3ScoreB);
     // auto_chooser.addOption("HB3ScoreR", PDPath.HB3ScoreR);
     // auto_chooser.addOption("HB3ScoreB", PDPath.HB3ScoreB);
-    auto_chooser.addOption("timed", timedPath);
+    auto_chooser.addOption("timed", PDPath.AUTO_OPTIONS.TIMED);
    // auto_chooser.addOption("Motion profiling tester path", motionProfiling);
     SmartDashboard.putData("Auto choices", auto_chooser);
    
@@ -139,9 +127,9 @@ public class Robot extends TimedRobot {
     m_mechanisms.init();
     m_drivetrainSubsystem.init();
     System.out.println("current pose: " + m_drivetrainSubsystem.getMPoseX() + " , " + m_drivetrainSubsystem.getMPoseY());
-    m_autoSelected = auto_chooser.getSelected();
-    m_autoSelected.init();
-    isBlueAlliance = allianceChooser.getSelected();
+    PDPath.AUTO_OPTIONS selected = auto_chooser.getSelected();
+    m_auto = PDPath.constructAuto(selected);
+    m_auto.init();
   }
 
   /** This function is called periodically during autonomous. */
@@ -149,7 +137,7 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
      //m_AprilTagSubsystem.periodic();
      m_mechanisms.periodic();
-     m_autoSelected.periodic();
+     m_auto.periodic();
      
      //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
 
