@@ -22,7 +22,7 @@ public class PneumaticIntakeSubsystem {
     private DigitalInput beambreakSensor;
 
     public PneumaticIntakeSubsystem(){ //TODO: add back compressor if it turns out we need it
-        solenoidOne = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 5, 7);
+        solenoidOne = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 3, 7);
         beambreakSensor = new DigitalInput(Constants.BEAM_BREAK_RECEIVER); 
         init();
     }
@@ -33,9 +33,9 @@ public class PneumaticIntakeSubsystem {
 
     public void periodic(){
        if(pneumaticIntakeState == PneumaticIntakeStates.PINCHING){
-            solenoidOne.set(kForward); //TODO: make sure this is the right direction
+            solenoidOne.set(kReverse); 
         } else if (pneumaticIntakeState == PneumaticIntakeStates.RELEASING){
-            solenoidOne.set(kReverse);
+            solenoidOne.set(kForward);
         }else{
             solenoidOne.set(kOff);
         }

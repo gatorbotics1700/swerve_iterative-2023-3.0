@@ -144,6 +144,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() { //BEFORE TESTING: MAKE SURE YOU HAVE EITHER DEPLOYED OR ADDED DRIVETRAIN INIT
     isBlueAlliance = allianceChooser.getSelected();
+    m_drivetrainSubsystem.init();
     m_mechanisms.init();
   }
 

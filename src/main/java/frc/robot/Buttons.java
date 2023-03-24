@@ -1,6 +1,7 @@
 package frc.robot;
 
 import frc.robot.subsystems.Mechanisms;
+import frc.robot.subsystems.PneumaticArmPivot;
 import frc.robot.subsystems.Mechanisms.MechanismStates;
 import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
 import frc.robot.subsystems.PneumaticIntakeSubsystem;
