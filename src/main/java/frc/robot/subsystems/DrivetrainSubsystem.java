@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.controller.PIDController;
+import com.ctre.phoenix.sensors.CANCoder;
 import frc.robot.Robot;
 
 
@@ -373,6 +374,10 @@ public class DrivetrainSubsystem {
 
     public Pose2d getMPose(){ //TODO: do we need this?
         return m_pose;
+    }
+
+    public CANCoder getCanCoderAngle(){
+        return m_frontLeftModule.getCANCoder();
     }
    
 }

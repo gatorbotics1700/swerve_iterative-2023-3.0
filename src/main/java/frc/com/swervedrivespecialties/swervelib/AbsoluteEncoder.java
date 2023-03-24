@@ -9,5 +9,5 @@ public interface AbsoluteEncoder {
      */
     double getAbsoluteAngle();
     
-    CANCoder getCANCoder();
+    CANCoder getCANCoderFB();
 }

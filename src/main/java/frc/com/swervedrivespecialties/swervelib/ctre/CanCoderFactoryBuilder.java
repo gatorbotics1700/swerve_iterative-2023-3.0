@@ -53,7 +53,7 @@ public class CanCoderFactoryBuilder {
         }
 
         @Override 
-        public CANCoder getCANCoder() {
+        public CANCoder getCANCoderFB() {
             return encoder;
         }
 
