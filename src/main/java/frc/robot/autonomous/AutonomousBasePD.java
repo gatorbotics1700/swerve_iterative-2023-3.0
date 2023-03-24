@@ -60,7 +60,7 @@ public class AutonomousBasePD extends AutonomousBase{
         armPneumaticPivot = Mechanisms.armPneumaticPivot;
         drivetrainSubsystem = Robot.m_drivetrainSubsystem;
         mechanisms = Robot.m_mechanisms;
-        pneumaticIntakeSubsystem = Robot.m_pneumaticIntakeSubsystem;
+        //pneumaticIntakeSubsystem = Robot.m_pneumaticIntakeSubsystem;
         limeLightSubsystem = AprilTagSubsystem.limeLightSubsystem;
         drivetrainSubsystem.resetOdometry(startingCoordinate);
         turnController = new PIDController(turnKP, turnKI, turnKD); 
