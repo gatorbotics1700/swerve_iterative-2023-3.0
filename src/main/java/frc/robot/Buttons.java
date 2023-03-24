@@ -2,7 +2,11 @@ package frc.robot;
 
 import frc.robot.subsystems.Mechanisms;
 import frc.robot.subsystems.Mechanisms.MechanismStates;
+import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
 import frc.robot.subsystems.PneumaticIntakeSubsystem;
+import frc.robot.subsystems.ArmPneumaticPivot.PneumaticPivotStates;
+import edu.wpi.first.math.controller.ArmFeedforward;
+import frc.robot.subsystems.ArmPneumaticPivot;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
 public class Buttons {
@@ -10,6 +14,7 @@ public class Buttons {
   private DrivetrainSubsystem m_drivetrainSubsystem = Robot.m_drivetrainSubsystem;
   private Mechanisms m_mechanisms = Robot.m_mechanisms;
   private PneumaticIntakeSubsystem pneumaticIntakeSubsystem = m_mechanisms.pneumaticIntakeSubsystem;
+  private ArmPneumaticPivot armPneumaticPivot = m_mechanisms.armPneumaticPivot;
   
   public void buttonsPeriodic(){
     //codriver
@@ -42,7 +47,12 @@ public class Buttons {
         }
       }
     
-      if(OI.m_controller_two.getRightBumper()){ 
+      if(OI.m_controller_two.getRightBumperReleased()){ 
+        if(armPneumaticPivot.pneumaticPivotState==PneumaticPivotStates.UP){
+          armPneumaticPivot.setState(PneumaticPivotStates.DOWN);
+        } else if(armPneumaticPivot.pneumaticPivotState==PneumaticPivotStates.DOWN){
+          armPneumaticPivot.setState(PneumaticPivotStates.UP);
+        }
       }
   
       if (OI.m_controller_two.getBackButton()){
@@ -62,8 +72,8 @@ public class Buttons {
       }
 
       //driver
-      if (OI.m_controller.getBButton()){ 
-        m_drivetrainSubsystem.stopDrive(); //stop all mech?
+      if (OI.m_controller.getBButton()){ //emergency stop EVERYTHING
+        m_drivetrainSubsystem.stopDrive(); 
         m_mechanisms.setState(MechanismStates.HOLDING);
       }
     
