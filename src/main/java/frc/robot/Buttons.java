@@ -1,15 +1,18 @@
 package frc.robot;
 
 import frc.robot.subsystems.Mechanisms;
+import frc.robot.subsystems.PneumaticArmPivot;
 import frc.robot.subsystems.Mechanisms.MechanismStates;
 import frc.robot.subsystems.PneumaticIntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.PneumaticArmPivot.PneumaticPivotStates;
 
 public class Buttons {
     
   private DrivetrainSubsystem m_drivetrainSubsystem = Robot.m_drivetrainSubsystem;
   private Mechanisms m_mechanisms = Robot.m_mechanisms;
   private PneumaticIntakeSubsystem pneumaticIntakeSubsystem = m_mechanisms.pneumaticIntakeSubsystem;
+  private PneumaticArmPivot pneumaticArmPivot = m_mechanisms.pneumaticArmPivot;
   
   public void buttonsPeriodic(){
     //codriver
@@ -42,7 +45,13 @@ public class Buttons {
         }
       }
     
-      if(OI.m_controller_two.getRightBumper()){ 
+      if(OI.m_controller_two.getRightBumperReleased()){ 
+        if(pneumaticArmPivot.pneumaticPivotState==PneumaticPivotStates.RETRACTING || 
+           pneumaticArmPivot.pneumaticPivotState==PneumaticPivotStates.OFF){
+          pneumaticArmPivot.setState(PneumaticPivotStates.ACTUATING);
+        } else if(pneumaticArmPivot.pneumaticPivotState==PneumaticPivotStates.ACTUATING){
+          pneumaticArmPivot.setState(PneumaticPivotStates.RETRACTING);
+        }
       }
   
       if (OI.m_controller_two.getBackButton()){

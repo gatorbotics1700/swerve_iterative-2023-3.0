@@ -8,6 +8,7 @@ public class Mechanisms {
     public ArmTelescopingSubsystem armTelescopingSubsystem;
     public ElevatorSubsystem elevatorSubsystem;
     public PneumaticIntakeSubsystem pneumaticIntakeSubsystem;
+    public PneumaticArmPivot pneumaticArmPivot;
 
     public static enum MechanismStates{
         LOW_NODE,
@@ -25,6 +26,7 @@ public class Mechanisms {
         armTelescopingSubsystem = new ArmTelescopingSubsystem();
         elevatorSubsystem = new ElevatorSubsystem();
         pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
+        pneumaticArmPivot = new PneumaticArmPivot();
         init();
     }
 
@@ -32,7 +34,8 @@ public class Mechanisms {
         elevatorSubsystem.init();
         armTelescopingSubsystem.init();
         pneumaticIntakeSubsystem.init();
-    
+        pneumaticArmPivot.init();
+
         mechState = MechanismStates.HOLDING; 
     }
 
@@ -79,6 +82,7 @@ public class Mechanisms {
         armTelescopingSubsystem.periodic();
         elevatorSubsystem.periodic();
         pneumaticIntakeSubsystem.periodic();
+        pneumaticArmPivot.periodic();
     }
 
     public void setState(MechanismStates mechState){

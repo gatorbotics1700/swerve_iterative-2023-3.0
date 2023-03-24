@@ -144,6 +144,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() { //BEFORE TESTING: MAKE SURE YOU HAVE EITHER DEPLOYED OR ADDED DRIVETRAIN INIT
     isBlueAlliance = allianceChooser.getSelected();
+    m_drivetrainSubsystem.init();
     m_mechanisms.init();
   }
 
@@ -152,7 +153,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     m_buttons.buttonsPeriodic();
     m_drivetrainSubsystem.driveTeleop(); //only sets speed; does not actually drive
-    //m_drivetrainSubsystem.drive();
+    m_drivetrainSubsystem.drive();
     m_mechanisms.periodic();
   }
 
