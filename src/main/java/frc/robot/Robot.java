@@ -150,11 +150,11 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {
-    m_buttons.buttonsPeriodic();
-    m_drivetrainSubsystem.driveTeleop(); //only sets speed; does not actually drive
-    m_drivetrainSubsystem.drive();
+  public void teleopPeriodic() { //b, d, m
     m_mechanisms.periodic();
+    m_drivetrainSubsystem.driveTeleop();
+    m_drivetrainSubsystem.drive();
+    m_buttons.buttonsPeriodic();
   }
 
   /** This function is called once when the robot is disabled. */
