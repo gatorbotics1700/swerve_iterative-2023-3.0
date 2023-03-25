@@ -146,6 +146,7 @@ public class Robot extends TimedRobot {
     isBlueAlliance = allianceChooser.getSelected();
     m_drivetrainSubsystem.init();
     m_mechanisms.init();
+    m_drivetrainSubsystem.init();
   }
 
   /** This function is called periodically during operator control. */
@@ -171,6 +172,7 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
+
   public void testPeriodic() {}
 
   /** This function is called once when the robot is first started up. */

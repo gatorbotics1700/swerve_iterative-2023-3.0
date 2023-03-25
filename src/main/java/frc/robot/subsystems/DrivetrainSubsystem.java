@@ -93,6 +93,7 @@ public class DrivetrainSubsystem {
   private ChassisSpeeds m_chassisSpeeds;
 
   public DrivetrainSubsystem() {
+
         m_pigeon = new PigeonIMU(DRIVETRAIN_PIGEON_ID);
         tab = Shuffleboard.getTab("Drivetrain");
 
@@ -181,7 +182,7 @@ public class DrivetrainSubsystem {
                 m_backLeftModule.getSwerveModulePosition(), 
                 m_backRightModule.getSwerveModulePosition()
         }, 
-        new Pose2d(0, 0, new Rotation2d(Math.toRadians(180)))); //assumes 180 degrees rotation is facing driver station
+        new Pose2d(0, 0, new Rotation2d(Math.toRadians(0)))); //changed rotation from 180 to 0 on 3/21//assumes 180 degrees rotation is facing driver station
   }
   
   //from pigeon used for updating our odometry
