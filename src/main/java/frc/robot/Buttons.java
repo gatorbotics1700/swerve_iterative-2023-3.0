@@ -46,11 +46,11 @@ public class Buttons {
         }
       }
     
-      if(OI.m_controller_two.getRightBumperReleased()){ 
-        if(armPneumaticPivot.pneumaticPivotState==PneumaticPivotStates.UP){
-          armPneumaticPivot.setState(PneumaticPivotStates.DOWN);
-        } else if(armPneumaticPivot.pneumaticPivotState==PneumaticPivotStates.DOWN){
+      if(OI.m_controller_two.getRightBumperReleased()){  //pivot
+        if(armPneumaticPivot.pneumaticPivotState==ArmPneumaticPivot.PneumaticPivotStates.DOWN){
           armPneumaticPivot.setState(PneumaticPivotStates.UP);
+        } else if (armPneumaticPivot.pneumaticPivotState==ArmPneumaticPivot.PneumaticPivotStates.UP){
+          armPneumaticPivot.setState(PneumaticPivotStates.DOWN);
         }
       }
   
