@@ -23,7 +23,7 @@ public class AutonomousBaseEngage extends AutonomousBase{
     public double desireTime;
     public double desiredAngle;
     DrivetrainSubsystem drivetrainSubsystem;
-    Mechanisms mechanisms;
+    Mechanisms mechanisms; 
 
     public enum AutoEngageStates{
         ENGAGE,
@@ -35,7 +35,6 @@ public class AutonomousBaseEngage extends AutonomousBase{
 
     public static AutoEngageStates autoEngageState = AutoEngageStates.OFF;
 
-    @Override
     public void setState(AutoEngageStates newEngageState){
         autoEngageState = newEngageState;
     }
@@ -46,33 +45,34 @@ public class AutonomousBaseEngage extends AutonomousBase{
        startingTime = 0;
        mechanisms = Mechanisms.m_mechanisms;
        firstTime = true;
+
     }
 
     @Override
     public void periodic(){
-        if(states == AutoEngageStates.MID_NODE){
+        if(autoEngageState == AutoEngageStates.MID_NODE){
             mechanisms.setState(MechanismStates.MID_NODE);
-            if(mechanisms.isDoneMid){
+            if(mechanisms.isDoneMid()){
                 firstTime = true; 
                 setState(AutoEngageStates.DRIVE);
             }
-        } else if(states == AutoEngageStates.LOW_NODE){
+        } else if(autoEngageState == AutoEngageStates.LOW_NODE){
             mechanisms.setState(MechanismStates.LOW_NODE);
-            if(mechanisms.isDoneLow){
+            if(mechanisms.isDoneLow()){
                 firstTime = true; 
                 setState(AutoEngageStates.DRIVE);
             }
-        } else if(states == AutoEngageStates.DRIVE){
+        } else if(autoEngageState == AutoEngageStates.DRIVE){
             if (firstTime == true){
                 firstTime = false;
                 startingTime = System.currentTimeMillis();
             }
-            if(startingTime = desireTime || drivetrainSubsystem.getPitch() > desiredAngle){
+            if(startingTime >= desireTime || drivetrainSubsystem.getPitch() > desiredAngle){
                 setState(AutoEngageStates.ENGAGE);
             } else{
                 drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.8, 0, 0, drivetrainSubsystem.getPoseRotation()));
             }
-        } else if(states == AutoEngageStates.ENGAGE){
+        } else if(autoEngageState == AutoEngageStates.ENGAGE){
             drivetrainSubsystem.pitchBalance(0.0);
         }else{
             drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0, drivetrainSubsystem.getPoseRotation()));

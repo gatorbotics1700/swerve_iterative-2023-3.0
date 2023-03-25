@@ -15,6 +15,8 @@ public class Mechanisms {
     public static ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
     public static ArmPneumaticPivot armPneumaticPivot = new ArmPneumaticPivot();
     public static PneumaticIntakeSubsystem m_pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
+    public static Mechanisms m_mechanisms;
+
 
 
     public void init(){
@@ -24,6 +26,7 @@ public class Mechanisms {
         //telescope
         armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED); //moved from auto periodic to init
         armTelescopingSubsystem.init();
+        m_mechanisms = new Mechanisms(); 
         //armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs); //VERY VERY IMPORTANT
     
        // armPneumaticPivot.init();

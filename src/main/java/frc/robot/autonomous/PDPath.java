@@ -26,7 +26,7 @@ public class PDPath {
         HDPLACELEAVEB,
         HBPLACELEAVEB,
         ENGAGECHARGE,
-        TIMED
+        TIMED;
     }
 
     public static AutonomousBase constructAuto(AUTO_OPTIONS selectedAuto){

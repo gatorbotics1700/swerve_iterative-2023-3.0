@@ -150,7 +150,7 @@ public class Robot extends TimedRobot {
     //m_autoSelected.setState(StateWithCoordinate.AutoStates.STOP);
     //m_aprilTagSubsystem.init();
     isBlueAlliance = allianceChooser.getSelected();
-    //m_mechanisms.init(); TODO: uncomment
+    m_mechanisms.init(); 
     m_drivetrainSubsystem.init();
   }
 

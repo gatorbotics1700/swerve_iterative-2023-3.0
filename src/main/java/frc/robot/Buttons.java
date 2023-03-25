@@ -28,7 +28,7 @@ public class Buttons {
       if(OI.m_controller_two.getPOV() >= 225 && OI.m_controller_two.getPOV() <= 315){
           if (!override){
             System.out.println("dpad 270: left substation");
-            level = AutoStates.LEFTPICKUP; 
+            level = AutoStates.PICKUP; 
             if (Robot.isBlueAlliance){
               scoringCol = 36;
             } else {
@@ -44,7 +44,7 @@ public class Buttons {
         if(OI.m_controller_two.getPOV() >= 45 && OI.m_controller_two.getPOV() <= 135){
           if (!override){
             System.out.println("dpad 90: right substation");
-            level = AutoStates.RIGHTPICKUP; 
+            level = AutoStates.PICKUP; 
             m_AprilTagSubsystem.setState(AprilTagSequence.DETECT);
             if (Robot.isBlueAlliance){
               scoringCol = 37;
@@ -117,7 +117,7 @@ public class Buttons {
             m_mechanisms.setState(MechanismStates.SHELF);
             System.out.println("xbox: shelf"); 
           }else{
-            level = AutoStates.RIGHTPICKUP;
+            level = AutoStates.PICKUP;
             if (Robot.isBlueAlliance){
               scoringCol = 37;
             } else {
@@ -164,12 +164,6 @@ public class Buttons {
         
         if(OI.m_controller.getAButtonReleased()){
           //pneumaticIntakeSubsystem.setState(PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF);
-        }
-
-        for (int i = 1; i < 10; i++){
-          if(OI.joystick.getRawButton(i)){
-            buttonLevel(i-1);
-          }
         }
   }
 
