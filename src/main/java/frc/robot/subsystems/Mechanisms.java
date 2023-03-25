@@ -80,7 +80,7 @@ public class Mechanisms {
         } else { //holding
             elevatorSubsystem.setState(ElevatorStates.ZERO); 
             armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
-            armPneumaticPivot.setState(PneumaticPivotStates.UP);
+            // armPneumaticPivot.setState(PneumaticPivotStates.RELEASING);
         }
         armTelescopingSubsystem.periodic();
         elevatorSubsystem.periodic();

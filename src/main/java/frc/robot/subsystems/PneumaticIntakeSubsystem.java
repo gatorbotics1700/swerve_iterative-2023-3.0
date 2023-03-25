@@ -22,7 +22,7 @@ public class PneumaticIntakeSubsystem {
     private DigitalInput beambreakSensor;
 
     public PneumaticIntakeSubsystem(){ //TODO: add back compressor if it turns out we need it
-        solenoidOne = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 10, 13); //3 & 7
+        solenoidOne = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 3, 7); //3 & 7
         beambreakSensor = new DigitalInput(Constants.BEAM_BREAK_RECEIVER); 
         init();
     }

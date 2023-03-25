@@ -47,14 +47,17 @@ public class Buttons {
         }
       }
     
-      if(OI.m_controller_two.getRightBumperReleased()){  //pivot
-        if(armPneumaticPivot.pneumaticPivotState==ArmPneumaticPivot.PneumaticPivotStates.DOWN 
-        || armPneumaticPivot.pneumaticPivotState==ArmPneumaticPivot.PneumaticPivotStates.OFF){
-          armPneumaticPivot.setState(PneumaticPivotStates.UP);
-        } else if (armPneumaticPivot.pneumaticPivotState==ArmPneumaticPivot.PneumaticPivotStates.UP){
-          armPneumaticPivot.setState(PneumaticPivotStates.DOWN);
-        }
-      }
+      // if(OI.m_controller_two.getPOV() > 135 && OI.m_controller_two.getPOV() < 225){ //new pivot - south dpad
+
+      // if(OI.m_controller_two.getRightBumperReleased()){ //pivot
+      //   System.out.println("pivot");
+      //   if(armPneumaticPivot.pneumaticPivotState==ArmPneumaticPivot.PneumaticPivotStates.PINCHING 
+      //   || armPneumaticPivot.pneumaticPivotState==ArmPneumaticPivot.PneumaticPivotStates.OFF){
+      //     armPneumaticPivot.setStatePneumaticIntake(null);(PneumaticPivotStates.RELEASING);
+      //   } else if (armPneumaticPivot.pneumaticPivotState==ArmPneumaticPivot.PneumaticPivotStates.UP){
+      //     armPneumaticPivot.setStatePneumaticIntake(PneumaticPivotStates.PINCHING);
+      //   }
+      // }
   
       if (OI.m_controller_two.getBackButton()){
         //this is the center button on left with 2 squares
@@ -67,7 +70,7 @@ public class Buttons {
         System.out.println("dpad: manual telescope");
       }
 
-      if(OI.m_controller_two.getPOV() > 135 && OI.m_controller_two.getPOV() < 225){
+      if(OI.m_controller_two.getPOV() > 225 && OI.m_controller_two.getPOV() < 315){
         m_mechanisms.setState(MechanismStates.MANUAL_ELEVATOR);
         System.out.println("dpad: manual elevator");
       }

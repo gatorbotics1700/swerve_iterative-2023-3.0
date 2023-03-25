@@ -154,12 +154,11 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() { //b, d, m
+  public void teleopPeriodic() { 
     m_mechanisms.periodic();
     m_drivetrainSubsystem.driveTeleop();
     m_drivetrainSubsystem.drive();
     m_buttons.buttonsPeriodic();
-    System.out.println("Telescoping ticks: " + m_mechanisms.armTelescopingSubsystem.getArmPosition());
   }
 
   /** This function is called once when the robot is disabled. */
@@ -181,8 +180,8 @@ public class Robot extends TimedRobot {
 
   public void testPeriodic() {
     m_mechanisms.periodic();
-    //ArmPneumaticPivot.solenoid.set(Value.kForward);
-    m_mechanisms.armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0.0);
+    m_mechanisms.armPneumaticPivot.solenoidOne.set(Value.kForward);
+    // m_mechanisms.armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0.0);
   }
   /** This function is called once when the robot is first started up. */
   @Override
