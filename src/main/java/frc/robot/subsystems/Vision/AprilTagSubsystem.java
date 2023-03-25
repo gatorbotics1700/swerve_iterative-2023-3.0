@@ -46,7 +46,7 @@ public class AprilTagSubsystem {
                 System.out.println("APRIL TAG DETECTED!!!!!!");
                 setState(AprilTagSequence.CORRECTPOSITION);
                 //autonomousBasePD.resetControllers();
-                autonomousBasePD = new AutonomousBasePD(DrivetrainSubsystem.m_pose, new StateWithCoordinate[]{                    
+                autonomousBasePD = new AutonomousBasePD(drivetrainSubsystem.getMPose(), new StateWithCoordinate[]{                    
                     new StateWithCoordinate(AutoStates.FIRST),
                     new StateWithCoordinate(AutoStates.DRIVE, AprilTagLocation.scoringPoses[Buttons.scoringCol]),
                     //new StateWithCoordinate(Buttons.level)
@@ -61,7 +61,7 @@ public class AprilTagSubsystem {
             if(limeLightSubsystem.getTv() != 0.0){
                 double[] tempArray = limeLightSubsystem.networkTable.getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
                 drivetrainSubsystem.resetOdometry(new Pose2d(tempArray[0], tempArray[1], new Rotation2d (Math.toRadians(tempArray[5]))));
-                System.out.println("Reset odometry to this m_pose: " + DrivetrainSubsystem.m_pose);
+                System.out.println("Reset odometry to this m_pose: " + drivetrainSubsystem.getMPose());
                 autonomousBasePD.periodic();
 
                 /*if(autonomousBasePD.xAtSetpoint() && autonomousBasePD.yAtSetpoint() && autonomousBasePD.turnAtSetpoint()){

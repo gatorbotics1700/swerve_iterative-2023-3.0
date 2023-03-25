@@ -60,12 +60,12 @@ public final class Falcon500DriveControllerFactoryBuilder {
 
             TalonFX motor = new TalonFX(driveConfiguration);
             boolean haveError = CtreUtils.checkCtreError(motor.configAllSettings(motorConfiguration), "Failed to configure Falcon 500"); //added can timeout on 03/03
-            /*for(int i = 0; i < 5; i++){
+            for(int i = 0; i < 5; i++){
                 haveError =  CtreUtils.checkCtreError(motor.configAllSettings(motorConfiguration), "Failed to configure Falcon 500"); //added can timeout on 03/03
                 if(!haveError){
                     break;
                 }
-            }*/
+            }
 
             if (hasVoltageCompensation()) {
                 // Enable voltage compensation
