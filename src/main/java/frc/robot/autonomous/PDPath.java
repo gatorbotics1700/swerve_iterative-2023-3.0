@@ -2,6 +2,7 @@ package frc.robot.autonomous;
 import frc.robot.Constants;
 import frc.robot.autonomous.*;
 import frc.robot.autonomous.StateWithCoordinate.AutoStates;
+import frc.robot.autonomous.AutonomousBaseEngage;
 
 import javax.swing.plaf.nimbus.State;
 
@@ -26,7 +27,10 @@ public class PDPath {
         HDPLACELEAVEB,
         HBPLACELEAVEB,
         ENGAGECHARGE,
-        TIMED;
+        TIMED,
+        MIDTIMEDENGAGED,
+        LOWTIMEDENGAGED,
+        DRIVETIMEDENGAGED;
     }
 
     public static AutonomousBase constructAuto(AUTO_OPTIONS selectedAuto){
@@ -102,8 +106,14 @@ public class PDPath {
                 new StateWithCoordinate(AutoStates.BALANCING)
                 }
             );
-        } else { //timed
+        } else if(selectedAuto == AUTO_OPTIONS.TIMED) {
             return new AutonomousBaseTimed();
+        } else if(selectedAuto== AUTO_OPTIONS.LOWTIMEDENGAGED){
+            return new AutonomousBaseEngage(1);
+        } else if (selectedAuto== AUTO_OPTIONS.MIDTIMEDENGAGED){
+            return new AutonomousBaseEngage(2);
+        } else {
+            return new AutonomousBaseEngage(0);
         }
 
         /*public static AutonomousBasePD HDIntakeEngage = new AutonomousBasePD(

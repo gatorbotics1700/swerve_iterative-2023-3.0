@@ -18,12 +18,12 @@ import frc.robot.subsystems.Vision.AprilTagSubsystem;
 
 public class AutonomousBaseEngage extends AutonomousBase{
 
-    public boolean firstTime;
-    public double startingTime;
-    public double desireTime;
-    public double desiredAngle;
-    DrivetrainSubsystem drivetrainSubsystem;
-    Mechanisms mechanisms; 
+    private boolean firstTime;
+    private double startingTime;
+    private double desireTime;
+    private double desiredAngle;
+    private DrivetrainSubsystem drivetrainSubsystem;
+    private Mechanisms mechanisms; 
 
     public enum AutoEngageStates{
         ENGAGE,
@@ -39,13 +39,25 @@ public class AutonomousBaseEngage extends AutonomousBase{
         autoEngageState = newEngageState;
     }
 
+    public AutonomousBaseEngage (int option){
+        init();
+        if(option==0){
+            setState(AutoEngageStates.DRIVE);
+        } else if (option==1){
+            setState(AutoEngageStates.LOW_NODE);
+        } else {
+            setState(AutoEngageStates.MID_NODE);
+        }
+    }
+
     @Override
     public void init(){
        drivetrainSubsystem = Robot.m_drivetrainSubsystem;
        startingTime = 0;
        mechanisms = Mechanisms.m_mechanisms;
        firstTime = true;
-
+       desireTime = 5000;
+       desiredAngle = 5;
     }
 
     @Override

@@ -77,6 +77,9 @@ public class Robot extends TimedRobot {
     //auto_chooser.addOption("HBPlaceLeaveR", PDPath.HBPlaceLeaveR);
     //auto_chooser.addOption("engageChargeR", PDPath.engageChargeR);
     auto_chooser.addOption("engageChargeB", PDPath.AUTO_OPTIONS.ENGAGECHARGE);
+    auto_chooser.addOption("lowTimedEngaged",PDPath.AUTO_OPTIONS.LOWTIMEDENGAGED);
+    auto_chooser.addOption("midTimedEngaged",PDPath.AUTO_OPTIONS.MIDTIMEDENGAGED);
+    auto_chooser.addOption("driveTimedEngaged",PDPath.AUTO_OPTIONS.DRIVETIMEDENGAGED);
     // auto_chooser.addOption("HDIntakeEngageB", PDPath.HDIntakeEngageB);
     // auto_chooser.addOption("HDIntakeEngageR", PDPath.HDIntakeEngageR);
     // auto_chooser.addOption("HD3ScoreR", PDPath.HD3ScoreR);
