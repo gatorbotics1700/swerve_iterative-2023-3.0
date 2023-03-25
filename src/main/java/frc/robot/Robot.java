@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.AutonomousBase;
 import frc.robot.autonomous.AutonomousBaseTimed;//made changes to this on joanne's computer
 import frc.robot.autonomous.AutonomousBasePD;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.autonomous.PDPath;
 
 /**
