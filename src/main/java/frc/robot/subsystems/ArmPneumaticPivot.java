@@ -31,13 +31,6 @@ public class ArmPneumaticPivot { //actuate = down, retract = up
         }
     }
 
-    public boolean getPSI(){
-        return true;
-        //System.out.println(piSystem.compressor.getCurrent());
-        //return piSystem.compressor.getPressureSwitchValue();
-    }
-
-
     public void setState(PneumaticPivotStates newPivotState){
         pneumaticPivotState = newPivotState;
     }
