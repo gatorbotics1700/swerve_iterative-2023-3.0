@@ -48,7 +48,8 @@ public class Buttons {
       }
     
       if(OI.m_controller_two.getRightBumperReleased()){  //pivot
-        if(armPneumaticPivot.pneumaticPivotState==ArmPneumaticPivot.PneumaticPivotStates.DOWN){
+        if(armPneumaticPivot.pneumaticPivotState==ArmPneumaticPivot.PneumaticPivotStates.DOWN 
+        || armPneumaticPivot.pneumaticPivotState==ArmPneumaticPivot.PneumaticPivotStates.OFF){
           armPneumaticPivot.setState(PneumaticPivotStates.UP);
         } else if (armPneumaticPivot.pneumaticPivotState==ArmPneumaticPivot.PneumaticPivotStates.UP){
           armPneumaticPivot.setState(PneumaticPivotStates.DOWN);

@@ -4,7 +4,11 @@
 
 package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import frc.robot.subsystems.ArmTelescopingSubsystem;
+import frc.robot.subsystems.ArmPneumaticPivot;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.Mechanisms;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -155,6 +159,7 @@ public class Robot extends TimedRobot {
     m_drivetrainSubsystem.driveTeleop();
     m_drivetrainSubsystem.drive();
     m_buttons.buttonsPeriodic();
+    System.out.println("Telescoping ticks: " + m_mechanisms.armTelescopingSubsystem.getArmPosition());
   }
 
   /** This function is called once when the robot is disabled. */
@@ -167,13 +172,18 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when test mode is enabled. */
   @Override
-  public void testInit() {}
+  public void testInit() {
+    //m_mechanisms.init();
+  }
 
   /** This function is called periodically during test mode. */
   @Override
 
-  public void testPeriodic() {}
-
+  public void testPeriodic() {
+    m_mechanisms.periodic();
+    //ArmPneumaticPivot.solenoid.set(Value.kForward);
+    m_mechanisms.armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0.0);
+  }
   /** This function is called once when the robot is first started up. */
   @Override
   public void simulationInit() {}

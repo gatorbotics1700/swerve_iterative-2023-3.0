@@ -14,7 +14,7 @@ public class ArmPneumaticPivot { //actuate = down, retract = up
 
     public PneumaticPivotStates pneumaticPivotState = PneumaticPivotStates.UP;
 
-    public static DoubleSolenoid solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 4, 6); //TODO: change port number + check channels
+    public static DoubleSolenoid solenoid = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 3, 7); //TODO: change port number + check channels
 
     public void init() {
         solenoid.set(Value.kOff);
