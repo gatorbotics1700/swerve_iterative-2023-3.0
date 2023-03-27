@@ -6,6 +6,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.Mechanisms;
 import frc.robot.subsystems.PneumaticArmPivot;
 import frc.robot.subsystems.PneumaticArmPivot.PneumaticPivotStates;
@@ -15,7 +16,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.AutonomousBase;
 import frc.robot.autonomous.AutonomousBaseTimed;//made changes to this on joanne's computer
 import frc.robot.autonomous.AutonomousBasePD;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.autonomous.PDPath;
 
 /**
@@ -150,15 +150,16 @@ public class Robot extends TimedRobot {
     isBlueAlliance = allianceChooser.getSelected();
     m_drivetrainSubsystem.init();
     m_mechanisms.init();
+    m_drivetrainSubsystem.init();
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {
-    m_buttons.buttonsPeriodic();
-    m_drivetrainSubsystem.driveTeleop(); //only sets speed; does not actually drive
-    //m_drivetrainSubsystem.drive();
+  public void teleopPeriodic() { 
     m_mechanisms.periodic();
+    m_drivetrainSubsystem.driveTeleop();
+    m_drivetrainSubsystem.drive();
+    m_buttons.buttonsPeriodic();
   }
 
   /** This function is called once when the robot is disabled. */
@@ -178,10 +179,10 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-    m_mechanisms.pneumaticArmPivot.setState(PneumaticPivotStates.RETRACTING);
     m_mechanisms.periodic();
+    m_mechanisms.armPneumaticPivot.solenoidOne.set(Value.kForward);
+    // m_mechanisms.armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0.0);
   }
-
   /** This function is called once when the robot is first started up. */
   @Override
   public void simulationInit() {}

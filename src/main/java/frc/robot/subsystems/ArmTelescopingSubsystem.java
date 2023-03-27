@@ -13,14 +13,14 @@ public class ArmTelescopingSubsystem {
 
     private TelescopingStates tState;
 
-    private static final int MIDARMTICKS = 34375 + 25000; //TODO: tune these lengths vv 
+    private static final int MIDARMTICKS = 231686 - 10000; //TODO: tune these lengths vv 
     private static final int SHELFARMTICKS = 312500;
     private static final int LOWARMTICKS = 0;
     private static final int RETRACTEDTICKS = 0;
     private static final int DEADBAND = 15000;
-    private static final int MAX_TICKS = 246875; 
+    private static final int MAX_TICKS = 231686; 
     
-    private TalonFX telescopingMotor;
+    public TalonFX telescopingMotor; //TODO: private
     private static final double _kP = 0.35;
     private static final double _kI = 0;
     private static final double _kD = 0;
@@ -91,7 +91,7 @@ public class ArmTelescopingSubsystem {
     }
 
     public void manual(){
-        if(getArmPosition() <= MAX_TICKS && getArmPosition() >= 0) {
+        //if(getArmPosition() <= MAX_TICKS && getArmPosition() >= 0) {
             if(OI.getLeftAxis() > 0.2){
                 telescopingMotor.set(ControlMode.PercentOutput,-0.2);
             }else if(OI.getLeftAxis() < -0.2){
@@ -99,7 +99,9 @@ public class ArmTelescopingSubsystem {
             } else {
                 telescopingMotor.set(ControlMode.PercentOutput, 0);
             }
-        }
+        //} else {
+            //telescopingMotor.set(ControlMode.PercentOutput, 0);
+        //}
     }
 
     public boolean isAtMid(){
@@ -116,6 +118,10 @@ public class ArmTelescopingSubsystem {
 
     public boolean isAtRetracted(){
         return Math.abs(telescopingMotor.getSelectedSensorPosition()) < DEADBAND;
+    }
+
+    public void setTelescopePosition(){
+        telescopingMotor.setSelectedSensorPosition(0.0);
     }
 
 }

@@ -1,20 +1,22 @@
 package frc.robot;
 
 import frc.robot.subsystems.Mechanisms;
-import frc.robot.subsystems.PneumaticArmPivot;
 import frc.robot.subsystems.Mechanisms.MechanismStates;
+import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
 import frc.robot.subsystems.PneumaticIntakeSubsystem;
+import frc.robot.subsystems.ArmPneumaticPivot.PneumaticPivotStates;
+import frc.robot.subsystems.ArmPneumaticPivot;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.PneumaticArmPivot.PneumaticPivotStates;
 
 public class Buttons {
     
   private DrivetrainSubsystem m_drivetrainSubsystem = Robot.m_drivetrainSubsystem;
   private Mechanisms m_mechanisms = Robot.m_mechanisms;
   private PneumaticIntakeSubsystem pneumaticIntakeSubsystem = m_mechanisms.pneumaticIntakeSubsystem;
-  private PneumaticArmPivot pneumaticArmPivot = m_mechanisms.pneumaticArmPivot;
+  private ArmPneumaticPivot armPneumaticPivot = m_mechanisms.armPneumaticPivot;
   
   public void buttonsPeriodic(){
+
     //codriver
       if(OI.m_controller_two.getYButton()){ 
         System.out.println("xbox: shelf");
@@ -45,14 +47,17 @@ public class Buttons {
         }
       }
     
-      if(OI.m_controller_two.getRightBumperReleased()){ 
-        if(pneumaticArmPivot.pneumaticPivotState==PneumaticPivotStates.RETRACTING || 
-           pneumaticArmPivot.pneumaticPivotState==PneumaticPivotStates.OFF){
-          pneumaticArmPivot.setState(PneumaticPivotStates.ACTUATING);
-        } else if(pneumaticArmPivot.pneumaticPivotState==PneumaticPivotStates.ACTUATING){
-          pneumaticArmPivot.setState(PneumaticPivotStates.RETRACTING);
-        }
-      }
+      // if(OI.m_controller_two.getPOV() > 135 && OI.m_controller_two.getPOV() < 225){ //new pivot - south dpad
+
+      // if(OI.m_controller_two.getRightBumperReleased()){ //pivot
+      //   System.out.println("pivot");
+      //   if(armPneumaticPivot.pneumaticPivotState==ArmPneumaticPivot.PneumaticPivotStates.PINCHING 
+      //   || armPneumaticPivot.pneumaticPivotState==ArmPneumaticPivot.PneumaticPivotStates.OFF){
+      //     armPneumaticPivot.setStatePneumaticIntake(null);(PneumaticPivotStates.RELEASING);
+      //   } else if (armPneumaticPivot.pneumaticPivotState==ArmPneumaticPivot.PneumaticPivotStates.UP){
+      //     armPneumaticPivot.setStatePneumaticIntake(PneumaticPivotStates.PINCHING);
+      //   }
+      // }
   
       if (OI.m_controller_two.getBackButton()){
         //this is the center button on left with 2 squares
@@ -65,14 +70,14 @@ public class Buttons {
         System.out.println("dpad: manual telescope");
       }
 
-      if(OI.m_controller_two.getPOV() > 135 && OI.m_controller_two.getPOV() < 225){
+      if(OI.m_controller_two.getPOV() > 225 && OI.m_controller_two.getPOV() < 315){
         m_mechanisms.setState(MechanismStates.MANUAL_ELEVATOR);
         System.out.println("dpad: manual elevator");
       }
 
       //driver
-      if (OI.m_controller.getBButton()){ 
-        m_drivetrainSubsystem.stopDrive(); //stop all mech?
+      if (OI.m_controller.getBButton()){ //emergency stop EVERYTHING
+        m_drivetrainSubsystem.stopDrive(); 
         m_mechanisms.setState(MechanismStates.HOLDING);
       }
     
