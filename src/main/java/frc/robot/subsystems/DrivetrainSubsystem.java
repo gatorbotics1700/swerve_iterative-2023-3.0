@@ -324,5 +324,9 @@ public class DrivetrainSubsystem {
     public Pose2d getMPose(){ //TODO: do we need this?
         return m_pose;
     }
+
+    public double getPitch(){
+        return m_pigeon.getPitch();
+    }
    
 }

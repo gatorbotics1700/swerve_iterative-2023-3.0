@@ -128,7 +128,7 @@ public class AutonomousBasePD extends AutonomousBase{
                 i++;
                 isFirst = true;
             }
-        }else if(states == AutoStates.LEFTPICKUP){ // TODO: are left and right pickup supposed to be the same? if so, can we have just one state?
+        }else if(states == AutoStates.PICKUP){ // TODO: are left and right pickup supposed to be the same? if so, can we have just one state?
             System.out.println("left pickup");
             if(isFirst){
                 startTime = System.currentTimeMillis();
@@ -138,12 +138,6 @@ public class AutonomousBasePD extends AutonomousBase{
             if(mechanisms.isDoneShelf() == true || System.currentTimeMillis() - startTime >= 500){
                 i++;
                 isFirst = true;
-            }
-        }else if(states == AutoStates.RIGHTPICKUP){
-            System.out.println("right pickup");
-            if(isFirst){
-                startTime = System.currentTimeMillis();
-                isFirst = false;
             }
             // If we never get to shelf it might be because the timeout is too short
             if(mechanisms.isDoneShelf() == true || System.currentTimeMillis() - startTime >= 500){
@@ -246,7 +240,6 @@ public class AutonomousBasePD extends AutonomousBase{
         return Math.abs(turnController.getPositionError()) <= TURN_DEADBAND;
     }
 
-    @Override
     public void setState(StateWithCoordinate.AutoStates newAutoState){
         states = newAutoState;
     }
