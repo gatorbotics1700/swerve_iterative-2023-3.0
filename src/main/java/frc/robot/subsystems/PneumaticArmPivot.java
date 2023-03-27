@@ -18,7 +18,7 @@ public class PneumaticArmPivot { //actuate = down, retract = up
 
     public PneumaticPivotStates pneumaticPivotState = PneumaticPivotStates.OFF;
 
-    private static DoubleSolenoid solenoid = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 4, 6); 
+    public static DoubleSolenoid solenoid = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 13, 10); 
 
     public void init() {
         solenoid.set(kOff);

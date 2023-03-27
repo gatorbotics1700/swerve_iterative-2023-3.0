@@ -4,8 +4,12 @@
 
 package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.Mechanisms;
+import frc.robot.subsystems.PneumaticArmPivot;
+import frc.robot.subsystems.PneumaticArmPivot.PneumaticPivotStates;
+import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.AutonomousBase;
@@ -153,7 +157,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     m_buttons.buttonsPeriodic();
     m_drivetrainSubsystem.driveTeleop(); //only sets speed; does not actually drive
-    m_drivetrainSubsystem.drive();
+    //m_drivetrainSubsystem.drive();
     m_mechanisms.periodic();
   }
 
@@ -167,11 +171,16 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when test mode is enabled. */
   @Override
-  public void testInit() {}
+  public void testInit() {
+    m_mechanisms.init();
+  }
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+    m_mechanisms.pneumaticArmPivot.setState(PneumaticPivotStates.RETRACTING);
+    m_mechanisms.periodic();
+  }
 
   /** This function is called once when the robot is first started up. */
   @Override
