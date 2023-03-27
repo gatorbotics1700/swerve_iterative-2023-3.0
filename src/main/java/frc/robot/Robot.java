@@ -12,6 +12,7 @@ import frc.robot.subsystems.ArmPneumaticPivot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.subsystems.Vision.*;
 import frc.robot.autonomous.PDPath;
@@ -179,9 +180,10 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-    // m_drivetrainSubsystem.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
+    //m_drivetrainSubsystem.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
     //armTelescopingSubsystem.init();
     //m_mechanisms.init();
+    m_drivetrainSubsystem.init();
 
   }
 

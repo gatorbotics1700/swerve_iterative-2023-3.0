@@ -33,7 +33,7 @@ public class CanCoderFactoryBuilder {
             
             CANCoder encoder = new CANCoder(configuration.getId());
             boolean haveError = CtreUtils.checkCtreError(encoder.configAllSettings(config, 250), "Failed to configure CANCoder");
-            for(int i = 0; i < 5; i++){
+            for(int i = 0; i < 10; i++){
                 haveError =  CtreUtils.checkCtreError(encoder.configAllSettings(config, 250), "Failed to configure CANCoder");
                 if(!haveError){
                     break;

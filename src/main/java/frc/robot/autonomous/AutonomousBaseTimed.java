@@ -18,7 +18,7 @@ public class AutonomousBaseTimed extends AutonomousBase{
     public void periodic(){
         double timeElapsed = (System.currentTimeMillis() - timeStart)/ 1000;
         if(timeElapsed < target){
-            drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.0, 0.0, drivetrainSubsystem.getPoseRotation()));
+            drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.4, 0.0, 0.0, drivetrainSubsystem.getPoseRotation()));
             drivetrainSubsystem.drive();
         } else {
             drivetrainSubsystem.stopDrive();   

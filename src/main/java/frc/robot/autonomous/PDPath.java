@@ -98,7 +98,7 @@ public class PDPath {
                 new StateWithCoordinate[]{
                 new StateWithCoordinate(AutoStates.FIRST),
                 //new StateWithCoordinate(AutoStates.FIRSTHIGHNODE),
-                new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(155.812 * mpi, 108.015 * mpi, new Rotation2d(Math.toRadians(180.0)))),
+                new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(153 * mpi, 108.015 * mpi, new Rotation2d(Math.toRadians(180.0)))),//155.812
                 new StateWithCoordinate(AutoStates.BALANCING)
                 }
             );
