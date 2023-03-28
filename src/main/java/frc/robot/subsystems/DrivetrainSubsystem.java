@@ -288,25 +288,22 @@ public class DrivetrainSubsystem {
         setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.0, 0.0, 0.0, getPoseRotation()));
         drive();
    }
+
    //TODO: look through this function
    public void pitchBalance(double pitchSetpoint){
         System.out.println("pitch: " + m_pigeon.getPitch());
-        double pitchAfterCorrection = m_pigeon.getPitch();
-        System.out.println("pitch after correcting for universalPitch: " + pitchAfterCorrection);
+        double currPitch = m_pigeon.getPitch();
         pitchController.setSetpoint(pitchSetpoint); 
-        double output = pitchController.calculate(pitchAfterCorrection, pitchSetpoint);
+        double output = pitchController.calculate(currPitch, pitchSetpoint);
         System.out.println("output: " + output); 
-        setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(output, 0, 0, getGyroscopeRotation()));
-        drive();
         
-        if (Math.abs(pitchAfterCorrection - pitchSetpoint) < 1.0){
-            setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0,getGyroscopeRotation()));
-            //velocityPD(0);
+        if (Math.abs(currPitch - pitchSetpoint) < 1.0){
+            setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0,getPoseRotation()));
         } else{
-                if(Math.abs(output) < MINOUTPUT){
-                   output = Math.signum(output) * MINOUTPUT;
-                }
+                output = Math.signum(output) * Math.max(output, MINOUTPUT);
+                setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(output, 0, 0, getPoseRotation()));
         }
+        drive();
     }
 
     public double getMPoseX(){

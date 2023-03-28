@@ -21,7 +21,7 @@ public class PneumaticIntakeSubsystem {
     // Initializes a DigitalInput on DIO 0 (roborio is built in w/ 10 DIOs (digital input-output ports))
     private DigitalInput beambreakSensor;
 
-    public PneumaticIntakeSubsystem(){ //TODO: add back compressor if it turns out we need it
+    public PneumaticIntakeSubsystem(){
         solenoidOne = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 3, 7); //3 & 7
         beambreakSensor = new DigitalInput(Constants.BEAM_BREAK_RECEIVER); 
         init();
