@@ -4,8 +4,8 @@ import frc.robot.subsystems.Mechanisms;
 import frc.robot.subsystems.Mechanisms.MechanismStates;
 import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
 import frc.robot.subsystems.PneumaticIntakeSubsystem;
-import frc.robot.subsystems.ArmPneumaticPivot.PneumaticPivotStates;
-import frc.robot.subsystems.ArmPneumaticPivot;
+import frc.robot.subsystems.PneumaticArmPivot.PneumaticPivotStates;
+import frc.robot.subsystems.PneumaticArmPivot;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
 public class Buttons {
@@ -13,7 +13,7 @@ public class Buttons {
   private DrivetrainSubsystem m_drivetrainSubsystem = Robot.m_drivetrainSubsystem;
   private Mechanisms m_mechanisms = Robot.m_mechanisms;
   private PneumaticIntakeSubsystem pneumaticIntakeSubsystem = m_mechanisms.pneumaticIntakeSubsystem;
-  private ArmPneumaticPivot armPneumaticPivot = m_mechanisms.armPneumaticPivot;
+  private PneumaticArmPivot armPneumaticPivot = m_mechanisms.armPneumaticPivot;
   
   public void buttonsPeriodic(){
 
@@ -49,15 +49,17 @@ public class Buttons {
     
       // if(OI.m_controller_two.getPOV() > 135 && OI.m_controller_two.getPOV() < 225){ //new pivot - south dpad
 
-      // if(OI.m_controller_two.getRightBumperReleased()){ //pivot
-      //   System.out.println("pivot");
-      //   if(armPneumaticPivot.pneumaticPivotState==ArmPneumaticPivot.PneumaticPivotStates.PINCHING 
-      //   || armPneumaticPivot.pneumaticPivotState==ArmPneumaticPivot.PneumaticPivotStates.OFF){
-      //     armPneumaticPivot.setStatePneumaticIntake(null);(PneumaticPivotStates.RELEASING);
-      //   } else if (armPneumaticPivot.pneumaticPivotState==ArmPneumaticPivot.PneumaticPivotStates.UP){
-      //     armPneumaticPivot.setStatePneumaticIntake(PneumaticPivotStates.PINCHING);
-      //   }
-      // }
+      if(OI.m_controller_two.getRightBumperReleased()){ 
+        System.out.println("xbox: single substation");
+        m_mechanisms.setState(MechanismStates.SUB);
+        // System.out.println("pivot");
+        // if(armPneumaticPivot.pneumaticPivotState==PneumaticPivotStates.DOWN 
+        // || armPneumaticPivot.pneumaticPivotState==PneumaticPivotStates.OFF){
+        //   armPneumaticPivot.setState(PneumaticPivotStates.UP);
+        // } else if (armPneumaticPivot.pneumaticPivotState==PneumaticPivotStates.UP){
+        //   armPneumaticPivot.setState(PneumaticPivotStates.DOWN);
+        // }
+      }
   
       if (OI.m_controller_two.getBackButton()){
         //this is the center button on left with 2 squares

@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -173,15 +174,24 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-    m_mechanisms.init();
+    m_drivetrainSubsystem.init();
+    //m_mechanisms.init();
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-    m_mechanisms.periodic();
-    m_mechanisms.armPneumaticPivot.solenoidOne.set(Value.kForward);
-    // m_mechanisms.armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0.0);
+
+    //OFFSETS
+    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0, 0, m_drivetrainSubsystem.getPoseRotation()));
+    m_drivetrainSubsystem.drive();
+    
+    //MECHANISMS
+    //m_mechanisms.periodic();
+    //m_buttons.buttonsPeriodic();
+    //PneumaticArmPivot.solenoid.set(Value.kForward);
+    //System.out.println(m_mechanisms.armTelescopingSubsystem.getArmPosition());
+    //m_mechanisms.armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0.0);
   }
   /** This function is called once when the robot is first started up. */
   @Override

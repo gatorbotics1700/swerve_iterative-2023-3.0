@@ -13,12 +13,13 @@ public class ArmTelescopingSubsystem {
 
     private TelescopingStates tState;
 
-    private static final int MIDARMTICKS = 231686 - 10000; //TODO: tune these lengths vv 
-    private static final int SHELFARMTICKS = 312500;
-    private static final int LOWARMTICKS = 0;
+    private static final int MIDARMTICKS = 231686 - 10000 + 34900; //TODO: tune these lengths vv 
+    private static final int SHELFARMTICKS = 312500; //+ 34900;
+    private static final int LOWARMTICKS = 34900;
+    private static final int SUBTICKS = 75000 + 34900;
     private static final int RETRACTEDTICKS = 0;
     private static final int DEADBAND = 15000;
-    private static final int MAX_TICKS = 231686; 
+    private static final int MAX_TICKS = 231686 + 34900; 
     
     public TalonFX telescopingMotor; //TODO: private
     private static final double _kP = 0.35;
@@ -34,6 +35,7 @@ public class ArmTelescopingSubsystem {
         LOW_ARM_LENGTH,
         SHELF_ARM_LENGTH,
         MID_ARM_LENGTH,
+        SINGLE_SUBSTATION,
         MANUAL;
     }
 
@@ -69,7 +71,10 @@ public class ArmTelescopingSubsystem {
         } else if (tState == TelescopingStates.MID_ARM_LENGTH){
             telescopingMotor.set(ControlMode.Position, MIDARMTICKS); 
             telescopeDeadband(MIDARMTICKS);
-        }else if(tState == TelescopingStates.MANUAL){
+        } else if (tState == TelescopingStates.SINGLE_SUBSTATION){
+            telescopingMotor.set(ControlMode.Position, SUBTICKS);
+            telescopeDeadband(SUBTICKS);
+        } else if(tState == TelescopingStates.MANUAL){
             manual();
         } else { //retracted again for safety
             telescopingMotor.set(ControlMode.PercentOutput, 0);

@@ -16,9 +16,9 @@ public class ElevatorSubsystem {
     private static final double _kD = 0.0;
     private static final int _kIzone = 0;
     private static final double _kPeakOutput = 1.0;
-    private static final double MID_HEIGHT_INCHES = 31.5; //TODO: tune these heights vv
-    private static final double LOW_HEIGHT_INCHES = 10;
-    private static final double SHELF_HEIGHT_INCHES = 25; 
+    private static final double MID_HEIGHT_INCHES = 14; //TODO: tune these heights vv
+    private static final double LOW_HEIGHT_INCHES = 0;
+    private static final double SHELF_HEIGHT_INCHES = 14; 
     private static final double MAX_HEIGHT = 31.5;
 
     private static final double ELEVATOR_SPROCKET_DIAMETER = 1.28;
@@ -117,6 +117,10 @@ public class ElevatorSubsystem {
 
     public boolean isAboveLow(){
         return elevatorMotor.getSelectedSensorPosition() > LOW_HEIGHT_INCHES*ELEVATOR_TICKS_PER_INCH;
+    }
+
+    public boolean isAtZero(){
+        return elevatorMotor.getSelectedSensorPosition() < DEADBAND;
     }
 
 }

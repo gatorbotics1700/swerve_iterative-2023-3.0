@@ -11,8 +11,8 @@ import frc.robot.Robot;
 public class PneumaticArmPivot { //actuate = down, retract = up
 
     public static enum PneumaticPivotStates{
-        ACTUATING,
-        RETRACTING,
+        UP,
+        DOWN,
         OFF;
     }
 
@@ -26,9 +26,9 @@ public class PneumaticArmPivot { //actuate = down, retract = up
     }
 
     public void periodic(){
-        if (pneumaticPivotState == PneumaticPivotStates.ACTUATING){
+        if (pneumaticPivotState == PneumaticPivotStates.UP){
             solenoid.set(kForward);
-        } else if (pneumaticPivotState == PneumaticPivotStates.RETRACTING){
+        } else if (pneumaticPivotState == PneumaticPivotStates.DOWN){
             solenoid.set(kReverse);
             System.out.println("retracting");
         } else {
