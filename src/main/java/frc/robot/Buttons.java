@@ -32,9 +32,8 @@ public class Buttons {
           m_mechanisms.setState(MechanismStates.MID_NODE); 
       }
     
-      if(OI.m_controller_two.getXButtonPressed()){ //ground pickup button
-        System.out.println("xbox: ground pickup");
-          m_mechanisms.setState(MechanismStates.GROUNDPICKUP);
+      if(OI.m_controller_two.getXButtonPressed()){ //used to be ground pickup button
+      
       }
     
       if(OI.m_controller_two.getLeftBumperReleased()){ 
