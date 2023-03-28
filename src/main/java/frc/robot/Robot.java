@@ -142,6 +142,7 @@ public class Robot extends TimedRobot {
      //m_AprilTagSubsystem.periodic();
      m_mechanisms.periodic();
      m_auto.periodic();
+     m_drivetrainSubsystem.drive();
      
      //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
 
@@ -155,7 +156,7 @@ public class Robot extends TimedRobot {
     //m_aprilTagSubsystem.init();
     isBlueAlliance = allianceChooser.getSelected();
     m_mechanisms.init(); 
-    m_drivetrainSubsystem.init();
+    //m_drivetrainSubsystem.init();
   }
 
   /** This function is called periodically during operator control. */

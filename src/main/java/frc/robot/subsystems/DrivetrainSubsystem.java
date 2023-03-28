@@ -31,7 +31,7 @@ import frc.robot.Constants;
 import frc.robot.OI;
 
 public class DrivetrainSubsystem {
-   private static final double pitchKP = 0.035; //0.025; 0.035;
+   private static final double pitchKP = 0.055; //0.025; 0.035;
    private static final double pitchKI = 0.0;
    private static final double pitchKD = 0.001; //0.001;
    private PIDController pitchController;
@@ -296,11 +296,11 @@ public class DrivetrainSubsystem {
         pitchController.setSetpoint(pitchSetpoint); 
         double output = pitchController.calculate(pitchAfterCorrection, pitchSetpoint);
         System.out.println("output: " + output); 
-        setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(output, 0, 0, getGyroscopeRotation()));
+        setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(output, 0, 0, getPoseRotation()));
         drive();
         
         if (Math.abs(pitchAfterCorrection - pitchSetpoint) < 1.0){
-            setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0,getGyroscopeRotation()));
+            setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0, getPoseRotation()));
             //velocityPD(0);
         } else{
                 if(Math.abs(output) < MINOUTPUT){

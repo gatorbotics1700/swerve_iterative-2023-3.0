@@ -57,7 +57,7 @@ public class AutonomousBaseEngage extends AutonomousBase{
        mechanisms = Mechanisms.m_mechanisms;
        firstTime = true;
        desireTime = 5000;
-       desiredAngle = 5;
+       desiredAngle = 10;
     }
 
     @Override
@@ -78,8 +78,9 @@ public class AutonomousBaseEngage extends AutonomousBase{
             if (firstTime == true){
                 firstTime = false;
                 startingTime = System.currentTimeMillis();
+                System.out.println(startingTime);
             }
-            if(startingTime >= desireTime || drivetrainSubsystem.getPitch() > desiredAngle){
+            if(/*startingTime + desireTime >= System.currentTimeMillis() ||*/ Math.abs(drivetrainSubsystem.getPitch()) > desiredAngle){
                 setState(AutoEngageStates.ENGAGE);
             } else{
                 drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.8, 0, 0, drivetrainSubsystem.getPoseRotation()));
@@ -89,6 +90,5 @@ public class AutonomousBaseEngage extends AutonomousBase{
         }else{
             drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0, drivetrainSubsystem.getPoseRotation()));
         }
-        drivetrainSubsystem.drive();
     }
 }
