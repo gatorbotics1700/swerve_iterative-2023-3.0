@@ -13,7 +13,7 @@ public class ArmTelescopingSubsystem {
 
     private TelescopingStates tState;
 
-    private static final int MIDARMTICKS = 231686 - 10000 + 34900; //TODO: tune these lengths vv 
+    private static final int MIDARMTICKS = 231686 - 10000 + 34900;
     private static final int SHELFARMTICKS = 312500; //+ 34900;
     private static final int LOWARMTICKS = 34900;
     private static final int SUBTICKS = 75000 + 34900;
@@ -21,7 +21,7 @@ public class ArmTelescopingSubsystem {
     private static final int DEADBAND = 15000;
     private static final int MAX_TICKS = 231686 + 34900; 
     
-    public TalonFX telescopingMotor; //TODO: private
+    private TalonFX telescopingMotor;
     private static final double _kP = 0.35;
     private static final double _kI = 0;
     private static final double _kD = 0;
@@ -119,6 +119,10 @@ public class ArmTelescopingSubsystem {
 
     public boolean isAtShelf(){
         return Math.abs(SHELFARMTICKS - telescopingMotor.getSelectedSensorPosition()) < DEADBAND;
+    }
+
+    public boolean isAtSub(){
+        return Math.abs(SUBTICKS - telescopingMotor.getSelectedSensorPosition()) < DEADBAND;
     }
 
     public boolean isAtRetracted(){

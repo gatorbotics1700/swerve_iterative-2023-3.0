@@ -44,19 +44,10 @@ public class Mechanisms {
 
     public void periodic(){
         if (mechState == MechanismStates.LOW_NODE){ 
-            if(elevatorSubsystem.isAboveLow()){ //if going down, we need to retract first
-                armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
-                if(armTelescopingSubsystem.isAtLow()){
-                    elevatorSubsystem.setState(ElevatorStates.LOW_ELEVATOR_HEIGHT);
-                    armPneumaticPivot.setState(PneumaticPivotStates.DOWN);
-                }
-            } else { //if going up, we need to go up before extending out
+            armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
+            if(armTelescopingSubsystem.isAtLow()){
                 elevatorSubsystem.setState(ElevatorStates.LOW_ELEVATOR_HEIGHT);
-                if(elevatorSubsystem.isAtLow()){
-                    //System.out.println("elevator is at low");
-                    armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
-                    armPneumaticPivot.setState(PneumaticPivotStates.DOWN);
-                }
+                armPneumaticPivot.setState(PneumaticPivotStates.DOWN);
             }
         } else if (mechState == MechanismStates.MID_NODE){
             elevatorSubsystem.setState(ElevatorStates.MID_ELEVATOR_HEIGHT);
@@ -71,24 +62,24 @@ public class Mechanisms {
               armTelescopingSubsystem.setTState(TelescopingStates.SHELF_ARM_LENGTH);
               armPneumaticPivot.setState(PneumaticPivotStates.DOWN);
             }
-        } else if(mechState == MechanismStates.GROUNDPICKUP){
+        } else if(mechState == MechanismStates.SUB){
+            armTelescopingSubsystem.setTState(TelescopingStates.SINGLE_SUBSTATION);
+            armPneumaticPivot.setState(PneumaticPivotStates.UP); 
+            if (armTelescopingSubsystem.isAtSub()){
+                elevatorSubsystem.setState(ElevatorStates.ZERO);
+            }
+        } /*else if(mechState == MechanismStates.GROUNDPICKUP){
             armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
             if(armTelescopingSubsystem.isAtRetracted()){
              elevatorSubsystem.setState(ElevatorStates.ZERO);
              armPneumaticPivot.setState(PneumaticPivotStates.DOWN);
             }
-        } else if (mechState == MechanismStates.MANUAL_ELEVATOR){
+        }*/ else if (mechState == MechanismStates.MANUAL_ELEVATOR){
             elevatorSubsystem.setState(ElevatorStates.MANUAL);
             System.out.println("Manual elevator");
         } else if (mechState == MechanismStates.MANUAL_TELESCOPE){
             armTelescopingSubsystem.setTState(TelescopingStates.MANUAL);
             System.out.println("manual telescope");
-        } else if(mechState == MechanismStates.SUB){
-            elevatorSubsystem.setState(ElevatorStates.ZERO);
-            if (elevatorSubsystem.isAtZero()){
-                armTelescopingSubsystem.setTState(TelescopingStates.SINGLE_SUBSTATION);
-                armPneumaticPivot.setState(PneumaticPivotStates.UP); //up
-            }
         } else { //holding
             elevatorSubsystem.setState(ElevatorStates.ZERO); 
             armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
