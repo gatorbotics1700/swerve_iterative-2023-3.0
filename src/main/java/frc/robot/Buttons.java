@@ -11,7 +11,6 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 public class Buttons {
     
   private DrivetrainSubsystem m_drivetrainSubsystem = Robot.m_drivetrainSubsystem;
-  private PneumaticIntakeSubsystem pneumaticIntakeSubsystem = Mechanisms.m_pneumaticIntakeSubsystem;
   private Mechanisms m_mechanisms = Robot.m_mechanisms;
   private PneumaticIntakeSubsystem pneumaticIntakeSubsystem = m_mechanisms.pneumaticIntakeSubsystem;
   //private PneumaticArmPivot armPneumaticPivot = m_mechanisms.armPneumaticPivot;

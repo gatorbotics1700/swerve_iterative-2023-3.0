@@ -80,7 +80,7 @@ public class AutonomousBasePD extends AutonomousBase{
             System.out.println("moving on to " + stateSequence[i]);
             return;
         } else if (states == AutoStates.FIRSTHIGHNODE){ //WE HAVE THIS BECAUSE OF APRILTAGS
-            doHighNode();
+            i++;
             return;
         }
         
@@ -92,7 +92,7 @@ public class AutonomousBasePD extends AutonomousBase{
                 System.out.println("moving on to " + stateSequence[i]);
             }
         }else if(states == AutoStates.HIGHNODE){ 
-            doHighNode();
+            i++;
         }else if(states == AutoStates.MIDNODE){
             System.out.println("mid node");
             mechanisms.setState(MechanismStates.MID_NODE);
@@ -147,22 +147,7 @@ public class AutonomousBasePD extends AutonomousBase{
         }else{
             drivetrainSubsystem.stopDrive();
         } 
-        drivetrainSubsystem.drive();  
-    }
-
-    private void doHighNode() {
-        mechanisms.setState(MechanismStates.HIGH_NODE);
-        System.out.println("high node");
-        if(isFirst){
-            startTime = System.currentTimeMillis();
-            isFirst = false;
-        }
-        // Start a timer in case we never finish getting to high
-        if(mechanisms.isDoneHigh()==true || System.currentTimeMillis()-startTime>=500){
-            i++;
-            isFirst = true;
-            System.out.println("moving on to " + stateSequence[i]);
-        }
+        drivetrainSubsystem.drive(); 
     }
 
     /** 

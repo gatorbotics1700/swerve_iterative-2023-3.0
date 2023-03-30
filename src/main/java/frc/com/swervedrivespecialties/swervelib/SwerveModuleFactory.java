@@ -69,11 +69,6 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration> {
         public SwerveModulePosition getSwerveModulePosition(){
             return new SwerveModulePosition(driveController.getPosition(), new Rotation2d(steerController.getStateAngle()));
         }
-
-        @Override
-        public CANCoder getCANCoder(){
-            return steerController.getCANCoderSC();
-        }
         
         @Override
         public void set(double driveVoltage, double steerAngle) {

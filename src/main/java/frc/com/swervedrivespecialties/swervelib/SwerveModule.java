@@ -13,6 +13,4 @@ public interface SwerveModule {
     SwerveModulePosition getSwerveModulePosition();
 
     void set(double driveVoltage, double steerAngle);
-
-    CANCoder getCANCoder();
 }

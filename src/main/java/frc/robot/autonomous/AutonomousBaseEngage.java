@@ -13,8 +13,6 @@ import frc.robot.autonomous.StateWithCoordinate;
 import frc.robot.autonomous.StateWithCoordinate.AutoStates;
 import frc.robot.subsystems.Mechanisms.MechanismStates;
 import frc.robot.subsystems.Mechanisms;
-import frc.robot.subsystems.Vision.LimeLightSubsystem;
-import frc.robot.subsystems.Vision.AprilTagSubsystem;
 
 public class AutonomousBaseEngage extends AutonomousBase{
 
