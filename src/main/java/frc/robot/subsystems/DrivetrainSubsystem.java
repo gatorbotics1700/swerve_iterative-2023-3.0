@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.controller.PIDController;
+import com.ctre.phoenix.sensors.CANCoder;
 import frc.robot.Robot;
 
 
@@ -150,6 +151,7 @@ public class DrivetrainSubsystem {
         );
 
         init();
+        
   }
 
   public void init(){

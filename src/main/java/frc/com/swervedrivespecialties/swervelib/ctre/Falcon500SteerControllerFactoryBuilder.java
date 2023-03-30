@@ -185,8 +185,8 @@ public final class Falcon500SteerControllerFactoryBuilder {
         }
 
         @Override
-        public CANCoder getCANCoderSC(){
-            return absoluteEncoder.getCANCoder();
+        public double getAbsoluteAngleSC(){
+            return absoluteEncoder.getAbsoluteAngle();
         }
 
         @Override
