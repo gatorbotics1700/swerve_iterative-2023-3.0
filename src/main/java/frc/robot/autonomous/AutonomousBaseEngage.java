@@ -33,7 +33,7 @@ public class AutonomousBaseEngage extends AutonomousBase{
         OFF;
     }
 
-    public static AutoEngageStates autoEngageState = AutoEngageStates.OFF;
+    private AutoEngageStates autoEngageState;
 
     public void setState(AutoEngageStates newEngageState){
         autoEngageState = newEngageState;
@@ -54,10 +54,11 @@ public class AutonomousBaseEngage extends AutonomousBase{
     public void init(){
        drivetrainSubsystem = Robot.m_drivetrainSubsystem;
        startingTime = 0;
-       mechanisms = Mechanisms.m_mechanisms;
+       mechanisms = Robot.m_mechanisms;
        firstTime = true;
        desireTime = 5000;
        desiredAngle = 10;
+       autoEngageState = AutoEngageStates.OFF;
     }
 
     @Override
@@ -87,6 +88,7 @@ public class AutonomousBaseEngage extends AutonomousBase{
             }
         } else if(autoEngageState == AutoEngageStates.ENGAGE){
             drivetrainSubsystem.pitchBalance(0.0);
+            mechanisms.setState(MechanismStates.HOLDING);
         }else{
             drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0, drivetrainSubsystem.getPoseRotation()));
         }

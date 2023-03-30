@@ -11,7 +11,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 
 
 public class PDPath {
-    //TODO: FIX ALL THE NUMBERS THESE XS AND YS ARE WRONG ALSO NEED RED ALLIANCE DIFF METHODS
     private static double mpi = Constants.METERS_PER_INCH;
     private static final double STARTING_X = 68.95;
     private static final double HB_Y_B = 200.046;
@@ -26,7 +25,6 @@ public class PDPath {
         HBLEAVEB,
         HDPLACELEAVEB,
         HBPLACELEAVEB,
-        ENGAGECHARGE,
         TIMED,
         MIDTIMEDENGAGED,
         LOWTIMEDENGAGED,
@@ -96,24 +94,15 @@ public class PDPath {
                     new StateWithCoordinate(AutoStates.STOP)
                 }
             );
-        } else if (selectedAuto == AUTO_OPTIONS.ENGAGECHARGE){
-            return new AutonomousBasePD(
-                new Pose2d(STARTING_X * mpi, 108.19* mpi, new Rotation2d(Math.toRadians(180.0))), 
-                new StateWithCoordinate[]{
-                new StateWithCoordinate(AutoStates.FIRST),
-                //new StateWithCoordinate(AutoStates.FIRSTHIGHNODE),
-                new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(153 * mpi, 108.015 * mpi, new Rotation2d(Math.toRadians(180.0)))),//155.812
-                new StateWithCoordinate(AutoStates.BALANCING)
-                }
-            );
-        } else if(selectedAuto == AUTO_OPTIONS.TIMED) {
-            return new AutonomousBaseTimed();
         } else if(selectedAuto== AUTO_OPTIONS.LOWTIMEDENGAGED){
             return new AutonomousBaseEngage(1);
         } else if (selectedAuto== AUTO_OPTIONS.MIDTIMEDENGAGED){
             return new AutonomousBaseEngage(2);
-        } else {
+        } else if (selectedAuto == AUTO_OPTIONS.DRIVETIMEDENGAGED){
             return new AutonomousBaseEngage(0);
+        }
+        else {
+            return new AutonomousBaseTimed();
         }
 
         /*public static AutonomousBasePD HDIntakeEngage = new AutonomousBasePD(

@@ -43,7 +43,6 @@ public class Robot extends TimedRobot {
   public static AprilTagSubsystem m_aprilTagSubsystem = new AprilTagSubsystem();
   public static Buttons m_buttons = new Buttons();
   
-  boolean override = false;
   double mpi = Constants.METERS_PER_INCH;
   public static Boolean isBlueAlliance = true;
  
@@ -58,37 +57,18 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() { //creates options for different autopaths, names are placeholders    
     System.out.println("#I'm Awake");
-    
-
-    allianceChooser.setDefaultOption("Blue Alliance", blue);
-    allianceChooser.addOption("Red Alliance", red);    
-    SmartDashboard.putData("Which alliance?", allianceChooser);
 
     //TODO: make the names come from the enum with a for loop cycling through everything in it?
     auto_chooser.setDefaultOption("testPath", PDPath.AUTO_OPTIONS.TESTPATH);
     auto_chooser.addOption("noGoR!", PDPath.AUTO_OPTIONS.NOGO);
-    //auto_chooser.addOption("noGoB!", PDPath.noGoB);
     auto_chooser.addOption("HDLeaveB", PDPath.AUTO_OPTIONS.HDLEAVEB);
     auto_chooser.addOption("HBLeaveB", PDPath.AUTO_OPTIONS.HBLEAVEB);
-    //auto_chooser.addOption("HBLeaveR", PDPath.HBLeaveR);
-    //auto_chooser.addOption("HDLeaveR", PDPath.HDLeaveR); 
     auto_chooser.addOption("HDPlaceLeaveB", PDPath.AUTO_OPTIONS.HDPLACELEAVEB);
     auto_chooser.addOption("HBPlaceLeaveB", PDPath.AUTO_OPTIONS.HBPLACELEAVEB);
-    //auto_chooser.addOption("HDPlaceLeaveR", PDPath.HDPlaceLeaveR); 
-    //auto_chooser.addOption("HBPlaceLeaveR", PDPath.HBPlaceLeaveR);
-    //auto_chooser.addOption("engageChargeR", PDPath.engageChargeR);
-    auto_chooser.addOption("engageChargeB", PDPath.AUTO_OPTIONS.ENGAGECHARGE);
     auto_chooser.addOption("lowTimedEngaged",PDPath.AUTO_OPTIONS.LOWTIMEDENGAGED);
     auto_chooser.addOption("midTimedEngaged",PDPath.AUTO_OPTIONS.MIDTIMEDENGAGED);
     auto_chooser.addOption("driveTimedEngaged",PDPath.AUTO_OPTIONS.DRIVETIMEDENGAGED);
-    // auto_chooser.addOption("HDIntakeEngageB", PDPath.HDIntakeEngageB);
-    // auto_chooser.addOption("HDIntakeEngageR", PDPath.HDIntakeEngageR);
-    // auto_chooser.addOption("HD3ScoreR", PDPath.HD3ScoreR);
-    // auto_chooser.addOption("HD3ScoreB", PDPath.HD3ScoreB);
-    // auto_chooser.addOption("HB3ScoreR", PDPath.HB3ScoreR);
-    // auto_chooser.addOption("HB3ScoreB", PDPath.HB3ScoreB);
     auto_chooser.addOption("timed", PDPath.AUTO_OPTIONS.TIMED);
-   // auto_chooser.addOption("Motion profiling tester path", motionProfiling);
     SmartDashboard.putData("Auto choices", auto_chooser);
    
   }

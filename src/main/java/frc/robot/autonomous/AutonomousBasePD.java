@@ -13,12 +13,8 @@ import frc.robot.Constants;
 import frc.robot.autonomous.StateWithCoordinate;
 import frc.robot.autonomous.StateWithCoordinate.AutoStates;
 import frc.robot.subsystems.PneumaticIntakeSubsystem;
-//import frc.robot.subsystems.ArmPneumaticPivot.PneumaticPivotStates;
 import frc.robot.subsystems.Mechanisms.MechanismStates;
-//import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates; TODO uncomment
 import frc.robot.subsystems.Mechanisms;
-import frc.robot.subsystems.Vision.LimeLightSubsystem;
-import frc.robot.subsystems.Vision.AprilTagSubsystem;
 
 public class AutonomousBasePD extends AutonomousBase{
     private static final double turnKP= 0.0001; //increased slight *** not tested
@@ -36,11 +32,8 @@ public class AutonomousBasePD extends AutonomousBase{
     private Boolean isFirst;
     private double startTime;
     
-    private ArmPneumaticPivot armPneumaticPivot;
     private DrivetrainSubsystem drivetrainSubsystem;
     private Mechanisms mechanisms;
-    private PneumaticIntakeSubsystem pneumaticIntakeSubsystem;
-    private LimeLightSubsystem limeLightSubsystem;
     public AutoStates states;
 
     //pids
@@ -57,11 +50,8 @@ public class AutonomousBasePD extends AutonomousBase{
     @Override
     public void init(){
         System.out.println("AUTONOMOUS INIT!\nINIT!\nINIT!");
-        armPneumaticPivot = Mechanisms.armPneumaticPivot;
         drivetrainSubsystem = Robot.m_drivetrainSubsystem;
         mechanisms = Robot.m_mechanisms;
-        //pneumaticIntakeSubsystem = Robot.m_pneumaticIntakeSubsystem;
-        //limeLightSubsystem = AprilTagSubsystem.limeLightSubsystem;
         drivetrainSubsystem.resetOdometry(startingCoordinate);
         turnController = new PIDController(turnKP, turnKI, turnKD); 
         xController = new PIDController(driveKP, driveKI, driveKD);
@@ -144,9 +134,6 @@ public class AutonomousBasePD extends AutonomousBase{
                 i++;
                 isFirst = true;
             }
-        }else if(states == AutoStates.BALANCING){
-            //armPneumaticPivot.setState(PneumaticPivotStates.ACTUATING);
-            Robot.m_drivetrainSubsystem.pitchBalance(0.0);
         }else if(states == AutoStates.INTAKING){
             if(isFirst){
                 startTime = System.currentTimeMillis(); 
@@ -243,55 +230,4 @@ public class AutonomousBasePD extends AutonomousBase{
     public void setState(StateWithCoordinate.AutoStates newAutoState){
         states = newAutoState;
     }
-
-    // TODO: look through this method when we're ready to use vision
-    public void driveDesiredDistanceVision(Pose2d dPose){ 
-        System.out.println("Limelight tv auto: " + limeLightSubsystem.getTv());
-
-        turnController.enableContinuousInput(0, 360);
-        //System.out.println("xcontroller setpoint: " + xController.getSetpoint());
-        //System.out.println("cur pose: " + DrivetrainSubsystem.m_pose);
-        //System.out.println("desired pose: " + dPose);
-        double speedX = xController.calculate(drivetrainSubsystem.getMPoseX(), dPose.getX());
-        double speedY = yController.calculate(drivetrainSubsystem.getMPoseY(), dPose.getY());
-        //System.out.println("m_pose deg: " + DrivetrainSubsystem.m_pose.getRotation().getDegrees() % 360);
-        //System.out.println("d_pose deg: " + dPose.getRotation().getDegrees() % 360);
-        double speedRotat = turnController.calculate(drivetrainSubsystem.getMPoseDegrees(), dPose.getRotation().getDegrees());
-        //System.out.println("DDDing");
-        //System.out.println("speed rotate: " + speedRotat);
-        
-        if(xAtSetpoint() || limeLightSubsystem.getTv() == 0.0){
-            speedX = 0; 
-            //System.out.println("In x deadband.\nX controller error: " + xController.getPositionError() + " in meters.");
-        } else {
-            speedX = Math.signum(speedX)*Math.max(Constants.DRIVE_MOTOR_MIN_VOLTAGE, Math.min(Constants.DRIVE_MOTOR_MAX_VOLTAGE, Math.abs(speedX)));  
-        }
-    
-        if(yAtSetpoint() || limeLightSubsystem.getTv() == 0.0){
-            speedY = 0; 
-            //System.out.println("In y deadband.");
-        } else {
-            speedY = Math.signum(speedY)*Math.max(Constants.DRIVE_MOTOR_MIN_VOLTAGE, Math.min(Constants.DRIVE_MOTOR_MAX_VOLTAGE, Math.abs(speedY)));
-        }
-    
-        if(turnAtSetpoint() || limeLightSubsystem.getTv() == 0.0){
-            speedRotat = 0;
-            //System.out.println("At setpoint");
-        } else {
-            //System.out.println("Position error: " + turnController.getPositionError());
-            speedRotat = Math.signum(speedRotat)*Math.max(Constants.STEER_MOTOR_MIN_VOLTAGE, Math.min(Constants.STEER_MOTOR_MAX_VOLTAGE, Math.abs(speedRotat)));
-          //  System.out.println("Speed rotat after: " + speedRotat);
-        }
-    
-        drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speedX, speedY, speedRotat, drivetrainSubsystem.getPoseRotation()));  
-        double errorX = (dPose.getX() - drivetrainSubsystem.getMPoseX());
-        double errorY = (dPose.getY() - drivetrainSubsystem.getMPoseY());
-        double errorRotat = turnController.getPositionError();
-        System.out.println("Rotation error: " + errorRotat + " deadband " + turnController.getPositionTolerance());
-        System.out.println("Speed X: " + speedX + " Speed Y: " + speedY + " Speed R: " + speedRotat);
-        //System.out.println("error:" + errorX + ", " + errorY + ", " + errorRotat);
-        //System.out.println("Desired Position: " + dPose.getX() + ", " + dPose.getY());
-
-    }
-
 }
