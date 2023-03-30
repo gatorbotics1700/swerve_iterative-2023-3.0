@@ -51,13 +51,6 @@ public class Buttons {
       if(OI.m_controller_two.getRightBumperReleased()){ 
         System.out.println("xbox: single substation");
         m_mechanisms.setState(MechanismStates.SUB);
-        // System.out.println("pivot");
-        // if(armPneumaticPivot.pneumaticPivotState==PneumaticPivotStates.DOWN 
-        // || armPneumaticPivot.pneumaticPivotState==PneumaticPivotStates.OFF){
-        //   armPneumaticPivot.setState(PneumaticPivotStates.UP);
-        // } else if (armPneumaticPivot.pneumaticPivotState==PneumaticPivotStates.UP){
-        //   armPneumaticPivot.setState(PneumaticPivotStates.DOWN);
-        // }
       }
   
       if (OI.m_controller_two.getBackButton()){
@@ -85,5 +78,13 @@ public class Buttons {
       if(OI.m_controller.getXButton()){
         m_drivetrainSubsystem.pitchBalance(0.0);
       }
+
+        // System.out.println("pivot");
+        // if(armPneumaticPivot.pneumaticPivotState==PneumaticPivotStates.DOWN 
+        // || armPneumaticPivot.pneumaticPivotState==PneumaticPivotStates.OFF){
+        //   armPneumaticPivot.setState(PneumaticPivotStates.UP);
+        // } else if (armPneumaticPivot.pneumaticPivotState==PneumaticPivotStates.UP){
+        //   armPneumaticPivot.setState(PneumaticPivotStates.DOWN);
+        // }
   }
 }

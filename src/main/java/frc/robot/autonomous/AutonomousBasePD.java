@@ -5,7 +5,6 @@ import javax.swing.SwingWorker.StateValue;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.*;
 import frc.robot.Robot;
-//import frc.robot.subsystems.ArmPneumaticPivot;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.Constants;
@@ -14,7 +13,6 @@ import frc.robot.autonomous.StateWithCoordinate.AutoStates;
 import frc.robot.subsystems.PneumaticIntakeSubsystem;
 //import frc.robot.subsystems.ArmPneumaticPivot.PneumaticPivotStates;
 import frc.robot.subsystems.Mechanisms.MechanismStates;
-//import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates; TODO uncomment
 import frc.robot.subsystems.Mechanisms;
 import frc.robot.subsystems.Vision.LimeLightSubsystem;
 
@@ -44,7 +42,6 @@ public class AutonomousBasePD extends AutonomousBase{
     private double startTimeLeft;
     private double startTimeRight;
     
-    //private static ArmPneumaticPivot armPneumaticPivot = new ArmPneumaticPivot();
     private static DrivetrainSubsystem drivetrainSubsystem = Robot.m_drivetrainSubsystem;
     private static Mechanisms mechanisms = Robot.m_mechanisms;
     private static LimeLightSubsystem limeLightSubsystem = new LimeLightSubsystem();
@@ -159,9 +156,6 @@ public class AutonomousBasePD extends AutonomousBase{
                         rightNodeCounter = -1;
                     }
                 }
-            }else if(states == AutoStates.BALANCING){
-                //armPneumaticPivot.setState(PneumaticPivotStates.ACTUATING);
-                Robot.m_drivetrainSubsystem.pitchBalance(0.0);
             }else if(states == AutoStates.INTAKING){
                 if(intakeCounter >= -1){
                     startTimeIntake = System.currentTimeMillis(); 
@@ -171,15 +165,9 @@ public class AutonomousBasePD extends AutonomousBase{
                     intakeCounter = -1;
                 }
                 mechanisms.setState(MechanismStates.GROUNDPICKUP);
-                //pneumaticIntakeSubsystem.setState(PneumaticIntakeStates.ACTUATING);TODO uncomment
             }else{
                 drivetrainSubsystem.stopDrive();
-            
             }
-                
-            
-            
-                
         }
     }
 

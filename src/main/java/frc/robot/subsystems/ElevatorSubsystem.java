@@ -16,7 +16,7 @@ public class ElevatorSubsystem {
     private static final double _kD = 0.0;
     private static final int _kIzone = 0;
     private static final double _kPeakOutput = 1.0;
-    private static final double MID_HEIGHT_INCHES = 14; //TODO: tune these heights vv
+    private static final double MID_HEIGHT_INCHES = 14;
     private static final double LOW_HEIGHT_INCHES = 0;
     private static final double SHELF_HEIGHT_INCHES = 14; 
     private static final double MAX_HEIGHT = 31.5;
@@ -25,7 +25,7 @@ public class ElevatorSubsystem {
     private static final double ELEVATOR_GEAR_RATIO = 25.0;
     private static final double ELEVATOR_TICKS_PER_INCH = Constants.TICKS_PER_REV*ELEVATOR_GEAR_RATIO/ELEVATOR_SPROCKET_DIAMETER/Math.PI;
 
-    private TalonFX elevatorMotor; //TODO: CHANGE BACK
+    private TalonFX elevatorMotor; 
     private ElevatorStates elevatorState;
     
     private Gains elevatorGains = new Gains(_kP, _kI, _kD, _kIzone, _kPeakOutput);
@@ -48,7 +48,7 @@ public class ElevatorSubsystem {
         //configuring deadband
         elevatorMotor.configAllowableClosedloopError(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs); //TODO: figure out what this line does
 		/* Config Position Closed Loop gains in slot0, typically kF stays zero. */
-		elevatorMotor.config_kP(Constants.kPIDLoopIdx, elevatorGains.kP, Constants.kTimeoutMs); //TODO: ensure there is no 7 second delay
+		elevatorMotor.config_kP(Constants.kPIDLoopIdx, elevatorGains.kP, Constants.kTimeoutMs);
 		elevatorMotor.config_kI(Constants.kPIDLoopIdx, elevatorGains.kI, Constants.kTimeoutMs);
 		elevatorMotor.config_kD(Constants.kPIDLoopIdx, elevatorGains.kD, Constants.kTimeoutMs);
     }

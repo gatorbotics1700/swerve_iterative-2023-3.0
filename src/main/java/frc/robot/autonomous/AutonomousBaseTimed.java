@@ -7,12 +7,15 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 public class AutonomousBaseTimed extends AutonomousBase{
     private DrivetrainSubsystem drivetrainSubsystem = Robot.m_drivetrainSubsystem;
     private double timeStart;
-    private double timeElapsed = 0;
-    final double target = 10.0; //units in seconds
+    private double target; //units in seconds
 
+    public AutonomousBaseTimed(){
+        init();
+    }
 
     @Override
     public void init(){
+        target = 10.0; //units in seconds
         timeStart = System.currentTimeMillis(); 
     }
 

@@ -15,7 +15,7 @@ import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.AutonomousBase;
-import frc.robot.autonomous.AutonomousBaseTimed;//made changes to this on joanne's computer
+import frc.robot.autonomous.AutonomousBaseTimed;
 import frc.robot.autonomous.AutonomousBasePD;
 import frc.robot.autonomous.PDPath;
 
@@ -136,31 +136,25 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-     //m_AprilTagSubsystem.periodic();
      m_mechanisms.periodic();
      m_autoSelected.periodic();
-     
      //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
-
-     //m_drivetrainSubsystem.drive();
   }
 
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() { //BEFORE TESTING: MAKE SURE YOU HAVE EITHER DEPLOYED OR ADDED DRIVETRAIN INIT
     isBlueAlliance = allianceChooser.getSelected();
-    m_drivetrainSubsystem.init();
     m_mechanisms.init();
-    m_drivetrainSubsystem.init();
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() { 
+    m_buttons.buttonsPeriodic();
     m_mechanisms.periodic();
     m_drivetrainSubsystem.driveTeleop();
     m_drivetrainSubsystem.drive();
-    m_buttons.buttonsPeriodic();
   }
 
   /** This function is called once when the robot is disabled. */

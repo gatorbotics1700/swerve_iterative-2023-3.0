@@ -10,17 +10,22 @@ import frc.robot.Robot;
 
 public class PneumaticArmPivot { //actuate = down, retract = up
 
+    private DoubleSolenoid solenoid; 
+    public PneumaticPivotStates pneumaticPivotState;
+
+    public PneumaticArmPivot(){
+        solenoid = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 13, 10); //a little worried this being in constructor could break it
+        init();
+    }
+
     public static enum PneumaticPivotStates{
         UP,
         DOWN,
         OFF;
     }
 
-    public PneumaticPivotStates pneumaticPivotState = PneumaticPivotStates.OFF;
-
-    public static DoubleSolenoid solenoid = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 13, 10); 
-
     public void init() {
+        pneumaticPivotState = PneumaticPivotStates.OFF;
         solenoid.set(kOff);
         System.out.println("solenoid set to off");
     }
