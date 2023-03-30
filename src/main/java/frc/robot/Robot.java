@@ -3,19 +3,21 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.TimedRobot;
-import frc.robot.subsystems.*;
-import frc.robot.subsystems.ArmPneumaticPivot;
-//import frc.robot.subsystems.ArmPneumaticPivot.PneumaticPivotStates;
-// import frc.robot.subsystems.ArmPneumaticPivot.PneumaticPivotStates;
-// import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.Mechanisms;
+import frc.robot.subsystems.PneumaticArmPivot;
+import frc.robot.subsystems.PneumaticArmPivot.PneumaticPivotStates;
+import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.autonomous.*;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import frc.robot.subsystems.Vision.*;
+import frc.robot.autonomous.AutonomousBase;
+import frc.robot.autonomous.AutonomousBaseTimed;
+import frc.robot.autonomous.AutonomousBasePD;
 import frc.robot.autonomous.PDPath;
-
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -38,20 +40,9 @@ public class Robot extends TimedRobot {
   private final SendableChooser<Boolean> allianceChooser = new SendableChooser<>();
 
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
-  public static PneumaticIntakeSubsystem m_pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
-  
   public static Mechanisms m_mechanisms = new Mechanisms();
-  public static ArmTelescopingSubsystem armTelescopingSubsystem = new ArmTelescopingSubsystem();
-
-  private static LimeLightSubsystem m_limeLightSubsystem = new LimeLightSubsystem();
-  public static AprilTagSubsystem m_aprilTagSubsystem = new AprilTagSubsystem();
-  public static ArmPneumaticPivot m_ArmPneumaticPivot = new ArmPneumaticPivot();
-
   public static Buttons m_buttons = new Buttons();
-  
-  double t= 0.0;
-  boolean override = false;
-  ChassisSpeeds m_ChassisSpeeds; 
+
   double mpi = Constants.METERS_PER_INCH;
   public static Boolean isBlueAlliance = true;
   
@@ -118,9 +109,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("y odometry",m_drivetrainSubsystem.getMPoseY()/Constants.METERS_PER_INCH);
     SmartDashboard.putNumber("angle odometry",m_drivetrainSubsystem.getMPoseDegrees()%360);
     //SmartDashboard.putBoolean("Ready to Score", m_limeLightSubsystem.seeSomething());
-    //SmartDashboard.putBoolean("beam broken?", m_pneumaticIntakeSubsystem.isBeamBroken());
-   // SmartDashboard.putBoolean("cube?", m_pneumaticIntakeSubsystem.getPurple());
-    //SmartDashboard.putBoolean("cone?", m_pneumaticIntakeSubsystem.getYellow());
+    SmartDashboard.putBoolean("beam broken?", m_mechanisms.pneumaticIntakeSubsystem.isBeamBroken());
     //System.out.println("x: " + DrivetrainSubsystem.m_pose.getX() + "y: " + DrivetrainSubsystem.m_pose.getY() + "rotation: " + DrivetrainSubsystem.m_pose.getRotation().getDegrees()%360);
   }
 
@@ -147,37 +136,25 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-     //m_AprilTagSubsystem.periodic();
      m_mechanisms.periodic();
      m_autoSelected.periodic();
-     
      //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
-
-     //m_drivetrainSubsystem.drive();
   }
 
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() { //BEFORE TESTING: MAKE SURE YOU HAVE EITHER DEPLOYED OR ADDED DRIVETRAIN INIT
-    //m_autoSelected.setState(StateWithCoordinate.AutoStates.STOP);
-    //m_aprilTagSubsystem.init();
     isBlueAlliance = allianceChooser.getSelected();
     m_mechanisms.init();
-    m_drivetrainSubsystem.init();
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {
-    /*if(AprilTagSubsystem.states != AprilTagSubsystem.AprilTagSequence.CORRECTPOSITION){
-      m_drivetrainSubsystem.driveTeleop();
-    }*/
+  public void teleopPeriodic() { 
     m_buttons.buttonsPeriodic();
-    m_drivetrainSubsystem.driveTeleop(); //only sets speed; does not actually drive
+    m_mechanisms.periodic();
+    m_drivetrainSubsystem.driveTeleop();
     m_drivetrainSubsystem.drive();
-    //m_mechanisms.periodic();
-    //m_aprilTagSubsystem.periodic();
-    //m_pneumaticIntakeSubsystem.periodic();
   }
 
   /** This function is called once when the robot is disabled. */
@@ -191,48 +168,25 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-    // m_drivetrainSubsystem.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
-    //armTelescopingSubsystem.init();
+    m_drivetrainSubsystem.init();
     //m_mechanisms.init();
-
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
 
-    // solenoidOne.set(Value.kReverse);
-   // System.out.println(m_drivetrainSubsystem.m_frontLeftModule.getCANCoder().getAbsolutePosition()%360);
-    //m_mechanisms.setState(MechanismStates.HOLDING);
+    //OFFSETS
+    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0, 0, m_drivetrainSubsystem.getPoseRotation()));
+    m_drivetrainSubsystem.drive();
+    
+    //MECHANISMS
     //m_mechanisms.periodic();
-    // if(OI.m_controller.getAButtonPressed()){
-    //   armTelescopingSubsystem.setTState(TelescopingStates.MID_ARM_LENGTH);
-    // } else if (OI.m_controller.getBButtonPressed()){
-    //   System.out.println("b button --> low");
-    //   armTelescopingSubsystem.setTState(TelescopingStates.LOW_ARM_LENGTH);
-    // } else if (OI.m_controller.getXButtonPressed()){
-    //   armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
-    // } else if(OI.m_controller.getYButton()){
-    //   armTelescopingSubsystem.telescopingMotor.set(ControlMode.PercentOutput, -0.2);
-    // }
-    /*if (OI.m_controller.getLeftBumper()){
-      ArmTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0);
-    } else {
-      ArmTelescopingSubsystem.telescopingMotor.set(ControlMode.PercentOutput, 0.2);
-    }*/
-   //m_pneumaticIntakeSubsystem.solenoidOne.set(Value.kForward);
-   // armTelescopingSubsystem.periodic();
-   //m_limeLightSubsystem.setPipeline(0.0);
-    //System.out.println("Tv: " + m_limeLightSubsystem.getTv());
-     m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0.0, 0.0, m_drivetrainSubsystem.getPoseRotation()));
-     m_drivetrainSubsystem.drive();
-
-    //  autonomousBaseTimed.periodic();
-    //ArmTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0);
-    //ElevatorSubsystem.elevatorMotor.setSelectedSensorPosition(0);
-
+    //m_buttons.buttonsPeriodic();
+    //PneumaticArmPivot.solenoid.set(Value.kForward);
+    //System.out.println(m_mechanisms.armTelescopingSubsystem.getArmPosition());
+    //m_mechanisms.armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0.0);
   }
-
   /** This function is called once when the robot is first started up. */
   @Override
   public void simulationInit() {}
@@ -240,7 +194,4 @@ public class Robot extends TimedRobot {
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {}
-
-  
 }
-

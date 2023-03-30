@@ -36,6 +36,10 @@ public class DrivetrainSubsystem {
    private static final double pitchKD = 0.001; //0.001;
    private PIDController pitchController;
    private static final double MINOUTPUT = 0.1;
+   private static final double SWERVE_GEAR_RATIO = 6.75;
+   private static final double SWERVE_WHEEL_DIAMETER = 4.0;
+   private static final double SWERVE_TICKS_PER_INCH = Constants.TICKS_PER_REV*SWERVE_GEAR_RATIO/SWERVE_WHEEL_DIAMETER/Math.PI; //talonfx drive encoder
+   private static final double SWERVE_TICKS_PER_METER = SWERVE_TICKS_PER_INCH/Constants.METERS_PER_INCH;
         
 
   /**
@@ -89,64 +93,63 @@ public class DrivetrainSubsystem {
   private ChassisSpeeds m_chassisSpeeds;
 
   public DrivetrainSubsystem() {
+        m_pigeon = new PigeonIMU(DRIVETRAIN_PIGEON_ID);
         tab = Shuffleboard.getTab("Drivetrain");
 
         // We will use mk4 modules with Falcon 500s with the L2 configuration. 
         m_frontLeftModule = Mk4SwerveModuleHelper.createFalcon500(
-            // This parameter is optional, but will allow you to see the current state of the module on the dashboard.
-            tab.getLayout("Front Left Module", BuiltInLayouts.kList)
-                    .withSize(2, 4)
-                    .withPosition(0, 0),
-            // This can be any level from L1-L4 depending on the gear configuration (the levels allow different amounts of speed and torque)
-            Mk4SwerveModuleHelper.GearRatio.L2,
-            // This is the ID of the drive motor
-            FRONT_LEFT_MODULE_DRIVE_MOTOR,
-            // This is the ID of the steer motor
-            FRONT_LEFT_MODULE_STEER_MOTOR,
-            // This is the ID of the steer encoder
-            FRONT_LEFT_MODULE_STEER_ENCODER,
-            // This is how much the steer encoder is offset from true zero (In our case, zero is facing straight forward)
-            FRONT_LEFT_MODULE_STEER_OFFSET
-    );
+                // This parameter is optional, but will allow you to see the current state of the module on the dashboard.
+                tab.getLayout("Front Left Module", BuiltInLayouts.kList)
+                        .withSize(2, 4)
+                        .withPosition(0, 0),
+                // This can be any level from L1-L4 depending on the gear configuration (the levels allow different amounts of speed and torque)
+                Mk4SwerveModuleHelper.GearRatio.L2,
+                // This is the ID of the drive motor
+                FRONT_LEFT_MODULE_DRIVE_MOTOR,
+                // This is the ID of the steer motor
+                FRONT_LEFT_MODULE_STEER_MOTOR,
+                // This is the ID of the steer encoder
+                FRONT_LEFT_MODULE_STEER_ENCODER,
+                // This is how much the steer encoder is offset from true zero (In our case, zero is facing straight forward)
+                FRONT_LEFT_MODULE_STEER_OFFSET
+        );
+        
+        // We will do the same for the other modules
+        //TODO: check if we want to construct on every enable
+        m_frontRightModule = Mk4SwerveModuleHelper.createFalcon500(
+                tab.getLayout("Front Right Module", BuiltInLayouts.kList)
+                        .withSize(2, 4)
+                        .withPosition(2, 0),
+                Mk4SwerveModuleHelper.GearRatio.L2,
+                FRONT_RIGHT_MODULE_DRIVE_MOTOR,
+                FRONT_RIGHT_MODULE_STEER_MOTOR,
+                FRONT_RIGHT_MODULE_STEER_ENCODER,
+                FRONT_RIGHT_MODULE_STEER_OFFSET
+        );
+        
+        m_backLeftModule = Mk4SwerveModuleHelper.createFalcon500(
+                tab.getLayout("Back Left Module", BuiltInLayouts.kList)
+                        .withSize(2, 4)
+                        .withPosition(4, 0),
+                Mk4SwerveModuleHelper.GearRatio.L2,
+                BACK_LEFT_MODULE_DRIVE_MOTOR,
+                BACK_LEFT_MODULE_STEER_MOTOR,
+                BACK_LEFT_MODULE_STEER_ENCODER,
+                BACK_LEFT_MODULE_STEER_OFFSET
+        );
+        
+        m_backRightModule = Mk4SwerveModuleHelper.createFalcon500(
+                tab.getLayout("Back Right Module", BuiltInLayouts.kList)
+                        .withSize(2, 4)
+                        .withPosition(6, 0),
+                Mk4SwerveModuleHelper.GearRatio.L2,
+                BACK_RIGHT_MODULE_DRIVE_MOTOR,
+                BACK_RIGHT_MODULE_STEER_MOTOR,
+                BACK_RIGHT_MODULE_STEER_ENCODER,
+                BACK_RIGHT_MODULE_STEER_OFFSET
+        );
 
-    // We will do the same for the other modules
-    //TODO: check if we want to construct on every enable
-    m_frontRightModule = Mk4SwerveModuleHelper.createFalcon500(
-            tab.getLayout("Front Right Module", BuiltInLayouts.kList)
-                    .withSize(2, 4)
-                    .withPosition(2, 0),
-            Mk4SwerveModuleHelper.GearRatio.L2,
-            FRONT_RIGHT_MODULE_DRIVE_MOTOR,
-            FRONT_RIGHT_MODULE_STEER_MOTOR,
-            FRONT_RIGHT_MODULE_STEER_ENCODER,
-            FRONT_RIGHT_MODULE_STEER_OFFSET
-    );
-
-    m_backLeftModule = Mk4SwerveModuleHelper.createFalcon500(
-            tab.getLayout("Back Left Module", BuiltInLayouts.kList)
-                    .withSize(2, 4)
-                    .withPosition(4, 0),
-            Mk4SwerveModuleHelper.GearRatio.L2,
-            BACK_LEFT_MODULE_DRIVE_MOTOR,
-            BACK_LEFT_MODULE_STEER_MOTOR,
-            BACK_LEFT_MODULE_STEER_ENCODER,
-            BACK_LEFT_MODULE_STEER_OFFSET
-    );
-
-    m_backRightModule = Mk4SwerveModuleHelper.createFalcon500(
-            tab.getLayout("Back Right Module", BuiltInLayouts.kList)
-                    .withSize(2, 4)
-                    .withPosition(6, 0),
-            Mk4SwerveModuleHelper.GearRatio.L2,
-            BACK_RIGHT_MODULE_DRIVE_MOTOR,
-            BACK_RIGHT_MODULE_STEER_MOTOR,
-            BACK_RIGHT_MODULE_STEER_ENCODER,
-            BACK_RIGHT_MODULE_STEER_OFFSET
-    );
-
-    m_pigeon = new PigeonIMU(DRIVETRAIN_PIGEON_ID);
-
-    init();
+        init();
   }
 
   public void init(){
@@ -178,7 +181,7 @@ public class DrivetrainSubsystem {
                 m_backLeftModule.getSwerveModulePosition(), 
                 m_backRightModule.getSwerveModulePosition()
         }, 
-        new Pose2d(0, 0, new Rotation2d(Math.toRadians(0)))); //changed rotation from 180 to 0 on 3/21//assumes 180 degrees rotation is facing driver station
+        new Pose2d(0, 0, new Rotation2d(Math.toRadians(180)))); //assumes 180 degrees rotation is facing driver station
   }
   
   //from pigeon used for updating our odometry
@@ -194,10 +197,10 @@ public class DrivetrainSubsystem {
 
   public void resetOdometry(Pose2d start){
         SwerveModulePosition[] positionArray =  new SwerveModulePosition[] {
-                new SwerveModulePosition(m_frontLeftModule.getPosition()/Constants.TICKS_PER_METER, new Rotation2d(m_frontLeftModule.getSteerAngle())),
-                new SwerveModulePosition(m_frontRightModule.getPosition()/Constants.TICKS_PER_METER, new Rotation2d(m_frontRightModule.getSteerAngle())), 
-                new SwerveModulePosition(m_backLeftModule.getPosition()/Constants.TICKS_PER_METER, new Rotation2d(m_backLeftModule.getSteerAngle())),
-                new SwerveModulePosition(m_backRightModule.getPosition()/Constants.TICKS_PER_METER, new Rotation2d(m_backRightModule.getSteerAngle()))};
+                new SwerveModulePosition(m_frontLeftModule.getPosition()/SWERVE_TICKS_PER_METER, new Rotation2d(m_frontLeftModule.getSteerAngle())),
+                new SwerveModulePosition(m_frontRightModule.getPosition()/SWERVE_TICKS_PER_METER, new Rotation2d(m_frontRightModule.getSteerAngle())), 
+                new SwerveModulePosition(m_backLeftModule.getPosition()/SWERVE_TICKS_PER_METER, new Rotation2d(m_backLeftModule.getSteerAngle())),
+                new SwerveModulePosition(m_backRightModule.getPosition()/SWERVE_TICKS_PER_METER, new Rotation2d(m_backRightModule.getSteerAngle()))};
         m_pose = start; //TODO: taken from elsewhere, confirm why we do this
         //System.out.println("position array: " + positionArray.toString());
         //System.out.println("m_pose: " + m_pose.getX() + ", " + m_pose.getY() + ", " + m_pose.getRotation().getDegrees());
@@ -237,10 +240,10 @@ public class DrivetrainSubsystem {
         //System.out.println("pose before update: " + m_pose.getX()/TICKS_PER_INCH + " and y: " + m_pose.getY()/TICKS_PER_INCH);
         //TODO: check getSteerAngle() is correct and that we shouldn't be getting from cancoder
         SwerveModulePosition[] array =  {
-                new SwerveModulePosition(m_frontLeftModule.getPosition()/Constants.TICKS_PER_METER, new Rotation2d(m_frontLeftModule.getSteerAngle())), //from steer motor
-                new SwerveModulePosition(m_frontRightModule.getPosition()/Constants.TICKS_PER_METER, new Rotation2d(m_frontRightModule.getSteerAngle())), 
-                new SwerveModulePosition(m_backLeftModule.getPosition()/Constants.TICKS_PER_METER, new Rotation2d(m_backLeftModule.getSteerAngle())),
-                new SwerveModulePosition(m_backRightModule.getPosition()/Constants.TICKS_PER_METER, new Rotation2d(m_backRightModule.getSteerAngle()))
+                new SwerveModulePosition(m_frontLeftModule.getPosition()/SWERVE_TICKS_PER_METER, new Rotation2d(m_frontLeftModule.getSteerAngle())), //from steer motor
+                new SwerveModulePosition(m_frontRightModule.getPosition()/SWERVE_TICKS_PER_METER, new Rotation2d(m_frontRightModule.getSteerAngle())), 
+                new SwerveModulePosition(m_backLeftModule.getPosition()/SWERVE_TICKS_PER_METER, new Rotation2d(m_backLeftModule.getSteerAngle())),
+                new SwerveModulePosition(m_backRightModule.getPosition()/SWERVE_TICKS_PER_METER, new Rotation2d(m_backRightModule.getSteerAngle()))
         };
         m_pose = m_odometry.update(getGyroscopeRotation(),array); 
 
@@ -285,25 +288,22 @@ public class DrivetrainSubsystem {
         setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.0, 0.0, 0.0, getPoseRotation()));
         drive();
    }
+
    //TODO: look through this function
    public void pitchBalance(double pitchSetpoint){
         System.out.println("pitch: " + m_pigeon.getPitch());
-        double pitchAfterCorrection = m_pigeon.getPitch();
-        System.out.println("pitch after correcting for universalPitch: " + pitchAfterCorrection);
+        double currPitch = m_pigeon.getPitch();
         pitchController.setSetpoint(pitchSetpoint); 
-        double output = pitchController.calculate(pitchAfterCorrection, pitchSetpoint);
+        double output = pitchController.calculate(currPitch, pitchSetpoint);
         System.out.println("output: " + output); 
-        setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(output, 0, 0, getGyroscopeRotation()));
-        drive();
         
-        if (Math.abs(pitchAfterCorrection - pitchSetpoint) < 1.0){
-            setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0,getGyroscopeRotation()));
-            //velocityPD(0);
+        if (Math.abs(currPitch - pitchSetpoint) < 1.0){
+            setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0,getPoseRotation()));
         } else{
-                if(Math.abs(output) < MINOUTPUT){
-                   output = Math.signum(output) * MINOUTPUT;
-                }
+                output = Math.signum(output) * Math.max(output, MINOUTPUT);
+                setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(output, 0, 0, getPoseRotation()));
         }
+        drive();
     }
 
     public double getMPoseX(){
