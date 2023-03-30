@@ -8,5 +8,5 @@ public interface SteerController {
 
     double getStateAngle();
 
-    CANCoder getCANCoderSC();
+    double getAbsoluteAngleSC();
 }

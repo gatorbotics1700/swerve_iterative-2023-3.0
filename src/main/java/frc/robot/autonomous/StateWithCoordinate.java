@@ -1,5 +1,7 @@
 package frc.robot.autonomous;
 
+import java.lang.Thread.State;
+
 import edu.wpi.first.math.geometry.Pose2d;
 
 public class StateWithCoordinate{
@@ -18,7 +20,6 @@ public class StateWithCoordinate{
     }
 
     public static enum AutoStates{
-        
         FIRST,
         DRIVE,
         STOP,
@@ -29,8 +30,7 @@ public class StateWithCoordinate{
         INTAKING,
         OUTTAKING,
         BALANCING,
-        LEFTPICKUP,
-        RIGHTPICKUP;
+        PICKUP;
     } 
 
 

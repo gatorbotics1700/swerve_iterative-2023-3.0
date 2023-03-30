@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.controller.PIDController;
+import com.ctre.phoenix.sensors.CANCoder;
 import frc.robot.Robot;
 
 
@@ -31,7 +32,7 @@ import frc.robot.Constants;
 import frc.robot.OI;
 
 public class DrivetrainSubsystem {
-   private static final double pitchKP = 0.035; //0.025;
+   private static final double pitchKP = 0.055; //0.025; 0.035;
    private static final double pitchKI = 0.0;
    private static final double pitchKD = 0.001; //0.001;
    private PIDController pitchController;
@@ -320,6 +321,10 @@ public class DrivetrainSubsystem {
 
     public Pose2d getMPose(){ //TODO: do we need this?
         return m_pose;
+    }
+
+    public double getPitch(){
+        return m_pigeon.getPitch();
     }
    
 }
