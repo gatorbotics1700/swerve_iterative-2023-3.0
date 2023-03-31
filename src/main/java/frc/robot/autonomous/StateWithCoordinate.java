@@ -29,7 +29,7 @@ public class StateWithCoordinate{
         FIRSTHIGHNODE,
         INTAKING,
         OUTTAKING,
-        BALANCING,
+        ENGAGE,
         PICKUP;
     } 
 

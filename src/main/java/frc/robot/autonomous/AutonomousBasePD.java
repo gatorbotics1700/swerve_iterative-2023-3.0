@@ -103,7 +103,6 @@ public class AutonomousBasePD extends AutonomousBase{
                     isFirst = true;
                 }
             } 
-            
         }else if(states == AutoStates.LOWNODE){
             System.out.println("low node");
             mechanisms.setState(MechanismStates.LOW_NODE);
@@ -116,7 +115,10 @@ public class AutonomousBasePD extends AutonomousBase{
                 i++;
                 isFirst = true;
             }
-        }else if(states == AutoStates.PICKUP){ // TODO: are left and right pickup supposed to be the same? if so, can we have just one state?
+        } else if(states == AutoStates.ENGAGE){
+            AutonomousBaseEngage autoEngage = new AutonomousBaseEngage(0);
+            autoEngage.periodic();
+        } else if(states == AutoStates.PICKUP){ // TODO: are left and right pickup supposed to be the same? if so, can we have just one state?
             System.out.println("left pickup");
             if(isFirst){
                 startTime = System.currentTimeMillis();
@@ -132,7 +134,7 @@ public class AutonomousBasePD extends AutonomousBase{
                 i++;
                 isFirst = true;
             }
-        }else if(states == AutoStates.INTAKING){
+        } else if(states == AutoStates.INTAKING){
             if(isFirst){
                 startTime = System.currentTimeMillis(); 
                 isFirst = false;
@@ -143,7 +145,7 @@ public class AutonomousBasePD extends AutonomousBase{
             }
             mechanisms.setState(MechanismStates.GROUNDPICKUP);
             //pneumaticIntakeSubsystem.setState(PneumaticIntakeStates.ACTUATING);TODO uncomment
-        }else{
+        } else {
             drivetrainSubsystem.stopDrive();
         } 
         drivetrainSubsystem.drive(); 
