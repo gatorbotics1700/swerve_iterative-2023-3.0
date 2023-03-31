@@ -83,8 +83,15 @@ public class AutonomousBaseEngage extends AutonomousBase{
         } else if(autoEngageState == AutoEngageStates.LOW_NODE){
             mechanisms.setState(MechanismStates.LOW_NODE);
             if(mechanisms.isDoneLow()){
-                firstTime = true; 
-                setState(AutoEngageStates.DRIVE);
+                if(firstTime == true){
+                    firstTime = false;
+                    startingTime = System.currentTimeMillis();
+                }
+                mechanisms.pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeStates.RELEASING);
+                if (System.currentTimeMillis()-startingTime>=500){ //time to outtake before moving on
+                    setState(AutoEngageStates.DRIVE);
+                    mechanisms.setState(MechanismStates.HOLDING);
+                }
             }
         } else if(autoEngageState == AutoEngageStates.DRIVE){
             //System.out.println("IN DRIVING FOR AUTO TIMED");
