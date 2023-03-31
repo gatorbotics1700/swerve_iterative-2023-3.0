@@ -21,7 +21,7 @@ public class ArmTelescopingSubsystem {
     private static final int DEADBAND = 15000;
     private static final int MAX_TICKS = 231686 + 34900; 
     
-    private TalonFX telescopingMotor;
+    public TalonFX telescopingMotor;
     private static final double _kP = 0.35;
     private static final double _kI = 0;
     private static final double _kD = 0;

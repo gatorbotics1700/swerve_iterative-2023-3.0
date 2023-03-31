@@ -52,7 +52,7 @@ public class PDPath {
                 new Pose2d(STARTING_X, 0.0, new Rotation2d(Math.toRadians(180.0))), 
                 new StateWithCoordinate[]{
                 new StateWithCoordinate(AutoStates.FIRST),
-                new StateWithCoordinate(AutoStates.FIRSTHIGHNODE),
+                new StateWithCoordinate(AutoStates.MIDNODE),
                 new StateWithCoordinate(AutoStates.STOP)
                 }
             );
@@ -79,7 +79,7 @@ public class PDPath {
                 new Pose2d(STARTING_X * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))), 
                 new StateWithCoordinate[]{
                 new StateWithCoordinate(AutoStates.FIRST),
-                new StateWithCoordinate(AutoStates.FIRSTHIGHNODE),
+                new StateWithCoordinate(AutoStates.MIDNODE),
                 new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(225 * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0)))),
                 new StateWithCoordinate(AutoStates.STOP)
                 }
@@ -89,7 +89,7 @@ public class PDPath {
                 new Pose2d(STARTING_X * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))), 
                 new StateWithCoordinate[]{
                     new StateWithCoordinate(AutoStates.FIRST),
-                    new StateWithCoordinate(AutoStates.FIRSTHIGHNODE),
+                    new StateWithCoordinate(AutoStates.MIDNODE),
                     new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(225 * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0)))),
                     new StateWithCoordinate(AutoStates.STOP)
                 }

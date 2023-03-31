@@ -32,11 +32,11 @@ import frc.robot.Constants;
 import frc.robot.OI;
 
 public class DrivetrainSubsystem {
-   private static final double pitchKP = 0.055; //0.025; 0.035;
+   private static final double pitchKP = 0.035; //0.025; 0.035;
    private static final double pitchKI = 0.0;
-   private static final double pitchKD = 0.001; //0.001;
+   private static final double pitchKD = 0.005; //0.001;
    private PIDController pitchController;
-   private static final double MINOUTPUT = 0.1;
+   private static final double MINOUTPUT = 0.2;
    private static final double SWERVE_GEAR_RATIO = 6.75;
    private static final double SWERVE_WHEEL_DIAMETER = 4.0;
    private static final double SWERVE_TICKS_PER_INCH = Constants.TICKS_PER_REV*SWERVE_GEAR_RATIO/SWERVE_WHEEL_DIAMETER/Math.PI; //talonfx drive encoder
@@ -295,15 +295,16 @@ public class DrivetrainSubsystem {
         System.out.println("pitch: " + m_pigeon.getPitch());
         double currPitch = m_pigeon.getPitch();
         pitchController.setSetpoint(pitchSetpoint); 
-        double output = pitchController.calculate(currPitch, pitchSetpoint);
-        System.out.println("output: " + output); 
+        double output = pitchController.calculate(currPitch, pitchSetpoint); 
         
-        if (Math.abs(currPitch - pitchSetpoint) < 1.0){
+        if (Math.abs(currPitch - pitchSetpoint) < 2.5){
+            System.out.println("BALANCED, SETTING PITCH SPEED TO ZERO");
             setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0,getPoseRotation()));
         } else{
-                output = Math.signum(output) * Math.max(output, MINOUTPUT);
-                setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(output, 0, 0, getPoseRotation()));
+            output = -Math.signum(output) * Math.max(Math.abs(output), MINOUTPUT);
+            setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(output, 0, 0, getPoseRotation()));
         }
+        System.out.println("output: " + output);
         drive();
     }
 

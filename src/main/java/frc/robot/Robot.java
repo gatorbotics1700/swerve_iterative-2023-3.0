@@ -84,8 +84,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     // System.out.println(allianceChooser.getSelected());
-    isBlueAlliance = allianceChooser.getSelected();
-    SmartDashboard.putBoolean("Alliance: ", isBlueAlliance); 
     SmartDashboard.putNumber("x odometry",m_drivetrainSubsystem.getMPoseX()/Constants.METERS_PER_INCH);
     SmartDashboard.putNumber("y odometry",m_drivetrainSubsystem.getMPoseY()/Constants.METERS_PER_INCH);
     SmartDashboard.putNumber("angle odometry",m_drivetrainSubsystem.getMPoseDegrees()%360);
@@ -106,12 +104,13 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    System.out.println("Auto INIT");
     m_mechanisms.init();
     m_drivetrainSubsystem.init();
     System.out.println("current pose: " + m_drivetrainSubsystem.getMPoseX() + " , " + m_drivetrainSubsystem.getMPoseY());
     PDPath.AUTO_OPTIONS selected = auto_chooser.getSelected();
     m_auto = PDPath.constructAuto(selected);
-    m_auto.init();
+    //m_auto.init();
   }
 
   /** This function is called periodically during autonomous. */
@@ -159,17 +158,19 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-
+    //m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.4, 0, 0, m_drivetrainSubsystem.getPoseRotation()));
+    //m_drivetrainSubsystem.pitchBalace(0.0);
+    
     //OFFSETS
-    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0, 0, m_drivetrainSubsystem.getPoseRotation()));
-    m_drivetrainSubsystem.drive();
+    //m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0, 0, m_drivetrainSubsystem.getPoseRotation()));
+    //m_drivetrainSubsystem.drive();
     
     //MECHANISMS
-    //m_mechanisms.periodic();
-    //m_buttons.buttonsPeriodic();
+    m_mechanisms.periodic();
+    m_buttons.buttonsPeriodic();
     //PneumaticArmPivot.solenoid.set(Value.kForward);
     //System.out.println(m_mechanisms.armTelescopingSubsystem.getArmPosition());
-    //m_mechanisms.armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0.0);
+    m_mechanisms.armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0.0);
   }
   /** This function is called once when the robot is first started up. */
   @Override

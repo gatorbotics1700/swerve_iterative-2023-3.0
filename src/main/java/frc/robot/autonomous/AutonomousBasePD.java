@@ -13,6 +13,7 @@ import frc.robot.autonomous.StateWithCoordinate;
 import frc.robot.autonomous.StateWithCoordinate.AutoStates;
 import frc.robot.subsystems.PneumaticIntakeSubsystem;
 import frc.robot.subsystems.Mechanisms.MechanismStates;
+import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
 import frc.robot.subsystems.Mechanisms;
 
 public class AutonomousBasePD extends AutonomousBase{
@@ -79,11 +80,7 @@ public class AutonomousBasePD extends AutonomousBase{
             i++;  
             System.out.println("moving on to " + stateSequence[i]);
             return;
-        } else if (states == AutoStates.FIRSTHIGHNODE){ //WE HAVE THIS BECAUSE OF APRILTAGS
-            i++;
-            return;
         }
-        
         //System.out.println("pose in auto: " + DrivetrainSubsystem.m_pose.getX()/Constants.METERS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getY()/Constants.METERS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getRotation().getDegrees());
         if (states == AutoStates.DRIVE){
             driveDesiredDistance(stateSequence[i].coordinate);
@@ -91,20 +88,22 @@ public class AutonomousBasePD extends AutonomousBase{
                 i++;  
                 System.out.println("moving on to " + stateSequence[i]);
             }
-        }else if(states == AutoStates.HIGHNODE){ 
-            i++;
         }else if(states == AutoStates.MIDNODE){
             System.out.println("mid node");
             mechanisms.setState(MechanismStates.MID_NODE);
-            if(isFirst){
-                startTime = System.currentTimeMillis();
-                isFirst = false;
-            }
             // If we never get to mid it might be because the timeout is too short
-            if(mechanisms.isDoneMid()==true || System.currentTimeMillis()-startTime>=500){
+            if(mechanisms.isDoneMid()==true){
+                if(isFirst){
+                    startTime = System.currentTimeMillis();
+                    isFirst = false;
+                }
+                mechanisms.pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeStates.RELEASING);
+                if (System.currentTimeMillis()-startTime>=500){ //time to outtake before moving on
                     i++;
                     isFirst = true;
-            }
+                }
+            } 
+            
         }else if(states == AutoStates.LOWNODE){
             System.out.println("low node");
             mechanisms.setState(MechanismStates.LOW_NODE);
