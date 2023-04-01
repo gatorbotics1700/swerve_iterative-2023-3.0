@@ -68,6 +68,7 @@ public class Robot extends TimedRobot {
     auto_chooser.addOption("lowTimedEngaged",PDPath.AUTO_OPTIONS.LOWTIMEDENGAGED);
     auto_chooser.addOption("midTimedEngaged",PDPath.AUTO_OPTIONS.MIDTIMEDENGAGED);
     auto_chooser.addOption("driveTimedEngaged",PDPath.AUTO_OPTIONS.DRIVETIMEDENGAGED);
+    auto_chooser.addOption("hi", PDPath.AUTO_OPTIONS.PLACE_LEAVE_ENGAGE);
     auto_chooser.addOption("timed", PDPath.AUTO_OPTIONS.TIMED);
     SmartDashboard.putData("Auto choices", auto_chooser);
    
@@ -162,8 +163,8 @@ public class Robot extends TimedRobot {
     //m_drivetrainSubsystem.pitchBalace(0.0);
     
     //OFFSETS
-    //m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0, 0, m_drivetrainSubsystem.getPoseRotation()));
-    //m_drivetrainSubsystem.drive();
+    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0, 0, m_drivetrainSubsystem.getPoseRotation()));
+    m_drivetrainSubsystem.drive();
     
     //MECHANISMS
     m_mechanisms.periodic();

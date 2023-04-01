@@ -77,7 +77,7 @@ public class AutonomousBaseEngage extends AutonomousBase{
                     startingTime = System.currentTimeMillis();
                 }
                 mechanisms.pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeStates.RELEASING);
-                if (System.currentTimeMillis()-startingTime>=500){ //time to outtake before moving on
+                if (System.currentTimeMillis()-startingTime>=1000){ //time to outtake before moving on
                     setState(AutoEngageStates.DRIVE);
                     mechanisms.setState(MechanismStates.HOLDING);
                 }
@@ -91,7 +91,7 @@ public class AutonomousBaseEngage extends AutonomousBase{
                     startingTime = System.currentTimeMillis();
                 }
                 mechanisms.pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeStates.RELEASING);
-                if (System.currentTimeMillis()-startingTime>=500){ //time to outtake before moving on
+                if (System.currentTimeMillis()-startingTime>=1000){ //time to outtake before moving on
                     setState(AutoEngageStates.DRIVE);
                     mechanisms.setState(MechanismStates.HOLDING);
                 }
@@ -105,6 +105,7 @@ public class AutonomousBaseEngage extends AutonomousBase{
             }
             if(/*startingTime + desireTime >= System.currentTimeMillis() ||*/ Math.abs(drivetrainSubsystem.getPitch()) > desiredAngle){
                 setState(AutoEngageStates.ENGAGE);
+                firstTime = true;
             } else{
                 drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.8, 0, 0, drivetrainSubsystem.getPoseRotation()));
             }
@@ -118,7 +119,7 @@ public class AutonomousBaseEngage extends AutonomousBase{
             if(/*startingTime + desireTime >= System.currentTimeMillis() ||*/ Math.abs(drivetrainSubsystem.getPitch()) > desiredAngle){
                 setState(AutoEngageStates.ENGAGE);
             } else{
-                drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(-0.8, 0, 0, drivetrainSubsystem.getPoseRotation()));
+                drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(-0.5, 0, 0, drivetrainSubsystem.getPoseRotation()));
             }
         } else if(autoEngageState == AutoEngageStates.ENGAGE){
             drivetrainSubsystem.pitchBalance(0.0);

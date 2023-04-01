@@ -47,7 +47,7 @@ public class ArmTelescopingSubsystem {
     public void init(){
         System.out.println("telescoping init!! :)");
         tState = TelescopingStates.RETRACTED;
-        telescopingMotor.setInverted(true); //forward = clockwise, changed on 2/9
+        telescopingMotor.setInverted(false); //forward = clockwise, changed on 2/9
         telescopingMotor.setNeutralMode(NeutralMode.Brake);
 
         // telescopingMotor.selectProfileSlot(0, 0); //TODO: find out what this does
@@ -70,6 +70,7 @@ public class ArmTelescopingSubsystem {
             telescopeDeadband(SHELFARMTICKS);
         } else if (tState == TelescopingStates.MID_ARM_LENGTH){
             telescopingMotor.set(ControlMode.Position, MIDARMTICKS); 
+            System.out.println("vel" + telescopingMotor.getSelectedSensorVelocity(0));
             telescopeDeadband(MIDARMTICKS);
         } else if (tState == TelescopingStates.SINGLE_SUBSTATION){
             telescopingMotor.set(ControlMode.Position, SUBTICKS);

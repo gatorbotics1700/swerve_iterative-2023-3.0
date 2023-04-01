@@ -116,8 +116,11 @@ public class AutonomousBasePD extends AutonomousBase{
                 isFirst = true;
             }
         } else if(states == AutoStates.ENGAGE){
-            AutonomousBaseEngage autoEngage = new AutonomousBaseEngage(0);
-            autoEngage.periodic();
+            if(isFirst){
+                isFirst = false;
+                AutonomousBaseEngage autoEngage = new AutonomousBaseEngage(3);
+            }
+            //autoEngage.periodic();
         } else if(states == AutoStates.PICKUP){ // TODO: are left and right pickup supposed to be the same? if so, can we have just one state?
             System.out.println("left pickup");
             if(isFirst){

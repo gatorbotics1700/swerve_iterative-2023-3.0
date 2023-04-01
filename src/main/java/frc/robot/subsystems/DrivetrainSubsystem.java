@@ -32,9 +32,9 @@ import frc.robot.Constants;
 import frc.robot.OI;
 
 public class DrivetrainSubsystem {
-   private static final double pitchKP = 0.035; //0.025; 0.035;
+   private static final double pitchKP = 0.025; //0.025; 0.035;
    private static final double pitchKI = 0.0;
-   private static final double pitchKD = 0.005; //0.001;
+   private static final double pitchKD = 0.001; //0.001;
    private PIDController pitchController;
    private static final double MINOUTPUT = 0.2;
    private static final double SWERVE_GEAR_RATIO = 6.75;
