@@ -25,7 +25,7 @@ public class ElevatorSubsystem {
     private static final double ELEVATOR_GEAR_RATIO = 25.0;
     private static final double ELEVATOR_TICKS_PER_INCH = Constants.TICKS_PER_REV*ELEVATOR_GEAR_RATIO/ELEVATOR_SPROCKET_DIAMETER/Math.PI;
 
-    private TalonFX elevatorMotor; 
+    public TalonFX elevatorMotor; 
     private ElevatorStates elevatorState;
     
     private Gains elevatorGains = new Gains(_kP, _kI, _kD, _kIzone, _kPeakOutput);
@@ -89,8 +89,8 @@ public class ElevatorSubsystem {
     }
 
     private void manualElevator(){
-        if(elevatorMotor.getSelectedSensorPosition() <= MAX_HEIGHT * ELEVATOR_TICKS_PER_INCH &&
-           elevatorMotor.getSelectedSensorPosition() >= 0){
+        if(elevatorMotor.getSelectedSensorPosition() <= MAX_HEIGHT * ELEVATOR_TICKS_PER_INCH /*&&
+           (elevatorMotor.getSelectedSensorPosition() >= 0*/){
             if(OI.getRightAxis() > 0.2){
                 elevatorMotor.set(ControlMode.PercentOutput, 0.2);
             }else if(OI.getRightAxis() < -0.2) {

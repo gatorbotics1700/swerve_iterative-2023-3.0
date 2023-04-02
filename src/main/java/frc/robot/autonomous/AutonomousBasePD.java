@@ -111,9 +111,12 @@ public class AutonomousBasePD extends AutonomousBase{
                 isFirst = false;
             }
             // If we never get to low it might be because the timeout is too short
-            if(mechanisms.isDoneLow()==true || System.currentTimeMillis()-startTime>=500){
-                i++;
-                isFirst = true;
+            if(mechanisms.isDoneLow()==true){
+                mechanisms.pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeStates.RELEASING);
+                if (System.currentTimeMillis()-startTime>=500){
+                    i++;
+                    isFirst = true;
+                }
             }
         } else if(states == AutoStates.ENGAGE){
             if(isFirst){

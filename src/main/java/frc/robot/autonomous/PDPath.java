@@ -53,7 +53,7 @@ public class PDPath {
                 new Pose2d(STARTING_X, 0.0, new Rotation2d(Math.toRadians(180.0))), 
                 new StateWithCoordinate[]{
                 new StateWithCoordinate(AutoStates.FIRST),
-                new StateWithCoordinate(AutoStates.MIDNODE),
+                new StateWithCoordinate(AutoStates.LOWNODE),
                 new StateWithCoordinate(AutoStates.STOP)
                 }
             );

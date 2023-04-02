@@ -172,6 +172,7 @@ public class Robot extends TimedRobot {
     //PneumaticArmPivot.solenoid.set(Value.kForward);
     //System.out.println(m_mechanisms.armTelescopingSubsystem.getArmPosition());
     m_mechanisms.armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0.0);
+    m_mechanisms.elevatorSubsystem.elevatorMotor.setSelectedSensorPosition(0.0);
   }
   /** This function is called once when the robot is first started up. */
   @Override
