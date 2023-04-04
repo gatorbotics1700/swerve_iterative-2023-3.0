@@ -4,15 +4,18 @@ import frc.robot.subsystems.Mechanisms;
 import frc.robot.subsystems.Mechanisms.MechanismStates;
 import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
 import frc.robot.subsystems.PneumaticIntakeSubsystem;
+import frc.robot.subsystems.Limelight.VisionStates;
 import frc.robot.subsystems.PneumaticArmPivot.PneumaticPivotStates;
 import frc.robot.subsystems.PneumaticArmPivot;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.Limelight;
 
 public class Buttons {
     
   private DrivetrainSubsystem m_drivetrainSubsystem = Robot.m_drivetrainSubsystem;
   private Mechanisms m_mechanisms = Robot.m_mechanisms;
   private PneumaticIntakeSubsystem pneumaticIntakeSubsystem = m_mechanisms.pneumaticIntakeSubsystem;
+  private Limelight limelight = Robot.m_limelight;
   //private PneumaticArmPivot armPneumaticPivot = m_mechanisms.armPneumaticPivot;
   
   public void buttonsPeriodic(){
@@ -77,6 +80,14 @@ public class Buttons {
     
       if(OI.m_controller.getXButton()){
         m_drivetrainSubsystem.pitchBalance(0.0);
+      }
+
+      if(OI.m_controller.getLeftBumperReleased()){
+        limelight.setState(VisionStates.DETECT);
+      }
+
+      if(OI.m_controller.getRightBumperReleased()){
+        limelight.setState(VisionStates.STOP);
       }
 
         // System.out.println("pivot");

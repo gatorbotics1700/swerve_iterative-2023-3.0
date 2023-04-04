@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Mechanisms;
 import frc.robot.subsystems.PneumaticArmPivot;
 import frc.robot.subsystems.PneumaticArmPivot.PneumaticPivotStates;
@@ -42,6 +43,7 @@ public class Robot extends TimedRobot {
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   public static Mechanisms m_mechanisms = new Mechanisms();
   public static Buttons m_buttons = new Buttons();
+  public static Limelight m_limelight = new Limelight();
 
   double mpi = Constants.METERS_PER_INCH;
   public static Boolean isBlueAlliance = true;
@@ -128,7 +130,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() { //BEFORE TESTING: MAKE SURE YOU HAVE EITHER DEPLOYED OR ADDED DRIVETRAIN INIT
     isBlueAlliance = allianceChooser.getSelected();
-    m_mechanisms.init(); 
+    m_mechanisms.init();
+    m_limelight.init();
     //m_drivetrainSubsystem.init();
   }
 
@@ -137,6 +140,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() { 
     m_buttons.buttonsPeriodic();
     m_mechanisms.periodic();
+    m_limelight.periodic();
     m_drivetrainSubsystem.driveTeleop();
     m_drivetrainSubsystem.drive();
   }
