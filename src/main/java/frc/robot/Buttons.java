@@ -7,6 +7,7 @@ import frc.robot.subsystems.PneumaticIntakeSubsystem;
 import frc.robot.subsystems.Limelight.VisionStates;
 import frc.robot.subsystems.PneumaticArmPivot.PneumaticPivotStates;
 import frc.robot.subsystems.PneumaticArmPivot;
+import frc.robot.subsystems.BuddyClimb;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.Limelight;
 
@@ -16,6 +17,7 @@ public class Buttons {
   private Mechanisms m_mechanisms = Robot.m_mechanisms;
   private PneumaticIntakeSubsystem pneumaticIntakeSubsystem = m_mechanisms.pneumaticIntakeSubsystem;
   private Limelight limelight = Robot.m_limelight;
+  private BuddyClimb buddyClimb = Robot.m_buddyClimb; 
   //private PneumaticArmPivot armPneumaticPivot = m_mechanisms.armPneumaticPivot;
   
   public void buttonsPeriodic(){
@@ -88,6 +90,16 @@ public class Buttons {
 
       if(OI.m_controller.getRightBumperReleased()){
         limelight.setState(VisionStates.STOP);
+      }
+
+      if(OI.m_controller_two.getAButtonReleased()){ 
+        System.out.println("Kangaroo CLIMBB- g'day mate!");
+        if(buddyClimb.pneumaticClimbState==BuddyClimb.PneumaticClimbStates.DOWN /*no idea if down is right */ || 
+           buddyClimb.pneumaticClimbState==BuddyClimb.PneumaticClimbStates.OFF){
+          buddyClimb.setState(BuddyClimb.PneumaticClimbStates.UP);
+        } else if(buddyClimb.pneumaticClimbState==BuddyClimb.PneumaticClimbStates.UP){
+          buddyClimb.setState(BuddyClimb.PneumaticClimbStates.DOWN); 
+        }
       }
 
         // System.out.println("pivot");

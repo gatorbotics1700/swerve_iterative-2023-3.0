@@ -19,6 +19,7 @@ import frc.robot.autonomous.AutonomousBase;
 import frc.robot.autonomous.AutonomousBaseTimed;
 import frc.robot.autonomous.AutonomousBasePD;
 import frc.robot.autonomous.PDPath;
+import frc.robot.subsystems.BuddyClimb;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -44,6 +45,7 @@ public class Robot extends TimedRobot {
   public static Mechanisms m_mechanisms = new Mechanisms();
   public static Buttons m_buttons = new Buttons();
   public static Limelight m_limelight = new Limelight();
+  public static BuddyClimb m_buddyClimb = new BuddyClimb(); 
 
   double mpi = Constants.METERS_PER_INCH;
   public static Boolean isBlueAlliance = true;
@@ -132,6 +134,7 @@ public class Robot extends TimedRobot {
     isBlueAlliance = allianceChooser.getSelected();
     m_mechanisms.init();
     m_limelight.init();
+    m_buddyClimb.init(); 
     //m_drivetrainSubsystem.init();
   }
 
@@ -141,6 +144,7 @@ public class Robot extends TimedRobot {
     m_buttons.buttonsPeriodic();
     m_mechanisms.periodic();
     m_limelight.periodic();
+    m_buddyClimb.periodic();
     m_drivetrainSubsystem.driveTeleop();
     m_drivetrainSubsystem.drive();
   }
