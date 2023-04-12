@@ -18,6 +18,7 @@ public class Mechanisms {
         SHELF,
         SUB,
         GROUNDPICKUP,
+        AUTO_STARTING,
         MANUAL_ELEVATOR,
         MANUAL_TELESCOPE,
         HOLDING;
@@ -68,7 +69,12 @@ public class Mechanisms {
             if (armTelescopingSubsystem.isAtSub()){
                 elevatorSubsystem.setState(ElevatorStates.ZERO);
             }
-        } /*else if(mechState == MechanismStates.GROUNDPICKUP){
+        } else if(mechState == MechanismStates.AUTO_STARTING){
+            elevatorSubsystem.setState(ElevatorStates.AUTO_HEIGHT);
+            armPneumaticPivot.setState(PneumaticPivotStates.UP);
+            armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
+        }
+        /*else if(mechState == MechanismStates.GROUNDPICKUP){
             armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);
             if(armTelescopingSubsystem.isAtRetracted()){
              elevatorSubsystem.setState(ElevatorStates.ZERO);

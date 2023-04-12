@@ -33,12 +33,10 @@ public final class Constants {
 
     //green
     
-    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(/*211.37 + 45*/212.08007);//306.123046875-90); //194.41
-    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(201.09375);//287.22656250000006-45); //305.15625
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(121.8164);//123.48632812500001);//23.73+90
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(20.654);//14.238281250000002+90);//122.87
-    
-    //public static final double offset = Robot.test.getDouble(DRIVETRAIN_PIGEON_ID); 
+    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(34.0137 + 180);
+    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(18.8086 + 180);
+    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(308.408203125 - 180);
+    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(196.435546875 - 180);
     
     //swervo
     /*public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(164.00390625);   //281.07421875-90 //279.316-270
@@ -47,20 +45,20 @@ public final class Constants {
     public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(52.525390625);//343.828125-90 //250.183*/
 
     //even can ids are drive, odd can ids are steer
-    public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 20;
-    public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 21; 
+    public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 21;
+    public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 20; 
     public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 2;
     
-    public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 22; 
-    public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 23; 
+    public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 23; 
+    public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 22; 
     public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 3; 
 
-    public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 26; 
-    public static final int BACK_LEFT_MODULE_STEER_MOTOR = 27; 
+    public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 27; 
+    public static final int BACK_LEFT_MODULE_STEER_MOTOR = 26; 
     public static final int BACK_LEFT_MODULE_STEER_ENCODER = 5; 
 
-    public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 24; 
-    public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 25; 
+    public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 25; 
+    public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 24; 
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 4; 
 
     public static final double DRIVE_MOTOR_MIN_VOLTAGE = 0.19;

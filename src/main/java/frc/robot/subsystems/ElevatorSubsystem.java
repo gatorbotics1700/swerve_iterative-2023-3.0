@@ -11,15 +11,16 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 //10 in on moving mechanism thing
 
 public class ElevatorSubsystem {
-    private static final double _kP = 0.15;
+    private static final double _kP = 0.2;//0.15;
     private static final double _kI = 0.0;
     private static final double _kD = 0.0;
     private static final int _kIzone = 0;
     private static final double _kPeakOutput = 1.0;
-    private static final double MID_HEIGHT_INCHES = 14;
+    private static final double MID_HEIGHT_INCHES = 30;
     private static final double LOW_HEIGHT_INCHES = 0;
-    private static final double SHELF_HEIGHT_INCHES = 14; 
-    private static final double MAX_HEIGHT = 31.5;
+    private static final double SHELF_HEIGHT_INCHES = 30; 
+    private static final double AUTO_HEIGHT_TICKS = 309563.0;
+    private static final double MAX_HEIGHT_INCHES = 31.5;
 
     private static final double ELEVATOR_SPROCKET_DIAMETER = 1.28;
     private static final double ELEVATOR_GEAR_RATIO = 25.0;
@@ -32,7 +33,7 @@ public class ElevatorSubsystem {
     private static final double DEADBAND = 5000; //15000;
 
     public static enum ElevatorStates{
-        ZERO, LOW_ELEVATOR_HEIGHT, MID_ELEVATOR_HEIGHT, SHELF_ELEVATOR_HEIGHT, MANUAL, STOPPED; 
+        ZERO, LOW_ELEVATOR_HEIGHT, MID_ELEVATOR_HEIGHT, SHELF_ELEVATOR_HEIGHT, AUTO_HEIGHT, MANUAL, STOPPED; 
     }
 
     public ElevatorSubsystem(){
@@ -53,6 +54,10 @@ public class ElevatorSubsystem {
 		elevatorMotor.config_kD(Constants.kPIDLoopIdx, elevatorGains.kD, Constants.kTimeoutMs);
     }
 
+    public void setZeroForAutoHeight(){
+        elevatorMotor.setSelectedSensorPosition(309563.0);
+    }
+
     public void periodic(){
         if (elevatorState == ElevatorStates.ZERO){ //emergency stop
             elevatorDeadband(0);
@@ -65,7 +70,9 @@ public class ElevatorSubsystem {
         } else if (elevatorState == ElevatorStates.MID_ELEVATOR_HEIGHT){
             double desiredTicks = determineRightTicks(MID_HEIGHT_INCHES);
             elevatorDeadband(desiredTicks);
-        } else if (elevatorState == ElevatorStates.MANUAL){
+        } else if(elevatorState == ElevatorStates.AUTO_HEIGHT){
+            elevatorDeadband(AUTO_HEIGHT_TICKS);
+        }else if (elevatorState == ElevatorStates.MANUAL){
             manualElevator();
         } else { //emergency stop again for safety
             elevatorMotor.set(ControlMode.PercentOutput, 0.0);
@@ -89,7 +96,7 @@ public class ElevatorSubsystem {
     }
 
     private void manualElevator(){
-        if(elevatorMotor.getSelectedSensorPosition() <= MAX_HEIGHT * ELEVATOR_TICKS_PER_INCH /*&&
+        if(elevatorMotor.getSelectedSensorPosition() <= MAX_HEIGHT_INCHES * ELEVATOR_TICKS_PER_INCH /*&&
            (elevatorMotor.getSelectedSensorPosition() >= 0*/){
             if(OI.getRightAxis() > 0.2){
                 elevatorMotor.set(ControlMode.PercentOutput, 0.2);
@@ -117,6 +124,10 @@ public class ElevatorSubsystem {
 
     public boolean isAtZero(){
         return elevatorMotor.getSelectedSensorPosition() < DEADBAND;
+    }
+
+    public double getSelectedSensorPosition(){
+        return elevatorMotor.getSelectedSensorPosition();
     }
 
 }

@@ -68,7 +68,7 @@ public class Robot extends TimedRobot {
     auto_chooser.addOption("lowTimedEngaged",PDPath.AUTO_OPTIONS.LOWTIMEDENGAGED);
     auto_chooser.addOption("midTimedEngaged",PDPath.AUTO_OPTIONS.MIDTIMEDENGAGED);
     auto_chooser.addOption("driveTimedEngaged",PDPath.AUTO_OPTIONS.DRIVETIMEDENGAGED);
-    auto_chooser.addOption("hi", PDPath.AUTO_OPTIONS.PLACE_LEAVE_ENGAGE);
+    auto_chooser.addOption("overEngage", PDPath.AUTO_OPTIONS.OVER_ENGAGE);
     auto_chooser.addOption("timed", PDPath.AUTO_OPTIONS.TIMED);
     SmartDashboard.putData("Auto choices", auto_chooser);
    
@@ -111,6 +111,7 @@ public class Robot extends TimedRobot {
     System.out.println("current pose: " + m_drivetrainSubsystem.getMPoseX() + " , " + m_drivetrainSubsystem.getMPoseY());
     PDPath.AUTO_OPTIONS selected = auto_chooser.getSelected();
     m_auto = PDPath.constructAuto(selected);
+    m_mechanisms.elevatorSubsystem.setZeroForAutoHeight();
     //m_auto.init();
   }
 
@@ -165,14 +166,14 @@ public class Robot extends TimedRobot {
     //OFFSETS
     m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0, 0, m_drivetrainSubsystem.getPoseRotation()));
     m_drivetrainSubsystem.drive();
-    
+
     //MECHANISMS
-    m_mechanisms.periodic();
-    m_buttons.buttonsPeriodic();
+    //m_mechanisms.periodic();
+    //m_buttons.buttonsPeriodic();
     //PneumaticArmPivot.solenoid.set(Value.kForward);
     //System.out.println(m_mechanisms.armTelescopingSubsystem.getArmPosition());
-    m_mechanisms.armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0.0);
-    m_mechanisms.elevatorSubsystem.elevatorMotor.setSelectedSensorPosition(0.0);
+    //m_mechanisms.armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0.0);
+    //m_mechanisms.elevatorSubsystem.elevatorMotor.setSelectedSensorPosition(0.0);
   }
   /** This function is called once when the robot is first started up. */
   @Override

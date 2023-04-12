@@ -23,7 +23,7 @@ public class AutonomousBasePD extends AutonomousBase{
     private static final double driveKP= 0.75; //Robot.kP.getDouble(0.00006);//0.00006;
     private static final double driveKI= 0.0; //Robot.kI.getDouble(0.0);//0.0;
     private static final double driveKD= 0.0; //Robot.kD.getDouble(0.0);//0.0;
-    private static final double DRIVE_DEADBAND = 2*Constants.METERS_PER_INCH; //meters - previously 3 inches
+    private static final double DRIVE_DEADBAND = 6*Constants.METERS_PER_INCH; //meters - previously 3 inches
     private static final double TURN_DEADBAND = 6.0; 
 
     private Pose2d startingCoordinate;
@@ -35,12 +35,13 @@ public class AutonomousBasePD extends AutonomousBase{
     private DrivetrainSubsystem drivetrainSubsystem;
     private Mechanisms mechanisms;
     public AutoStates states;
+    private AutonomousBaseEngage autoEngage; 
 
     //pids
     private PIDController turnController;
     private PIDController xController;
     private PIDController yController;
-    
+
     public AutonomousBasePD(Pose2d startingCoordinate, StateWithCoordinate[] stateSequence){
         this.startingCoordinate = startingCoordinate;
         this.stateSequence =  stateSequence;
@@ -56,6 +57,7 @@ public class AutonomousBasePD extends AutonomousBase{
         turnController = new PIDController(turnKP, turnKI, turnKD); 
         xController = new PIDController(driveKP, driveKI, driveKD);
         yController = new PIDController(driveKP, driveKI, driveKD);
+        autoEngage = new AutonomousBaseEngage(3);
         xController.reset();
         yController.reset();
         turnController.reset();
@@ -84,6 +86,7 @@ public class AutonomousBasePD extends AutonomousBase{
         //System.out.println("pose in auto: " + DrivetrainSubsystem.m_pose.getX()/Constants.METERS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getY()/Constants.METERS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getRotation().getDegrees());
         if (states == AutoStates.DRIVE){
             driveDesiredDistance(stateSequence[i].coordinate);
+            mechanisms.setState(MechanismStates.HOLDING);
             if(xController.atSetpoint() && yController.atSetpoint() && turnController.atSetpoint()){
                 i++;  
                 System.out.println("moving on to " + stateSequence[i]);
@@ -121,9 +124,8 @@ public class AutonomousBasePD extends AutonomousBase{
         } else if(states == AutoStates.ENGAGE){
             if(isFirst){
                 isFirst = false;
-                AutonomousBaseEngage autoEngage = new AutonomousBaseEngage(3);
             }
-            //autoEngage.periodic();
+            autoEngage.periodic();
         } else if(states == AutoStates.PICKUP){ // TODO: are left and right pickup supposed to be the same? if so, can we have just one state?
             System.out.println("left pickup");
             if(isFirst){
@@ -151,6 +153,14 @@ public class AutonomousBasePD extends AutonomousBase{
             }
             mechanisms.setState(MechanismStates.GROUNDPICKUP);
             //pneumaticIntakeSubsystem.setState(PneumaticIntakeStates.ACTUATING);TODO uncomment
+        }else if(states == AutoStates.FASTDRIVE){
+            if(Math.abs(stateSequence[i].coordinate.getX() - drivetrainSubsystem.getMPoseX())>DRIVE_DEADBAND){
+                drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.8,0,0, drivetrainSubsystem.getPoseRotation()));
+                mechanisms.setState(MechanismStates.HOLDING);
+            }else{
+                drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0,0,0, drivetrainSubsystem.getPoseRotation()));
+                i++;
+            }
         } else {
             drivetrainSubsystem.stopDrive();
         } 
@@ -172,6 +182,7 @@ public class AutonomousBasePD extends AutonomousBase{
         double speedRotat = turnController.calculate(drivetrainSubsystem.getMPoseDegrees(), dPose.getRotation().getDegrees());
         //System.out.println("DDDing");
         //System.out.println("speed rotate: " + speedRotat);
+        System.out.println("sp");
         
         if(xAtSetpoint()){ //TODO: remove this once the built in setpoints work in vision
             speedX = 0; 

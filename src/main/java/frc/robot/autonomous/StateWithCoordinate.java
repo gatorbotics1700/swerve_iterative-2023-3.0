@@ -30,6 +30,7 @@ public class StateWithCoordinate{
         INTAKING,
         OUTTAKING,
         ENGAGE,
+        FASTDRIVE,
         PICKUP;
     } 
 
