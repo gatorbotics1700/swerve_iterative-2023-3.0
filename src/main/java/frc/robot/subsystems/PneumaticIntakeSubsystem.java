@@ -22,7 +22,7 @@ public class PneumaticIntakeSubsystem {
     private DigitalInput beambreakSensor;
 
     public PneumaticIntakeSubsystem(){
-        solenoidOne = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 7, 3); //3 & 7
+        solenoidOne = new DoubleSolenoid(10, PneumaticsModuleType.CTREPCM, 4, 5); //3 & 7
         beambreakSensor = new DigitalInput(Constants.BEAM_BREAK_RECEIVER); 
         init();
     }

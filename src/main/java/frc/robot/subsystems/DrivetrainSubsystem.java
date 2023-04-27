@@ -32,9 +32,9 @@ import frc.robot.Constants;
 import frc.robot.OI;
 
 public class DrivetrainSubsystem {
-   private static final double pitchKP = 0.025; //0.025; 0.035;
+   private static final double pitchKP = 0.027; //0.025; 0.035;
    private static final double pitchKI = 0.0;
-   private static final double pitchKD = 0.001; //0.001;
+   private static final double pitchKD = 0.005; //0.001;
    private PIDController pitchController;
    private static final double MINOUTPUT = 0.2;
    private static final double SWERVE_GEAR_RATIO = 6.75;
@@ -43,7 +43,7 @@ public class DrivetrainSubsystem {
    private static final double SWERVE_TICKS_PER_METER = SWERVE_TICKS_PER_INCH/Constants.METERS_PER_INCH;
         
 
-  /**
+  /**`+
    * The maximum voltage that will be delivered to the motors.
    * <p>
    * This can be reduced to cap the robot's maximum speed. Typically, this is useful during initial testing of the robot.

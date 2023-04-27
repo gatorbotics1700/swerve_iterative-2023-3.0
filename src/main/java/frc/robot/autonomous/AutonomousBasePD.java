@@ -101,7 +101,7 @@ public class AutonomousBasePD extends AutonomousBase{
                     isFirst = false;
                 }
                 mechanisms.pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeStates.RELEASING);
-                if (System.currentTimeMillis()-startTime>=500){ //time to outtake before moving on
+                if (System.currentTimeMillis()-startTime>=1000){ //time to outtake before moving on
                     i++;
                     isFirst = true;
                 }
@@ -116,7 +116,7 @@ public class AutonomousBasePD extends AutonomousBase{
             // If we never get to low it might be because the timeout is too short
             if(mechanisms.isDoneLow()==true){
                 mechanisms.pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeStates.RELEASING);
-                if (System.currentTimeMillis()-startTime>=500){
+                if (System.currentTimeMillis()-startTime>=1000){
                     i++;
                     isFirst = true;
                 }
@@ -125,7 +125,7 @@ public class AutonomousBasePD extends AutonomousBase{
             if(isFirst){
                 isFirst = false;
             }
-            autoEngage.periodic();
+            autoEngage.periodic();   
         } else if(states == AutoStates.PICKUP){ // TODO: are left and right pickup supposed to be the same? if so, can we have just one state?
             System.out.println("left pickup");
             if(isFirst){
@@ -155,7 +155,7 @@ public class AutonomousBasePD extends AutonomousBase{
             //pneumaticIntakeSubsystem.setState(PneumaticIntakeStates.ACTUATING);TODO uncomment
         }else if(states == AutoStates.FASTDRIVE){
             if(Math.abs(stateSequence[i].coordinate.getX() - drivetrainSubsystem.getMPoseX())>DRIVE_DEADBAND){
-                drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.8,0,0, drivetrainSubsystem.getPoseRotation()));
+                drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(1,0,0, drivetrainSubsystem.getPoseRotation()));
                 mechanisms.setState(MechanismStates.HOLDING);
             }else{
                 drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0,0,0, drivetrainSubsystem.getPoseRotation()));

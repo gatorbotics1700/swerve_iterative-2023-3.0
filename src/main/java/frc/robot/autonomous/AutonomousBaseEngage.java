@@ -107,7 +107,7 @@ public class AutonomousBaseEngage extends AutonomousBase{
                 setState(AutoEngageStates.ENGAGE);
                 firstTime = true;
             } else{
-                drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.8, 0, 0, drivetrainSubsystem.getPoseRotation()));
+                drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(1, 0, 0, drivetrainSubsystem.getPoseRotation()));
             }
         } else if(autoEngageState == AutoEngageStates.DRIVEBACK){
             //System.out.println("IN DRIVING FOR AUTO TIMED");
@@ -119,7 +119,7 @@ public class AutonomousBaseEngage extends AutonomousBase{
             if(/*startingTime + desireTime >= System.currentTimeMillis() ||*/ Math.abs(drivetrainSubsystem.getPitch()) > desiredAngle){
                 setState(AutoEngageStates.ENGAGE);
             } else{
-                drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(-0.5, 0, 0, drivetrainSubsystem.getPoseRotation()));
+                drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(-1.0, 0, 0, drivetrainSubsystem.getPoseRotation()));
             }
         } else if(autoEngageState == AutoEngageStates.ENGAGE){
             drivetrainSubsystem.pitchBalance(0.0);

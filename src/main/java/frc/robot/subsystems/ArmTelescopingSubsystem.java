@@ -38,7 +38,7 @@ public class ArmTelescopingSubsystem {
         SINGLE_SUBSTATION,
         MANUAL;
     }
-
+    
     public ArmTelescopingSubsystem(){
         telescopingMotor = new TalonFX(Constants.TELESCOPING_MOTOR_ID);
         init();
@@ -47,7 +47,7 @@ public class ArmTelescopingSubsystem {
     public void init(){
         System.out.println("telescoping init!! :)");
         tState = TelescopingStates.RETRACTED;
-        telescopingMotor.setInverted(false); //forward = clockwise, changed on 2/9
+        //telescopingMotor.setInverted(true); //changed to true on 04/13 //forward = clockwise, changed on 2/9
         telescopingMotor.setNeutralMode(NeutralMode.Brake);
 
         // telescopingMotor.selectProfileSlot(0, 0); //TODO: find out what this does
@@ -81,6 +81,9 @@ public class ArmTelescopingSubsystem {
             telescopingMotor.set(ControlMode.PercentOutput, 0);
         }
     }
+    public void setTelescopeInversion(boolean i){
+        telescopingMotor.setInverted(i);
+    }
 
     private void telescopeDeadband(double desiredTicks){
         if (Math.abs(desiredTicks - telescopingMotor.getSelectedSensorPosition()) < DEADBAND){
@@ -99,9 +102,9 @@ public class ArmTelescopingSubsystem {
     public void manual(){
         //if(getArmPosition() <= MAX_TICKS && getArmPosition() >= 0) {
             if(OI.getLeftAxis() > 0.2){
-                telescopingMotor.set(ControlMode.PercentOutput,-0.2);
-            }else if(OI.getLeftAxis() < -0.2){
                 telescopingMotor.set(ControlMode.PercentOutput,0.2);
+            }else if(OI.getLeftAxis() < -0.2){
+                telescopingMotor.set(ControlMode.PercentOutput,-0.2);
             } else {
                 telescopingMotor.set(ControlMode.PercentOutput, 0);
             }
@@ -115,7 +118,7 @@ public class ArmTelescopingSubsystem {
     }
 
     public boolean isAtLow(){
-        return Math.abs(LOWARMTICKS-telescopingMotor.getSelectedSensorPosition())<DEADBAND;
+        return Math.abs(LOWARMTICKS-telescopingMotor.getSelectedSensorPosition())<DEADBAND+15000; //TODO: remember this
     }
 
     public boolean isAtShelf(){

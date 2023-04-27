@@ -14,7 +14,7 @@ public class PneumaticArmPivot { //actuate = down, retract = up
     public PneumaticPivotStates pneumaticPivotState;
 
     public PneumaticArmPivot(){
-        solenoid = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 13, 10); //a little worried this being in constructor could break it
+        solenoid = new DoubleSolenoid(10, PneumaticsModuleType.CTREPCM, 6, 7); //a little worried this being in constructor could break it
         init();
     }
 
