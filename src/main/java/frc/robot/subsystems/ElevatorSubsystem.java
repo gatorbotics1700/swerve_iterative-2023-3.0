@@ -1,10 +1,12 @@
 package frc.robot.subsystems;
+
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import frc.robot.Constants;
 import frc.robot.Gains;
 import frc.robot.OI;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 //NOTES ON MEASUREMENTS
 //22.5inches on inside of metal frame that chain moves in
@@ -19,25 +21,33 @@ public class ElevatorSubsystem {
     private static final double MID_HEIGHT_INCHES = 30;
     private static final double LOW_HEIGHT_INCHES = 0;
     private static final double SHELF_HEIGHT_INCHES = 30; 
-    private static final double AUTO_HEIGHT_TICKS = 309563.0;
     private static final double MAX_HEIGHT_INCHES = 31.5;
 
     private static final double ELEVATOR_SPROCKET_DIAMETER = 1.28;
     private static final double ELEVATOR_GEAR_RATIO = 25.0;
     private static final double ELEVATOR_TICKS_PER_INCH = Constants.TICKS_PER_REV*ELEVATOR_GEAR_RATIO/ELEVATOR_SPROCKET_DIAMETER/Math.PI;
 
-    public TalonFX elevatorMotor; 
+    public TalonFX elevatorMotor;
     private ElevatorStates elevatorState;
+    private DigitalInput topLimitSwitch;
+    private DigitalInput bottomLimitSwitch;
+    public LimitSwitchStates limitSwitchStates;
     
     private Gains elevatorGains = new Gains(_kP, _kI, _kD, _kIzone, _kPeakOutput);
     private static final double DEADBAND = 5000; //15000;
 
     public static enum ElevatorStates{
-        ZERO, LOW_ELEVATOR_HEIGHT, MID_ELEVATOR_HEIGHT, SHELF_ELEVATOR_HEIGHT, AUTO_HEIGHT, MANUAL, STOPPED; 
+        ZERO, LOW_ELEVATOR_HEIGHT, MID_ELEVATOR_HEIGHT, SHELF_ELEVATOR_HEIGHT, MANUAL, STOPPED; 
+    }
+    
+    private enum LimitSwitchStates{
+        TOOHIGH, TOOLOW, HEIGHTOKAY;
     }
 
     public ElevatorSubsystem(){
         elevatorMotor = new TalonFX(Constants.ELEVATOR_CAN_ID);
+        topLimitSwitch = new DigitalInput(0);
+        bottomLimitSwitch = new DigitalInput(1);
         init();
     }
 
@@ -52,26 +62,37 @@ public class ElevatorSubsystem {
 		elevatorMotor.config_kP(Constants.kPIDLoopIdx, elevatorGains.kP, Constants.kTimeoutMs);
 		elevatorMotor.config_kI(Constants.kPIDLoopIdx, elevatorGains.kI, Constants.kTimeoutMs);
 		elevatorMotor.config_kD(Constants.kPIDLoopIdx, elevatorGains.kD, Constants.kTimeoutMs);
-    }
-
-    public void setZeroForAutoHeight(){
-        elevatorMotor.setSelectedSensorPosition(309563.0);
+        limitSwitchStates = LimitSwitchStates.HEIGHTOKAY;
     }
 
     public void periodic(){
+        System.out.println("Elevator Limit State: " + limitSwitchStates);
+        elevatorLimitPeriodic();
+        elevatorPositionPeriodic();
+    }
+    
+    public void elevatorLimitPeriodic(){
+        if(topLimitSwitch.get()){
+            limitSwitchStates = LimitSwitchStates.TOOHIGH;
+        }else if(bottomLimitSwitch.get()){
+            limitSwitchStates = LimitSwitchStates.TOOLOW;
+        }else{
+            limitSwitchStates = LimitSwitchStates.HEIGHTOKAY;
+        }
+    }
+
+    public void elevatorPositionPeriodic(){
         if (elevatorState == ElevatorStates.ZERO){ //emergency stop
-            elevatorDeadband(0);
+            setElevator(0);
         } else if (elevatorState == ElevatorStates.LOW_ELEVATOR_HEIGHT){
             double desiredTicks = determineRightTicks(LOW_HEIGHT_INCHES);
-            elevatorDeadband(desiredTicks);
+            setElevator(desiredTicks);
         } else if (elevatorState == ElevatorStates.SHELF_ELEVATOR_HEIGHT) {
             double desiredTicks = determineRightTicks(SHELF_HEIGHT_INCHES);
-            elevatorDeadband(desiredTicks);
+            setElevator(desiredTicks);
         } else if (elevatorState == ElevatorStates.MID_ELEVATOR_HEIGHT){
             double desiredTicks = determineRightTicks(MID_HEIGHT_INCHES);
-            elevatorDeadband(desiredTicks);
-        } else if(elevatorState == ElevatorStates.AUTO_HEIGHT){
-            elevatorDeadband(AUTO_HEIGHT_TICKS);
+            setElevator(desiredTicks);
         }else if (elevatorState == ElevatorStates.MANUAL){
             manualElevator();
         } else { //emergency stop again for safety
@@ -83,10 +104,24 @@ public class ElevatorSubsystem {
         return desiredInches * ELEVATOR_TICKS_PER_INCH; 
     }
 
-    private void elevatorDeadband(double desiredTicks){
-        if (Math.abs(desiredTicks - elevatorMotor.getSelectedSensorPosition()) > DEADBAND){
-            elevatorMotor.set(ControlMode.Position, desiredTicks); 
-        } else {
+    private void setElevator(double desiredTicks){
+        if(Math.abs(desiredTicks - elevatorMotor.getSelectedSensorPosition()) > DEADBAND){
+            if(limitSwitchStates == LimitSwitchStates.TOOHIGH){
+                if(desiredTicks >= elevatorMotor.getSelectedSensorPosition()){
+                    elevatorMotor.set(ControlMode.PercentOutput, 0);
+                }else{
+                    elevatorMotor.set(ControlMode.Position, desiredTicks);
+                }
+            }else if(limitSwitchStates == LimitSwitchStates.TOOLOW){
+                if(desiredTicks <= elevatorMotor.getSelectedSensorPosition()){
+                    elevatorMotor.set(ControlMode.PercentOutput, 0);
+                }else{
+                    elevatorMotor.set(ControlMode.Position, desiredTicks);
+                }
+            }else{
+                elevatorMotor.set(ControlMode.Position, desiredTicks);
+            }
+        }else{
             elevatorMotor.set(ControlMode.PercentOutput, 0);
         }
     }
@@ -98,9 +133,9 @@ public class ElevatorSubsystem {
     private void manualElevator(){
         if(elevatorMotor.getSelectedSensorPosition() <= MAX_HEIGHT_INCHES * ELEVATOR_TICKS_PER_INCH /*&&
            (elevatorMotor.getSelectedSensorPosition() >= 0*/){
-            if(OI.getRightAxis() > 0.2){
+            if(OI.getRightAxis() < -0.2 && limitSwitchStates == LimitSwitchStates.HEIGHTOKAY){
                 elevatorMotor.set(ControlMode.PercentOutput, 0.2);
-            }else if(OI.getRightAxis() < -0.2) {
+            }else if(OI.getRightAxis() > 0.2 && limitSwitchStates != LimitSwitchStates.TOOLOW) {
                 elevatorMotor.set(ControlMode.PercentOutput, -0.2);
             }else {
                 elevatorMotor.set(ControlMode.PercentOutput, 0);
@@ -129,5 +164,4 @@ public class ElevatorSubsystem {
     public double getSelectedSensorPosition(){
         return elevatorMotor.getSelectedSensorPosition();
     }
-
 }

@@ -120,8 +120,6 @@ public class Robot extends TimedRobot {
     System.out.println("current pose: " + m_drivetrainSubsystem.getMPoseX() + " , " + m_drivetrainSubsystem.getMPoseY());
     PDPath.AUTO_OPTIONS selected = auto_chooser.getSelected();
     m_auto = PDPath.constructAuto(selected);
-    //m_mechanisms.elevatorSubsystem.setZeroForAutoHeight();
-    //m_auto.init();
   }
 
   /** This function is called periodically during autonomous. */

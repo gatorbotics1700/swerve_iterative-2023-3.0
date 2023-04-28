@@ -79,10 +79,6 @@ public class Buttons {
         m_drivetrainSubsystem.pitchBalance(0.0);
       }
 
-      if(OI.m_controller.getAButton()){
-        m_mechanisms.setState(MechanismStates.AUTO_STARTING);
-      }
-
         // System.out.println("pivot");
         // if(armPneumaticPivot.pneumaticPivotState==PneumaticPivotStates.DOWN 
         // || armPneumaticPivot.pneumaticPivotState==PneumaticPivotStates.OFF){
