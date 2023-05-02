@@ -20,7 +20,8 @@ public class Mechanisms {
         GROUNDPICKUP,
         MANUAL_ELEVATOR,
         MANUAL_TELESCOPE,
-        HOLDING;
+        HOLDING,
+        STOP;
     }
 
     private MechanismStates mechState;
@@ -81,6 +82,10 @@ public class Mechanisms {
         } else if (mechState == MechanismStates.MANUAL_TELESCOPE){
             armTelescopingSubsystem.setTState(TelescopingStates.MANUAL);
             System.out.println("manual telescope");
+        } else if (mechState == MechanismStates.STOP){
+            elevatorSubsystem.setState(ElevatorStates.STOPPED);
+            armTelescopingSubsystem.setTState(TelescopingStates.STOP);
+            armPneumaticPivot.setState(PneumaticPivotStates.UP);
         } else { //holding
             elevatorSubsystem.setState(ElevatorStates.ZERO); 
             armTelescopingSubsystem.setTState(TelescopingStates.RETRACTED);

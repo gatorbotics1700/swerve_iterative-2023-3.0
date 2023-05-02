@@ -5,12 +5,15 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import frc.robot.Constants;
 import frc.robot.Gains;
 import frc.robot.OI;
+import frc.robot.Robot;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.DigitalInput;
-
+import frc.robot.subsystems.Mechanisms;
 //NOTES ON MEASUREMENTS
 //22.5inches on inside of metal frame that chain moves in
 //10 in on moving mechanism thing
+import frc.robot.subsystems.Mechanisms.MechanismStates;
 
 public class ElevatorSubsystem {
     private static final double _kP = 0.2;//0.15;
@@ -29,6 +32,7 @@ public class ElevatorSubsystem {
 
     public TalonFX elevatorMotor;
     private ElevatorStates elevatorState;
+    private Mechanisms mechanisms;
     private DigitalInput topLimitSwitch;
     private DigitalInput bottomLimitSwitch;
     public LimitSwitchStates limitSwitchStates;
@@ -63,10 +67,12 @@ public class ElevatorSubsystem {
 		elevatorMotor.config_kI(Constants.kPIDLoopIdx, elevatorGains.kI, Constants.kTimeoutMs);
 		elevatorMotor.config_kD(Constants.kPIDLoopIdx, elevatorGains.kD, Constants.kTimeoutMs);
         limitSwitchStates = LimitSwitchStates.HEIGHTOKAY;
+        mechanisms = Robot.m_mechanisms;
     }
 
     public void periodic(){
-        System.out.println("Elevator Limit State: " + limitSwitchStates);
+        System.out.println("Elevator State: " + elevatorState);
+        System.out.println("Limit Switch State " + limitSwitchStates);
         elevatorLimitPeriodic();
         elevatorPositionPeriodic();
     }
@@ -108,13 +114,15 @@ public class ElevatorSubsystem {
         if(Math.abs(desiredTicks - elevatorMotor.getSelectedSensorPosition()) > DEADBAND){
             if(limitSwitchStates == LimitSwitchStates.TOOHIGH){
                 if(desiredTicks >= elevatorMotor.getSelectedSensorPosition()){
-                    elevatorMotor.set(ControlMode.PercentOutput, 0);
+                    mechanisms.setState(MechanismStates.STOP);
+                    System.out.println("Elevator state SHOULD BE STOPPED: " + elevatorState);
+                    System.out.println("should be setting elevator state to STOP");
                 }else{
                     elevatorMotor.set(ControlMode.Position, desiredTicks);
                 }
             }else if(limitSwitchStates == LimitSwitchStates.TOOLOW){
                 if(desiredTicks <= elevatorMotor.getSelectedSensorPosition()){
-                    elevatorMotor.set(ControlMode.PercentOutput, 0);
+                    mechanisms.setState(MechanismStates.STOP);
                 }else{
                     elevatorMotor.set(ControlMode.Position, desiredTicks);
                 }
@@ -122,7 +130,7 @@ public class ElevatorSubsystem {
                 elevatorMotor.set(ControlMode.Position, desiredTicks);
             }
         }else{
-            elevatorMotor.set(ControlMode.PercentOutput, 0);
+            elevatorState = ElevatorStates.STOPPED;
         }
     }
 

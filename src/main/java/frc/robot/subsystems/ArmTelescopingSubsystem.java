@@ -36,7 +36,8 @@ public class ArmTelescopingSubsystem {
         SHELF_ARM_LENGTH,
         MID_ARM_LENGTH,
         SINGLE_SUBSTATION,
-        MANUAL;
+        MANUAL,
+        STOP;
     }
     
     public ArmTelescopingSubsystem(){
