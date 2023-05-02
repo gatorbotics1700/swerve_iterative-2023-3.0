@@ -43,7 +43,7 @@ public class ElevatorSubsystem {
 
     public void init(){
         System.out.println("elevator init!!!!");
-        elevatorMotor.setInverted(true); // looking from the front of the robot, clockwise is false (:
+        elevatorMotor.setInverted(false); // looking from the front of the robot, clockwise is false -- not sure if thats true anymore
         elevatorMotor.setNeutralMode(NeutralMode.Brake);
         setState(ElevatorStates.LOW_ELEVATOR_HEIGHT);
         //configuring deadband

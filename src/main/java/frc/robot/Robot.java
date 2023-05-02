@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Mechanisms;
 import frc.robot.subsystems.PneumaticArmPivot;
 import frc.robot.subsystems.PneumaticArmPivot.PneumaticPivotStates;
@@ -44,6 +45,7 @@ public class Robot extends TimedRobot {
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   public static Mechanisms m_mechanisms = new Mechanisms();
   public static Buttons m_buttons = new Buttons();
+  public static Limelight m_limeLight = new Limelight();
 
   double mpi = Constants.METERS_PER_INCH;
   public static Boolean isBlueAlliance = true;
@@ -139,7 +141,9 @@ public class Robot extends TimedRobot {
   public void teleopInit() { //BEFORE TESTING: MAKE SURE YOU HAVE EITHER DEPLOYED OR ADDED DRIVETRAIN INIT
     isBlueAlliance = allianceChooser.getSelected();
     m_mechanisms.init(); 
-   //m_drivetrainSubsystem.init();
+    m_limeLight.init();
+    m_drivetrainSubsystem.init();
+    m_buttons.buttonsInit();
   }
 
   /** This function is called periodically during operator control. */
@@ -150,7 +154,7 @@ public class Robot extends TimedRobot {
     m_drivetrainSubsystem.driveTeleop();
     m_drivetrainSubsystem.drive();
     m_mechanisms.armTelescopingSubsystem.setTelescopeInversion(inverted.getSelected());
-   
+    m_limeLight.periodic();
   }
 
   /** This function is called once when the robot is disabled. */
@@ -175,8 +179,8 @@ public class Robot extends TimedRobot {
     //m_drivetrainSubsystem.pitchBalace(0.0);
     
     //OFFSETS
-    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0, 0, m_drivetrainSubsystem.getPoseRotation()));
-    m_drivetrainSubsystem.drive();
+    //m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0, 0, m_drivetrainSubsystem.getPoseRotation()));
+    //m_drivetrainSubsystem.drive();
 
     //MECHANISMS
     m_mechanisms.periodic();

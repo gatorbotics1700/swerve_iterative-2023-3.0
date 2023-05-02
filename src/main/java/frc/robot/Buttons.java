@@ -4,19 +4,28 @@ import frc.robot.subsystems.Mechanisms;
 import frc.robot.subsystems.Mechanisms.MechanismStates;
 import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
 import frc.robot.subsystems.PneumaticIntakeSubsystem;
+import frc.robot.subsystems.Limelight.VisionStates;
 import frc.robot.subsystems.PneumaticArmPivot.PneumaticPivotStates;
 import frc.robot.subsystems.PneumaticArmPivot;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.Limelight;
 
 public class Buttons {
     
-  private DrivetrainSubsystem m_drivetrainSubsystem = Robot.m_drivetrainSubsystem;
-  private Mechanisms m_mechanisms = Robot.m_mechanisms;
-  private PneumaticIntakeSubsystem pneumaticIntakeSubsystem = m_mechanisms.pneumaticIntakeSubsystem;
+  private DrivetrainSubsystem m_drivetrainSubsystem;
+  private Mechanisms m_mechanisms;
+  private PneumaticIntakeSubsystem pneumaticIntakeSubsystem;
+  private Limelight limeLight;
   //private PneumaticArmPivot armPneumaticPivot = m_mechanisms.armPneumaticPivot;
   
-  public void buttonsPeriodic(){
+  public void buttonsInit(){
+    m_drivetrainSubsystem = Robot.m_drivetrainSubsystem;
+    m_mechanisms = Robot.m_mechanisms;
+    pneumaticIntakeSubsystem  = m_mechanisms.pneumaticIntakeSubsystem;
+    limeLight = Robot.m_limeLight;
+  }
 
+  public void buttonsPeriodic(){
     //codriver
       if(OI.m_controller_two.getYButton()){ 
         System.out.println("xbox: shelf");
@@ -81,6 +90,10 @@ public class Buttons {
 
       if(OI.m_controller.getAButton()){
         m_mechanisms.setState(MechanismStates.AUTO_STARTING);
+      }
+
+      if(OI.m_controller.getYButton()){
+        limeLight.setState(VisionStates.DETECT);
       }
 
         // System.out.println("pivot");
