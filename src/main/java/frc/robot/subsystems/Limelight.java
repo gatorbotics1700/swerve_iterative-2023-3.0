@@ -46,20 +46,27 @@ public class Limelight{
         if(visionState == VisionStates.DETECT){
             if(getTv()==1.0){
                 visionState = VisionStates.DRIVE;
-                double distancey = (ATHEIGHT - LLHEIGHT)/Math.tan(LLANGLE + getTy());
-                double distancex = Math.tan(getTx())*distancey;
+                double[] botArray = networkTable.getEntry("botpose").getDoubleArray(new double[6]);
+                //tempArray holds [x,y,z,roll,pitch,yaw,latency]
+                drivetrainSubsystem.setMPose(new Pose2d(botArray[0], botArray[1], new Rotation2d(botArray[5])));
+                double[] tagArray = networkTable.getEntry("targetpose_robotspace").getDoubleArray(new double[6]);
+                double distancey = tagArray[1] - RR;
+                double distancex = tagArray[0];
                 System.out.println("Distance Y: " + distancey + " Distance X: " + distancex);
                 autonomousBasePD = new AutonomousBasePD(
                     new Pose2d(0, 0, drivetrainSubsystem.getPoseRotation()), 
                     new StateWithCoordinate[]{
                         new StateWithCoordinate(AutoStates.FIRST),
-                        new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(distancex, distancey-RR, new Rotation2d(Math.toRadians(180.0)))),
+                        new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(distancex, distancey, drivetrainSubsystem.getPoseRotation())),
                         new StateWithCoordinate(AutoStates.STOP)
                     });
                 autonomousBasePD.init();
             }
         }else if(visionState == VisionStates.DRIVE){
             autonomousBasePD.periodic();
+            if(autonomousBasePD.states==AutoStates.STOP){
+                visionState = VisionStates.STOP;
+            }
         }else{
 
         }

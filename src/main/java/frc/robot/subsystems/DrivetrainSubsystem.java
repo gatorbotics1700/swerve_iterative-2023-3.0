@@ -308,6 +308,10 @@ public class DrivetrainSubsystem {
         drive();
     }
 
+    public void setMPose(Pose2d newPose){
+        m_pose = newPose;
+    }
+
     public double getMPoseX(){
         return m_pose.getX();
     }

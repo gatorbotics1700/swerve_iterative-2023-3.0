@@ -177,12 +177,12 @@ public class AutonomousBasePD extends AutonomousBase{
         //System.out.println("desired pose: " + dPose);
         double speedX = xController.calculate(drivetrainSubsystem.getMPoseX(), dPose.getX());
         double speedY = yController.calculate(drivetrainSubsystem.getMPoseY(), dPose.getY());
-        System.out.println("m_pose deg: " + drivetrainSubsystem.getMPoseDegrees() % 360);
-        System.out.println("d_pose deg: " + dPose.getRotation().getDegrees() % 360);
+        //System.out.println("m_pose deg: " + drivetrainSubsystem.getMPoseDegrees() % 360);
+        //System.out.println("d_pose deg: " + dPose.getRotation().getDegrees() % 360);
         double speedRotat = turnController.calculate(drivetrainSubsystem.getMPoseDegrees(), dPose.getRotation().getDegrees());
         //System.out.println("DDDing");
         //System.out.println("speed rotate: " + speedRotat);
-        System.out.println("sp");
+        //System.out.println("sp");
         
         if(xAtSetpoint()){ //TODO: remove this once the built in setpoints work in vision
             speedX = 0; 
