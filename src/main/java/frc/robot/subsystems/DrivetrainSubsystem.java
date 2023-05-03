@@ -60,7 +60,7 @@ public class DrivetrainSubsystem {
    * <p>
    * This is a measure of how fast the robot should be able to drive in a straight line.
    */
-  private static final double MAX_VELOCITY_METERS_PER_SECOND = 6380.0 / 60.0 *
+  public static final double MAX_VELOCITY_METERS_PER_SECOND = 6380.0 / 60.0 *
           SdsModuleConfigurations.MK4_L2.getDriveReduction() *
           SdsModuleConfigurations.MK4_L2.getWheelDiameter() * Math.PI;
           // = 5.38281261
@@ -326,6 +326,10 @@ public class DrivetrainSubsystem {
 
     public double getPitch(){
         return m_pigeon.getPitch();
+    }
+
+    public SwerveDriveKinematics getMKinematics(){
+        return m_kinematics; 
     }
    
 }
