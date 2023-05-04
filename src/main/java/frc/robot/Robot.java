@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.AutonomousBase;
 import frc.robot.autonomous.AutonomousBaseTimed;
 import frc.robot.autonomous.AutonomousBasePD;
-import frc.robot.autonomous.PDPath;
+import frc.robot.autonomous.Paths;
 import frc.robot.subsystems.ArmTelescopingSubsystem;
 
 /**
@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
   private static final Boolean blue = true;
   // DoubleSolenoid solenoidOne = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 4, 3); 
 
-  private final SendableChooser<PDPath.AUTO_OPTIONS> auto_chooser = new SendableChooser<>();
+  private final SendableChooser<Paths.AUTO_OPTIONS> auto_chooser = new SendableChooser<>();
   private final SendableChooser<Boolean> inverted = new SendableChooser<>();
   private final SendableChooser<Boolean> allianceChooser = new SendableChooser<>();
 
@@ -61,20 +61,21 @@ public class Robot extends TimedRobot {
     System.out.println("#I'm Awake");
 
     //TODO: make the names come from the enum with a for loop cycling through everything in it?
-    auto_chooser.setDefaultOption("testPath", PDPath.AUTO_OPTIONS.TESTPATH);
-    auto_chooser.addOption("noGoR!", PDPath.AUTO_OPTIONS.NOGO);
-    auto_chooser.addOption("HDLeaveB", PDPath.AUTO_OPTIONS.HDLEAVEB);
-    auto_chooser.addOption("HBLeaveB", PDPath.AUTO_OPTIONS.HBLEAVEB);
-    auto_chooser.addOption("lowHDPlaceLeaveB", PDPath.AUTO_OPTIONS.LOWHDPLACELEAVEB);
-    auto_chooser.addOption("lowHBPlaceLeaveB", PDPath.AUTO_OPTIONS.LOWHBPLACELEAVEB);
-    auto_chooser.addOption("midHDPlaceLeaveB", PDPath.AUTO_OPTIONS.MIDHDPLACELEAVEB);
-    auto_chooser.addOption("midHBPlaceLeaveB", PDPath.AUTO_OPTIONS.MIDHBPLACELEAVEB);
-    auto_chooser.addOption("lowTimedEngaged",PDPath.AUTO_OPTIONS.LOWTIMEDENGAGED);
-    auto_chooser.addOption("midTimedEngaged",PDPath.AUTO_OPTIONS.MIDTIMEDENGAGED);
-    auto_chooser.addOption("driveTimedEngaged",PDPath.AUTO_OPTIONS.DRIVETIMEDENGAGED);
-    auto_chooser.addOption("lowOverEngage", PDPath.AUTO_OPTIONS.LOW_OVER_ENGAGE);
-    auto_chooser.addOption("midOverEngage", PDPath.AUTO_OPTIONS.MID_OVER_ENGAGE);
-    auto_chooser.addOption("timed", PDPath.AUTO_OPTIONS.TIMED);
+    auto_chooser.setDefaultOption("testPath", Paths.AUTO_OPTIONS.TESTPATH);
+    auto_chooser.addOption("noGoR!", Paths.AUTO_OPTIONS.NOGO);
+    auto_chooser.addOption("HDLeaveB", Paths.AUTO_OPTIONS.HDLEAVEB);
+    auto_chooser.addOption("HBLeaveB", Paths.AUTO_OPTIONS.HBLEAVEB);
+    auto_chooser.addOption("lowHDPlaceLeaveB", Paths.AUTO_OPTIONS.LOWHDPLACELEAVEB);
+    auto_chooser.addOption("lowHBPlaceLeaveB", Paths.AUTO_OPTIONS.LOWHBPLACELEAVEB);
+    auto_chooser.addOption("midHDPlaceLeaveB", Paths.AUTO_OPTIONS.MIDHDPLACELEAVEB);
+    auto_chooser.addOption("midHBPlaceLeaveB", Paths.AUTO_OPTIONS.MIDHBPLACELEAVEB);
+    auto_chooser.addOption("lowTimedEngaged",Paths.AUTO_OPTIONS.LOWTIMEDENGAGED);
+    auto_chooser.addOption("midTimedEngaged",Paths.AUTO_OPTIONS.MIDTIMEDENGAGED);
+    auto_chooser.addOption("driveTimedEngaged",Paths.AUTO_OPTIONS.DRIVETIMEDENGAGED);
+    auto_chooser.addOption("lowOverEngage", Paths.AUTO_OPTIONS.LOW_OVER_ENGAGE);
+    auto_chooser.addOption("midOverEngage", Paths.AUTO_OPTIONS.MID_OVER_ENGAGE);
+    auto_chooser.addOption("timed", Paths.AUTO_OPTIONS.TIMED);
+    auto_chooser.addOption("motionProfiling", Paths.AUTO_OPTIONS.MP); 
     inverted.setDefaultOption("true", true);
     inverted.addOption("false", false);
     SmartDashboard.putData("Auto choices", auto_chooser);
@@ -118,8 +119,8 @@ public class Robot extends TimedRobot {
     m_mechanisms.init();
     m_drivetrainSubsystem.init();
     System.out.println("current pose: " + m_drivetrainSubsystem.getMPoseX() + " , " + m_drivetrainSubsystem.getMPoseY());
-    PDPath.AUTO_OPTIONS selected = auto_chooser.getSelected();
-    m_auto = PDPath.constructAuto(selected);
+    Paths.AUTO_OPTIONS selected = auto_chooser.getSelected();
+    m_auto = Paths.constructAuto(selected);
     //m_mechanisms.elevatorSubsystem.setZeroForAutoHeight();
     //m_auto.init();
   }
@@ -130,6 +131,7 @@ public class Robot extends TimedRobot {
      m_mechanisms.periodic();
      m_auto.periodic();
      m_drivetrainSubsystem.drive();
+     System.out.println("our pose: " + m_drivetrainSubsystem.getMPoseX());
      
      //System.out.println("Odometry: "+ DrivetrainSubsystem.m_odometry.getPoseMeters());
   }
@@ -173,7 +175,7 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
     //m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.4, 0, 0, m_drivetrainSubsystem.getPoseRotation()));
     //m_drivetrainSubsystem.pitchBalace(0.0);
-    
+    System.out.println("our pose: " + m_drivetrainSubsystem.getMPoseX());
     //OFFSETS
     m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0, 0, m_drivetrainSubsystem.getPoseRotation()));
     m_drivetrainSubsystem.drive();

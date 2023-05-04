@@ -73,7 +73,7 @@ public class DrivetrainSubsystem {
   private static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND /
           Math.hypot(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0);
 
-  private SwerveDriveKinematics m_kinematics;
+  private static SwerveDriveKinematics m_kinematics;
 
   // By default we use a Pigeon for our gyroscope. But if you use another gyroscope, like a NavX, you can change this.
   // The important thing about how you configure your gyroscope is that rotating the robot counter-clockwise should
@@ -311,7 +311,7 @@ public class DrivetrainSubsystem {
     public double getMPoseX(){
         return m_pose.getX();
     }
-
+    
     public double getMPoseY(){
         return m_pose.getY();
     }
@@ -324,11 +324,13 @@ public class DrivetrainSubsystem {
         return m_pose;
     }
 
+
+
     public double getPitch(){
         return m_pigeon.getPitch();
     }
 
-    public SwerveDriveKinematics getMKinematics(){
+    public static SwerveDriveKinematics getMKinematics(){
         return m_kinematics; 
     }
    

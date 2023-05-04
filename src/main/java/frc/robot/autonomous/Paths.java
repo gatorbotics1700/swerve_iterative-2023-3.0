@@ -10,7 +10,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 
 
-public class PDPath {
+public class Paths {
     private static double mpi = Constants.METERS_PER_INCH;
     private static final double STARTING_X = 68.95;
     private static final double HB_Y_B = 200.046;
@@ -32,7 +32,8 @@ public class PDPath {
         TIMED,
         MIDTIMEDENGAGED,
         LOWTIMEDENGAGED,
-        DRIVETIMEDENGAGED;
+        DRIVETIMEDENGAGED,
+        MP;
     }
 
     public static AutonomousBase constructAuto(AUTO_OPTIONS selectedAuto){
@@ -140,6 +141,12 @@ public class PDPath {
                     new StateWithCoordinate(AutoStates.STOP)
                 }
             );
+        } else if(selectedAuto == AUTO_OPTIONS.MP){
+            return new AutonomousBaseMP(
+                Trajectories.uno, 
+                Trajectories.dos,
+                Trajectories.tres
+            ); 
         } else if(selectedAuto== AUTO_OPTIONS.LOWTIMEDENGAGED){
             return new AutonomousBaseEngage(1);
         } else if (selectedAuto== AUTO_OPTIONS.MIDTIMEDENGAGED){
