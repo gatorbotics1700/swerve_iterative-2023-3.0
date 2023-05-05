@@ -83,4 +83,6 @@ public final class Constants {
    
     public static final int kPIDLoopIdx = 0;
     public static final int kTimeoutMs = 500;
+
+    public static final int ELECTRONICS_BOARD_MOTOR_ID = 21;//TODO fix
 }
