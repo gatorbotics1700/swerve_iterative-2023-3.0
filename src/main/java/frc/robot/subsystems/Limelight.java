@@ -18,6 +18,7 @@ public class Limelight{
     private final double RR = 0.3937; //intended to increase confusion- in meters tho!
     private AutonomousBasePD autonomousBasePD;
     private DrivetrainSubsystem drivetrainSubsystem;
+    private Pose2d intakePose = new Pose2d(0, 0, new Rotation2d(0));
 
     public enum VisionStates{
         DETECT,
