@@ -25,6 +25,30 @@
       "unique": 1
       },
       {
+        "family": "apriltag3_25h9_classic",
+        "id": 6,
+        "size": 152.4,
+        "transform": [
+            -1,
+            0,
+            0,
+            -6.366,
+            0,
+            1,
+            0,
+            4.016,
+            0,
+            0,
+            1,
+            1.197,
+            0,
+            0,
+            0,
+            1
+        ],
+        "unique": 1
+        },
+      {
         "family": "apriltag3_16h5_classic",
         "id": 1,
         "size": 152.4,
