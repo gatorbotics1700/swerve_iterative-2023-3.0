@@ -3,6 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -18,7 +20,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.AutonomousBase;
 import frc.robot.autonomous.AutonomousBaseTimed;
 import frc.robot.autonomous.AutonomousBasePD;
+import frc.robot.autonomous.StateWithCoordinate.AutoStates;
 import frc.robot.autonomous.PDPath;
+import frc.robot.autonomous.StateWithCoordinate;
 import frc.robot.subsystems.ArmTelescopingSubsystem;
 
 /**
@@ -49,6 +53,8 @@ public class Robot extends TimedRobot {
 
   double mpi = Constants.METERS_PER_INCH;
   public static Boolean isBlueAlliance = true;
+
+  AutonomousBasePD autonomousBasePD;
  
 // red alliance  
 // half the field (325.8415) - blue x value + half the field (325.8415) = red x value
@@ -168,7 +174,13 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-    m_drivetrainSubsystem.init();
+    //m_drivetrainSubsystem.init();
+    autonomousBasePD = new AutonomousBasePD(new Pose2d(2, 1, new Rotation2d(0)), new StateWithCoordinate[]{
+      new StateWithCoordinate(AutoStates.FIRST),
+      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(3, 1, new Rotation2d(0))),
+      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(3, 2, new Rotation2d(0))),
+      new StateWithCoordinate(AutoStates.STOP)
+  });
     //m_mechanisms.init();
   }
 
@@ -177,18 +189,18 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
     //m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.4, 0, 0, m_drivetrainSubsystem.getPoseRotation()));
     //m_drivetrainSubsystem.pitchBalace(0.0);
-    
+    autonomousBasePD.periodic();
     //OFFSETS
-    //m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0, 0, m_drivetrainSubsystem.getPoseRotation()));
-    //m_drivetrainSubsystem.drive();
+    // m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0, 0, m_drivetrainSubsystem.getPoseRotation()));
+    // m_drivetrainSubsystem.drive();
 
     //MECHANISMS
-    m_mechanisms.periodic();
-    m_buttons.buttonsPeriodic();
+    // m_mechanisms.periodic();
+    // m_buttons.buttonsPeriodic();
     //PneumaticArmPivot.solenoid.set(Value.kForward);
     //System.out.println(m_mechanisms.armTelescopingSubsystem.getArmPosition());
-    m_mechanisms.armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0.0);
-    m_mechanisms.elevatorSubsystem.elevatorMotor.setSelectedSensorPosition(0.0);
+    // m_mechanisms.armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0.0);
+    // m_mechanisms.elevatorSubsystem.elevatorMotor.setSelectedSensorPosition(0.0);
   }
   /** This function is called once when the robot is first started up. */
   @Override

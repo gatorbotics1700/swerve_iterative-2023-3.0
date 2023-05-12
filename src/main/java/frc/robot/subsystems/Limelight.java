@@ -18,7 +18,9 @@ public class Limelight{
     private final double RR = 0.3937; //intended to increase confusion- in meters tho!
     private AutonomousBasePD autonomousBasePD;
     private DrivetrainSubsystem drivetrainSubsystem;
-    private Pose2d intakePose = new Pose2d(0, 0, new Rotation2d(0));
+    private final Pose2d intakePoseRed = new Pose2d(15.037816, 0.4191, new Rotation2d(Math.toRadians(270)));
+    private final Pose2d intakePoseBlue = new Pose2d(15.037816, 7.559802, new Rotation2d(Math.toRadians(90)));
+    private final Pose2d intakePose3 = new Pose2d(14.914, 4.424, new Rotation2d(Math.toRadians(180)));
 
     public enum VisionStates{
         DETECT,
@@ -50,17 +52,32 @@ public class Limelight{
                 double[] botArray = networkTable.getEntry("botpose").getDoubleArray(new double[6]);
                 //tempArray holds [x,y,z,roll,pitch,yaw,latency]
                 drivetrainSubsystem.setMPose(new Pose2d(botArray[0], botArray[1], new Rotation2d(botArray[5])));
-                double[] tagArray = networkTable.getEntry("targetpose_robotspace").getDoubleArray(new double[6]);
-                double distancey = tagArray[1] - RR;
-                double distancex = tagArray[0];
-                System.out.println("Distance Y: " + distancey + " Distance X: " + distancex);
-                autonomousBasePD = new AutonomousBasePD(
+                double id = networkTable.getEntry("tid").getDouble(0.0);
+                if(id==6){
+                    autonomousBasePD = new AutonomousBasePD(
+                        new Pose2d(0, 0, drivetrainSubsystem.getPoseRotation()), 
+                        new StateWithCoordinate[]{
+                            new StateWithCoordinate(AutoStates.FIRST),
+                            new StateWithCoordinate(AutoStates.DRIVE, intakePoseRed),
+                            new StateWithCoordinate(AutoStates.STOP)
+                        });  
+                }else if(id == 21){
+                    autonomousBasePD = new AutonomousBasePD(
                     new Pose2d(0, 0, drivetrainSubsystem.getPoseRotation()), 
                     new StateWithCoordinate[]{
                         new StateWithCoordinate(AutoStates.FIRST),
-                        new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(distancex, distancey, drivetrainSubsystem.getPoseRotation())),
+                        new StateWithCoordinate(AutoStates.DRIVE, intakePoseBlue),
                         new StateWithCoordinate(AutoStates.STOP)
                     });
+                }else if(id == 3){
+                    autonomousBasePD = new AutonomousBasePD(
+                    new Pose2d(0, 0, drivetrainSubsystem.getPoseRotation()), 
+                    new StateWithCoordinate[]{
+                        new StateWithCoordinate(AutoStates.FIRST),
+                        new StateWithCoordinate(AutoStates.DRIVE, intakePose3),
+                        new StateWithCoordinate(AutoStates.STOP)
+                    });
+                }
                 autonomousBasePD.init();
             }
         }else if(visionState == VisionStates.DRIVE){
