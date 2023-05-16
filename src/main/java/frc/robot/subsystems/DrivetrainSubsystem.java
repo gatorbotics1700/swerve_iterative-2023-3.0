@@ -183,7 +183,8 @@ public class DrivetrainSubsystem {
                 m_backRightModule.getSwerveModulePosition()
         }, 
         new Pose2d(0, 0, new Rotation2d(Math.toRadians(180)))); //assumes 180 degrees rotation is facing driver station
-  }
+        resetOdometry(new Pose2d());
+        }
   
   //from pigeon used for updating our odometry
   //in an unknown, arbitrary frame
@@ -246,6 +247,7 @@ public class DrivetrainSubsystem {
                 new SwerveModulePosition(m_backLeftModule.getPosition()/SWERVE_TICKS_PER_METER, new Rotation2d(m_backLeftModule.getSteerAngle())),
                 new SwerveModulePosition(m_backRightModule.getPosition()/SWERVE_TICKS_PER_METER, new Rotation2d(m_backRightModule.getSteerAngle()))
         };
+       // System.out.println("x : " + getMPoseX()/Constants.METERS_PER_INCH);
         m_pose = m_odometry.update(getGyroscopeRotation(),array); 
 
         //array of states filled with the speed and angle for each module (made from linear and angular motion for the whole robot) 

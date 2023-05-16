@@ -23,7 +23,7 @@ public class AutonomousBasePD extends AutonomousBase{
     private static final double driveKP= 0.75; //Robot.kP.getDouble(0.00006);//0.00006;
     private static final double driveKI= 0.0; //Robot.kI.getDouble(0.0);//0.0;
     private static final double driveKD= 0.0; //Robot.kD.getDouble(0.0);//0.0;
-    private static final double DRIVE_DEADBAND = 6*Constants.METERS_PER_INCH; //meters - previously 3 inches
+    private static final double DRIVE_DEADBAND = 3*Constants.METERS_PER_INCH; //meters - previously 3 inches
     private static final double TURN_DEADBAND = 6.0; 
 
     private Pose2d startingCoordinate;

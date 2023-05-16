@@ -38,13 +38,13 @@ import frc.robot.subsystems.ArmTelescopingSubsystem;
 public class Robot extends TimedRobot {
 
   private AutonomousBase m_auto;
-  private static final Boolean red = false;
-  private static final Boolean blue = true;
+  //private static final Boolean red = false;
+  //private static final Boolean blue = true;
   // DoubleSolenoid solenoidOne = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 4, 3); 
 
   private final SendableChooser<PDPath.AUTO_OPTIONS> auto_chooser = new SendableChooser<>();
   private final SendableChooser<Boolean> inverted = new SendableChooser<>();
-  private final SendableChooser<Boolean> allianceChooser = new SendableChooser<>();
+  //private final SendableChooser<Boolean> allianceChooser = new SendableChooser<>();
 
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   public static Mechanisms m_mechanisms = new Mechanisms();
@@ -52,7 +52,7 @@ public class Robot extends TimedRobot {
   public static Limelight m_limeLight = new Limelight();
 
   double mpi = Constants.METERS_PER_INCH;
-  public static Boolean isBlueAlliance = true;
+  //public static Boolean isBlueAlliance = true;
 
   AutonomousBasePD autonomousBasePD;
  
@@ -87,6 +87,17 @@ public class Robot extends TimedRobot {
     inverted.addOption("false", false);
     SmartDashboard.putData("Auto choices", auto_chooser);
     SmartDashboard.putData("telecope inverted", inverted);
+
+  //   SmartDashboard.putBoolean("bool", true);
+  //   SmartDashboard.updateValues();
+  //  // System.out.println("BOOL VALUE" + SmartDashboard.getBoolean("bool", false));
+  //   SmartDashboard.putNumber("x odometry",/*m_drivetrainSubsystem.getMPoseX()/Constants.METERS_PER_INCH*/ 9.1);
+  //   SmartDashboard.putNumber("y odometry",m_drivetrainSubsystem.getMPoseY()/Constants.METERS_PER_INCH);
+  //   SmartDashboard.putNumber("angle odometry",m_drivetrainSubsystem.getMPoseDegrees()%360);
+   // System.out.println("x: "+ m_drivetrainSubsystem.getMPoseX()/Constants.METERS_PER_INCH);
+    //SmartDashboard.putBoolean("Ready to Score", m_limeLightSubsystem.seeSomething());
+   
+    SmartDashboard.putBoolean("beam broken?", m_mechanisms.pneumaticIntakeSubsystem.isBeamBroken());
    
   }
 
@@ -101,12 +112,14 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     // System.out.println(allianceChooser.getSelected());
-    SmartDashboard.putNumber("x odometry",m_drivetrainSubsystem.getMPoseX()/Constants.METERS_PER_INCH);
+ 
+    SmartDashboard.putNumber("x odometry", m_drivetrainSubsystem.getMPoseX()/Constants.METERS_PER_INCH);
     SmartDashboard.putNumber("y odometry",m_drivetrainSubsystem.getMPoseY()/Constants.METERS_PER_INCH);
     SmartDashboard.putNumber("angle odometry",m_drivetrainSubsystem.getMPoseDegrees()%360);
-    //SmartDashboard.putBoolean("Ready to Score", m_limeLightSubsystem.seeSomething());
+   // System.out.println("x: "+ m_drivetrainSubsystem.getMPoseX()/Constants.METERS_PER_INCH);
+  //   //SmartDashboard.putBoolean("Ready to Score", m_limeLightSubsystem.seeSomething());
    
-    SmartDashboard.putBoolean("beam broken?", m_mechanisms.pneumaticIntakeSubsystem.isBeamBroken());
+  //   SmartDashboard.putBoolean("beam broken?", m_mechanisms.pneumaticIntakeSubsystem.isBeamBroken());
     //System.out.println("x: " + DrivetrainSubsystem.m_pose.getX() + "y: " + DrivetrainSubsystem.m_pose.getY() + "rotation: " + DrivetrainSubsystem.m_pose.getRotation().getDegrees()%360);
   }
 
@@ -145,11 +158,12 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() { //BEFORE TESTING: MAKE SURE YOU HAVE EITHER DEPLOYED OR ADDED DRIVETRAIN INIT
-    isBlueAlliance = allianceChooser.getSelected();
+    //isBlueAlliance = allianceChooser.getSelected();
     m_mechanisms.init(); 
     m_limeLight.init();
     m_drivetrainSubsystem.init();
     m_buttons.buttonsInit();
+    // m_drivetrainSubsystem.resetOdometry(new Pose2d());
   }
 
   /** This function is called periodically during operator control. */
@@ -175,13 +189,15 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     //m_drivetrainSubsystem.init();
-    autonomousBasePD = new AutonomousBasePD(new Pose2d(2, 1, new Rotation2d(0)), new StateWithCoordinate[]{
-      new StateWithCoordinate(AutoStates.FIRST),
-      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(3, 1, new Rotation2d(0))),
-      new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(3, 2, new Rotation2d(0))),
-      new StateWithCoordinate(AutoStates.STOP)
-  });
+    // autonomousBasePD = new AutonomousBasePD(new Pose2d(2, 1, new Rotation2d(0)), new StateWithCoordinate[]{
+    //   new StateWithCoordinate(AutoStates.FIRST),
+    //   new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(3, 1, new Rotation2d(0))),
+    //   new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(3, 2, new Rotation2d(0))),
+
+    //  new StateWithCoordinate(AutoStates.STOP)
+ // 
     //m_mechanisms.init();
+    m_drivetrainSubsystem.setSpeed( ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0, 0, m_drivetrainSubsystem.getPoseRotation()));
   }
 
   /** This function is called periodically during test mode. */
@@ -189,10 +205,10 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
     //m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.4, 0, 0, m_drivetrainSubsystem.getPoseRotation()));
     //m_drivetrainSubsystem.pitchBalace(0.0);
-    autonomousBasePD.periodic();
+    //autonomousBasePD.periodic();
     //OFFSETS
     // m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0, 0, m_drivetrainSubsystem.getPoseRotation()));
-    // m_drivetrainSubsystem.drive();
+     m_drivetrainSubsystem.drive();
 
     //MECHANISMS
     // m_mechanisms.periodic();
