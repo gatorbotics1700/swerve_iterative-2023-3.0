@@ -12,15 +12,12 @@ import frc.robot.autonomous.StateWithCoordinate.AutoStates;
 public class Limelight{
     private VisionStates visionState;
     private NetworkTable networkTable;
-    private final double LLHEIGHT = 1.35;
-    private final double ATHEIGHT = 1.15;
-    private final double LLANGLE = 0.0;
-    private final double RR = 0.3937; //intended to increase confusion- in meters tho!
     private AutonomousBasePD autonomousBasePD;
     private DrivetrainSubsystem drivetrainSubsystem;
-    private final Pose2d intakePoseRed = new Pose2d(15.037816, 0.4191, new Rotation2d(Math.toRadians(270)));
-    private final Pose2d intakePoseBlue = new Pose2d(15.037816, 7.559802, new Rotation2d(Math.toRadians(90)));
-    private final Pose2d intakePose3 = new Pose2d(14.914, 4.424, new Rotation2d(Math.toRadians(180)));
+    private final double RR = 0.4; //meters
+    private final Pose2d intakePoseRed = new Pose2d(15.037816, 0.4191, new Rotation2d(Math.toRadians(270)));//WRONG
+    private final Pose2d intakePoseBlue = new Pose2d(15.037816, 7.559802, new Rotation2d(Math.toRadians(90)));//WRONG
+    private final Pose2d intakePose3 = new Pose2d(-7.24+RR, 0.42-RR, new Rotation2d(Math.toRadians(180))); //the subtraction might be unfounded
 
     public enum VisionStates{
         DETECT,
@@ -45,20 +42,22 @@ public class Limelight{
     }
     
     public void periodic(){
-        System.out.println("Vision State: " + visionState);
+        //System.out.println("Vision State: " + visionState);
         if(visionState == VisionStates.DETECT){
             if(getTv()==1.0){
                 visionState = VisionStates.DRIVE;
                 double[] botArray = networkTable.getEntry("botpose").getDoubleArray(new double[6]);
                 //tempArray holds [x,y,z,roll,pitch,yaw,latency]
-                drivetrainSubsystem.setMPose(new Pose2d(botArray[0], botArray[1], new Rotation2d(botArray[5])));
+                drivetrainSubsystem.resetOdometry(new Pose2d(botArray[0], botArray[1], new Rotation2d(botArray[5])));
+                System.out.println("Setting robot pose to: " + new Pose2d(botArray[0], botArray[1], new Rotation2d(botArray[5])));
+                System.out.println("pose: x " + drivetrainSubsystem.getMPoseX() + "y " + drivetrainSubsystem.getMPoseY());
                 double id = networkTable.getEntry("tid").getDouble(0.0);
                 if(id==6){
                     autonomousBasePD = new AutonomousBasePD(
-                        new Pose2d(0, 0, drivetrainSubsystem.getPoseRotation()), 
+                        new Pose2d(botArray[0], botArray[1], new Rotation2d(botArray[5])), 
                         new StateWithCoordinate[]{
                             new StateWithCoordinate(AutoStates.FIRST),
-                            new StateWithCoordinate(AutoStates.DRIVE, intakePoseRed),
+                            new StateWithCoordinate(AutoStates.DRIVE, intakePose3), //changed 5/16
                             new StateWithCoordinate(AutoStates.STOP)
                         });  
                 }else if(id == 21){

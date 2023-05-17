@@ -188,7 +188,7 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-    //m_drivetrainSubsystem.init();
+    m_drivetrainSubsystem.init();
     // autonomousBasePD = new AutonomousBasePD(new Pose2d(2, 1, new Rotation2d(0)), new StateWithCoordinate[]{
     //   new StateWithCoordinate(AutoStates.FIRST),
     //   new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(3, 1, new Rotation2d(0))),
@@ -196,8 +196,9 @@ public class Robot extends TimedRobot {
 
     //  new StateWithCoordinate(AutoStates.STOP)
  // 
-    //m_mechanisms.init();
-    m_drivetrainSubsystem.setSpeed( ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0, 0, m_drivetrainSubsystem.getPoseRotation()));
+    m_mechanisms.init();
+    m_buttons.buttonsInit();
+    //m_drivetrainSubsystem.setSpeed( ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0, 0, m_drivetrainSubsystem.getPoseRotation()));
   }
 
   /** This function is called periodically during test mode. */
@@ -207,16 +208,16 @@ public class Robot extends TimedRobot {
     //m_drivetrainSubsystem.pitchBalace(0.0);
     //autonomousBasePD.periodic();
     //OFFSETS
-    // m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0, 0, m_drivetrainSubsystem.getPoseRotation()));
+     m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0, 0, m_drivetrainSubsystem.getPoseRotation()));
      m_drivetrainSubsystem.drive();
 
     //MECHANISMS
-    // m_mechanisms.periodic();
-    // m_buttons.buttonsPeriodic();
+    m_mechanisms.periodic();
+    m_buttons.buttonsPeriodic();
     //PneumaticArmPivot.solenoid.set(Value.kForward);
     //System.out.println(m_mechanisms.armTelescopingSubsystem.getArmPosition());
-    // m_mechanisms.armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0.0);
-    // m_mechanisms.elevatorSubsystem.elevatorMotor.setSelectedSensorPosition(0.0);
+    m_mechanisms.armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0.0);
+    m_mechanisms.elevatorSubsystem.elevatorMotor.setSelectedSensorPosition(0.0);
   }
   /** This function is called once when the robot is first started up. */
   @Override

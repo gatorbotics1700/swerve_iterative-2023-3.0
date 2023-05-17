@@ -183,7 +183,7 @@ public class DrivetrainSubsystem {
                 m_backRightModule.getSwerveModulePosition()
         }, 
         new Pose2d(0, 0, new Rotation2d(Math.toRadians(180)))); //assumes 180 degrees rotation is facing driver station
-        resetOdometry(new Pose2d());
+        resetOdometry(new Pose2d(0, 0, new Rotation2d(Math.toRadians(180))));
         }
   
   //from pigeon used for updating our odometry
@@ -308,10 +308,6 @@ public class DrivetrainSubsystem {
         }
         System.out.println("output: " + output);
         drive();
-    }
-
-    public void setMPose(Pose2d newPose){
-        m_pose = newPose;
     }
 
     public double getMPoseX(){

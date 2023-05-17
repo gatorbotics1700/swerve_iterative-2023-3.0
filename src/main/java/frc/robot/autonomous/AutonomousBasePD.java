@@ -71,7 +71,7 @@ public class AutonomousBasePD extends AutonomousBase{
     public void periodic()
     {
         states = stateSequence[i].state;
-        System.out.println("state: " + states);
+        //System.out.println("state: " + states);
         if (states == AutoStates.FIRST){
             turnController.setTolerance(TURN_DEADBAND); 
             xController.setTolerance(DRIVE_DEADBAND);
@@ -173,7 +173,7 @@ public class AutonomousBasePD extends AutonomousBase{
     @Override
     public void driveDesiredDistance(Pose2d dPose){      
         //System.out.println("xcontroller setpoint: " + xController.getSetpoint());
-        //System.out.println("cur pose: " + DrivetrainSubsystem.m_pose);
+        System.out.println("cur pose: " + drivetrainSubsystem.getMPoseX() + " y " + drivetrainSubsystem.getMPoseY());
         //System.out.println("desired pose: " + dPose);
         double speedX = xController.calculate(drivetrainSubsystem.getMPoseX(), dPose.getX());
         double speedY = yController.calculate(drivetrainSubsystem.getMPoseY(), dPose.getY());
@@ -207,13 +207,13 @@ public class AutonomousBasePD extends AutonomousBase{
           //  System.out.println("Speed rotat after: " + speedRotat);
         }
 
-        drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speedX, speedY, speedRotat, drivetrainSubsystem.getPoseRotation()));  
+        drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(speedX, speedY, 0, drivetrainSubsystem.getPoseRotation()));  
         double errorX = (dPose.getX() - drivetrainSubsystem.getMPoseX());
         double errorY = (dPose.getY() - drivetrainSubsystem.getMPoseY());
         double errorRotat = turnController.getPositionError();
-        System.out.println("Rotation error: " + errorRotat + " deadband " + turnController.getPositionTolerance());
+        //System.out.println("Rotation error: " + errorRotat + " deadband " + turnController.getPositionTolerance());
         System.out.println("Speed X: " + speedX + " Speed Y: " + speedY + " Speed R: " + speedRotat);
-        //System.out.println("error:" + errorX + ", " + errorY + ", " + errorRotat);
+        System.out.println("error:" + errorX + ", " + errorY + ", " + errorRotat);
         //System.out.println("Desired Position: " + dPose.getX() + ", " + dPose.getY());
     }
 
