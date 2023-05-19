@@ -22,6 +22,7 @@ public class AutonomousBaseMP extends AutonomousBase{
     private Trajectory trajectory1;
     private Trajectory trajectory2;
     private Trajectory trajectory3;
+    private Trajectory trajectory4;
     private Trajectory.State end;
     private HolonomicDriveController controller;
         // trapezoid profile takes in max rotation velocity and max rotation acceleration 
@@ -30,10 +31,11 @@ public class AutonomousBaseMP extends AutonomousBase{
     
     private static DrivetrainSubsystem drivetrainSubsystem;
 
-    public AutonomousBaseMP(Trajectory trajectory1, Trajectory trajectory2, Trajectory trajectory3){
+    public AutonomousBaseMP(Trajectory trajectory1, Trajectory trajectory2, Trajectory trajectory3, Trajectory trajectory4){
         this.trajectory1 = trajectory1; 
         this.trajectory2 = trajectory2;
         this.trajectory3 = trajectory3;
+        this.trajectory4 = trajectory4; 
         controller = new HolonomicDriveController(
             new PIDController(1, 0, 0), new PIDController(1, 0, 0), //TODO: CHANGE KP
             new ProfiledPIDController(1, 0, 0,
@@ -60,6 +62,7 @@ public class AutonomousBaseMP extends AutonomousBase{
         TRAJECTORY1,
         TRAJECTORY2, 
         TRAJECTORY3,
+        TRAJECTORY4,
         PLACEHIGH, 
         PICKUP, 
         BALANCE,
@@ -87,12 +90,17 @@ public class AutonomousBaseMP extends AutonomousBase{
         } else if (doing == Doing.TRAJECTORY2){
             followTrajectory(trajectory2);
             if (trajectoryDone(trajectory2)){
-                setDoing(Doing.STOP);
+                setDoing(Doing.TRAJECTORY3);
             }
         } else if (doing == Doing.TRAJECTORY3){
             System.out.println("traj 3 End X: "+ end.poseMeters.getX() + " traj 3 Get X: " + drivetrainSubsystem.getMPoseX()); 
             followTrajectory(trajectory3);
             if (trajectoryDone(trajectory3)){
+                setDoing(Doing.TRAJECTORY4);
+            }
+        } else if (doing == Doing.TRAJECTORY4){
+            followTrajectory(trajectory4);
+            if (trajectoryDone(trajectory4)){
                 setDoing(Doing.STOP);
             }
         } else if (doing == Doing.PLACEHIGH){

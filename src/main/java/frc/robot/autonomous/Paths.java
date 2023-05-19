@@ -33,7 +33,8 @@ public class Paths {
         MIDTIMEDENGAGED,
         LOWTIMEDENGAGED,
         DRIVETIMEDENGAGED,
-        MP;
+        MP, 
+        MP_HD3SCORER; 
     }
 
     public static AutonomousBase constructAuto(AUTO_OPTIONS selectedAuto){
@@ -145,7 +146,15 @@ public class Paths {
             return new AutonomousBaseMP(
                 Trajectories.uno, 
                 Trajectories.dos,
-                Trajectories.tres
+                Trajectories.tres,
+                Trajectories.nada
+            ); 
+        } else if(selectedAuto == AUTO_OPTIONS.MP_HD3SCORER){
+            return new AutonomousBaseMP(
+                Trajectories.uno, 
+                Trajectories.dos,
+                Trajectories.tres,
+                Trajectories.nada
             ); 
         } else if(selectedAuto== AUTO_OPTIONS.LOWTIMEDENGAGED){
             return new AutonomousBaseEngage(1);
