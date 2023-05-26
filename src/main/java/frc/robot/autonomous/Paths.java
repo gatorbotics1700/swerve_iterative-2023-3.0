@@ -34,7 +34,8 @@ public class Paths {
         LOWTIMEDENGAGED,
         DRIVETIMEDENGAGED,
         MP, 
-        MP_HD3SCORER; 
+        MP_HD3SCORER, 
+        MP_TESTPATH;
     }
 
     public static AutonomousBase constructAuto(AUTO_OPTIONS selectedAuto){
@@ -151,12 +152,20 @@ public class Paths {
             ); 
         } else if(selectedAuto == AUTO_OPTIONS.MP_HD3SCORER){
             return new AutonomousBaseMP(
+                Trajectories.oneHD3R, 
+                Trajectories.twoHD3R,
+                Trajectories.threeHD3R,
+                Trajectories.fourHD3R
+            ); 
+        } else if(selectedAuto == AUTO_OPTIONS.MP_TESTPATH){
+            return new AutonomousBaseMP(
+                //NOTE BECAUSE AVERY WILL FORGET: CHANGE THESE TRAJECTORIES THAT THIS IS CALLING PLEASE PLEASE!!
                 Trajectories.uno, 
                 Trajectories.dos,
                 Trajectories.tres,
                 Trajectories.nada
             ); 
-        } else if(selectedAuto== AUTO_OPTIONS.LOWTIMEDENGAGED){
+        }else if(selectedAuto== AUTO_OPTIONS.LOWTIMEDENGAGED){
             return new AutonomousBaseEngage(1);
         } else if (selectedAuto== AUTO_OPTIONS.MIDTIMEDENGAGED){
             return new AutonomousBaseEngage(2);

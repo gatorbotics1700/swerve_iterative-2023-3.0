@@ -6,6 +6,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.MaxVelocityConstraint;
 import edu.wpi.first.math.trajectory.constraint.SwerveDriveKinematicsConstraint;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.Constants;
 import frc.robot.Robot;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 
 //IN METERS!
 public class Trajectories{
+    private static double mpi = Constants.METERS_PER_INCH; 
 
     public static Trajectory uno = generateTrajectory(
         new Pose2d(), 
@@ -77,6 +79,51 @@ public class Trajectories{
         new Translation2d(400.0, 55.0),
         new Translation2d(454.199, 45.934),
         new Translation2d(525, 43.5),
+        false
+    ); 
+
+    public static Trajectory flowerOne = generateTrajectory(
+        new Pose2d(0, 20 * mpi, new Rotation2d(Math.toRadians(0))),
+        new Pose2d(11 * mpi, 2 * mpi, new Rotation2d(Math.toRadians(0))),
+        new Translation2d(2.69 * mpi, 16.24 * mpi),
+        new Translation2d(4.58 * mpi, 10.44 * mpi),
+        new Translation2d(6.22 * mpi, 5.18 * mpi),
+        false
+    ); 
+
+    public static Trajectory flowerTwo = generateTrajectory(
+        new Pose2d(11 * mpi, 2 * mpi, new Rotation2d(Math.toRadians(0))),
+        new Pose2d(27.4 * mpi, 15.4 * mpi, new Rotation2d(Math.toRadians(0))),
+        new Translation2d(16.52 * mpi, 1.65 * mpi),
+        new Translation2d(23.08 * mpi, 5.07 * mpi),
+        new Translation2d(25.3 * mpi, 10.42 * mpi),
+        false 
+    ); 
+
+    public static Trajectory flowerThree = generateTrajectory(
+        new Pose2d(11 * mpi, 2 * mpi, new Rotation2d(Math.toRadians(0))),
+        new Pose2d(27.4 * mpi, 15.4 * mpi, new Rotation2d(Math.toRadians(0))),
+        new Translation2d(16.52 * mpi, 1.65 * mpi),
+        new Translation2d(23.08 * mpi, 5.07 * mpi),
+        new Translation2d(25.3 * mpi, 10.42 * mpi),
+        true
+    ); 
+
+    public static Trajectory flowerFour = generateTrajectory(
+        new Pose2d(0, 20 * mpi, new Rotation2d(Math.toRadians(0))),
+        new Pose2d(11 * mpi, 2 * mpi, new Rotation2d(Math.toRadians(0))),
+        new Translation2d(2.69 * mpi, 16.24 * mpi),
+        new Translation2d(4.58 * mpi, 10.44 * mpi),
+        new Translation2d(6.22 * mpi, 5.18 * mpi),
+        true
+    ); 
+
+    public static Trajectory nada = generateTrajectory(
+        new Pose2d(),
+        new Pose2d(),
+        new Translation2d(),
+        new Translation2d(),
+        new Translation2d(),
         false
     ); 
 
