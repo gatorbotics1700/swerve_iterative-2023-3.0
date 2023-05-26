@@ -51,6 +51,8 @@ public class AutonomousBaseMP extends AutonomousBase{
 
         double timeCheck = trajectory1.getTotalTimeSeconds();
         end = trajectory1.sample(timeCheck);
+        //Avery note: might need to edit this when we work with multiple trajectories bc we only check Traj one 
+        //maybe a method to reset time that can be called when we switch to a new trajectory in the else ifs 
         System.out.println("total time: " + timeCheck);
         System.out.println("total time: " + timeCheck);
         System.out.println("Init pose: " + drivetrainSubsystem.getMPoseX());
