@@ -159,7 +159,6 @@ public class Paths {
             ); 
         } else if(selectedAuto == AUTO_OPTIONS.MP_TESTPATH){
             return new AutonomousBaseMP(
-                //NOTE BECAUSE AVERY WILL FORGET: CHANGE THESE TRAJECTORIES THAT THIS IS CALLING PLEASE PLEASE!!
                 Trajectories.flowerOne, 
                 Trajectories.flowerTwo,
                 Trajectories.flowerThree,

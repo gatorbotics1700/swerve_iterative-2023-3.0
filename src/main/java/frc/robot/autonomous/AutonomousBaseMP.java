@@ -75,6 +75,7 @@ public class AutonomousBaseMP extends AutonomousBase{
     private Doing doing = Doing.FIRST; 
     
     @Override
+    //Avery note: make state machine work better!! Like PID 
     public void periodic(){
         if (doing == Doing.FIRST){
             timeStart = System.currentTimeMillis();
