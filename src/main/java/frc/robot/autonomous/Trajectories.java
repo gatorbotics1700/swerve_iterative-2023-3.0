@@ -24,8 +24,7 @@ public class Trajectories{
         new Pose2d(2.0, 0.0, new Rotation2d(Math.toRadians(90))), 
         new Translation2d(1.0, 0.0), 
         new Translation2d(1.2, 0.25), 
-        new Translation2d(1.4, 0.0),
-        false
+        new Translation2d(1.4, 0.0)
     );
 
     public static Trajectory dos = generateTrajectory(
@@ -33,8 +32,7 @@ public class Trajectories{
         new Pose2d(1.5, 2.3, new Rotation2d(0)), 
         new Translation2d(.2, .5), 
         new Translation2d(.9, 1.5), 
-        new Translation2d(1.5, 2.0), 
-        false
+        new Translation2d(1.5, 2.0)
     );
 
     public static Trajectory tres = generateTrajectory(
@@ -42,8 +40,7 @@ public class Trajectories{
         new Pose2d(2.0, -1.0, new Rotation2d(0)), 
         new Translation2d(.2, -.4), 
         new Translation2d(.9, -.6), 
-        new Translation2d(1.5, -.8),
-        false
+        new Translation2d(1.5, -.8)
     );
 
     public static Trajectory oneHD3R = generateTrajectory(
@@ -51,8 +48,7 @@ public class Trajectories{
         new Pose2d(372.684, 37.193, new Rotation2d(Math.toRadians(0))),
         new Translation2d(520.0, 25.2), 
         new Translation2d(445.0, 30.2), 
-        new Translation2d(400.0, 33.19), 
-        false
+        new Translation2d(400.0, 33.19)
     ); 
 
     public static Trajectory twoHD3R = generateTrajectory(
@@ -60,8 +56,7 @@ public class Trajectories{
         new Pose2d(595.461, 43.068, new Rotation2d(Math.toRadians(180))),
         new Translation2d(400.0, 33.19), 
         new Translation2d(445.0, 30.2), 
-        new Translation2d(520.0, 25.2), 
-        false 
+        new Translation2d(520.0, 25.2) 
     ); 
 
     public static Trajectory threeHD3R = generateTrajectory(
@@ -69,8 +64,7 @@ public class Trajectories{
         new Pose2d(372.606,85.622, new Rotation2d(Math.toRadians(0))),
         new Translation2d(525, 43.5),
         new Translation2d(454.199, 45.934), 
-        new Translation2d(400.0, 55.0),
-        false
+        new Translation2d(400.0, 55.0)
     ); 
 
     public static Trajectory fourHD3R = generateTrajectory(
@@ -78,8 +72,7 @@ public class Trajectories{
         new Pose2d(595.529, 66.117, new Rotation2d(Math.toRadians(180))),
         new Translation2d(400.0, 55.0),
         new Translation2d(454.199, 45.934),
-        new Translation2d(525, 43.5),
-        false
+        new Translation2d(525, 43.5)
     ); 
 
     public static Trajectory flowerOne = generateTrajectory(
@@ -87,8 +80,7 @@ public class Trajectories{
         new Pose2d(11 * mpi, 2 * mpi, new Rotation2d(Math.toRadians(0))),
         new Translation2d(2.69 * mpi, 16.24 * mpi),
         new Translation2d(4.58 * mpi, 10.44 * mpi),
-        new Translation2d(6.22 * mpi, 5.18 * mpi),
-        false
+        new Translation2d(6.22 * mpi, 5.18 * mpi)
     ); 
 
     public static Trajectory flowerTwo = generateTrajectory(
@@ -96,26 +88,23 @@ public class Trajectories{
         new Pose2d(27.4 * mpi, 15.4 * mpi, new Rotation2d(Math.toRadians(0))),
         new Translation2d(16.52 * mpi, 1.65 * mpi),
         new Translation2d(23.08 * mpi, 5.07 * mpi),
-        new Translation2d(25.3 * mpi, 10.42 * mpi),
-        false 
+        new Translation2d(25.3 * mpi, 10.42 * mpi) 
     ); 
 
     public static Trajectory flowerThree = generateTrajectory(
-        new Pose2d(11 * mpi, 2 * mpi, new Rotation2d(Math.toRadians(0))),
         new Pose2d(27.4 * mpi, 15.4 * mpi, new Rotation2d(Math.toRadians(0))),
-        new Translation2d(16.52 * mpi, 1.65 * mpi),
+        new Pose2d(11 * mpi, 2 * mpi, new Rotation2d(Math.toRadians(0))),
+        new Translation2d(25.3 * mpi, 10.42 * mpi), 
         new Translation2d(23.08 * mpi, 5.07 * mpi),
-        new Translation2d(25.3 * mpi, 10.42 * mpi),
-        true
+        new Translation2d(16.52 * mpi, 1.65 * mpi)
     ); 
 
     public static Trajectory flowerFour = generateTrajectory(
-        new Pose2d(0, 20 * mpi, new Rotation2d(Math.toRadians(0))),
         new Pose2d(11 * mpi, 2 * mpi, new Rotation2d(Math.toRadians(0))),
-        new Translation2d(2.69 * mpi, 16.24 * mpi),
+        new Pose2d(0, 20 * mpi, new Rotation2d(Math.toRadians(0))),
+        new Translation2d(6.22 * mpi, 5.18 * mpi), 
         new Translation2d(4.58 * mpi, 10.44 * mpi),
-        new Translation2d(6.22 * mpi, 5.18 * mpi),
-        true
+        new Translation2d(2.69 * mpi, 16.24 * mpi)
     ); 
 
     public static Trajectory nada = generateTrajectory(
@@ -123,11 +112,10 @@ public class Trajectories{
         new Pose2d(),
         new Translation2d(),
         new Translation2d(),
-        new Translation2d(),
-        false
+        new Translation2d()
     ); 
 
-    public static Trajectory generateTrajectory(Pose2d starting, Pose2d ending, Translation2d interior1, Translation2d interior2, Translation2d interior3, boolean isReversed){
+    public static Trajectory generateTrajectory(Pose2d starting, Pose2d ending, Translation2d interior1, Translation2d interior2, Translation2d interior3){
         ArrayList<Translation2d> interiorWaypoints = new ArrayList<Translation2d>();
         interiorWaypoints.add(interior1);
         interiorWaypoints.add(interior2);
@@ -140,7 +128,6 @@ public class Trajectories{
         System.out.println("Start config pose: " + Robot.m_drivetrainSubsystem.getMPoseX());
         config.addConstraint(swerveDriveKinematicsConstraint);
         config.addConstraint(maxVelocityConstraint);
-        config.setReversed(isReversed); 
 
         Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
             starting,
