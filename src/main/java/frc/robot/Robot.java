@@ -59,6 +59,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() { //creates options for different autopaths, names are placeholders    
     System.out.println("#I'm Awake");
+    System.out.println("Yay Gatorbotics!");
+    System.out.println("Slay 1700");
 
     //TODO: make the names come from the enum with a for loop cycling through everything in it?
     auto_chooser.setDefaultOption("testPath", PDPath.AUTO_OPTIONS.TESTPATH);
@@ -175,16 +177,17 @@ public class Robot extends TimedRobot {
     //m_drivetrainSubsystem.pitchBalace(0.0);
     
     //OFFSETS
-    m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0, 0, m_drivetrainSubsystem.getPoseRotation()));
-    m_drivetrainSubsystem.drive();
+    //m_drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0.2, 0, 0, m_drivetrainSubsystem.getPoseRotation()));
+    //m_drivetrainSubsystem.drive();
 
     //MECHANISMS
     m_mechanisms.periodic();
     m_buttons.buttonsPeriodic();
     //PneumaticArmPivot.solenoid.set(Value.kForward);
     //System.out.println(m_mechanisms.armTelescopingSubsystem.getArmPosition());
-    m_mechanisms.armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0.0);
-    m_mechanisms.elevatorSubsystem.elevatorMotor.setSelectedSensorPosition(0.0);
+    //m_mechanisms.armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0.0);
+    //m_mechanisms.elevatorSubsystem.elevatorMotor.setSelectedSensorPosition(0.0);
+    System.out.println(m_mechanisms.elevatorSubsystem.elevatorMotor.getSelectedSensorPosition());
   }
   /** This function is called once when the robot is first started up. */
   @Override

@@ -18,6 +18,7 @@ public class ArmTelescopingSubsystem {
     private static final int LOWARMTICKS = 34900;
     private static final int SUBTICKS = 75000 + 34900;
     private static final int RETRACTEDTICKS = 0;
+    private static final int KARYS_ARMTICKS = 100000;
     private static final int DEADBAND = 15000;
     private static final int MAX_TICKS = 231686 + 34900; 
     
@@ -36,7 +37,8 @@ public class ArmTelescopingSubsystem {
         SHELF_ARM_LENGTH,
         MID_ARM_LENGTH,
         SINGLE_SUBSTATION,
-        MANUAL;
+        MANUAL,
+        KARYS_ARM;
     }
     
     public ArmTelescopingSubsystem(){
@@ -77,6 +79,9 @@ public class ArmTelescopingSubsystem {
             telescopeDeadband(SUBTICKS);
         } else if(tState == TelescopingStates.MANUAL){
             manual();
+        } else if(tState == TelescopingStates.KARYS_ARM){
+            telescopingMotor.set(ControlMode.Position, KARYS_ARMTICKS);
+            telescopeDeadband(KARYS_ARMTICKS);
         } else { //retracted again for safety
             telescopingMotor.set(ControlMode.PercentOutput, 0);
         }

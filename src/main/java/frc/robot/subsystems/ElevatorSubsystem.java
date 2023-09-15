@@ -21,6 +21,7 @@ public class ElevatorSubsystem {
     private static final double SHELF_HEIGHT_INCHES = 30; 
     private static final double AUTO_HEIGHT_TICKS = 309563.0;
     private static final double MAX_HEIGHT_INCHES = 31.5;
+    private static final double KARYS_ELEVATOR_INCHES = 18;
 
     private static final double ELEVATOR_SPROCKET_DIAMETER = 1.28;
     private static final double ELEVATOR_GEAR_RATIO = 25.0;
@@ -33,7 +34,7 @@ public class ElevatorSubsystem {
     private static final double DEADBAND = 5000; //15000;
 
     public static enum ElevatorStates{
-        ZERO, LOW_ELEVATOR_HEIGHT, MID_ELEVATOR_HEIGHT, SHELF_ELEVATOR_HEIGHT, AUTO_HEIGHT, MANUAL, STOPPED; 
+        ZERO, LOW_ELEVATOR_HEIGHT, MID_ELEVATOR_HEIGHT, SHELF_ELEVATOR_HEIGHT, AUTO_HEIGHT, MANUAL, STOPPED, KARYS_ELEVATOR; 
     }
 
     public ElevatorSubsystem(){
@@ -74,6 +75,9 @@ public class ElevatorSubsystem {
             elevatorDeadband(AUTO_HEIGHT_TICKS);
         }else if (elevatorState == ElevatorStates.MANUAL){
             manualElevator();
+        } else if (elevatorState == ElevatorStates.KARYS_ELEVATOR){
+            double desiredTicks = determineRightTicks(KARYS_ELEVATOR_INCHES);
+            elevatorDeadband(desiredTicks);
         } else { //emergency stop again for safety
             elevatorMotor.set(ControlMode.PercentOutput, 0.0);
         }
