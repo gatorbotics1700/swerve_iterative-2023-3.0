@@ -138,4 +138,48 @@ public class Trajectories{
         System.out.println("End config pose: " + Robot.m_drivetrainSubsystem.getMPoseX());
         return trajectory;
     }
+    //the point of the method is to not have to type out new pose2d etc etc every time you want a trajectory
+    //s stands for start (as in the starting pose2d), e is for end, and wp1,2, and 3 are waypoints
+    // public static Trajectory easyTrajectory(double sx, double sy, double sr, double ex, double ey, double er, double wp1x, double wp1y, double wp2x, double wp2y, double wp3x, double wp3y){
+    //     Trajectory traj = generateTrajectory(
+    //         new Pose2d(sx * mpi, sy * mpi, new Rotation2d(Math.toRadians(sr))),
+    //         new Pose2d(ex * mpi, ey * mpi, new Rotation2d(Math.toRadians(er))),
+    //         new Translation2d(wp1x * mpi, wp1y * mpi), 
+    //         new Translation2d(wp2x * mpi, wp2y * mpi),
+    //         new Translation2d(wp3x * mpi, wp3y * mpi)
+    //     );
+    //     return traj;
+    // };
+    //new version with array
+    public static Trajectory easyTrajectory(double[] coords){
+        Trajectory traj = generateTrajectory(
+            new Pose2d(coords[0] * mpi, coords[1] * mpi, new Rotation2d(Math.toRadians(coords[2]))),
+            new Pose2d(coords[3] * mpi, coords[4] * mpi, new Rotation2d(Math.toRadians(coords[5]))),
+            new Translation2d(coords[6] * mpi, coords[7] * mpi), 
+            new Translation2d(coords[8] * mpi, coords[9] * mpi),
+            new Translation2d(coords[10] * mpi, coords[10] * mpi)
+        );
+        return traj;
+    }
+    //avery says you need to do it this way, you can't just call easyTrajectory
+    static double[] ntc = {2,3,4,5,6,7,8,9,10,11,12};
+    public static Trajectory ntrajectory = easyTrajectory(ntc);
+    //public static Trajectory ntrajectory = easyTrajectory(1,2,3,4,5,6,7,8,9,10,11,12);
+
+    public static AutonomousBaseMP easyTPath(double[] tp1, double[] tp2, double[] tp3, double[] tp4){
+        Trajectory trajectory1 = easyTrajectory(tp1);
+        Trajectory trajectory2 = easyTrajectory(tp2);
+        Trajectory trajectory3 = easyTrajectory(tp3);
+        Trajectory trajectory4 = easyTrajectory(tp4);
+       
+        return new AutonomousBaseMP(
+            trajectory1,
+            trajectory2,
+            trajectory3,
+            trajectory4
+        );
+    }
+    
+
+
 }
