@@ -66,10 +66,10 @@ public class AutonomousBaseMP extends AutonomousBase{
         TRAJECTORY3,
         TRAJECTORY4,
         PLACEHIGH, 
-        PICKUP, 
         BALANCE,
         STOP,
-        FIRST; 
+        LOW,
+        FIRST;
     }
 
     private Doing doing = Doing.FIRST; 
@@ -107,8 +107,8 @@ public class AutonomousBaseMP extends AutonomousBase{
                 setDoing(Doing.STOP);
             }
         } else if (doing == Doing.PLACEHIGH){
-            
-        } else if (doing == Doing.PICKUP){
+        
+        } else if (doing == Doing.LOW){
             
         } else if (doing == Doing.BALANCE){
             
@@ -118,6 +118,7 @@ public class AutonomousBaseMP extends AutonomousBase{
 
         timeElapsed = System.currentTimeMillis() - timeStart;
     }
+
 
     public boolean trajectoryDone(Trajectory trajectory){
         double error = Math.abs(end.poseMeters.getX() - drivetrainSubsystem.getMPoseX());

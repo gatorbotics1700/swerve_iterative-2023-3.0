@@ -18,6 +18,14 @@ import edu.wpi.first.math.geometry.Translation2d;
 //IN METERS!
 public class Trajectories{
     private static double mpi = Constants.METERS_PER_INCH; 
+    //lauren + caro note: copied and pasted from Paths.java (for HDLEAVEBMP)
+    //Avery note: we might need to adjust for origin in the middle
+    private static final double STARTING_X = 68.95;
+    private static final double ENDING_X = 100; //Avery note: guess - change later
+    private static final double HB_Y_B = 200.046;
+    private static final double HD_Y_B = 54.69;
+    private static final double HB_Y_R = 200.046;
+    private static final double HD_Y_R = 54.69;
 
     public static Trajectory uno = generateTrajectory(
         new Pose2d(), 
@@ -75,38 +83,6 @@ public class Trajectories{
         new Translation2d(525, 43.5)
     ); 
 
-    public static Trajectory flowerOne = generateTrajectory(
-        new Pose2d(0, 20 * mpi, new Rotation2d(Math.toRadians(0))),
-        new Pose2d(11 * mpi, 2 * mpi, new Rotation2d(Math.toRadians(0))),
-        new Translation2d(2.69 * mpi, 16.24 * mpi),
-        new Translation2d(4.58 * mpi, 10.44 * mpi),
-        new Translation2d(6.22 * mpi, 5.18 * mpi)
-    ); 
-
-    public static Trajectory flowerTwo = generateTrajectory(
-        new Pose2d(11 * mpi, 2 * mpi, new Rotation2d(Math.toRadians(0))),
-        new Pose2d(27.4 * mpi, 15.4 * mpi, new Rotation2d(Math.toRadians(0))),
-        new Translation2d(16.52 * mpi, 1.65 * mpi),
-        new Translation2d(23.08 * mpi, 5.07 * mpi),
-        new Translation2d(25.3 * mpi, 10.42 * mpi) 
-    ); 
-
-    public static Trajectory flowerThree = generateTrajectory(
-        new Pose2d(27.4 * mpi, 15.4 * mpi, new Rotation2d(Math.toRadians(0))),
-        new Pose2d(11 * mpi, 2 * mpi, new Rotation2d(Math.toRadians(0))),
-        new Translation2d(25.3 * mpi, 10.42 * mpi), 
-        new Translation2d(23.08 * mpi, 5.07 * mpi),
-        new Translation2d(16.52 * mpi, 1.65 * mpi)
-    ); 
-
-    public static Trajectory flowerFour = generateTrajectory(
-        new Pose2d(11 * mpi, 2 * mpi, new Rotation2d(Math.toRadians(0))),
-        new Pose2d(0, 20 * mpi, new Rotation2d(Math.toRadians(0))),
-        new Translation2d(6.22 * mpi, 5.18 * mpi), 
-        new Translation2d(4.58 * mpi, 10.44 * mpi),
-        new Translation2d(2.69 * mpi, 16.24 * mpi)
-    ); 
-
     public static Trajectory nada = generateTrajectory(
         new Pose2d(),
         new Pose2d(),
@@ -114,6 +90,30 @@ public class Trajectories{
         new Translation2d(),
         new Translation2d()
     ); 
+
+    public static Trajectory HDLEAVEBMP = generateTrajectory(
+        new Pose2d(STARTING_X * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
+        new Pose2d(ENDING_X * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
+        new Translation2d(75 * mpi, HD_Y_B * mpi),
+        new Translation2d(85 * mpi, HD_Y_B * mpi),
+        new Translation2d(95 * mpi, HD_Y_B * mpi)
+    );
+
+    public static Trajectory HBLEAVEBMP = generateTrajectory(
+        new Pose2d(STARTING_X * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
+        new Pose2d(ENDING_X * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
+        new Translation2d(75 * mpi, HB_Y_B * mpi),
+        new Translation2d(85 * mpi, HB_Y_B * mpi),
+        new Translation2d(95 * mpi, HB_Y_B * mpi)
+    );
+
+    public static Trajectory ENGAGEMP = generateTrajectory(
+        new Pose2d(STARTING_X * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
+        new Pose2d(265 * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
+        new Translation2d(117.9625 * mpi, HD_Y_B * mpi),
+        new Translation2d(166.975 * mpi, HD_Y_B * mpi),
+        new Translation2d(215.9875 * mpi, HD_Y_B * mpi)
+    );
 
     public static Trajectory generateTrajectory(Pose2d starting, Pose2d ending, Translation2d interior1, Translation2d interior2, Translation2d interior3){
         ArrayList<Translation2d> interiorWaypoints = new ArrayList<Translation2d>();

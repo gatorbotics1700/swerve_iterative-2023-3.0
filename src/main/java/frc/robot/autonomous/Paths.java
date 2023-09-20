@@ -83,7 +83,7 @@ public class Paths {
             );
         } else if (selectedAuto == AUTO_OPTIONS.LOWHDPLACELEAVEB){
             return new AutonomousBasePD(
-                new Pose2d(STARTING_X * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))), 
+                new Pose2d(STARTING_X * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))), //Avery note: why is it HB_Y_B?
                 new StateWithCoordinate[]{
                 new StateWithCoordinate(AutoStates.FIRST),
                 new StateWithCoordinate(AutoStates.LOWNODE),
