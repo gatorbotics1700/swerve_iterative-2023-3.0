@@ -7,7 +7,10 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.geometry.*;
 import frc.robot.Robot;
+import frc.robot.autonomous.StateWithCoordinate.AutoStates;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.Mechanisms.MechanismStates;
+import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -15,6 +18,8 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.constraint.SwerveDriveKinematicsConstraint;
 import edu.wpi.first.math.trajectory.constraint.TrajectoryConstraint;
 import edu.wpi.first.math.trajectory.constraint.MaxVelocityConstraint;
+import frc.robot.subsystems.Mechanisms;
+
 
 public class AutonomousBaseMP extends AutonomousBase{
     private double timeStart;
@@ -30,6 +35,14 @@ public class AutonomousBaseMP extends AutonomousBase{
         // PIDController #2 : the first arg rep how many m/s added in the y direction for every meter of error in the y direction
     
     private static DrivetrainSubsystem drivetrainSubsystem;
+    public AutoStates states;
+    private Mechanisms mechanisms;
+    private AutonomousBaseEngage autoEngage; 
+
+
+    private Boolean isFirst;
+    private double startTime;
+    private int i;
 
     public AutonomousBaseMP(Trajectory trajectory1, Trajectory trajectory2, Trajectory trajectory3, Trajectory trajectory4){
         this.trajectory1 = trajectory1; 
@@ -46,9 +59,9 @@ public class AutonomousBaseMP extends AutonomousBase{
 
     @Override
     public void init(){
-        timeStart = System.currentTimeMillis();
-        timeElapsed = 0;
-
+        timeStart = 0.0;
+        i = 0;
+        isFirst = true;
         double timeCheck = trajectory1.getTotalTimeSeconds();
         end = trajectory1.sample(timeCheck);
         //Avery note: might need to edit this when we work with multiple trajectories bc we only check Traj one 
@@ -60,65 +73,90 @@ public class AutonomousBaseMP extends AutonomousBase{
         //System.out.println("Traj 1 " + trajectory1 +  "/n Traj 2 " + trajectory2 + "/n Traj 3 " + trajectory3); 
     }
 
-    public static enum Doing{
+    public static enum MPStates{
         TRAJECTORY1,
         TRAJECTORY2, 
         TRAJECTORY3,
         TRAJECTORY4,
-        PLACEHIGH, 
+        MID, 
         BALANCE,
         STOP,
         LOW,
         FIRST;
     }
 
-    private Doing doing = Doing.FIRST; 
+    private MPStates mpstates = MPStates.FIRST; 
     
     @Override
     //Avery note: make state machine work better!! Like PID 
     public void periodic(){
-        if (doing == Doing.FIRST){
+        if (mpstates == MPStates.FIRST){
             timeStart = System.currentTimeMillis();
-            setDoing(Doing.TRAJECTORY1);
+            setStates(MPStates.TRAJECTORY1);
             System.out.println("Doing first");
             System.out.println("initial pose: " + drivetrainSubsystem.getMPoseX());
-        } else if (doing == Doing.TRAJECTORY1){
+        } else if (mpstates == MPStates.TRAJECTORY1){
             System.out.println("traj 1 End X: "+ end.poseMeters.getX() + " traj 1 Get X: " + drivetrainSubsystem.getMPoseX()); 
             followTrajectory(trajectory1);
             System.out.println("Doing Traj 1"); 
             if (trajectoryDone(trajectory1)){
                  System.out.println("STOP");
-                 setDoing(Doing.STOP);
+                 setStates(MPStates.STOP);
             }
-        } else if (doing == Doing.TRAJECTORY2){
+        } else if (mpstates == MPStates.TRAJECTORY2){
             followTrajectory(trajectory2);
             if (trajectoryDone(trajectory2)){
-                setDoing(Doing.TRAJECTORY3);
+                setStates(MPStates.TRAJECTORY3);
             }
-        } else if (doing == Doing.TRAJECTORY3){
+        } else if (mpstates == MPStates.TRAJECTORY3){
             System.out.println("traj 3 End X: "+ end.poseMeters.getX() + " traj 3 Get X: " + drivetrainSubsystem.getMPoseX()); 
             followTrajectory(trajectory3);
             if (trajectoryDone(trajectory3)){
-                setDoing(Doing.TRAJECTORY4);
+                setStates(MPStates.TRAJECTORY4);
             }
-        } else if (doing == Doing.TRAJECTORY4){
+        } else if (mpstates == MPStates.TRAJECTORY4){
             followTrajectory(trajectory4);
             if (trajectoryDone(trajectory4)){
-                setDoing(Doing.STOP);
+                setStates(MPStates.STOP);
             }
-        } else if (doing == Doing.PLACEHIGH){
-        
-        } else if (doing == Doing.LOW){
+        } else if (mpstates == MPStates.MID){
+            System.out.println("mid node");
+            setStates(MPStates.MID);
+            if(mechanisms.isDoneMid()==true){
+                if(isFirst){
+                    startTime = System.currentTimeMillis();
+                    isFirst = false;
+                }
+                mechanisms.pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeStates.RELEASING);
+                if (System.currentTimeMillis()-startTime>=1000){ //time to outtake before moving on
+                    i++;
+                    isFirst = true;
+                }
+            } 
+
+        } else if (mpstates == MPStates.LOW){
+            System.out.println("low node");
+            setStates(MPStates.LOW);
+            if(isFirst){
+                timeStart = System.currentTimeMillis();
+                isFirst = false;
+            }
+            if(mechanisms.isDoneLow()==true){
+                mechanisms.pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeStates.RELEASING);
+                if (System.currentTimeMillis()-startTime>=1000){
+                    i++;
+                    isFirst = true;
+                }
+            }
             
-        } else if (doing == Doing.BALANCE){
-            
+        } else if (mpstates == MPStates.BALANCE){
+            autoEngage.periodic();   
         } else {
             drivetrainSubsystem.stopDrive();
         }
 
         timeElapsed = System.currentTimeMillis() - timeStart;
     }
-
 
     public boolean trajectoryDone(Trajectory trajectory){
         double error = Math.abs(end.poseMeters.getX() - drivetrainSubsystem.getMPoseX());
@@ -133,8 +171,8 @@ public class AutonomousBaseMP extends AutonomousBase{
         }
     }
 
-    public void setDoing(Doing newDoing){
-        doing = newDoing;
+    public void setStates(MPStates newState){
+        mpstates = newState;
     }
 
     public void followTrajectory(Trajectory trajectory){
