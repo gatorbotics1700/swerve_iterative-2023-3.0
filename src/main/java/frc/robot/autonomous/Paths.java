@@ -3,6 +3,7 @@ import frc.robot.Constants;
 import frc.robot.autonomous.*;
 import frc.robot.autonomous.StateWithCoordinate.AutoStates;
 import frc.robot.autonomous.AutonomousBaseEngage;
+import frc.robot.autonomous.MPStateWithCoordinate.MPStates;
 
 import javax.swing.plaf.nimbus.State;
 
@@ -35,7 +36,16 @@ public class Paths {
         DRIVETIMEDENGAGED,
         MP, 
         MP_HD3SCORER, 
-        MP_TESTPATH;
+        MP_TESTPATH,
+        //make these 
+        MP_HDLEAVEB,
+        MP_HBLEAVEB,
+        MP_LOWHDPLACELEAVEB,
+        MP_LOWHBPLACELEAVEB,
+        MP_MIDHDPLACELEAVEB,
+        MP_MIDHBPLACELEAVEB,
+        MP_LOW_OVER_ENGAGE,
+        MP_MID_OVER_ENGAGE;
     }
 
     public static AutonomousBase constructAuto(AUTO_OPTIONS selectedAuto){
@@ -51,7 +61,6 @@ public class Paths {
                 new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(0, 0, new Rotation2d(0))), 
                 new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(20 * mpi, 20 * mpi, new Rotation2d(0))),
                 new StateWithCoordinate(AutoStates.STOP)
-
                 }
             );
         } else if (selectedAuto == AUTO_OPTIONS.NOGO){
@@ -143,28 +152,32 @@ public class Paths {
                     new StateWithCoordinate(AutoStates.STOP)
                 }
             );
-        } else if(selectedAuto == AUTO_OPTIONS.MP){
+        // } else if(selectedAuto == AUTO_OPTIONS.MP){
+        //     return new AutonomousBaseMP(
+        //         Trajectories.uno, 
+        //         Trajectories.dos,
+        //         Trajectories.tres,
+        //         Trajectories.nada
+        //     ); 
+        // } else if(selectedAuto == AUTO_OPTIONS.MP_HD3SCORER){
+        //     return new AutonomousBaseMP(
+        //         Trajectories.oneHD3R, 
+        //         Trajectories.twoHD3R,
+        //         Trajectories.threeHD3R,
+        //         Trajectories.fourHD3R
+        //     ); 
+         } else if(selectedAuto == AUTO_OPTIONS.MP_HDLEAVEB){
             return new AutonomousBaseMP(
-                Trajectories.uno, 
-                Trajectories.dos,
-                Trajectories.tres,
-                Trajectories.nada
+                new Pose2d(STARTING_X * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
+                new MPStateWithCoordinate[]{
+                    new MPStateWithCoordinate(MPStates.FIRST),
+                    new MPStateWithCoordinate(MPStates.TRAJECTORY, new Pose2d(225 * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0)))),//278.95
+                    //Anaika notes: change drive to mp version => Trajectory ***** change in ABMP
+                    new MPStateWithCoordinate(MPStates.STOP) 
+                }
             ); 
-        } else if(selectedAuto == AUTO_OPTIONS.MP_HD3SCORER){
-            return new AutonomousBaseMP(
-                Trajectories.oneHD3R, 
-                Trajectories.twoHD3R,
-                Trajectories.threeHD3R,
-                Trajectories.fourHD3R
-            ); 
-        } else if(selectedAuto == AUTO_OPTIONS.MP_TESTPATH){
-            return new AutonomousBaseMP(
-                Trajectories.flowerOne, 
-                Trajectories.flowerTwo,
-                Trajectories.flowerThree,
-                Trajectories.flowerFour
-            ); 
-        }else if(selectedAuto== AUTO_OPTIONS.LOWTIMEDENGAGED){
+        } 
+        else if(selectedAuto== AUTO_OPTIONS.LOWTIMEDENGAGED){
             return new AutonomousBaseEngage(1);
         } else if (selectedAuto== AUTO_OPTIONS.MIDTIMEDENGAGED){
             return new AutonomousBaseEngage(2);
