@@ -38,11 +38,11 @@ public class Paths {
         MP_HD3SCORER, 
         MP_TESTPATH,
         //make these 
-        MP_HDLEAVEB,
-        MP_HBLEAVEB,
-        MP_LOWHDPLACELEAVEB,
-        MP_LOWHBPLACELEAVEB,
-        MP_MIDHDPLACELEAVEB,
+        MP_HDLEAVEB, // done
+        MP_HBLEAVEB, //done
+        MP_LOWHDPLACELEAVEB, // done
+        MP_LOWHBPLACELEAVEB, //done
+        MP_MIDHDPLACELEAVEB,//done
         MP_MIDHBPLACELEAVEB,
         MP_LOW_OVER_ENGAGE,
         MP_MID_OVER_ENGAGE;
@@ -176,7 +176,47 @@ public class Paths {
                     new MPStateWithCoordinate(MPStates.STOP) 
                 }
             ); 
-        } 
+        } else if(selectedAuto == AUTO_OPTIONS.MP_HBLEAVEB){
+            return new AutonomousBaseMP(
+                new Pose2d(STARTING_X * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
+                new MPStateWithCoordinate[]{
+                    new MPStateWithCoordinate(MPStates.FIRST),
+                    new MPStateWithCoordinate(MPStates.TRAJECTORY, new Pose2d(225 * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0)))),
+                    new MPStateWithCoordinate(MPStates.STOP)
+                }
+            );
+        } else if(selectedAuto == AUTO_OPTIONS.MP_LOWHDPLACELEAVEB){
+            return new AutonomousBaseMP(
+                new Pose2d(STARTING_X * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
+                new MPStateWithCoordinate[]{
+                    new MPStateWithCoordinate(MPStates.FIRST),
+                    new MPStateWithCoordinate(MPStates.LOW),
+                    new MPStateWithCoordinate(MPStates.TRAJECTORY, new Pose2d((225 + 30) * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0)))),
+                    new MPStateWithCoordinate(MPStates.STOP)
+                }
+            );
+        } else if(selectedAuto == AUTO_OPTIONS.MP_LOWHBPLACELEAVEB){
+            return new AutonomousBaseMP(
+                new Pose2d(STARTING_X * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))), 
+                new MPStateWithCoordinate[]{
+                    new MPStateWithCoordinate(MPStates.FIRST),
+                    new MPStateWithCoordinate(MPStates.LOW),
+                    new MPStateWithCoordinate(MPStates.TRAJECTORY, new Pose2d(225 * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0)))),
+                    new MPStateWithCoordinate(MPStates.STOP)
+                }
+            );
+        } else if(selectedAuto == AUTO_OPTIONS.MP_MIDHDPLACELEAVEB){
+            return new AutonomousBaseMP(
+                new Pose2d(STARTING_X * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
+                new MPStateWithCoordinate[]{
+                    new MPStateWithCoordinate(MPStates.FIRST),
+                    new MPStateWithCoordinate(MPStates.MID),
+                    new MPStateWithCoordinate(MPStates.TRAJECTORY, new Pose2d((225 + 30) * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0)))),
+                    new MPStateWithCoordinate(MPStates.STOP)
+                }
+            );
+        }
+
         else if(selectedAuto== AUTO_OPTIONS.LOWTIMEDENGAGED){
             return new AutonomousBaseEngage(1);
         } else if (selectedAuto== AUTO_OPTIONS.MIDTIMEDENGAGED){
