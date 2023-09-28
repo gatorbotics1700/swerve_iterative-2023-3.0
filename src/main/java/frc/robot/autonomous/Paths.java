@@ -9,6 +9,7 @@ import javax.swing.plaf.nimbus.State;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
 
 
 public class Paths {
@@ -40,12 +41,12 @@ public class Paths {
         //make these 
         MP_HDLEAVEB, // done
         MP_HBLEAVEB, //done
-        MP_LOWHDPLACELEAVEB, // done
-        MP_LOWHBPLACELEAVEB, //done
-        MP_MIDHDPLACELEAVEB,//done
-        MP_MIDHBPLACELEAVEB,
-        MP_LOW_OVER_ENGAGE,
-        MP_MID_OVER_ENGAGE;
+        MP_LOWHDPLACELEAVEB, // fix
+        MP_LOWHBPLACELEAVEB, //fix
+        MP_MIDHDPLACELEAVEB, //fix
+        MP_MIDHBPLACELEAVEB, //fix
+        MP_LOW_OVER_ENGAGE, //fix 
+        MP_MID_OVER_ENGAGE; //fix
     }
 
     public static AutonomousBase constructAuto(AUTO_OPTIONS selectedAuto){
@@ -171,8 +172,7 @@ public class Paths {
                 new Pose2d(STARTING_X * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
                 new MPStateWithCoordinate[]{
                     new MPStateWithCoordinate(MPStates.FIRST),
-                    new MPStateWithCoordinate(MPStates.TRAJECTORY, new Pose2d(225 * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0)))),//278.95
-                    //Anaika notes: change drive to mp version => Trajectory ***** change in ABMP
+                    new MPStateWithCoordinate(MPStates.TRAJECTORY, Trajectories.HDLEAVEBMP),//278.95
                     new MPStateWithCoordinate(MPStates.STOP) 
                 }
             ); 
@@ -181,7 +181,7 @@ public class Paths {
                 new Pose2d(STARTING_X * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
                 new MPStateWithCoordinate[]{
                     new MPStateWithCoordinate(MPStates.FIRST),
-                    new MPStateWithCoordinate(MPStates.TRAJECTORY, new Pose2d(225 * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0)))),
+                    new MPStateWithCoordinate(MPStates.TRAJECTORY, Trajectories.HBLEAVEBMP),
                     new MPStateWithCoordinate(MPStates.STOP)
                 }
             );
@@ -191,7 +191,7 @@ public class Paths {
                 new MPStateWithCoordinate[]{
                     new MPStateWithCoordinate(MPStates.FIRST),
                     new MPStateWithCoordinate(MPStates.LOW),
-                    new MPStateWithCoordinate(MPStates.TRAJECTORY, new Pose2d((225 + 30) * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0)))),
+                    new MPStateWithCoordinate(MPStates.TRAJECTORY, Trajectories.LOWHDPLACELEAVEBMP),
                     new MPStateWithCoordinate(MPStates.STOP)
                 }
             );
@@ -201,7 +201,7 @@ public class Paths {
                 new MPStateWithCoordinate[]{
                     new MPStateWithCoordinate(MPStates.FIRST),
                     new MPStateWithCoordinate(MPStates.LOW),
-                    new MPStateWithCoordinate(MPStates.TRAJECTORY, new Pose2d(225 * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0)))),
+                    new MPStateWithCoordinate(MPStates.TRAJECTORY, Trajectories.LOWHBPLACELEAVEBMP),
                     new MPStateWithCoordinate(MPStates.STOP)
                 }
             );
@@ -211,13 +211,33 @@ public class Paths {
                 new MPStateWithCoordinate[]{
                     new MPStateWithCoordinate(MPStates.FIRST),
                     new MPStateWithCoordinate(MPStates.MID),
-                    new MPStateWithCoordinate(MPStates.TRAJECTORY, new Pose2d((225 + 30) * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0)))),
+                    new MPStateWithCoordinate(MPStates.TRAJECTORY, Trajectories.LOWHBPLACELEAVEBMP),
                     new MPStateWithCoordinate(MPStates.STOP)
                 }
             );
-        }
-
-        else if(selectedAuto== AUTO_OPTIONS.LOWTIMEDENGAGED){
+        } else if (selectedAuto == AUTO_OPTIONS.MP_LOW_OVER_ENGAGE){
+            return new AutonomousBaseMP(
+                new Pose2d(STARTING_X * mpi, HD_Y_B * mpi + 4*mpi, new Rotation2d(Math.toRadians(180.0))), 
+                new MPStateWithCoordinate[]{
+                    new MPStateWithCoordinate(MPStates.FIRST),
+                    new MPStateWithCoordinate(MPStates.LOW),
+                    new MPStateWithCoordinate(MPStates.FASTDRIVE, Trajectories.LOW_OVER_ENGAGEMP), //TODO solution for what FASTDRIVE should be
+                    new MPStateWithCoordinate(MPStates.BALANCE),
+                    new MPStateWithCoordinate(MPStates.STOP)
+                }
+            );
+        } else if (selectedAuto == AUTO_OPTIONS.MP_MID_OVER_ENGAGE){
+            return new AutonomousBaseMP(
+                new Pose2d(STARTING_X * mpi, HD_Y_B * mpi + 4*mpi, new Rotation2d(Math.toRadians(180.0))), 
+                new MPStateWithCoordinate[]{
+                    new MPStateWithCoordinate(MPStates.FIRST),
+                    new MPStateWithCoordinate(MPStates.MID),
+                    new MPStateWithCoordinate(MPStates.FASTDRIVE, Trajectories.MID_OVER_ENGAGEMP), //TODO solution for what FASTDRIVE should be
+                    new MPStateWithCoordinate(MPStates.BALANCE),
+                    new MPStateWithCoordinate(MPStates.STOP)
+                }
+            ); 
+        } else if(selectedAuto== AUTO_OPTIONS.LOWTIMEDENGAGED){
             return new AutonomousBaseEngage(1);
         } else if (selectedAuto== AUTO_OPTIONS.MIDTIMEDENGAGED){
             return new AutonomousBaseEngage(2);

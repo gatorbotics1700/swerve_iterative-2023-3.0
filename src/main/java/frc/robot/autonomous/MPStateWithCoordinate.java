@@ -3,21 +3,22 @@ package frc.robot.autonomous;
 import java.lang.Thread.State;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.trajectory.Trajectory;
 import frc.robot.autonomous.StateWithCoordinate.AutoStates;
 
 public class MPStateWithCoordinate{
 
     public final MPStates mpState;
-    public final Pose2d coordinate;
+    public final Trajectory trajectory;
 
-    public MPStateWithCoordinate(MPStates mpStates, Pose2d coordinate){
+    public MPStateWithCoordinate(MPStates mpStates, Trajectory trajectory){
         this.mpState = mpStates;
-        this.coordinate = coordinate;
+        this.trajectory = trajectory;
     }
 
     public MPStateWithCoordinate(MPStates mpStates){
         this.mpState = mpStates;
-        this.coordinate = null;
+        this.trajectory = null;
     }
 
     public static enum MPStates{

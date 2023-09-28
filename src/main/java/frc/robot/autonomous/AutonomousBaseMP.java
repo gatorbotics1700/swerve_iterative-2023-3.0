@@ -24,10 +24,10 @@ import frc.robot.subsystems.Mechanisms;
 public class AutonomousBaseMP extends AutonomousBase{
     private double timeStart;
     private double timeElapsed = 0;
-    private Trajectory trajectory1;
-    private Trajectory trajectory2;
-    private Trajectory trajectory3;
-    private Trajectory trajectory4;
+    // private Trajectory trajectory1;
+    // private Trajectory trajectory2;
+    // private Trajectory trajectory3;
+    // private Trajectory trajectory4;
     private Trajectory.State end;
     private HolonomicDriveController controller;
         // trapezoid profile takes in max rotation velocity and max rotation acceleration 
@@ -61,8 +61,8 @@ public class AutonomousBaseMP extends AutonomousBase{
         timeStart = 0.0;
         i = 0;
         isFirst = true;
-        double timeCheck = trajectory1.getTotalTimeSeconds();
-        end = trajectory1.sample(timeCheck);
+        double timeCheck = MPStateSequence[i].trajectory.getTotalTimeSeconds();
+        end = MPStateSequence[i].trajectory.sample(timeCheck);
         //Avery note: might need to edit this when we work with multiple trajectories bc we only check Traj one 
         //maybe a method to reset time that can be called when we switch to a new trajectory in the else ifs 
         System.out.println("total time: " + timeCheck);
@@ -81,46 +81,20 @@ public class AutonomousBaseMP extends AutonomousBase{
         System.out.println("state: " + mpstates);
         if(mpstates == MPStates.FIRST){
             timeStart = System.currentTimeMillis();
-            setStates(MPStates.TRAJECTORY1); //Anaika notes: fix this => they should all be one trajectory bc all working mp paths only need 1
+            setStates(MPStates.TRAJECTORY);  // made one state for trajectory and are putting individual trajectories in followTradjectory()
             System.out.println("Doing first");
             System.out.println("initial pose: " + drivetrainSubsystem.getMPoseX());
             i++;
             System.out.println("moving on to " + MPStateSequence[i]);
-        } else if(mpstates == MPStates.TRAJECTORY1){
-            System.out.println("traj 1 End X: "+ end.poseMeters.getX() + " trajectory 1 Get X: " + drivetrainSubsystem.getMPoseX()); 
-            followTrajectory(trajectory1);
-            System.out.println("Doing Trajectory 1"); 
-            if(trajectoryDone(trajectory1)){
+        } else if(mpstates == MPStates.TRAJECTORY){
+            System.out.println("trajectory End X: "+ end.poseMeters.getX() + " trajectory Get X: " + drivetrainSubsystem.getMPoseX()); 
+            followTrajectory(MPStateSequence[i].trajectory); 
+            if(trajectoryDone(MPStateSequence[i].trajectory)){
                 System.out.println("STOP");
                 setStates(MPStates.STOP);
                 i++;
                 System.out.println("moving on to " + MPStateSequence[i]);
             }
-        } else if(mpstates == MPStates.TRAJECTORY2){
-            followTrajectory(trajectory2);
-            if(trajectoryDone(trajectory2)){
-                setStates(MPStates.TRAJECTORY3);
-                i++;
-                System.out.println("moving on to " + MPStateSequence[i]);
-            }
-            
-        } else if(mpstates == MPStates.TRAJECTORY3){
-            System.out.println("traj 3 End X: "+ end.poseMeters.getX() + " trajectory 3 Get X: " + drivetrainSubsystem.getMPoseX()); 
-            followTrajectory(trajectory3);
-            if(trajectoryDone(trajectory3)){
-                setStates(MPStates.TRAJECTORY4);
-                i++;
-                System.out.println("moving on to " + MPStateSequence[i]);
-            }
-            
-        } else if(mpstates == MPStates.TRAJECTORY4){
-            followTrajectory(trajectory4);
-            if(trajectoryDone(trajectory4)){
-                setStates(MPStates.STOP);
-                i++;
-                System.out.println("moving on to " + MPStateSequence[i]);
-            }
-            
         } else if(mpstates == MPStates.MID){
             System.out.println("mid node");
             setStates(MPStates.MID);
