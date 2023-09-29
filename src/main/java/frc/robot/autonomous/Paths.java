@@ -3,7 +3,7 @@ import frc.robot.Constants;
 import frc.robot.autonomous.*;
 import frc.robot.autonomous.StateWithCoordinate.AutoStates;
 import frc.robot.autonomous.AutonomousBaseEngage;
-import frc.robot.autonomous.MPStateWithCoordinate.MPStates;
+import frc.robot.autonomous.MPStateWithTrajectory.MPStates;
 
 import javax.swing.plaf.nimbus.State;
 
@@ -170,71 +170,71 @@ public class Paths {
          } else if(selectedAuto == AUTO_OPTIONS.MP_HDLEAVEB){
             return new AutonomousBaseMP(
                 new Pose2d(STARTING_X * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
-                new MPStateWithCoordinate[]{
-                    new MPStateWithCoordinate(MPStates.FIRST),
-                    new MPStateWithCoordinate(MPStates.TRAJECTORY, Trajectories.HDLEAVEBMP),//278.95
-                    new MPStateWithCoordinate(MPStates.STOP) 
+                new MPStateWithTrajectory[]{
+                    new MPStateWithTrajectory(MPStates.FIRST),
+                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.HDLEAVEBMP),//278.95
+                    new MPStateWithTrajectory(MPStates.STOP) 
                 }
             ); 
         } else if(selectedAuto == AUTO_OPTIONS.MP_HBLEAVEB){
             return new AutonomousBaseMP(
                 new Pose2d(STARTING_X * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
-                new MPStateWithCoordinate[]{
-                    new MPStateWithCoordinate(MPStates.FIRST),
-                    new MPStateWithCoordinate(MPStates.TRAJECTORY, Trajectories.HBLEAVEBMP),
-                    new MPStateWithCoordinate(MPStates.STOP)
+                new MPStateWithTrajectory[]{
+                    new MPStateWithTrajectory(MPStates.FIRST),
+                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.HBLEAVEBMP),
+                    new MPStateWithTrajectory(MPStates.STOP)
                 }
             );
         } else if(selectedAuto == AUTO_OPTIONS.MP_LOWHDPLACELEAVEB){
             return new AutonomousBaseMP(
-                new Pose2d(STARTING_X * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
-                new MPStateWithCoordinate[]{
-                    new MPStateWithCoordinate(MPStates.FIRST),
-                    new MPStateWithCoordinate(MPStates.LOW),
-                    new MPStateWithCoordinate(MPStates.TRAJECTORY, Trajectories.LOWHDPLACELEAVEBMP),
-                    new MPStateWithCoordinate(MPStates.STOP)
+    
+                new MPStateWithTrajectory[]{
+                    new MPStateWithTrajectory(MPStates.FIRST),
+                    new MPStateWithTrajectory(MPStates.LOW),
+                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectory trajectory),
+                    new MPStateWithTrajectory(MPStates.STOP)
                 }
             );
         } else if(selectedAuto == AUTO_OPTIONS.MP_LOWHBPLACELEAVEB){
             return new AutonomousBaseMP(
                 new Pose2d(STARTING_X * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))), 
-                new MPStateWithCoordinate[]{
-                    new MPStateWithCoordinate(MPStates.FIRST),
-                    new MPStateWithCoordinate(MPStates.LOW),
-                    new MPStateWithCoordinate(MPStates.TRAJECTORY, Trajectories.LOWHBPLACELEAVEBMP),
-                    new MPStateWithCoordinate(MPStates.STOP)
+                new MPStateWithTrajectory[]{
+                    new MPStateWithTrajectory(MPStates.FIRST),
+                    new MPStateWithTrajectory(MPStates.LOW),
+                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.LOWHBPLACELEAVEBMP),
+                    new MPStateWithTrajectory(MPStates.STOP)
                 }
             );
         } else if(selectedAuto == AUTO_OPTIONS.MP_MIDHDPLACELEAVEB){
             return new AutonomousBaseMP(
                 new Pose2d(STARTING_X * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
-                new MPStateWithCoordinate[]{
-                    new MPStateWithCoordinate(MPStates.FIRST),
-                    new MPStateWithCoordinate(MPStates.MID),
-                    new MPStateWithCoordinate(MPStates.TRAJECTORY, Trajectories.LOWHBPLACELEAVEBMP),
-                    new MPStateWithCoordinate(MPStates.STOP)
+                new MPStateWithTrajectory[]{
+                    new MPStateWithTrajectory(MPStates.FIRST),
+                    new MPStateWithTrajectory(MPStates.MID),
+                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.LOWHBPLACELEAVEBMP),
+                    new MPStateWithTrajectory(MPStates.STOP)
                 }
             );
         } else if (selectedAuto == AUTO_OPTIONS.MP_LOW_OVER_ENGAGE){
             return new AutonomousBaseMP(
                 new Pose2d(STARTING_X * mpi, HD_Y_B * mpi + 4*mpi, new Rotation2d(Math.toRadians(180.0))), 
-                new MPStateWithCoordinate[]{
-                    new MPStateWithCoordinate(MPStates.FIRST),
-                    new MPStateWithCoordinate(MPStates.LOW),
-                    new MPStateWithCoordinate(MPStates.FASTDRIVE, Trajectories.LOW_OVER_ENGAGEMP), //TODO solution for what FASTDRIVE should be
-                    new MPStateWithCoordinate(MPStates.BALANCE),
-                    new MPStateWithCoordinate(MPStates.STOP)
+                new MPStateWithTrajectory[]{
+                    new MPStateWithTrajectory(MPStates.FIRST),
+                    new MPStateWithTrajectory(MPStates.LOW),
+                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.LOW_OVER_ENGAGEMP), 
+                    new MPStateWithTrajectory(MPStates.BALANCE),
+                    new MPStateWithTrajectory(MPStates.STOP)
                 }
             );
         } else if (selectedAuto == AUTO_OPTIONS.MP_MID_OVER_ENGAGE){
             return new AutonomousBaseMP(
                 new Pose2d(STARTING_X * mpi, HD_Y_B * mpi + 4*mpi, new Rotation2d(Math.toRadians(180.0))), 
-                new MPStateWithCoordinate[]{
-                    new MPStateWithCoordinate(MPStates.FIRST),
-                    new MPStateWithCoordinate(MPStates.MID),
-                    new MPStateWithCoordinate(MPStates.FASTDRIVE, Trajectories.MID_OVER_ENGAGEMP), //TODO solution for what FASTDRIVE should be
-                    new MPStateWithCoordinate(MPStates.BALANCE),
-                    new MPStateWithCoordinate(MPStates.STOP)
+                new MPStateWithTrajectory[]{
+                    new MPStateWithTrajectory(MPStates.FIRST),
+                    new MPStateWithTrajectory(MPStates.MID),
+                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.MID_OVER_ENGAGEMP), 
+                    new MPStateWithTrajectory(MPStates.BALANCE),
+                    new MPStateWithTrajectory(MPStates.STOP)
                 }
             ); 
         } else if(selectedAuto== AUTO_OPTIONS.LOWTIMEDENGAGED){

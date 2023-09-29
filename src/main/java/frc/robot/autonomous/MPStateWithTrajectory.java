@@ -6,24 +6,24 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import frc.robot.autonomous.StateWithCoordinate.AutoStates;
 
-public class MPStateWithCoordinate{
+public class MPStateWithTrajectory{
 
     public final MPStates mpState;
     public final Trajectory trajectory;
 
-    public MPStateWithCoordinate(MPStates mpStates, Trajectory trajectory){
+    public MPStateWithTrajectory(MPStates mpStates, Trajectory trajectory){
         this.mpState = mpStates;
         this.trajectory = trajectory;
     }
 
-    public MPStateWithCoordinate(MPStates mpStates){
+    public MPStateWithTrajectory(MPStates mpStates){
         this.mpState = mpStates;
         this.trajectory = null;
     }
 
     public static enum MPStates{
         TRAJECTORY, // anaika notes:fix
-        MID, 
+        MID,        //Avery notes: :(
         BALANCE,
         STOP,
         LOW,

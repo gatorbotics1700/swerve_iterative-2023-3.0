@@ -7,7 +7,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.geometry.*;
 import frc.robot.Robot;
-import frc.robot.autonomous.MPStateWithCoordinate.MPStates;
+import frc.robot.autonomous.MPStateWithTrajectory.MPStates;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.Mechanisms.MechanismStates;
 import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
@@ -38,15 +38,13 @@ public class AutonomousBaseMP extends AutonomousBase{
     public MPStates mpStates;
     private Mechanisms mechanisms;
     private AutonomousBaseEngage autoEngage; 
-    private MPStateWithCoordinate[] MPStateSequence;
-    private Pose2d mpStartingCoordinate;
+    private MPStateWithTrajectory[] MPStateSequence;
 
     private Boolean isFirst;
     private double startTime;
     private int i;
 
-    public AutonomousBaseMP(Pose2d mpStartingCoordinate, MPStateWithCoordinate[] MPStateSequence){
-        this.mpStartingCoordinate = mpStartingCoordinate;
+    public AutonomousBaseMP(MPStateWithTrajectory[] MPStateSequence){
         this.MPStateSequence =  MPStateSequence;
         controller = new HolonomicDriveController(
             new PIDController(1, 0, 0), new PIDController(1, 0, 0), //TODO: CHANGE KP
