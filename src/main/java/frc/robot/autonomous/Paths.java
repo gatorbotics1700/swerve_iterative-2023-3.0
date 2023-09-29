@@ -169,7 +169,6 @@ public class Paths {
         //     ); 
          } else if(selectedAuto == AUTO_OPTIONS.MP_HDLEAVEB){
             return new AutonomousBaseMP(
-                new Pose2d(STARTING_X * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
                 new MPStateWithTrajectory[]{
                     new MPStateWithTrajectory(MPStates.FIRST),
                     new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.HDLEAVEBMP),//278.95
@@ -178,7 +177,6 @@ public class Paths {
             ); 
         } else if(selectedAuto == AUTO_OPTIONS.MP_HBLEAVEB){
             return new AutonomousBaseMP(
-                new Pose2d(STARTING_X * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
                 new MPStateWithTrajectory[]{
                     new MPStateWithTrajectory(MPStates.FIRST),
                     new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.HBLEAVEBMP),
@@ -191,48 +189,44 @@ public class Paths {
                 new MPStateWithTrajectory[]{
                     new MPStateWithTrajectory(MPStates.FIRST),
                     new MPStateWithTrajectory(MPStates.LOW),
-                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectory trajectory),
+                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.HDLEAVEBMP), 
                     new MPStateWithTrajectory(MPStates.STOP)
                 }
             );
         } else if(selectedAuto == AUTO_OPTIONS.MP_LOWHBPLACELEAVEB){
             return new AutonomousBaseMP(
-                new Pose2d(STARTING_X * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))), 
                 new MPStateWithTrajectory[]{
                     new MPStateWithTrajectory(MPStates.FIRST),
                     new MPStateWithTrajectory(MPStates.LOW),
-                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.LOWHBPLACELEAVEBMP),
+                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.HBLEAVEBMP),
                     new MPStateWithTrajectory(MPStates.STOP)
                 }
             );
         } else if(selectedAuto == AUTO_OPTIONS.MP_MIDHDPLACELEAVEB){
             return new AutonomousBaseMP(
-                new Pose2d(STARTING_X * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
                 new MPStateWithTrajectory[]{
                     new MPStateWithTrajectory(MPStates.FIRST),
                     new MPStateWithTrajectory(MPStates.MID),
-                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.LOWHBPLACELEAVEBMP),
+                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.HDLEAVEBMP),
                     new MPStateWithTrajectory(MPStates.STOP)
                 }
             );
         } else if (selectedAuto == AUTO_OPTIONS.MP_LOW_OVER_ENGAGE){
             return new AutonomousBaseMP(
-                new Pose2d(STARTING_X * mpi, HD_Y_B * mpi + 4*mpi, new Rotation2d(Math.toRadians(180.0))), 
                 new MPStateWithTrajectory[]{
                     new MPStateWithTrajectory(MPStates.FIRST),
                     new MPStateWithTrajectory(MPStates.LOW),
-                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.LOW_OVER_ENGAGEMP), 
+                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.ENGAGEMP), 
                     new MPStateWithTrajectory(MPStates.BALANCE),
                     new MPStateWithTrajectory(MPStates.STOP)
                 }
             );
         } else if (selectedAuto == AUTO_OPTIONS.MP_MID_OVER_ENGAGE){
             return new AutonomousBaseMP(
-                new Pose2d(STARTING_X * mpi, HD_Y_B * mpi + 4*mpi, new Rotation2d(Math.toRadians(180.0))), 
                 new MPStateWithTrajectory[]{
                     new MPStateWithTrajectory(MPStates.FIRST),
                     new MPStateWithTrajectory(MPStates.MID),
-                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.MID_OVER_ENGAGEMP), 
+                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.ENGAGEMP), 
                     new MPStateWithTrajectory(MPStates.BALANCE),
                     new MPStateWithTrajectory(MPStates.STOP)
                 }

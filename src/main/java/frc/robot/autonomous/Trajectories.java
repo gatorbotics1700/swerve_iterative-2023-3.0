@@ -116,47 +116,47 @@ public class Trajectories{
     );
 
     //anaika note: TODO fix below 
-    //Avery note: what was below was unnecesary, all the trajectories can be reused. 
+    //Avery note: what was below was unnecesary, all the above trajectories can be reused. we shall discuss 
     
-    public static Trajectory LOWHDPLACELEAVEBMP = generateTrajectory( // TODO write traj
-        new Pose2d(STARTING_X * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))), //correct
+    //public static Trajectory LOWHDPLACELEAVEBMP = generateTrajectory( // TODO write traj
+       // new Pose2d(STARTING_X * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))), //correct
         //new Pose2d(ENDING_X * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))), 
         // new Translation2d(75 * mpi, HB_Y_B * mpi),
         // new Translation2d(85 * mpi, HB_Y_B * mpi),
         // new Translation2d(95 * mpi, HB_Y_B * mpi)
-    );
+    //);
 
-    public static Trajectory LOWHBPLACELEAVEBMP = generateTrajectory( // TODO write traj
-        new Pose2d(STARTING_X * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))), //correct
+   // public static Trajectory LOWHBPLACELEAVEBMP = generateTrajectory( // TODO write traj
+        //new Pose2d(STARTING_X * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))), //correct
        // new Pose2d(ENDING_X * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))), 
         // new Translation2d(75 * mpi, HB_Y_B * mpi),
         // new Translation2d(85 * mpi, HB_Y_B * mpi),
         // new Translation2d(95 * mpi, HB_Y_B * mpi)
-    );
+   // );
 
-    public static Trajectory MIDHDPLACELEAVEBMP = generateTrajectory( //TODO write traj
-        new Pose2d(STARTING_X * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))), //correct
+    //public static Trajectory MIDHDPLACELEAVEBMP = generateTrajectory( //TODO write traj
+      //  new Pose2d(STARTING_X * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))), //correct
        // new Pose2d(ENDING_X * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))), 
         // new Translation2d(75 * mpi, HB_Y_B * mpi),
         // new Translation2d(85 * mpi, HB_Y_B * mpi),
         // new Translation2d(95 * mpi, HB_Y_B * mpi)
-    );
+   // );
 
-    public static Trajectory LOW_OVER_ENGAGEMP = generateTrajectory( // TODO write traj
+    //public static Trajectory LOW_OVER_ENGAGEMP = generateTrajectory( // TODO write traj
         // new Pose2d(STARTING_X * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
         // new Pose2d(265 * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
         // new Translation2d(117.9625 * mpi, HD_Y_B * mpi),
         // new Translation2d(166.975 * mpi, HD_Y_B * mpi),
         // new Translation2d(215.9875 * mpi, HD_Y_B * mpi)
-    ); 
+   // ); 
 
-    public static Trajectory MID_OVER_ENGAGEMP = generateTrajectory( // TODO write traj
+   // public static Trajectory MID_OVER_ENGAGEMP = generateTrajectory( // TODO write traj
         // new Pose2d(STARTING_X * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
         // new Pose2d(265 * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
         // new Translation2d(117.9625 * mpi, HD_Y_B * mpi),
         // new Translation2d(166.975 * mpi, HD_Y_B * mpi),
         // new Translation2d(215.9875 * mpi, HD_Y_B * mpi)
-    );
+   // );
 
     public static Trajectory generateTrajectory(Pose2d starting, Pose2d ending, Translation2d interior1, Translation2d interior2, Translation2d interior3){
         ArrayList<Translation2d> interiorWaypoints = new ArrayList<Translation2d>();
