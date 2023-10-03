@@ -38,15 +38,14 @@ public class Paths {
         MP, 
         MP_HD3SCORER, 
         MP_TESTPATH,
-        //make these 
-        MP_HDLEAVEB, // done
-        MP_HBLEAVEB, //done
-        MP_LOWHDPLACELEAVEB, // fix
-        MP_LOWHBPLACELEAVEB, //fix
-        MP_MIDHDPLACELEAVEB, //fix
-        MP_MIDHBPLACELEAVEB, //fix
-        MP_LOW_OVER_ENGAGE, //fix 
-        MP_MID_OVER_ENGAGE; //fix
+        MP_HDLEAVEB, 
+        MP_HBLEAVEB, 
+        MP_LOWHDPLACELEAVEB, 
+        MP_LOWHBPLACELEAVEB, 
+        MP_MIDHDPLACELEAVEB, 
+        MP_MIDHBPLACELEAVEB,
+        MP_LOW_OVER_ENGAGE, 
+        MP_MID_OVER_ENGAGE; 
     }
 
     public static AutonomousBase constructAuto(AUTO_OPTIONS selectedAuto){

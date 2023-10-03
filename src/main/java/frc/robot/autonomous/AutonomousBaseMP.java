@@ -24,10 +24,6 @@ import frc.robot.subsystems.Mechanisms;
 public class AutonomousBaseMP extends AutonomousBase{
     private double timeStart;
     private double timeElapsed = 0;
-    // private Trajectory trajectory1;
-    // private Trajectory trajectory2;
-    // private Trajectory trajectory3;
-    // private Trajectory trajectory4;
     private Trajectory.State end;
     private HolonomicDriveController controller;
         // trapezoid profile takes in max rotation velocity and max rotation acceleration 

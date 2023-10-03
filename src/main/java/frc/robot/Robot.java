@@ -15,6 +15,7 @@ import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.AutonomousBase;
+import frc.robot.autonomous.AutonomousBaseMP;
 import frc.robot.autonomous.AutonomousBaseTimed;
 import frc.robot.autonomous.AutonomousBasePD;
 import frc.robot.autonomous.Paths;
@@ -33,6 +34,7 @@ import frc.robot.subsystems.ArmTelescopingSubsystem;
 public class Robot extends TimedRobot {
 
   private AutonomousBase m_auto;
+  private AutonomousBaseMP m_autoMP;
   private static final Boolean red = false;
   private static final Boolean blue = true;
   // DoubleSolenoid solenoidOne = new DoubleSolenoid(10, PneumaticsModuleType.REVPH, 4, 3); 
@@ -169,6 +171,7 @@ public class Robot extends TimedRobot {
   public void testInit() {
     m_drivetrainSubsystem.init();
     //m_mechanisms.init();
+   
   }
 
   /** This function is called periodically during test mode. */
@@ -188,6 +191,8 @@ public class Robot extends TimedRobot {
     //System.out.println(m_mechanisms.armTelescopingSubsystem.getArmPosition());
     m_mechanisms.armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0.0);
     m_mechanisms.elevatorSubsystem.elevatorMotor.setSelectedSensorPosition(0.0);
+  
+    
   }
   /** This function is called once when the robot is first started up. */
   @Override
