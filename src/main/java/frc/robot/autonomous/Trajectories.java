@@ -91,7 +91,7 @@ public class Trajectories{
         new Translation2d()
     ); 
 
-    public static Trajectory HDMP = generateTrajectory( //for all hd paths
+    public static Trajectory HDMP = generateTrajectory( //for all HD paths
         new Pose2d(STARTING_X * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
         new Pose2d(ENDING_X * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
         new Translation2d(75 * mpi, HD_Y_B * mpi),
@@ -99,7 +99,7 @@ public class Trajectories{
         new Translation2d(95 * mpi, HD_Y_B * mpi)
     );
 
-    public static Trajectory HBMP = generateTrajectory( //all hb paths
+    public static Trajectory HBMP = generateTrajectory( //for all HB paths
         new Pose2d(STARTING_X * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
         new Pose2d(ENDING_X * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
         new Translation2d(75 * mpi, HB_Y_B * mpi),
@@ -107,7 +107,7 @@ public class Trajectories{
         new Translation2d(95 * mpi, HB_Y_B * mpi)
     );
 
-    public static Trajectory ENGAGEMP = generateTrajectory( //for all paths with engage state
+    public static Trajectory ENGAGEMP = generateTrajectory( //for all paths with an Engage state
         new Pose2d(STARTING_X * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
         new Pose2d(265 * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
         new Translation2d(117.9625 * mpi, HD_Y_B * mpi),
