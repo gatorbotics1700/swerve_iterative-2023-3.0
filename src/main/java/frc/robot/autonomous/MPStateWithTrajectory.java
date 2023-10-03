@@ -22,11 +22,11 @@ public class MPStateWithTrajectory{
     }
 
     public static enum MPStates{
-        TRAJECTORY, // anaika notes:fix
-        MID,        //Avery notes: :(
-        BALANCE,
-        STOP,
-        LOW,
+        TRAJECTORY, //MP version of PD states DRIVE and FASTDRIVE // note: don't need FASTDRIVE in MP bc MP doesn't have the same problems as PD
+        MID, //PD version = MIDNODE
+        ENGAGE, //PD version = ENGAGE
+        STOP, 
+        LOW, //PD version = LOWNODE
         FIRST;
     } 
 

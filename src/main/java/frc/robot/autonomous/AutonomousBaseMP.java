@@ -73,7 +73,6 @@ public class AutonomousBaseMP extends AutonomousBase{
     private MPStates mpstates = MPStates.FIRST; 
     
     @Override
-    //Avery note: make state machine work better!! Like PID 
     public void periodic(){
         mpstates = MPStateSequence[i].mpState;
         System.out.println("state: " + mpstates);
@@ -123,7 +122,7 @@ public class AutonomousBaseMP extends AutonomousBase{
                 }
             }
             
-        } else if(mpstates == MPStates.BALANCE){
+        } else if(mpstates == MPStates.ENGAGE){
             autoEngage.periodic();   
         } else{
             drivetrainSubsystem.stopDrive();

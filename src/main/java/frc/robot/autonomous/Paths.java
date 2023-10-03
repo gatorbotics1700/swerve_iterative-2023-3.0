@@ -153,6 +153,7 @@ public class Paths {
                     new StateWithCoordinate(AutoStates.STOP)
                 }
             );
+
         // } else if(selectedAuto == AUTO_OPTIONS.MP){
         //     return new AutonomousBaseMP(
         //         Trajectories.uno, 
@@ -167,11 +168,12 @@ public class Paths {
         //         Trajectories.threeHD3R,
         //         Trajectories.fourHD3R
         //     ); 
+
          } else if(selectedAuto == AUTO_OPTIONS.MP_HDLEAVEB){
             return new AutonomousBaseMP(
                 new MPStateWithTrajectory[]{
                     new MPStateWithTrajectory(MPStates.FIRST),
-                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.HDLEAVEBMP),//278.95
+                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.HDMP),//278.95
                     new MPStateWithTrajectory(MPStates.STOP) 
                 }
             ); 
@@ -179,7 +181,7 @@ public class Paths {
             return new AutonomousBaseMP(
                 new MPStateWithTrajectory[]{
                     new MPStateWithTrajectory(MPStates.FIRST),
-                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.HBLEAVEBMP),
+                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.HBMP),
                     new MPStateWithTrajectory(MPStates.STOP)
                 }
             );
@@ -189,7 +191,7 @@ public class Paths {
                 new MPStateWithTrajectory[]{
                     new MPStateWithTrajectory(MPStates.FIRST),
                     new MPStateWithTrajectory(MPStates.LOW),
-                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.HDLEAVEBMP), 
+                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.HDMP), 
                     new MPStateWithTrajectory(MPStates.STOP)
                 }
             );
@@ -198,7 +200,7 @@ public class Paths {
                 new MPStateWithTrajectory[]{
                     new MPStateWithTrajectory(MPStates.FIRST),
                     new MPStateWithTrajectory(MPStates.LOW),
-                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.HBLEAVEBMP),
+                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.HBMP),
                     new MPStateWithTrajectory(MPStates.STOP)
                 }
             );
@@ -207,7 +209,7 @@ public class Paths {
                 new MPStateWithTrajectory[]{
                     new MPStateWithTrajectory(MPStates.FIRST),
                     new MPStateWithTrajectory(MPStates.MID),
-                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.HDLEAVEBMP),
+                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.HDMP),
                     new MPStateWithTrajectory(MPStates.STOP)
                 }
             );
@@ -217,7 +219,7 @@ public class Paths {
                     new MPStateWithTrajectory(MPStates.FIRST),
                     new MPStateWithTrajectory(MPStates.LOW),
                     new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.ENGAGEMP), 
-                    new MPStateWithTrajectory(MPStates.BALANCE),
+                    new MPStateWithTrajectory(MPStates.ENGAGE), 
                     new MPStateWithTrajectory(MPStates.STOP)
                 }
             );
@@ -227,7 +229,7 @@ public class Paths {
                     new MPStateWithTrajectory(MPStates.FIRST),
                     new MPStateWithTrajectory(MPStates.MID),
                     new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.ENGAGEMP), 
-                    new MPStateWithTrajectory(MPStates.BALANCE),
+                    new MPStateWithTrajectory(MPStates.ENGAGE),
                     new MPStateWithTrajectory(MPStates.STOP)
                 }
             ); 
