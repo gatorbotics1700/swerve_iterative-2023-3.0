@@ -118,7 +118,7 @@ public class Trajectories{
     public static Trajectory generateTrajectory(Pose2d starting, Pose2d ending, Translation2d interior1, Translation2d interior2, Translation2d interior3){
         ArrayList<Translation2d> interiorWaypoints = new ArrayList<Translation2d>();
         interiorWaypoints.add(interior1);
-        interiorWaypoints.add(interior2);
+        interiorWaypoints.add(interio r2);
         interiorWaypoints.add(interior3);
 
         SwerveDriveKinematicsConstraint swerveDriveKinematicsConstraint = new SwerveDriveKinematicsConstraint(DrivetrainSubsystem.getMKinematics(), DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND*.75);
