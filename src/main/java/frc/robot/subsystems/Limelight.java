@@ -7,7 +7,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Robot;
 import frc.robot.autonomous.AutonomousBasePD;
 import frc.robot.autonomous.StateWithCoordinate;
-import frc.robot.autonomous.StateWithCoordinate.AutoStates;
+import frc.robot.autonomous.StateWithCoordinate.AutoStates; 
 
 public class Limelight{
     private VisionStates visionState;
@@ -44,6 +44,9 @@ public class Limelight{
     public void periodic(){
         if(visionState == VisionStates.DETECT){
             if(getTv()==1.0){
+                //System.out.println("I have found an AprilTag. Tag ID:" + VisionStates.detectTag());
+                
+
                 visionState = VisionStates.DRIVE;
                 double distancey = (ATHEIGHT - LLHEIGHT)/Math.tan(LLANGLE + getTy());
                 double distancex = Math.tan(getTx())*distancey;
@@ -55,6 +58,7 @@ public class Limelight{
                         new StateWithCoordinate(AutoStates.STOP)
                     });
                 autonomousBasePD.init();
+                getId();
             }
         }else if(visionState == VisionStates.DRIVE){
             autonomousBasePD.periodic();
@@ -76,6 +80,13 @@ public class Limelight{
     }
 
     private double getTy(){
+
         return networkTable.getEntry("ty").getDouble(0.0);
     }
+
+    private double getId(){
+        
+        return networkTable.getEntry("Id").getDouble(0.0);
+    }
+
 }
