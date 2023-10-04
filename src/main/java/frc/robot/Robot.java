@@ -79,6 +79,7 @@ public class Robot extends TimedRobot {
     auto_chooser.addOption("timed", Paths.AUTO_OPTIONS.TIMED);
     auto_chooser.addOption("motionProfiling", Paths.AUTO_OPTIONS.MP); 
     auto_chooser.addOption("MP Tester", Paths.AUTO_OPTIONS.MP_TESTPATH); 
+    auto_chooser.addOption("MPHBLeaveB", Paths.AUTO_OPTIONS.MP_HBLEAVEB); 
     inverted.setDefaultOption("true", true);
     inverted.addOption("false", false);
     SmartDashboard.putData("Auto choices", auto_chooser);

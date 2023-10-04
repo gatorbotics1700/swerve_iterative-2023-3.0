@@ -177,6 +177,7 @@ public class Paths {
                 }
             ); 
         } else if(selectedAuto == AUTO_OPTIONS.MP_HBLEAVEB){
+            System.out.println("Made it to the paths class!"); 
             return new AutonomousBaseMP(
                 new MPStateWithTrajectory[]{
                     new MPStateWithTrajectory(MPStates.FIRST),

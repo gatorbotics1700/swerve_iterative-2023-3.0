@@ -129,7 +129,8 @@ public class Trajectories{
         System.out.println("Start config pose: " + Robot.m_drivetrainSubsystem.getMPoseX());
         config.addConstraint(swerveDriveKinematicsConstraint);
         config.addConstraint(maxVelocityConstraint);
-
+// look into using traj configs. its possiblwe are not using/;applying it correctly
+       //our way of generating trajectory. It is BROKEN 
         Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
             starting,
             interiorWaypoints, 
