@@ -21,10 +21,10 @@ public class ElevatorSubsystem {
     private static final double _kD = 0.0;
     private static final int _kIzone = 0;
     private static final double _kPeakOutput = 1.0;
-    private static final double MID_HEIGHT_INCHES = 30;
+    private static final double MID_HEIGHT_INCHES = 31.5;
     private static final double LOW_HEIGHT_INCHES = 0;
     private static final double SHELF_HEIGHT_INCHES = 30; 
-    private static final double MAX_HEIGHT_INCHES = 31.5;
+    private static final double MAX_HEIGHT_INCHES = 31.5;//31.5
 
     private static final double ELEVATOR_SPROCKET_DIAMETER = 1.28;
     private static final double ELEVATOR_GEAR_RATIO = 25.0;
@@ -34,7 +34,7 @@ public class ElevatorSubsystem {
     private ElevatorStates elevatorState;
     private Mechanisms mechanisms;
     private DigitalInput topLimitSwitch;
-    private DigitalInput bottomLimitSwitch;
+    //private DigitalInput bottomLimitSwitch;
     public LimitSwitchStates limitSwitchStates;
     
     private Gains elevatorGains = new Gains(_kP, _kI, _kD, _kIzone, _kPeakOutput);
@@ -51,7 +51,7 @@ public class ElevatorSubsystem {
     public ElevatorSubsystem(){
         elevatorMotor = new TalonFX(Constants.ELEVATOR_CAN_ID);
         topLimitSwitch = new DigitalInput(0);
-        bottomLimitSwitch = new DigitalInput(1);
+        //bottomLimitSwitch = new DigitalInput(1);
         init();
     }
 
@@ -80,9 +80,9 @@ public class ElevatorSubsystem {
     public void elevatorLimitPeriodic(){
         if(topLimitSwitch.get()){
             limitSwitchStates = LimitSwitchStates.TOOHIGH;
-        }else if(bottomLimitSwitch.get()){
+        /* }else if(bottomLimitSwitch.get()){
             limitSwitchStates = LimitSwitchStates.TOOLOW;
-        }else{
+        */}else{
             limitSwitchStates = LimitSwitchStates.HEIGHTOKAY;
         }
     }
@@ -120,13 +120,13 @@ public class ElevatorSubsystem {
                 }else{
                     elevatorMotor.set(ControlMode.Position, desiredTicks);
                 }
-            }else if(limitSwitchStates == LimitSwitchStates.TOOLOW){
+            /* }else if(limitSwitchStates == LimitSwitchStates.TOOLOW){
                 if(desiredTicks <= elevatorMotor.getSelectedSensorPosition()){
                     mechanisms.setState(MechanismStates.STOP);
                 }else{
                     elevatorMotor.set(ControlMode.Position, desiredTicks);
                 }
-            }else{
+            */}else{
                 elevatorMotor.set(ControlMode.Position, desiredTicks);
             }
         }else{
