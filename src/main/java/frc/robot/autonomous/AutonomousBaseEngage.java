@@ -20,6 +20,7 @@ public class AutonomousBaseEngage extends AutonomousBase{
 
     private boolean firstTime;
     private double startingTime;
+    private double startingTime2;
     private double desireTime;
     private double desiredAngle;
     private DrivetrainSubsystem drivetrainSubsystem;
@@ -59,6 +60,7 @@ public class AutonomousBaseEngage extends AutonomousBase{
         System.out.println("IN AUTO ENGAGE INIT");
        drivetrainSubsystem = Robot.m_drivetrainSubsystem;
        startingTime = 0;
+       startingTime2 = 0;
        mechanisms = Robot.m_mechanisms;
        firstTime = true;
        desireTime = 5000;
@@ -71,7 +73,10 @@ public class AutonomousBaseEngage extends AutonomousBase{
         System.out.println("Engage state: " + autoEngageState);
         if(autoEngageState == AutoEngageStates.MID_NODE){
             mechanisms.setState(MechanismStates.MID_NODE);
-            if(mechanisms.isDoneMid()){
+            if(firstTime == true){
+                startingTime2 = System.currentTimeMillis();
+            }
+            if(mechanisms.isDoneMid() || System.currentTimeMillis() - startingTime2 >= 2000){
                 if(firstTime == true){
                     firstTime = false;
                     startingTime = System.currentTimeMillis();

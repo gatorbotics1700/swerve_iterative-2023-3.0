@@ -168,7 +168,7 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     m_drivetrainSubsystem.init();
-    //m_mechanisms.init();
+    m_mechanisms.init();
   }
 
   /** This function is called periodically during test mode. */
@@ -182,12 +182,12 @@ public class Robot extends TimedRobot {
     m_drivetrainSubsystem.drive();
 
     //MECHANISMS
-    m_mechanisms.periodic();
-    m_buttons.buttonsPeriodic();
+    //m_mechanisms.periodic();
+    //m_buttons.buttonsPeriodic();
     //PneumaticArmPivot.solenoid.set(Value.kForward);
     //System.out.println(m_mechanisms.armTelescopingSubsystem.getArmPosition());
-    m_mechanisms.armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0.0);
-    m_mechanisms.elevatorSubsystem.elevatorMotor.setSelectedSensorPosition(0.0);
+    //m_mechanisms.armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0.0);
+    //m_mechanisms.elevatorSubsystem.elevatorMotor.setSelectedSensorPosition(0.0);
   }
   /** This function is called once when the robot is first started up. */
   @Override

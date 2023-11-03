@@ -31,6 +31,7 @@ public class AutonomousBasePD extends AutonomousBase{
     private int i;
     private Boolean isFirst;
     private double startTime;
+    private double startTime2;
     
     private DrivetrainSubsystem drivetrainSubsystem;
     private Mechanisms mechanisms;
@@ -65,6 +66,7 @@ public class AutonomousBasePD extends AutonomousBase{
         i = 0;
         isFirst = true;
         startTime = 0.0;
+        startTime2 = 0.0;
     }
 
     @Override
@@ -94,8 +96,11 @@ public class AutonomousBasePD extends AutonomousBase{
         }else if(states == AutoStates.MIDNODE){
             System.out.println("mid node");
             mechanisms.setState(MechanismStates.MID_NODE);
+            if(isFirst){
+                startTime2 = System.currentTimeMillis();
+            }
             // If we never get to mid it might be because the timeout is too short
-            if(mechanisms.isDoneMid()==true){
+            if(mechanisms.isDoneMid()==true || System.currentTimeMillis() - startTime2 >= 2000){
                 if(isFirst){
                     startTime = System.currentTimeMillis();
                     isFirst = false;
