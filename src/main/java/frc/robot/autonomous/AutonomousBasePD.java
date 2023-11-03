@@ -72,7 +72,7 @@ public class AutonomousBasePD extends AutonomousBase{
     @Override
     public void periodic()
     {
-        states = stateSequence[i].state;
+        states = stateSequence[i].autoState;
         System.out.println("state: " + states);
         if (states == AutoStates.FIRST){
             turnController.setTolerance(TURN_DEADBAND); 

@@ -3,11 +3,13 @@ import frc.robot.Constants;
 import frc.robot.autonomous.*;
 import frc.robot.autonomous.StateWithCoordinate.AutoStates;
 import frc.robot.autonomous.AutonomousBaseEngage;
+import frc.robot.autonomous.MPStateWithTrajectory.MPStates;
 
 import javax.swing.plaf.nimbus.State;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
 
 
 public class Paths {
@@ -35,7 +37,15 @@ public class Paths {
         DRIVETIMEDENGAGED,
         MP, 
         MP_HD3SCORER, 
-        MP_TESTPATH;
+        MP_TESTPATH,
+        MP_HDLEAVEB, 
+        MP_HBLEAVEB, 
+        MP_LOWHDPLACELEAVEB, 
+        MP_LOWHBPLACELEAVEB, 
+        MP_MIDHDPLACELEAVEB, 
+        MP_MIDHBPLACELEAVEB,
+        MP_LOW_OVER_ENGAGE, 
+        MP_MID_OVER_ENGAGE; 
     }
 
     public static AutonomousBase constructAuto(AUTO_OPTIONS selectedAuto){
@@ -51,7 +61,6 @@ public class Paths {
                 new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(0, 0, new Rotation2d(0))), 
                 new StateWithCoordinate(AutoStates.DRIVE, new Pose2d(20 * mpi, 20 * mpi, new Rotation2d(0))),
                 new StateWithCoordinate(AutoStates.STOP)
-
                 }
             );
         } else if (selectedAuto == AUTO_OPTIONS.NOGO){
@@ -83,7 +92,7 @@ public class Paths {
             );
         } else if (selectedAuto == AUTO_OPTIONS.LOWHDPLACELEAVEB){
             return new AutonomousBasePD(
-                new Pose2d(STARTING_X * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))), 
+                new Pose2d(STARTING_X * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))), //Avery note: why is it HB_Y_B?
                 new StateWithCoordinate[]{
                 new StateWithCoordinate(AutoStates.FIRST),
                 new StateWithCoordinate(AutoStates.LOWNODE),
@@ -143,28 +152,88 @@ public class Paths {
                     new StateWithCoordinate(AutoStates.STOP)
                 }
             );
-        } else if(selectedAuto == AUTO_OPTIONS.MP){
+
+        // } else if(selectedAuto == AUTO_OPTIONS.MP){
+        //     return new AutonomousBaseMP(
+        //         Trajectories.uno, 
+        //         Trajectories.dos,
+        //         Trajectories.tres,
+        //         Trajectories.nada
+        //     ); 
+        // } else if(selectedAuto == AUTO_OPTIONS.MP_HD3SCORER){
+        //     return new AutonomousBaseMP(
+        //         Trajectories.oneHD3R, 
+        //         Trajectories.twoHD3R,
+        //         Trajectories.threeHD3R,
+        //         Trajectories.fourHD3R
+        //     ); 
+
+         } else if(selectedAuto == AUTO_OPTIONS.MP_HDLEAVEB){
             return new AutonomousBaseMP(
-                Trajectories.uno, 
-                Trajectories.dos,
-                Trajectories.tres,
-                Trajectories.nada
+                new MPStateWithTrajectory[]{
+                    new MPStateWithTrajectory(MPStates.FIRST),
+                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.HDMP),//278.95
+                    new MPStateWithTrajectory(MPStates.STOP) 
+                }
             ); 
-        } else if(selectedAuto == AUTO_OPTIONS.MP_HD3SCORER){
+        } else if(selectedAuto == AUTO_OPTIONS.MP_HBLEAVEB){
+            System.out.println("Made it to the paths class!"); 
             return new AutonomousBaseMP(
-                Trajectories.oneHD3R, 
-                Trajectories.twoHD3R,
-                Trajectories.threeHD3R,
-                Trajectories.fourHD3R
-            ); 
-        } else if(selectedAuto == AUTO_OPTIONS.MP_TESTPATH){
+                new MPStateWithTrajectory[]{
+                    new MPStateWithTrajectory(MPStates.FIRST),
+                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.HBMP),
+                    new MPStateWithTrajectory(MPStates.STOP)
+                }
+            );
+        } else if(selectedAuto == AUTO_OPTIONS.MP_LOWHDPLACELEAVEB){
             return new AutonomousBaseMP(
-                Trajectories.flowerOne, 
-                Trajectories.flowerTwo,
-                Trajectories.flowerThree,
-                Trajectories.flowerFour
+    
+                new MPStateWithTrajectory[]{
+                    new MPStateWithTrajectory(MPStates.FIRST),
+                    new MPStateWithTrajectory(MPStates.LOW),
+                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.HDMP), 
+                    new MPStateWithTrajectory(MPStates.STOP)
+                }
+            );
+        } else if(selectedAuto == AUTO_OPTIONS.MP_LOWHBPLACELEAVEB){
+            return new AutonomousBaseMP(
+                new MPStateWithTrajectory[]{
+                    new MPStateWithTrajectory(MPStates.FIRST),
+                    new MPStateWithTrajectory(MPStates.LOW),
+                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.HBMP),
+                    new MPStateWithTrajectory(MPStates.STOP)
+                }
+            );
+        } else if(selectedAuto == AUTO_OPTIONS.MP_MIDHDPLACELEAVEB){
+            return new AutonomousBaseMP(
+                new MPStateWithTrajectory[]{
+                    new MPStateWithTrajectory(MPStates.FIRST),
+                    new MPStateWithTrajectory(MPStates.MID),
+                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.HDMP),
+                    new MPStateWithTrajectory(MPStates.STOP)
+                }
+            );
+        } else if (selectedAuto == AUTO_OPTIONS.MP_LOW_OVER_ENGAGE){
+            return new AutonomousBaseMP(
+                new MPStateWithTrajectory[]{
+                    new MPStateWithTrajectory(MPStates.FIRST),
+                    new MPStateWithTrajectory(MPStates.LOW),
+                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.ENGAGEMP), 
+                    new MPStateWithTrajectory(MPStates.ENGAGE), 
+                    new MPStateWithTrajectory(MPStates.STOP)
+                }
+            );
+        } else if (selectedAuto == AUTO_OPTIONS.MP_MID_OVER_ENGAGE){
+            return new AutonomousBaseMP(
+                new MPStateWithTrajectory[]{
+                    new MPStateWithTrajectory(MPStates.FIRST),
+                    new MPStateWithTrajectory(MPStates.MID),
+                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.ENGAGEMP), 
+                    new MPStateWithTrajectory(MPStates.ENGAGE),
+                    new MPStateWithTrajectory(MPStates.STOP)
+                }
             ); 
-        }else if(selectedAuto== AUTO_OPTIONS.LOWTIMEDENGAGED){
+        } else if(selectedAuto== AUTO_OPTIONS.LOWTIMEDENGAGED){
             return new AutonomousBaseEngage(1);
         } else if (selectedAuto== AUTO_OPTIONS.MIDTIMEDENGAGED){
             return new AutonomousBaseEngage(2);
