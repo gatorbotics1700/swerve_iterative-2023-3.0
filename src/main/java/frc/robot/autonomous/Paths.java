@@ -169,6 +169,7 @@ public class Paths {
         //     ); 
 
          } else if(selectedAuto == AUTO_OPTIONS.MP_HDLEAVEB){
+            System.out.println("In MP_HDLEAVEB");
             return new AutonomousBaseMP(
                 new MPStateWithTrajectory[]{
                     new MPStateWithTrajectory(MPStates.FIRST),

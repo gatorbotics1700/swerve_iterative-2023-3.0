@@ -20,7 +20,7 @@ public class Trajectories{
     private static double mpi = Constants.METERS_PER_INCH; 
     //lauren + caro note: copied and pasted from Paths.java (for HDLEAVEBMP)
     //Avery note: we might need to adjust for origin in the middle
-    private static final double STARTING_X = 68.95;
+    private static final double STARTING_X = 0.0;
     private static final double ENDING_X = 100; //Avery note: guess - change later
     private static final double HB_Y_B = 200.046;
     private static final double HD_Y_B = 54.69;
@@ -94,9 +94,9 @@ public class Trajectories{
     public static Trajectory HDMP = generateTrajectory( //for all HD paths
         new Pose2d(STARTING_X * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
         new Pose2d(ENDING_X * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
-        new Translation2d(75 * mpi, HD_Y_B * mpi),
-        new Translation2d(85 * mpi, HD_Y_B * mpi),
-        new Translation2d(95 * mpi, HD_Y_B * mpi)
+        new Translation2d(30 * mpi, 0 * mpi),
+        new Translation2d(30 * mpi, 0 * mpi),
+        new Translation2d(30 * mpi, 0 * mpi)
     );
 
     public static Trajectory HBMP = generateTrajectory( //for all HB paths
@@ -117,27 +117,31 @@ public class Trajectories{
    
 
     public static Trajectory generateTrajectory(Pose2d starting, Pose2d ending, Translation2d interior1, Translation2d interior2, Translation2d interior3){
+        System.out.println("Into generate trajectory"); 
         ArrayList<Translation2d> interiorWaypoints = new ArrayList<Translation2d>();
         interiorWaypoints.add(interior1);
         interiorWaypoints.add(interior2);
         interiorWaypoints.add(interior3);
 
-        SwerveDriveKinematicsConstraint swerveDriveKinematicsConstraint = new SwerveDriveKinematicsConstraint(DrivetrainSubsystem.getMKinematics(), DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND*.75);
+        SwerveDriveKinematicsConstraint swerveDriveKinematicsConstraint = new SwerveDriveKinematicsConstraint(DrivetrainSubsystem.getMKinematics(), DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND);
         MaxVelocityConstraint maxVelocityConstraint = new MaxVelocityConstraint(DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND*.75);
+        System.out.println("Made constraints!");
 
-        TrajectoryConfig config = new TrajectoryConfig(DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND*0.75, 1); //4.96, 2.8 //we should maybe look into this further
+        TrajectoryConfig config = new TrajectoryConfig(DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND, 1); //4.96, 2.8 //we should maybe look into this further
         System.out.println("Start config pose: " + Robot.m_drivetrainSubsystem.getMPoseX());
         config.addConstraint(swerveDriveKinematicsConstraint);
         config.addConstraint(maxVelocityConstraint);
-// look into using traj configs. its possiblwe are not using/;applying it correctly
-       //our way of generating trajectory. It is BROKEN 
+        // look into using traj configs. its possiblwe are not using/;applying it correctly
+        //our way of generating trajectory. It is BROKEN 
+        System.out.println("to generate trajectory WPIlib"); 
+        //Avery Note: this line (below) is the broken one! (11/3/23)
         Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
             starting,
             interiorWaypoints, 
             ending,
             config
         );
-        System.out.println("End config pose: " + Robot.m_drivetrainSubsystem.getMPoseX());
+        System.out.println("Generated trajectory! " + trajectory.getTotalTimeSeconds());
         return trajectory;
     }
 }

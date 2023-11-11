@@ -18,7 +18,7 @@ public class MPStateWithTrajectory{
 
     public MPStateWithTrajectory(MPStates mpStates){
         this.mpState = mpStates;
-        this.trajectory = null;
+        this.trajectory = Trajectories.nada;
     }
 
     public static enum MPStates{

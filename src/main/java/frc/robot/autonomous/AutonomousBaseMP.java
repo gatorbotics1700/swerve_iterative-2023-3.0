@@ -41,6 +41,7 @@ public class AutonomousBaseMP extends AutonomousBase{
     private int i;
 
     public AutonomousBaseMP(MPStateWithTrajectory[] MPStateSequence){
+        System.out.println("In autobase structure!");
         this.MPStateSequence =  MPStateSequence;
         controller = new HolonomicDriveController(
             new PIDController(1, 0, 0), new PIDController(1, 0, 0), //TODO: CHANGE KP
@@ -153,6 +154,7 @@ public class AutonomousBaseMP extends AutonomousBase{
             //change angle to get the trajectory angle later
         
         drivetrainSubsystem.setSpeed(adjustedSpeeds);
+        System.out.println("Adjusted speed: " + adjustedSpeeds);
     }
 
 }

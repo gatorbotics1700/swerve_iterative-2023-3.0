@@ -77,6 +77,8 @@ public class Robot extends TimedRobot {
     auto_chooser.addOption("timed", Paths.AUTO_OPTIONS.TIMED);
     auto_chooser.addOption("motionProfiling", Paths.AUTO_OPTIONS.MP); 
     auto_chooser.addOption("MP Tester", Paths.AUTO_OPTIONS.MP_TESTPATH); 
+    auto_chooser.addOption("MPHBLeaveB", Paths.AUTO_OPTIONS.MP_HBLEAVEB);
+    auto_chooser.addOption("MPHDLeaveB", Paths.AUTO_OPTIONS.MP_HDLEAVEB);
     inverted.setDefaultOption("true", true);
     inverted.addOption("false", false);
     SmartDashboard.putData("Auto choices", auto_chooser);
@@ -121,7 +123,7 @@ public class Robot extends TimedRobot {
     m_drivetrainSubsystem.init();
     System.out.println("current pose: " + m_drivetrainSubsystem.getMPoseX() + " , " + m_drivetrainSubsystem.getMPoseY());
     Paths.AUTO_OPTIONS selected = auto_chooser.getSelected();
-    m_auto = Paths.constructAuto(selected);
+    m_auto = Paths.constructAuto(selected);//PROBLEMMM - confirmed 11/10/2023
     //m_mechanisms.elevatorSubsystem.setZeroForAutoHeight();
     //m_auto.init();
   }
@@ -129,7 +131,9 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-     m_mechanisms.periodic();
+    System.out.println("JUST ENTERED AUTONOMOUS PERIODIC");
+     //m_mechanisms.periodic();
+     System.out.println("IN AUTOPERIODIC!!!");
      m_auto.periodic();
      m_drivetrainSubsystem.drive();
      System.out.println("our pose: " + m_drivetrainSubsystem.getMPoseX());
@@ -182,11 +186,11 @@ public class Robot extends TimedRobot {
     m_drivetrainSubsystem.drive();
 
     //MECHANISMS
-    //m_mechanisms.periodic();
-    //m_buttons.buttonsPeriodic();
+    m_mechanisms.periodic();
+    m_buttons.buttonsPeriodic();
     //PneumaticArmPivot.solenoid.set(Value.kForward);
     //System.out.println(m_mechanisms.armTelescopingSubsystem.getArmPosition());
-    //m_mechanisms.armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0.0);
+    m_mechanisms.armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0.0);
     //m_mechanisms.elevatorSubsystem.elevatorMotor.setSelectedSensorPosition(0.0);
   }
   /** This function is called once when the robot is first started up. */
