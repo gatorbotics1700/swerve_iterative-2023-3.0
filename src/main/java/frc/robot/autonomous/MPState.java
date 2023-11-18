@@ -6,22 +6,22 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import frc.robot.autonomous.StateWithCoordinate.AutoStates;
 
-public class MPStateWithTrajectory{
+public class MPState{
 
-    public final MPStates mpState;
+    public final MPStateLabel stateLabel;
     public final Trajectory trajectory;
 
-    public MPStateWithTrajectory(MPStates mpStates, Trajectory trajectory){
-        this.mpState = mpStates;
+    public MPState(MPStateLabel stateLabel, Trajectory trajectory){
+        this.stateLabel = stateLabel;
         this.trajectory = trajectory;
     }
-
-    public MPStateWithTrajectory(MPStates mpStates){
-        this.mpState = mpStates;
-        this.trajectory = Trajectories.nada;
+//this constructor is for states that don't require driving
+    public MPState(MPStateLabel stateLabel){
+        this.stateLabel = stateLabel;
+        this.trajectory = null; 
     }
 
-    public static enum MPStates{
+    public static enum MPStateLabel{
         TRAJECTORY, //MP version of PD states DRIVE and FASTDRIVE //note: don't need FASTDRIVE in MP bc MP doesn't have the same problems as PD
         MID, //PD version = MIDNODE
         ENGAGE,

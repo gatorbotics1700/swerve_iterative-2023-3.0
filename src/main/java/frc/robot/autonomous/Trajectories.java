@@ -26,7 +26,7 @@ public class Trajectories{
     private static final double HD_Y_B = 54.69;
     private static final double HB_Y_R = 200.046;
     private static final double HD_Y_R = 54.69;
-
+//Write methods for each trajectory - 11/17/2023
     public static Trajectory uno = generateTrajectory(
         new Pose2d(), 
         new Pose2d(2.0, 0.0, new Rotation2d(Math.toRadians(90))), 
@@ -82,15 +82,15 @@ public class Trajectories{
         new Translation2d(454.199, 45.934),
         new Translation2d(525, 43.5)
     ); 
-
-    public static Trajectory nada = generateTrajectory(
+//NADA IS EXTREMELY BROKEN DO NOT USE - 11/17/2023
+    /*public static Trajectory nada = generateTrajectory(
         new Pose2d(),
         new Pose2d(),
         new Translation2d(),
         new Translation2d(),
         new Translation2d()
-    ); 
-
+    ); */
+//TODO: EDIT HDMP AND HBMP - 11/17/2023
     public static Trajectory HDMP = generateTrajectory( //for all HD paths
         new Pose2d(STARTING_X * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
         new Pose2d(ENDING_X * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
@@ -99,6 +99,7 @@ public class Trajectories{
         new Translation2d(30 * mpi, 0 * mpi)
     );
 
+    /* TODO: ERROR TOO CLOSE TOGETHER
     public static Trajectory HBMP = generateTrajectory( //for all HB paths
         new Pose2d(STARTING_X * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
         new Pose2d(ENDING_X * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
@@ -106,7 +107,9 @@ public class Trajectories{
         new Translation2d(85 * mpi, HB_Y_B * mpi),
         new Translation2d(95 * mpi, HB_Y_B * mpi)
     );
+    */
 
+    //shouldn't be complaining about this one, what is it 11/17/23
     public static Trajectory ENGAGEMP = generateTrajectory( //for all paths with an Engage state
         new Pose2d(STARTING_X * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
         new Pose2d(265 * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),

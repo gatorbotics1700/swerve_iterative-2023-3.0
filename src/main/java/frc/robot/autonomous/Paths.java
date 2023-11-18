@@ -3,7 +3,7 @@ import frc.robot.Constants;
 import frc.robot.autonomous.*;
 import frc.robot.autonomous.StateWithCoordinate.AutoStates;
 import frc.robot.autonomous.AutonomousBaseEngage;
-import frc.robot.autonomous.MPStateWithTrajectory.MPStates;
+import frc.robot.autonomous.MPState.MPStateLabel;
 
 import javax.swing.plaf.nimbus.State;
 
@@ -171,67 +171,67 @@ public class Paths {
          } else if(selectedAuto == AUTO_OPTIONS.MP_HDLEAVEB){
             System.out.println("In MP_HDLEAVEB");
             return new AutonomousBaseMP(
-                new MPStateWithTrajectory[]{
-                    new MPStateWithTrajectory(MPStates.FIRST),
-                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.HDMP),//278.95
-                    new MPStateWithTrajectory(MPStates.STOP) 
+                new MPState[]{
+                    new MPState(MPStateLabel.FIRST),
+                    new MPState(MPStateLabel.TRAJECTORY, Trajectories.uno),//HDMP 278.95
+                    new MPState(MPStateLabel.STOP) 
                 }
             ); 
         } else if(selectedAuto == AUTO_OPTIONS.MP_HBLEAVEB){
             System.out.println("Made it to the paths class!"); 
             return new AutonomousBaseMP(
-                new MPStateWithTrajectory[]{
-                    new MPStateWithTrajectory(MPStates.FIRST),
-                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.HBMP),
-                    new MPStateWithTrajectory(MPStates.STOP)
+                new MPState[]{
+                    new MPState(MPStateLabel.FIRST),
+                    new MPState(MPStateLabel.TRAJECTORY, Trajectories.uno), //HBMP
+                    new MPState(MPStateLabel.STOP)
                 }
             );
         } else if(selectedAuto == AUTO_OPTIONS.MP_LOWHDPLACELEAVEB){
             return new AutonomousBaseMP(
     
-                new MPStateWithTrajectory[]{
-                    new MPStateWithTrajectory(MPStates.FIRST),
-                    new MPStateWithTrajectory(MPStates.LOW),
-                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.HDMP), 
-                    new MPStateWithTrajectory(MPStates.STOP)
+                new MPState[]{
+                    new MPState(MPStateLabel.FIRST),
+                    new MPState(MPStateLabel.LOW),
+                    new MPState(MPStateLabel.TRAJECTORY, Trajectories.uno), //HDMP
+                    new MPState(MPStateLabel.STOP)
                 }
             );
         } else if(selectedAuto == AUTO_OPTIONS.MP_LOWHBPLACELEAVEB){
             return new AutonomousBaseMP(
-                new MPStateWithTrajectory[]{
-                    new MPStateWithTrajectory(MPStates.FIRST),
-                    new MPStateWithTrajectory(MPStates.LOW),
-                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.HBMP),
-                    new MPStateWithTrajectory(MPStates.STOP)
+                new MPState[]{
+                    new MPState(MPStateLabel.FIRST),
+                    new MPState(MPStateLabel.LOW),
+                    new MPState(MPStateLabel.TRAJECTORY, Trajectories.uno), //HBMP
+                    new MPState(MPStateLabel.STOP)
                 }
             );
         } else if(selectedAuto == AUTO_OPTIONS.MP_MIDHDPLACELEAVEB){
             return new AutonomousBaseMP(
-                new MPStateWithTrajectory[]{
-                    new MPStateWithTrajectory(MPStates.FIRST),
-                    new MPStateWithTrajectory(MPStates.MID),
-                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.HDMP),
-                    new MPStateWithTrajectory(MPStates.STOP)
+                new MPState[]{
+                    new MPState(MPStateLabel.FIRST),
+                    new MPState(MPStateLabel.MID),
+                    new MPState(MPStateLabel.TRAJECTORY, Trajectories.HDMP),
+                    new MPState(MPStateLabel.STOP)
                 }
             );
         } else if (selectedAuto == AUTO_OPTIONS.MP_LOW_OVER_ENGAGE){
             return new AutonomousBaseMP(
-                new MPStateWithTrajectory[]{
-                    new MPStateWithTrajectory(MPStates.FIRST),
-                    new MPStateWithTrajectory(MPStates.LOW),
-                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.ENGAGEMP), 
-                    new MPStateWithTrajectory(MPStates.ENGAGE), 
-                    new MPStateWithTrajectory(MPStates.STOP)
+                new MPState[]{
+                    new MPState(MPStateLabel.FIRST),
+                    new MPState(MPStateLabel.LOW),
+                    new MPState(MPStateLabel.TRAJECTORY, Trajectories.ENGAGEMP), 
+                    new MPState(MPStateLabel.ENGAGE), 
+                    new MPState(MPStateLabel.STOP)
                 }
             );
         } else if (selectedAuto == AUTO_OPTIONS.MP_MID_OVER_ENGAGE){
             return new AutonomousBaseMP(
-                new MPStateWithTrajectory[]{
-                    new MPStateWithTrajectory(MPStates.FIRST),
-                    new MPStateWithTrajectory(MPStates.MID),
-                    new MPStateWithTrajectory(MPStates.TRAJECTORY, Trajectories.ENGAGEMP), 
-                    new MPStateWithTrajectory(MPStates.ENGAGE),
-                    new MPStateWithTrajectory(MPStates.STOP)
+                new MPState[]{
+                    new MPState(MPStateLabel.FIRST),
+                    new MPState(MPStateLabel.MID),
+                    new MPState(MPStateLabel.TRAJECTORY, Trajectories.ENGAGEMP), 
+                    new MPState(MPStateLabel.ENGAGE),
+                    new MPState(MPStateLabel.STOP)
                 }
             ); 
         } else if(selectedAuto== AUTO_OPTIONS.LOWTIMEDENGAGED){

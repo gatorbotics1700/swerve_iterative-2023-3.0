@@ -7,7 +7,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.geometry.*;
 import frc.robot.Robot;
-import frc.robot.autonomous.MPStateWithTrajectory.MPStates;
+import frc.robot.autonomous.MPState.MPStateLabel;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.Mechanisms.MechanismStates;
 import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
@@ -24,23 +24,23 @@ import frc.robot.subsystems.Mechanisms;
 public class AutonomousBaseMP extends AutonomousBase{
     private double timeStart;
     private double timeElapsed = 0;
-    private Trajectory.State end;
+    private Trajectory.State currentTrajState;
     private HolonomicDriveController controller;
         // trapezoid profile takes in max rotation velocity and max rotation acceleration 
         // PIDController #1: the first arg rep how many m/s added in the x direction for every meter of error in the x direction
         // PIDController #2 : the first arg rep how many m/s added in the y direction for every meter of error in the y direction
     
     private static DrivetrainSubsystem drivetrainSubsystem;
-    public MPStates mpStates;
+    public MPStateLabel mpStates;
     private Mechanisms mechanisms;
     private AutonomousBaseEngage autoEngage; 
-    private MPStateWithTrajectory[] MPStateSequence;
+    private MPState[] MPStateSequence;
 
     private Boolean isFirst;
     private double startTime;
     private int i;
 
-    public AutonomousBaseMP(MPStateWithTrajectory[] MPStateSequence){
+    public AutonomousBaseMP(MPState[] MPStateSequence){
         System.out.println("In autobase structure!");
         this.MPStateSequence =  MPStateSequence;
         controller = new HolonomicDriveController(
@@ -56,42 +56,47 @@ public class AutonomousBaseMP extends AutonomousBase{
         timeStart = 0.0;
         i = 0;
         isFirst = true;
-        double timeCheck = MPStateSequence[i].trajectory.getTotalTimeSeconds();
-        end = MPStateSequence[i].trajectory.sample(timeCheck);
-        //Avery note: might need to edit this when we work with multiple trajectories bc we only check Traj one 
-        //maybe a method to reset time that can be called when we switch to a new trajectory in the else ifs 
-        System.out.println("total time: " + timeCheck);
-        System.out.println("total time: " + timeCheck);
         System.out.println("Init pose: " + drivetrainSubsystem.getMPoseX());
         drivetrainSubsystem.resetOdometry(new Pose2d());
         //System.out.println("Traj 1 " + trajectory1 +  "/n Traj 2 " + trajectory2 + "/n Traj 3 " + trajectory3); 
     }
 
-    private MPStates mpstates = MPStates.FIRST; 
+    private MPStateLabel currentStateLabel = MPStateLabel.FIRST; 
     
     @Override
     public void periodic(){
-        mpstates = MPStateSequence[i].mpState;
-        System.out.println("state: " + mpstates);
-        if(mpstates == MPStates.FIRST){
+        currentStateLabel = MPStateSequence[i].stateLabel;
+        System.out.println("state: " + currentStateLabel);
+        if(currentStateLabel == MPStateLabel.FIRST){
             timeStart = System.currentTimeMillis();
-            setStates(MPStates.TRAJECTORY);  // made one state for trajectory and are putting individual trajectories in followTradjectory()
+            setStates(MPStateLabel.TRAJECTORY);  // made one state for trajectory and are putting individual trajectories in followTradjectory()
             System.out.println("Doing first");
             System.out.println("initial pose: " + drivetrainSubsystem.getMPoseX());
             i++;
             System.out.println("moving on to " + MPStateSequence[i]);
-        } else if(mpstates == MPStates.TRAJECTORY){
-            System.out.println("trajectory End X: "+ end.poseMeters.getX() + " trajectory Get X: " + drivetrainSubsystem.getMPoseX()); 
-            followTrajectory(MPStateSequence[i].trajectory); 
-            if(trajectoryDone(MPStateSequence[i].trajectory)){
-                System.out.println("STOP");
-                setStates(MPStates.STOP);
+        } else if(currentStateLabel == MPStateLabel.TRAJECTORY){
+            if(MPStateSequence[i].trajectory == null){
+                System.out.println("No trajectory");
+                setStates(MPStateLabel.STOP);
                 i++;
                 System.out.println("moving on to " + MPStateSequence[i]);
+            }else{
+                double timeCheck;
+                timeCheck = MPStateSequence[i].trajectory.getTotalTimeSeconds();
+                currentTrajState = MPStateSequence[i].trajectory.sample(timeCheck);
+                System.out.println("total time: " + timeCheck);
+                System.out.println("trajectory End X: "+ currentTrajState.poseMeters.getX() + " trajectory Get X: " + drivetrainSubsystem.getMPoseX()); 
+                followTrajectory(MPStateSequence[i].trajectory); 
+                if(trajectoryDone(MPStateSequence[i].trajectory)){
+                    System.out.println("STOP");
+                    setStates(MPStateLabel.STOP);
+                    i++;
+                    System.out.println("moving on to " + MPStateSequence[i]);
+                }
             }
-        } else if(mpstates == MPStates.MID){
+        } else if(currentStateLabel == MPStateLabel.MID){
             System.out.println("mid node");
-            setStates(MPStates.MID);
+            setStates(MPStateLabel.MID);
             if(mechanisms.isDoneMid()==true){
                 if(isFirst){
                     startTime = System.currentTimeMillis();
@@ -104,9 +109,9 @@ public class AutonomousBaseMP extends AutonomousBase{
                 }
             } 
            
-        } else if(mpstates == MPStates.LOW){
+        } else if(currentStateLabel == MPStateLabel.LOW){
             System.out.println("low node");
-            setStates(MPStates.LOW);
+            setStates(MPStateLabel.LOW);
             if(isFirst){
                 timeStart = System.currentTimeMillis();
                 isFirst = false;
@@ -119,19 +124,20 @@ public class AutonomousBaseMP extends AutonomousBase{
                 }
             }
             
-        } else if(mpstates == MPStates.ENGAGE){
+        } else if(currentStateLabel == MPStateLabel.ENGAGE){
             autoEngage.periodic();   
         } else{
             drivetrainSubsystem.stopDrive();
+            System.out.println("DID NOT RECOGNIZE STATE LABEL; STOP DRIVE!!!");
         }
 
         timeElapsed = System.currentTimeMillis() - timeStart;
     }
 
     public boolean trajectoryDone(Trajectory trajectory){
-        double error = Math.abs(end.poseMeters.getX() - drivetrainSubsystem.getMPoseX());
+        double error = Math.abs(currentTrajState.poseMeters.getX() - drivetrainSubsystem.getMPoseX());
         System.out.println("error: " + error);
-        System.out.println("End X: "+ end.poseMeters.getX() + " Get X: " + drivetrainSubsystem.getMPoseX()); 
+        System.out.println("End X: "+ currentTrajState.poseMeters.getX() + " Get X: " + drivetrainSubsystem.getMPoseX()); 
         if(error < 0.1 /*/&& 
         Math.abs(end.poseMeters.getY() - DrivetrainSubsystem.m_pose.getY()) < 2 &&
         Math.abs(end.poseMeters.getRotation().getDegrees() - DrivetrainSubsystem.m_pose.getRotation().getDegrees()) < 2 */){
@@ -141,16 +147,16 @@ public class AutonomousBaseMP extends AutonomousBase{
         }
     }
 
-    public void setStates(MPStates newState){
-        mpstates = newState;
+    public void setStates(MPStateLabel newStateLabel){
+        currentStateLabel = newStateLabel;
     }
 
     public void followTrajectory(Trajectory trajectory){
         Trajectory.State goal = trajectory.sample(timeElapsed/1000);
-        System.out.println("follow End X: "+ end.poseMeters.getX() + " follow Get X: " + drivetrainSubsystem.getMPoseX()); 
+        System.out.println("follow End X: "+ currentTrajState.poseMeters.getX() + " follow Get X: " + drivetrainSubsystem.getMPoseX()); 
         
         ChassisSpeeds adjustedSpeeds = controller.calculate(
-            drivetrainSubsystem.getMPose(), goal, end.poseMeters.getRotation());
+            drivetrainSubsystem.getMPose(), goal, currentTrajState.poseMeters.getRotation());
             //change angle to get the trajectory angle later
         
         drivetrainSubsystem.setSpeed(adjustedSpeeds);
