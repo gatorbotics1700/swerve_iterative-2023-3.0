@@ -11,7 +11,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 //10 in on moving mechanism thing
 
 public class ElevatorSubsystem {
-    private static final double _kP = 0.2;//0.15;
+    private static final double _kP = 0.2; //0.15;
     private static final double _kI = 0.0;
     private static final double _kD = 0.0;
     private static final int _kIzone = 0;
@@ -33,16 +33,23 @@ public class ElevatorSubsystem {
     private static final double DEADBAND = 5000; //15000;
 
     public static enum ElevatorStates{
-        ZERO, LOW_ELEVATOR_HEIGHT, MID_ELEVATOR_HEIGHT, SHELF_ELEVATOR_HEIGHT, AUTO_HEIGHT, MANUAL, STOPPED; 
+        ZERO, 
+        LOW_ELEVATOR_HEIGHT, 
+        MID_ELEVATOR_HEIGHT, 
+        SHELF_ELEVATOR_HEIGHT, 
+        AUTO_HEIGHT, 
+        MANUAL, 
+        STOPPED; 
     }
 
     public ElevatorSubsystem(){
-        elevatorMotor = new TalonFX(Constants.ELEVATOR_CAN_ID);
+        // TODO: assign the CAN ID to the motor (you can find the CAN ID in Constants)
         init();
     }
 
     public void init(){
-        System.out.println("elevator init!!!!");
+        // TODO: write a print statement here! 
+        // print statements help us identify what code ran successfully and where we came across errors
         elevatorMotor.setInverted(true); // looking from the front of the robot, clockwise is false (:
         elevatorMotor.setNeutralMode(NeutralMode.Brake);
         setState(ElevatorStates.LOW_ELEVATOR_HEIGHT);
@@ -64,12 +71,7 @@ public class ElevatorSubsystem {
         } else if (elevatorState == ElevatorStates.LOW_ELEVATOR_HEIGHT){
             double desiredTicks = determineRightTicks(LOW_HEIGHT_INCHES);
             elevatorDeadband(desiredTicks);
-        } else if (elevatorState == ElevatorStates.SHELF_ELEVATOR_HEIGHT) {
-            double desiredTicks = determineRightTicks(SHELF_HEIGHT_INCHES);
-            elevatorDeadband(desiredTicks);
-        } else if (elevatorState == ElevatorStates.MID_ELEVATOR_HEIGHT){
-            double desiredTicks = determineRightTicks(MID_HEIGHT_INCHES);
-            elevatorDeadband(desiredTicks);
+        // TODO: MID_ELEVATOR_HEIGHT and SHELF_ELEVATOR_HEIGHT
         } else if(elevatorState == ElevatorStates.AUTO_HEIGHT){
             elevatorDeadband(AUTO_HEIGHT_TICKS);
         }else if (elevatorState == ElevatorStates.MANUAL){
@@ -80,19 +82,21 @@ public class ElevatorSubsystem {
     }
 
     private double determineRightTicks(double desiredInches){
-        return desiredInches * ELEVATOR_TICKS_PER_INCH; 
+        // TODO: return using ELEVATOR_TICKS_PER_INCH
     }
 
     private void elevatorDeadband(double desiredTicks){
         if (Math.abs(desiredTicks - elevatorMotor.getSelectedSensorPosition()) > DEADBAND){
-            elevatorMotor.set(ControlMode.Position, desiredTicks); 
+            // TODO: set motor control mode to Position and pass the output value (desiredTicks)
+            // HINT: go to the set() method if you need help
         } else {
-            elevatorMotor.set(ControlMode.PercentOutput, 0);
+            // TODO: set control mode to PercentOutput (usually used for stopping) and pass the output value
+            // HINT: for the output value, remember that we want the motor to stop
         }
     }
 
     public void setState(ElevatorStates newElevatorState){
-        elevatorState = newElevatorState;
+        // TODO: complete the setter method using elevatorState object
     }
 
     private void manualElevator(){
@@ -113,18 +117,11 @@ public class ElevatorSubsystem {
     public boolean isAtMid(){
         return Math.abs(elevatorMotor.getSelectedSensorPosition()-MID_HEIGHT_INCHES*ELEVATOR_TICKS_PER_INCH)<DEADBAND;
     }
+    
+    // TODO: write methods that return booleans isAtLow and isAtShelf
+    // HINT: it should look similar to the one above
 
-    public boolean isAtLow(){
-        return Math.abs(elevatorMotor.getSelectedSensorPosition()-LOW_HEIGHT_INCHES*ELEVATOR_TICKS_PER_INCH)<DEADBAND;
-    }
-
-    public boolean isAtShelf(){
-        return Math.abs(elevatorMotor.getSelectedSensorPosition()-SHELF_HEIGHT_INCHES*ELEVATOR_TICKS_PER_INCH) < DEADBAND;
-    }
-
-    public boolean isAtZero(){
-        return elevatorMotor.getSelectedSensorPosition() < DEADBAND;
-    }
+    // TODO: can you write one for isAtZero? what about this method is different from the prior 3?
 
     public double getSelectedSensorPosition(){
         return elevatorMotor.getSelectedSensorPosition();

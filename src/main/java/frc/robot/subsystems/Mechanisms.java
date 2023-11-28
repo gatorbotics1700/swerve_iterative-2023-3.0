@@ -13,15 +13,7 @@ public class Mechanisms {
     public PneumaticArmPivot armPneumaticPivot;
 
     public static enum MechanismStates{
-        LOW_NODE,
-        MID_NODE,
-        SHELF,
-        SUB,
-        GROUNDPICKUP,
-        AUTO_STARTING,
-        MANUAL_ELEVATOR,
-        MANUAL_TELESCOPE,
-        HOLDING;
+        // TODO
     }
 
     private MechanismStates mechState;

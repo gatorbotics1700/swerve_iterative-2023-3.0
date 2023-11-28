@@ -11,9 +11,7 @@ import frc.robot.Constants;
 public class PneumaticIntakeSubsystem {
 
     public static enum PneumaticIntakeStates{
-        PINCHING, 
-        RELEASING, 
-        OFF;
+        // TODO
     }
 
     public PneumaticIntakeStates pneumaticIntakeState;
@@ -28,21 +26,15 @@ public class PneumaticIntakeSubsystem {
     }
 
     public void init(){
-        pneumaticIntakeState = PneumaticIntakeStates.PINCHING;
+        // set the state to PINCHING
     }
 
     public void periodic(){
-       if(pneumaticIntakeState == PneumaticIntakeStates.PINCHING){
-            solenoidOne.set(kForward); 
-        } else if (pneumaticIntakeState == PneumaticIntakeStates.RELEASING){
-            solenoidOne.set(kReverse);
-        }else{
-            solenoidOne.set(kOff);
-        }
+       // TODO
     }
 
     public void setStatePneumaticIntake(PneumaticIntakeStates newIntakeState){
-        pneumaticIntakeState = newIntakeState;
+        // TODO
     }
 
     public boolean isBeamBroken(){
