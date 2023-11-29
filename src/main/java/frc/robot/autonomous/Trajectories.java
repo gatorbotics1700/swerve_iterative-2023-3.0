@@ -99,7 +99,8 @@ public class Trajectories{
         new Translation2d(30 * mpi, 0 * mpi)
     );
 
-    /* TODO: ERROR TOO CLOSE TOGETHER
+    /* TODO: ERROR TOO CLOSE TOGETHER. 
+
     public static Trajectory HBMP = generateTrajectory( //for all HB paths
         new Pose2d(STARTING_X * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
         new Pose2d(ENDING_X * mpi, HB_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
@@ -109,13 +110,14 @@ public class Trajectories{
     );
     */
 
-    //shouldn't be complaining about this one, what is it 11/17/23
-    public static Trajectory ENGAGEMP = generateTrajectory( //for all paths with an Engage state
-        new Pose2d(STARTING_X * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
-        new Pose2d(265 * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
-        new Translation2d(117.9625 * mpi, HD_Y_B * mpi),
-        new Translation2d(166.975 * mpi, HD_Y_B * mpi),
-        new Translation2d(215.9875 * mpi, HD_Y_B * mpi)
+    //shouldn't be complaining about this one, what is it 11/17/. 
+    //are they too close? issue with directionality? or units. clockwise positive angles. 
+    public static Trajectory ENGAGEMP = generateTrajectory( //all measurements in meters already! PathPlanner
+        new Pose2d(1.95, 2.77, new Rotation2d(Math.toRadians(180.0))),
+        new Pose2d(4.12, 2.73, new Rotation2d(Math.toRadians(180.0))),
+        new Translation2d(2.44, 4.31),
+        new Translation2d(3.79, 4.79),
+        new Translation2d(5.71, 3.52)
     );
    
 

@@ -128,7 +128,7 @@ public class AutonomousBaseMP extends AutonomousBase{
             autoEngage.periodic();   
         } else{
             drivetrainSubsystem.stopDrive();
-            System.out.println("DID NOT RECOGNIZE STATE LABEL; STOP DRIVE!!!");
+           // System.out.println("DID NOT RECOGNIZE STATE LABEL; STOP DRIVE!!!");
         }
 
         timeElapsed = System.currentTimeMillis() - timeStart;
