@@ -6,12 +6,16 @@ import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.kReverse;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.robot.Constants;
 
 public class PneumaticIntakeSubsystem {
 
     public static enum PneumaticIntakeStates{
         // TODO
+        PINCHING,
+        RELEASING,
+        OFF;
     }
 
     public PneumaticIntakeStates pneumaticIntakeState;
@@ -27,14 +31,23 @@ public class PneumaticIntakeSubsystem {
 
     public void init(){
         // set the state to PINCHING
+        pneumaticIntakeState = PneumaticIntakeStates.PINCHING;
     }
 
     public void periodic(){
        // TODO
+       if(pneumaticIntakeState == PneumaticIntakeStates.PINCHING){
+            solenoidOne.set(kForward);
+       }else if(pneumaticIntakeState == PneumaticIntakeStates.RELEASING){
+            solenoidOne.set(kReverse);
+       }else{
+            solenoidOne.set(Value.kOff);
+       }
     }
 
     public void setStatePneumaticIntake(PneumaticIntakeStates newIntakeState){
         // TODO
+        pneumaticIntakeState = newIntakeState; 
     }
 
     public boolean isBeamBroken(){
