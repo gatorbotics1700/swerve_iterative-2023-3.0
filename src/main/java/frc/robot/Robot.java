@@ -45,6 +45,8 @@ public class Robot extends TimedRobot {
   public static Mechanisms m_mechanisms = new Mechanisms();
   public static Buttons m_buttons = new Buttons();
 
+  public static boolean mechanismsEnabled = false;
+
   double mpi = Constants.METERS_PER_INCH;
   public static Boolean isBlueAlliance = true;
  
@@ -79,10 +81,14 @@ public class Robot extends TimedRobot {
     auto_chooser.addOption("MP Tester", Paths.AUTO_OPTIONS.MP_TESTPATH); 
     auto_chooser.addOption("MPHBLeaveB", Paths.AUTO_OPTIONS.MP_HBLEAVEB);
     auto_chooser.addOption("MPHDLeaveB", Paths.AUTO_OPTIONS.MP_HDLEAVEB);
+    auto_chooser.addOption("MPLowOverEngaged", Paths.AUTO_OPTIONS.MP_LOW_OVER_ENGAGE);
+    auto_chooser.addOption("MPMidOverEngaged", Paths.AUTO_OPTIONS.MP_MID_OVER_ENGAGE);
+
     inverted.setDefaultOption("true", true);
     inverted.addOption("false", false);
     SmartDashboard.putData("Auto choices", auto_chooser);
     SmartDashboard.putData("telecope inverted", inverted);
+   
    
   }
 

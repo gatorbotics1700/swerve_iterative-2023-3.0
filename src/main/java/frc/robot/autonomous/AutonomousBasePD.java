@@ -53,7 +53,9 @@ public class AutonomousBasePD extends AutonomousBase{
     public void init(){
         System.out.println("AUTONOMOUS INIT!\nINIT!\nINIT!");
         drivetrainSubsystem = Robot.m_drivetrainSubsystem;
-        mechanisms = Robot.m_mechanisms;
+        if(Robot.mechanismsEnabled){
+            mechanisms = Robot.m_mechanisms;
+        }
         drivetrainSubsystem.resetOdometry(startingCoordinate);
         turnController = new PIDController(turnKP, turnKI, turnKD); 
         xController = new PIDController(driveKP, driveKI, driveKD);
@@ -88,43 +90,55 @@ public class AutonomousBasePD extends AutonomousBase{
         //System.out.println("pose in auto: " + DrivetrainSubsystem.m_pose.getX()/Constants.METERS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getY()/Constants.METERS_PER_INCH + " " + DrivetrainSubsystem.m_pose.getRotation().getDegrees());
         if (states == AutoStates.DRIVE){
             driveDesiredDistance(stateSequence[i].coordinate);
-            mechanisms.setState(MechanismStates.HOLDING);
+            if(Robot.mechanismsEnabled){
+                mechanisms.setState(MechanismStates.HOLDING);
+            }
             if(xController.atSetpoint() && yController.atSetpoint() && turnController.atSetpoint()){
                 i++;  
                 System.out.println("moving on to " + stateSequence[i]);
             }
-        }else if(states == AutoStates.MIDNODE){
-            System.out.println("mid node");
-            mechanisms.setState(MechanismStates.MID_NODE);
-            if(isFirst){
-                startTime2 = System.currentTimeMillis();
+        }else if( states == AutoStates.MIDNODE){
+            if(Robot.mechanismsEnabled){
+                System.out.println("mid node");
+                mechanisms.setState(MechanismStates.MID_NODE);
+                if(isFirst){
+                    startTime2 = System.currentTimeMillis();
+                }
+                // If we never get to mid it might be because the timeout is too short
+                if(mechanisms.isDoneMid()==true || System.currentTimeMillis() - startTime2 >= 2000){
+                    if(isFirst){
+                        startTime = System.currentTimeMillis();
+                        isFirst = false;
+                    }
+                    mechanisms.pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeStates.RELEASING);
+                    if (System.currentTimeMillis()-startTime>=1000){ //time to outtake before moving on
+                        i++;
+                        isFirst = true;
+                    }
+                } 
+            }else{
+                System.out.println("mid skipped bc mechanismsEnabled was false");
+                i++;
             }
-            // If we never get to mid it might be because the timeout is too short
-            if(mechanisms.isDoneMid()==true || System.currentTimeMillis() - startTime2 >= 2000){
+        }else if(states == AutoStates.LOWNODE){
+            if(Robot.mechanismsEnabled){
+                System.out.println("low node");
+                mechanisms.setState(MechanismStates.LOW_NODE);
                 if(isFirst){
                     startTime = System.currentTimeMillis();
                     isFirst = false;
                 }
-                mechanisms.pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeStates.RELEASING);
-                if (System.currentTimeMillis()-startTime>=1000){ //time to outtake before moving on
-                    i++;
-                    isFirst = true;
+                // If we never get to low it might be because the timeout is too short
+                if(mechanisms.isDoneLow()==true){
+                    mechanisms.pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeStates.RELEASING);
+                    if (System.currentTimeMillis()-startTime>=1000){
+                        i++;
+                        isFirst = true;
+                    }
                 }
-            } 
-        }else if(states == AutoStates.LOWNODE){
-            System.out.println("low node");
-            mechanisms.setState(MechanismStates.LOW_NODE);
-            if(isFirst){
-                startTime = System.currentTimeMillis();
-                isFirst = false;
-            }
-            // If we never get to low it might be because the timeout is too short
-            if(mechanisms.isDoneLow()==true){
-                mechanisms.pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeStates.RELEASING);
-                if (System.currentTimeMillis()-startTime>=1000){
-                    i++;
-                    isFirst = true;
-                }
+            }else{
+                System.out.println("low skipped bc mechanismsEnabled was false");
+                i++;
             }
         } else if(states == AutoStates.ENGAGE){
             if(isFirst){
@@ -132,44 +146,55 @@ public class AutonomousBasePD extends AutonomousBase{
             }
             autoEngage.periodic();   
         } else if(states == AutoStates.PICKUP){ // TODO: are left and right pickup supposed to be the same? if so, can we have just one state?
+           if(Robot.mechanismsEnabled){     
             System.out.println("left pickup");
-            if(isFirst){
-                startTime = System.currentTimeMillis();
-                isFirst = false;
-            }
-            // If we never get to shelf it might be because the timeout is too short
-            if(mechanisms.isDoneShelf() == true || System.currentTimeMillis() - startTime >= 500){
+                if(isFirst){
+                    startTime = System.currentTimeMillis();
+                    isFirst = false;
+                }
+                // If we never get to shelf it might be because the timeout is too short
+                if(mechanisms.isDoneShelf() == true || System.currentTimeMillis() - startTime >= 500){
+                    i++;
+                    isFirst = true;
+                }
+                // If we never get to shelf it might be because the timeout is too short
+                if(mechanisms.isDoneShelf() == true || System.currentTimeMillis() - startTime >= 500){
+                    i++;
+                    isFirst = true;
+                }
+           }else{
+                System.out.println("pickup skipped bc mechanismsEnabled was false");
                 i++;
-                isFirst = true;
-            }
-            // If we never get to shelf it might be because the timeout is too short
-            if(mechanisms.isDoneShelf() == true || System.currentTimeMillis() - startTime >= 500){
-                i++;
-                isFirst = true;
-            }
+           }
         } else if(states == AutoStates.INTAKING){
-            if(isFirst){
-                startTime = System.currentTimeMillis(); 
-                isFirst = false;
-            }
-            if(System.currentTimeMillis()-startTime>=500){
+            if(Robot.mechanismsEnabled){
+                if(isFirst){
+                    startTime = System.currentTimeMillis(); 
+                    isFirst = false;
+                }
+                if(System.currentTimeMillis()-startTime>=500){
+                    i++;
+                    isFirst = true;
+                }
+                mechanisms.setState(MechanismStates.GROUNDPICKUP);
+                //pneumaticIntakeSubsystem.setState(PneumaticIntakeStates.ACTUATING);TODO uncomment
+                if(states == AutoStates.FASTDRIVE){
+                    if(Math.abs(stateSequence[i].coordinate.getX() - drivetrainSubsystem.getMPoseX())>DRIVE_DEADBAND){
+                        drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(1,0,0, drivetrainSubsystem.getPoseRotation()));
+                        mechanisms.setState(MechanismStates.HOLDING);
+                    }else{
+                        drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0,0,0, drivetrainSubsystem.getPoseRotation()));
+                        i++;
+                    }
+                } else {
+                    drivetrainSubsystem.stopDrive();
+                } 
+                drivetrainSubsystem.drive(); 
+        }else{
+                System.out.println("intaking skipped bc mechanismsEnabled was false");
                 i++;
-                isFirst = true;
             }
-            mechanisms.setState(MechanismStates.GROUNDPICKUP);
-            //pneumaticIntakeSubsystem.setState(PneumaticIntakeStates.ACTUATING);TODO uncomment
-        }else if(states == AutoStates.FASTDRIVE){
-            if(Math.abs(stateSequence[i].coordinate.getX() - drivetrainSubsystem.getMPoseX())>DRIVE_DEADBAND){
-                drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(1,0,0, drivetrainSubsystem.getPoseRotation()));
-                mechanisms.setState(MechanismStates.HOLDING);
-            }else{
-                drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0,0,0, drivetrainSubsystem.getPoseRotation()));
-                i++;
-            }
-        } else {
-            drivetrainSubsystem.stopDrive();
-        } 
-        drivetrainSubsystem.drive(); 
+        }
     }
 
     /** 

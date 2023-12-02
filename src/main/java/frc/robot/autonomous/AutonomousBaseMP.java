@@ -56,6 +56,9 @@ public class AutonomousBaseMP extends AutonomousBase{
         timeStart = 0.0;
         i = 0;
         isFirst = true;
+        if(Robot.mechanismsEnabled){
+            mechanisms = new Mechanisms(); 
+        }
         System.out.println("Init pose: " + drivetrainSubsystem.getMPoseX());
         drivetrainSubsystem.resetOdometry(new Pose2d());
         //System.out.println("Traj 1 " + trajectory1 +  "/n Traj 2 " + trajectory2 + "/n Traj 3 " + trajectory3); 
@@ -95,33 +98,44 @@ public class AutonomousBaseMP extends AutonomousBase{
                 }
             }
         } else if(currentStateLabel == MPStateLabel.MID){
-            System.out.println("mid node");
-            setStates(MPStateLabel.MID);
-            if(mechanisms.isDoneMid()==true){
-                if(isFirst){
-                    startTime = System.currentTimeMillis();
-                    isFirst = false;
-                }
-                mechanisms.pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeStates.RELEASING);
-                if(System.currentTimeMillis()-startTime>=1000){ //time to outtake before moving on
-                    i++;
-                    isFirst = true;
-                }
-            } 
+            if(Robot.mechanismsEnabled){
+                System.out.println("mid node");
+                setStates(MPStateLabel.MID);
+                if(mechanisms.isDoneMid()==true){
+                    if(isFirst){
+                        startTime = System.currentTimeMillis();
+                        isFirst = false;
+                    }
+                    mechanisms.pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeStates.RELEASING);
+                    if(System.currentTimeMillis()-startTime>=1000){ //time to outtake before moving on
+                        i++;
+                        isFirst = true;
+                    }
+                } 
+            }else{
+                System.out.println("skipping mid bc mechanismsEnabled = false");
+                i++;
+            }
+
            
         } else if(currentStateLabel == MPStateLabel.LOW){
-            System.out.println("low node");
-            setStates(MPStateLabel.LOW);
-            if(isFirst){
-                timeStart = System.currentTimeMillis();
-                isFirst = false;
-            }
-            if(mechanisms.isDoneLow()==true){
-                mechanisms.pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeStates.RELEASING);
-                if(System.currentTimeMillis()-startTime>=1000){
-                    i++;
-                    isFirst = true;
+            if(Robot.mechanismsEnabled){
+                System.out.println("low node");
+                setStates(MPStateLabel.LOW);
+                if(isFirst){
+                    timeStart = System.currentTimeMillis();
+                    isFirst = false;
                 }
+                if(mechanisms.isDoneLow()==true){
+                    mechanisms.pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeStates.RELEASING);
+                    if(System.currentTimeMillis()-startTime>=1000){
+                        i++;
+                        isFirst = true;
+                    }
+                }
+            }else{
+                System.out.println("skipping low bc mechanismsEnabled = false");
+                i++; 
             }
             
         } else if(currentStateLabel == MPStateLabel.ENGAGE){
