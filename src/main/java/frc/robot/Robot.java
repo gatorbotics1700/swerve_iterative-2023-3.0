@@ -40,6 +40,7 @@ public class Robot extends TimedRobot {
   private final SendableChooser<Paths.AUTO_OPTIONS> auto_chooser = new SendableChooser<>();
   private final SendableChooser<Boolean> inverted = new SendableChooser<>();
   private final SendableChooser<Boolean> allianceChooser = new SendableChooser<>();
+  private final SendableChooser<Boolean> mechanism_toggle = new SendableChooser<>(); 
 
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
   public static Mechanisms m_mechanisms = new Mechanisms();
@@ -60,7 +61,7 @@ public class Robot extends TimedRobot {
   */
   @Override
   public void robotInit() { //creates options for different autopaths, names are placeholders    
-    System.out.println("#I'm Awake");
+    System.out.println("#I'm Awake"); //don't delete #
 
     //TODO: make the names come from the enum with a for loop cycling through everything in it?
     auto_chooser.setDefaultOption("testPath", Paths.AUTO_OPTIONS.TESTPATH);
@@ -84,8 +85,12 @@ public class Robot extends TimedRobot {
     auto_chooser.addOption("MPLowOverEngaged", Paths.AUTO_OPTIONS.MP_LOW_OVER_ENGAGE);
     auto_chooser.addOption("MPMidOverEngaged", Paths.AUTO_OPTIONS.MP_MID_OVER_ENGAGE);
 
-    inverted.setDefaultOption("true", true);
-    inverted.addOption("false", false);
+    inverted.setDefaultOption("true", true); //setting options for auto chooser so we can toggle between true/false
+    inverted.addOption("false", false); //adding second option
+    mechanism_toggle.setDefaultOption("true", true);  //turns mechanism functionality on
+    mechanism_toggle.addOption("false", false); //adding second option
+
+    SmartDashboard.putData("Mechanisms Toggle", mechanism_toggle);
     SmartDashboard.putData("Auto choices", auto_chooser);
     SmartDashboard.putData("telecope inverted", inverted);
    
@@ -129,7 +134,8 @@ public class Robot extends TimedRobot {
     m_drivetrainSubsystem.init();
     System.out.println("current pose: " + m_drivetrainSubsystem.getMPoseX() + " , " + m_drivetrainSubsystem.getMPoseY());
     Paths.AUTO_OPTIONS selected = auto_chooser.getSelected();
-    m_auto = Paths.constructAuto(selected);//PROBLEMMM - confirmed 11/10/2023
+    m_auto = Paths.constructAuto(selected);
+    mechanismsEnabled = mechanism_toggle.getSelected(); //sets mech true or false 
     //m_mechanisms.elevatorSubsystem.setZeroForAutoHeight();
     //m_auto.init();
   }
@@ -152,6 +158,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() { //BEFORE TESTING: MAKE SURE YOU HAVE EITHER DEPLOYED OR ADDED DRIVETRAIN INIT
     isBlueAlliance = allianceChooser.getSelected();
     m_mechanisms.init(); 
+    mechanismsEnabled = mechanism_toggle.getSelected(); 
    //m_drivetrainSubsystem.init();
   }
 
@@ -179,6 +186,7 @@ public class Robot extends TimedRobot {
   public void testInit() {
     m_drivetrainSubsystem.init();
     m_mechanisms.init();
+    mechanismsEnabled = mechanism_toggle.getSelected(); 
   }
 
   /** This function is called periodically during test mode. */

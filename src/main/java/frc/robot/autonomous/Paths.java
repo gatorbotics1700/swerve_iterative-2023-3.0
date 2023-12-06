@@ -14,7 +14,8 @@ import edu.wpi.first.math.trajectory.Trajectory;
 
 public class Paths {
     private static double mpi = Constants.METERS_PER_INCH;
-    private static final double STARTING_X = 68.95;
+    private static final double STARTING_X = 68.95; //WHAT ARE  THESE
+    //frequently used midpoints
     private static final double HB_Y_B = 200.046;
     private static final double HD_Y_B = 54.69;
     private static final double HB_Y_R = 200.046;

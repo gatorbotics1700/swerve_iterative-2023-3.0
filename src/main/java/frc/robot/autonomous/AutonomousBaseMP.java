@@ -36,11 +36,14 @@ public class AutonomousBaseMP extends AutonomousBase{
     private AutonomousBaseEngage autoEngage; 
     private MPState[] MPStateSequence;
 
-    private Boolean isFirst;
+    private Boolean isFirst; //if a state has isFirst it is the first time that a specific state is being run; initializes a time started
     private double startTime;
     private int i;
 
     public AutonomousBaseMP(MPState[] MPStateSequence){
+        /*Takes state sequence from MPStateSequence
+         * Initializes a holonomic drive controller which is necessary for wpilib trajectory generator
+         */
         System.out.println("In autobase structure!");
         this.MPStateSequence =  MPStateSequence;
         controller = new HolonomicDriveController(
@@ -51,24 +54,24 @@ public class AutonomousBaseMP extends AutonomousBase{
         init();
     }
 
+    private MPStateLabel currentStateLabel = MPStateLabel.FIRST; //initializes state machine
+
     @Override
     public void init(){
         timeStart = 0.0;
         i = 0;
         isFirst = true;
-        if(Robot.mechanismsEnabled){
+        if(Robot.mechanismsEnabled){ //tests to see if we're using mechanisms before defining it 
             mechanisms = new Mechanisms(); 
         }
         System.out.println("Init pose: " + drivetrainSubsystem.getMPoseX());
         drivetrainSubsystem.resetOdometry(new Pose2d());
         //System.out.println("Traj 1 " + trajectory1 +  "/n Traj 2 " + trajectory2 + "/n Traj 3 " + trajectory3); 
     }
-
-    private MPStateLabel currentStateLabel = MPStateLabel.FIRST; 
     
     @Override
     public void periodic(){
-        currentStateLabel = MPStateSequence[i].stateLabel;
+        currentStateLabel = MPStateSequence[i].stateLabel; //name of the state
         System.out.println("state: " + currentStateLabel);
         if(currentStateLabel == MPStateLabel.FIRST){
             timeStart = System.currentTimeMillis();
@@ -84,8 +87,7 @@ public class AutonomousBaseMP extends AutonomousBase{
                 i++;
                 System.out.println("moving on to " + MPStateSequence[i]);
             }else{
-                double timeCheck;
-                timeCheck = MPStateSequence[i].trajectory.getTotalTimeSeconds();
+                double timeCheck = MPStateSequence[i].trajectory.getTotalTimeSeconds();
                 currentTrajState = MPStateSequence[i].trajectory.sample(timeCheck);
                 System.out.println("total time: " + timeCheck);
                 System.out.println("trajectory End X: "+ currentTrajState.poseMeters.getX() + " trajectory Get X: " + drivetrainSubsystem.getMPoseX()); 
@@ -98,7 +100,7 @@ public class AutonomousBaseMP extends AutonomousBase{
                 }
             }
         } else if(currentStateLabel == MPStateLabel.MID){
-            if(Robot.mechanismsEnabled){
+            if(Robot.mechanismsEnabled){ //Test to see if we're using mechanisms before running mech states 
                 System.out.println("mid node");
                 setStates(MPStateLabel.MID);
                 if(mechanisms.isDoneMid()==true){
@@ -118,7 +120,7 @@ public class AutonomousBaseMP extends AutonomousBase{
             }
 
            
-        } else if(currentStateLabel == MPStateLabel.LOW){
+        } else if(currentStateLabel == MPStateLabel.LOW){ //Test to see if we're using mechanisms before running mech states
             if(Robot.mechanismsEnabled){
                 System.out.println("low node");
                 setStates(MPStateLabel.LOW);

@@ -21,8 +21,9 @@ public class Trajectories{
     //lauren + caro note: copied and pasted from Paths.java (for HDLEAVEBMP)
     //Avery note: we might need to adjust for origin in the middle
     private static final double STARTING_X = 0.0;
-    private static final double ENDING_X = 100; //Avery note: guess - change later
-    private static final double HB_Y_B = 200.046;
+    private static final double ENDING_X = 100; 
+    //frequently used midpoints (or never used midpoints)
+    private static final double HB_Y_B = 200.046; 
     private static final double HD_Y_B = 54.69;
     private static final double HB_Y_R = 200.046;
     private static final double HD_Y_R = 54.69;
