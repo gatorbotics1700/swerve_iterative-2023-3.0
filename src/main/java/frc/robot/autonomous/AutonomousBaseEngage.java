@@ -11,10 +11,10 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.Constants; 
 import frc.robot.autonomous.StateWithCoordinate;
 import frc.robot.autonomous.StateWithCoordinate.AutoStates;
-import frc.robot.subsystems.Mechanisms.MechanismStates;
-import frc.robot.subsystems.Mechanisms;
-import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
-import frc.robot.subsystems.PneumaticIntakeSubsystem;
+// import frc.robot.subsystems.Mechanisms.MechanismStates;
+// import frc.robot.subsystems.Mechanisms;
+// import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
+// import frc.robot.subsystems.PneumaticIntakeSubsystem;
 
 public class AutonomousBaseEngage extends AutonomousBase{
 
@@ -24,7 +24,7 @@ public class AutonomousBaseEngage extends AutonomousBase{
     private double desireTime;
     private double desiredAngle;
     private DrivetrainSubsystem drivetrainSubsystem;
-    private Mechanisms mechanisms; 
+    //private Mechanisms mechanisms; 
 
     public enum AutoEngageStates{
         ENGAGE,
@@ -61,7 +61,7 @@ public class AutonomousBaseEngage extends AutonomousBase{
        drivetrainSubsystem = Robot.m_drivetrainSubsystem;
        startingTime = 0;
        startingTime2 = 0;
-       mechanisms = Robot.m_mechanisms;
+      // mechanisms = Robot.m_mechanisms;
        firstTime = true;
        desireTime = 5000;
        desiredAngle = 15;
@@ -72,36 +72,36 @@ public class AutonomousBaseEngage extends AutonomousBase{
     public void periodic(){
         System.out.println("Engage state: " + autoEngageState);
         if(autoEngageState == AutoEngageStates.MID_NODE){
-            mechanisms.setState(MechanismStates.MID_NODE);
+          //  mechanisms.setState(MechanismStates.MID_NODE);
             if(firstTime == true){
                 startingTime2 = System.currentTimeMillis();
             }
-            if(mechanisms.isDoneMid() || System.currentTimeMillis() - startingTime2 >= 2000){
-                if(firstTime == true){
-                    firstTime = false;
-                    startingTime = System.currentTimeMillis();
-                }
-                mechanisms.pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeStates.RELEASING);
-                if (System.currentTimeMillis()-startingTime>=1000){ //time to outtake before moving on
-                    setState(AutoEngageStates.DRIVE);
-                    mechanisms.setState(MechanismStates.HOLDING);
-                }
+            //if(mechanisms.isDoneMid() || System.currentTimeMillis() - startingTime2 >= 2000){
+                // if(firstTime == true){
+                //     firstTime = false;
+                //     startingTime = System.currentTimeMillis();
+                // }
+              //  mechanisms.pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeStates.RELEASING);
+                // if (System.currentTimeMillis()-startingTime>=1000){ //time to outtake before moving on
+                //     setState(AutoEngageStates.DRIVE);
+                //     mechanisms.setState(MechanismStates.HOLDING);
+                // }
                 
             }
-        } else if(autoEngageState == AutoEngageStates.LOW_NODE){
-            mechanisms.setState(MechanismStates.LOW_NODE);
-            if(mechanisms.isDoneLow()){
-                if(firstTime == true){
-                    firstTime = false;
-                    startingTime = System.currentTimeMillis();
-                }
-                mechanisms.pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeStates.RELEASING);
-                if (System.currentTimeMillis()-startingTime>=1000){ //time to outtake before moving on
-                    setState(AutoEngageStates.DRIVE);
-                    mechanisms.setState(MechanismStates.HOLDING);
-                }
-            }
-        } else if(autoEngageState == AutoEngageStates.DRIVE){
+        // } else if(autoEngageState == AutoEngageStates.LOW_NODE){
+        //     mechanisms.setState(MechanismStates.LOW_NODE);
+        //     if(mechanisms.isDoneLow()){
+        //         if(firstTime == true){
+        //             firstTime = false;
+        //             startingTime = System.currentTimeMillis();
+        //         }
+        //         mechanisms.pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeStates.RELEASING);
+        //         if (System.currentTimeMillis()-startingTime>=1000){ //time to outtake before moving on
+        //             setState(AutoEngageStates.DRIVE);
+        //             mechanisms.setState(MechanismStates.HOLDING);
+        //         }
+        //     }
+        else if(autoEngageState == AutoEngageStates.DRIVE){
             //System.out.println("IN DRIVING FOR AUTO TIMED");
             if (firstTime == true){
                 firstTime = false;
@@ -126,9 +126,9 @@ public class AutonomousBaseEngage extends AutonomousBase{
             } else{
                 drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(-1.0, 0, 0, drivetrainSubsystem.getPoseRotation()));
             }
-        } else if(autoEngageState == AutoEngageStates.ENGAGE){
-            drivetrainSubsystem.pitchBalance(0.0);
-            mechanisms.setState(MechanismStates.HOLDING);
+        // } else if(autoEngageState == AutoEngageStates.ENGAGE){
+        //     drivetrainSubsystem.pitchBalance(0.0);
+        //     mechanisms.setState(MechanismStates.HOLDING);
         }else{
             drivetrainSubsystem.setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0, drivetrainSubsystem.getPoseRotation()));
         }

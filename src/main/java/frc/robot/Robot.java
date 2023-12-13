@@ -7,18 +7,18 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.Mechanisms;
-import frc.robot.subsystems.PneumaticArmPivot;
-import frc.robot.subsystems.PneumaticArmPivot.PneumaticPivotStates;
-import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
+// import frc.robot.subsystems.ElevatorSubsystem;
+// import frc.robot.subsystems.Mechanisms;
+// import frc.robot.subsystems.PneumaticArmPivot;
+// import frc.robot.subsystems.PneumaticArmPivot.PneumaticPivotStates;
+// import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.AutonomousBase;
 import frc.robot.autonomous.AutonomousBaseTimed;
 import frc.robot.autonomous.AutonomousBasePD;
 import frc.robot.autonomous.Paths;
-import frc.robot.subsystems.ArmTelescopingSubsystem;
+// import frc.robot.subsystems.ArmTelescopingSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -43,8 +43,8 @@ public class Robot extends TimedRobot {
   private final SendableChooser<Boolean> mechanism_toggle = new SendableChooser<>(); 
 
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(); //if anything breaks in the future it might be this
-  public static Mechanisms m_mechanisms = new Mechanisms();
-  public static Buttons m_buttons = new Buttons();
+  // public static Mechanisms m_mechanisms = new Mechanisms();
+  // public static Buttons m_buttons = new Buttons();
 
   public static boolean mechanismsEnabled = false;
 
@@ -113,8 +113,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("angle odometry",m_drivetrainSubsystem.getMPoseDegrees()%360);
     //SmartDashboard.putBoolean("Ready to Score", m_limeLightSubsystem.seeSomething());
    
-    SmartDashboard.putBoolean("beam broken?", m_mechanisms.pneumaticIntakeSubsystem.isBeamBroken());
-    //System.out.println("x: " + DrivetrainSubsystem.m_pose.getX() + "y: " + DrivetrainSubsystem.m_pose.getY() + "rotation: " + DrivetrainSubsystem.m_pose.getRotation().getDegrees()%360);
+  //   SmartDashboard.putBoolean("beam broken?", m_mechanisms.pneumaticIntakeSubsystem.isBeamBroken());
+  //   //System.out.println("x: " + DrivetrainSubsystem.m_pose.getX() + "y: " + DrivetrainSubsystem.m_pose.getY() + "rotation: " + DrivetrainSubsystem.m_pose.getRotation().getDegrees()%360);
   }
 
   /**
@@ -130,7 +130,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     System.out.println("Auto INIT");
-    m_mechanisms.init();
+   // m_mechanisms.init();
     m_drivetrainSubsystem.init();
     System.out.println("current pose: " + m_drivetrainSubsystem.getMPoseX() + " , " + m_drivetrainSubsystem.getMPoseY());
     Paths.AUTO_OPTIONS selected = auto_chooser.getSelected();
@@ -157,7 +157,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() { //BEFORE TESTING: MAKE SURE YOU HAVE EITHER DEPLOYED OR ADDED DRIVETRAIN INIT
     isBlueAlliance = allianceChooser.getSelected();
-    m_mechanisms.init(); 
+    // m_mechanisms.init(); 
     mechanismsEnabled = mechanism_toggle.getSelected(); 
    //m_drivetrainSubsystem.init();
   }
@@ -165,11 +165,11 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() { 
-    m_buttons.buttonsPeriodic();
-    m_mechanisms.periodic();
+    // m_buttons.buttonsPeriodic();
+    // m_mechanisms.periodic();
     m_drivetrainSubsystem.driveTeleop();
     m_drivetrainSubsystem.drive();
-    m_mechanisms.armTelescopingSubsystem.setTelescopeInversion(inverted.getSelected());
+    // m_mechanisms.armTelescopingSubsystem.setTelescopeInversion(inverted.getSelected());
    
   }
 
@@ -185,7 +185,7 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     m_drivetrainSubsystem.init();
-    m_mechanisms.init();
+    //m_mechanisms.init();
     mechanismsEnabled = mechanism_toggle.getSelected(); 
   }
 
@@ -200,11 +200,11 @@ public class Robot extends TimedRobot {
     m_drivetrainSubsystem.drive();
 
     //MECHANISMS
-    m_mechanisms.periodic();
-    m_buttons.buttonsPeriodic();
+    // m_mechanisms.periodic();
+    // m_buttons.buttonsPeriodic();
     //PneumaticArmPivot.solenoid.set(Value.kForward);
     //System.out.println(m_mechanisms.armTelescopingSubsystem.getArmPosition());
-    m_mechanisms.armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0.0);
+    // m_mechanisms.armTelescopingSubsystem.telescopingMotor.setSelectedSensorPosition(0.0);
     //m_mechanisms.elevatorSubsystem.elevatorMotor.setSelectedSensorPosition(0.0);
   }
   /** This function is called once when the robot is first started up. */

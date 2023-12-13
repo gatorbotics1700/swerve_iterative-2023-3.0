@@ -174,7 +174,7 @@ public class Paths {
             return new AutonomousBaseMP(
                 new MPState[]{
                     new MPState(MPStateLabel.FIRST),
-                    new MPState(MPStateLabel.TRAJECTORY, Trajectories.uno),//HDMP 278.95
+                    new MPState(MPStateLabel.TRAJECTORY, Trajectories.HDMP),//HDMP 278.95
                     new MPState(MPStateLabel.STOP) 
                 }
             ); 
@@ -220,7 +220,7 @@ public class Paths {
             return new AutonomousBaseMP(
                 new MPState[]{
                     new MPState(MPStateLabel.FIRST),
-                    new MPState(MPStateLabel.LOW),
+                   // new MPState(MPStateLabel.LOW),
                     new MPState(MPStateLabel.TRAJECTORY, Trajectories.ENGAGEMP), 
                     new MPState(MPStateLabel.ENGAGE), 
                     new MPState(MPStateLabel.STOP)
@@ -230,7 +230,7 @@ public class Paths {
             return new AutonomousBaseMP(
                 new MPState[]{
                     new MPState(MPStateLabel.FIRST),
-                    new MPState(MPStateLabel.MID),
+                    //new MPState(MPStateLabel.MID),
                     new MPState(MPStateLabel.TRAJECTORY, Trajectories.ENGAGEMP), 
                     new MPState(MPStateLabel.ENGAGE),
                     new MPState(MPStateLabel.STOP)

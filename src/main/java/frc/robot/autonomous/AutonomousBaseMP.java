@@ -9,8 +9,8 @@ import edu.wpi.first.math.geometry.*;
 import frc.robot.Robot;
 import frc.robot.autonomous.MPState.MPStateLabel;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.Mechanisms.MechanismStates;
-import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
+//import frc.robot.subsystems.Mechanisms.MechanismStates;
+//import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -18,7 +18,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.constraint.SwerveDriveKinematicsConstraint;
 import edu.wpi.first.math.trajectory.constraint.TrajectoryConstraint;
 import edu.wpi.first.math.trajectory.constraint.MaxVelocityConstraint;
-import frc.robot.subsystems.Mechanisms;
+//import frc.robot.subsystems.Mechanisms;
 
 
 public class AutonomousBaseMP extends AutonomousBase{
@@ -32,7 +32,7 @@ public class AutonomousBaseMP extends AutonomousBase{
     
     private static DrivetrainSubsystem drivetrainSubsystem;
     public MPStateLabel mpStates;
-    private Mechanisms mechanisms;
+    //private Mechanisms mechanisms;
     private AutonomousBaseEngage autoEngage; 
     private MPState[] MPStateSequence;
 
@@ -61,9 +61,9 @@ public class AutonomousBaseMP extends AutonomousBase{
         timeStart = 0.0;
         i = 0;
         isFirst = true;
-        if(Robot.mechanismsEnabled){ //tests to see if we're using mechanisms before defining it 
-            mechanisms = new Mechanisms(); 
-        }
+        // if(Robot.mechanismsEnabled){ //tests to see if we're using mechanisms before defining it 
+        //     mechanisms = new Mechanisms(); 
+        // }
         System.out.println("Init pose: " + drivetrainSubsystem.getMPoseX());
         drivetrainSubsystem.resetOdometry(new Pose2d());
         //System.out.println("Traj 1 " + trajectory1 +  "/n Traj 2 " + trajectory2 + "/n Traj 3 " + trajectory3); 
@@ -99,7 +99,7 @@ public class AutonomousBaseMP extends AutonomousBase{
                     System.out.println("moving on to " + MPStateSequence[i]);
                 }
             }
-        } else if(currentStateLabel == MPStateLabel.MID){
+      /*  } else if(currentStateLabel == MPStateLabel.MID){
             if(Robot.mechanismsEnabled){ //Test to see if we're using mechanisms before running mech states 
                 System.out.println("mid node");
                 setStates(MPStateLabel.MID);
@@ -140,7 +140,7 @@ public class AutonomousBaseMP extends AutonomousBase{
                 i++; 
             }
             
-        } else if(currentStateLabel == MPStateLabel.ENGAGE){
+        */ } else if(currentStateLabel == MPStateLabel.ENGAGE){
             autoEngage.periodic();   
         } else{
             drivetrainSubsystem.stopDrive();
