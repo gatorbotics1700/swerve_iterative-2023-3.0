@@ -94,7 +94,7 @@ public class Trajectories{
 //TODO: EDIT HDMP AND HBMP - 11/17/2023
     public static Trajectory HDMP = generateTrajectory( //for all HD paths
         new Pose2d(), //new Pose2d(STARTING_X * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
-        new Pose2d(ENDING_X * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
+        new Pose2d(60 * mpi, 0 * mpi, new Rotation2d(Math.toRadians(180.0))),//ENDING_X * mpi, HD_Y_B * mpi, new Rotation2d(Math.toRadians(180.0))),
         new Translation2d(30 * mpi, 0 * mpi),
         new Translation2d(30 * mpi, 0 * mpi),
         new Translation2d(30 * mpi, 0 * mpi)

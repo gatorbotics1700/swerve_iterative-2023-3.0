@@ -34,18 +34,18 @@ public class AutonomousBaseMP extends AutonomousBase{
     public MPStateLabel mpStates;
     //private Mechanisms mechanisms;
     private AutonomousBaseEngage autoEngage; 
-    private MPState[] MPStateSequence;
+    private MPState[] mpStateSequence;
 
     private Boolean isFirst; //if a state has isFirst it is the first time that a specific state is being run; initializes a time started
     private double startTime;
     private int i;
 
-    public AutonomousBaseMP(MPState[] MPStateSequence){
+    public AutonomousBaseMP(MPState[] mpStateSequence){
         /*Takes state sequence from MPStateSequence
          * Initializes a holonomic drive controller which is necessary for wpilib trajectory generator
          */
         System.out.println("In autobase structure!");
-        this.MPStateSequence =  MPStateSequence;
+        this.mpStateSequence =  mpStateSequence;
         controller = new HolonomicDriveController(
             new PIDController(1, 0, 0), new PIDController(1, 0, 0), //TODO: CHANGE KP
             new ProfiledPIDController(1, 0, 0,
@@ -71,7 +71,8 @@ public class AutonomousBaseMP extends AutonomousBase{
     
     @Override
     public void periodic(){
-        currentStateLabel = MPStateSequence[i].stateLabel; //name of the state
+        System.out.println("just started");
+        currentStateLabel = mpStateSequence[i].stateLabel; //name of the state
         System.out.println("state: " + currentStateLabel);
         if(currentStateLabel == MPStateLabel.FIRST){
             timeStart = System.currentTimeMillis();
@@ -79,24 +80,26 @@ public class AutonomousBaseMP extends AutonomousBase{
             System.out.println("Doing first");
             System.out.println("initial pose: " + drivetrainSubsystem.getMPoseX());
             i++;
-            System.out.println("moving on to " + MPStateSequence[i]);
+            System.out.println("moving on to " + mpStateSequence[i]);
         } else if(currentStateLabel == MPStateLabel.TRAJECTORY){
-            if(MPStateSequence[i].trajectory == null){
+            drivetrainSubsystem.resetOdometry(new Pose2d());
+            System.out.println("running trajectory:" + mpStateSequence[i].trajectory.toString());
+            if(mpStateSequence[i].trajectory == null){
                 System.out.println("No trajectory");
                 setStates(MPStateLabel.STOP);
                 i++;
-                System.out.println("moving on to " + MPStateSequence[i]);
+                System.out.println("moving on to " + mpStateSequence[i]);
             }else{
-                double timeCheck = MPStateSequence[i].trajectory.getTotalTimeSeconds();
-                currentTrajState = MPStateSequence[i].trajectory.sample(timeCheck);
+                double timeCheck = mpStateSequence[i].trajectory.getTotalTimeSeconds();
+                currentTrajState = mpStateSequence[i].trajectory.sample(timeCheck);
                 System.out.println("total time: " + timeCheck);
                 System.out.println("trajectory End X: "+ currentTrajState.poseMeters.getX() + " trajectory Get X: " + drivetrainSubsystem.getMPoseX()); 
-                followTrajectory(MPStateSequence[i].trajectory); 
-                if(trajectoryDone(MPStateSequence[i].trajectory)){
+                followTrajectory(mpStateSequence[i].trajectory); 
+                if(trajectoryDone(mpStateSequence[i].trajectory)){
                     System.out.println("STOP");
                     setStates(MPStateLabel.STOP);
                     i++;
-                    System.out.println("moving on to " + MPStateSequence[i]);
+                    System.out.println("moving on to " + mpStateSequence[i]);
                 }
             }
       /*  } else if(currentStateLabel == MPStateLabel.MID){
@@ -177,6 +180,7 @@ public class AutonomousBaseMP extends AutonomousBase{
         
         drivetrainSubsystem.setSpeed(adjustedSpeeds);
         System.out.println("Adjusted speed: " + adjustedSpeeds);
+        drivetrainSubsystem.drive();
     }
 
 }
