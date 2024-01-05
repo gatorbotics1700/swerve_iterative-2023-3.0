@@ -56,6 +56,10 @@ public class AutonomousBaseMP extends AutonomousBase{
 
     private MPStateLabel currentStateLabel = MPStateLabel.FIRST; //initializes state machine
 
+    public void setStates(MPStateLabel newStateLabel){
+        currentStateLabel = newStateLabel;
+    }
+    
     @Override
     public void init(){
         timeStart = 0.0;
@@ -66,12 +70,12 @@ public class AutonomousBaseMP extends AutonomousBase{
         // }
         System.out.println("Init pose: " + drivetrainSubsystem.getMPoseX());
         drivetrainSubsystem.resetOdometry(new Pose2d());
+        System.out.println("just started");
         //System.out.println("Traj 1 " + trajectory1 +  "/n Traj 2 " + trajectory2 + "/n Traj 3 " + trajectory3); 
     }
     
     @Override
     public void periodic(){
-        System.out.println("just started");
         currentStateLabel = mpStateSequence[i].stateLabel; //name of the state
         System.out.println("state: " + currentStateLabel);
         if(currentStateLabel == MPStateLabel.FIRST){
@@ -164,10 +168,6 @@ public class AutonomousBaseMP extends AutonomousBase{
         }else{
             return false;
         }
-    }
-
-    public void setStates(MPStateLabel newStateLabel){
-        currentStateLabel = newStateLabel;
     }
 
     public void followTrajectory(Trajectory trajectory){

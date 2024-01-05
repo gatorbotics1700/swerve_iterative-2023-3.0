@@ -237,15 +237,23 @@ public class Paths {
                     new MPState(MPStateLabel.STOP)
                 }
             ); 
-        
+
+        }else if(selectedAuto == AUTO_OPTIONS.MP_TESTPATH){
+            return new AutonomousBaseMP(
+                new MPState[]{
+                    new MPState(MPStateLabel.FIRST),
+                    new MPState(MPStateLabel.TRAJECTORY, Trajectories.uno),
+                    new MPState(MPStateLabel.STOP)
+                }
+            );
+
         } else if(selectedAuto== AUTO_OPTIONS.LOWTIMEDENGAGED){
             return new AutonomousBaseEngage(1);
         } else if (selectedAuto== AUTO_OPTIONS.MIDTIMEDENGAGED){
             return new AutonomousBaseEngage(2);
         } else if (selectedAuto == AUTO_OPTIONS.DRIVETIMEDENGAGED){
             return new AutonomousBaseEngage(0);
-        }
-        else {
+        } else {
             return new AutonomousBaseTimed();
         }
 
