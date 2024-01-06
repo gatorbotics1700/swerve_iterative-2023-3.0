@@ -7,12 +7,14 @@ import frc.robot.subsystems.PneumaticIntakeSubsystem;
 import frc.robot.subsystems.PneumaticArmPivot.PneumaticPivotStates;
 import frc.robot.subsystems.PneumaticArmPivot;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.LauncherSubsystem;
 
 public class Buttons {
     
   private DrivetrainSubsystem m_drivetrainSubsystem = Robot.m_drivetrainSubsystem;
   private Mechanisms m_mechanisms = Robot.m_mechanisms;
   private PneumaticIntakeSubsystem pneumaticIntakeSubsystem = m_mechanisms.pneumaticIntakeSubsystem;
+  private LauncherSubsystem m_launcher = m_mechanisms.launcherSubsystem;
   //private PneumaticArmPivot armPneumaticPivot = m_mechanisms.armPneumaticPivot;
   
   public void buttonsPeriodic(){
@@ -33,7 +35,12 @@ public class Buttons {
       }
     
       if(OI.m_controller_two.getXButtonPressed()){ //used to be ground pickup button
-      
+        if(m_launcher.isRunning == false) {
+          m_launcher.isRunning = true;
+        }
+        else {
+          m_launcher.isRunning = false;
+        }
       }
     
       if(OI.m_controller_two.getLeftBumperReleased()){ 
