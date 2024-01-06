@@ -16,33 +16,34 @@ public class Buttons {
 
     //codriver
       if(OI.m_controller_two.getYButton()){  
-        if(m_launcher.speed <= 0.95) {
-          m_launcher.speed += 0.05;
+        if(m_launcher.launchSpeed <= 0.95) {
+          m_launcher.launchSpeed += 0.05;
         } else {
           System.out.println("exceeded limit");
         }
-        System.out.println("speed:" + m_launcher.speed);
+        System.out.println("speed:" + m_launcher.launchSpeed);
       }
 
       if(OI.m_controller_two.getAButton()){ 
-          if(m_launcher.speed >= -0.95) {
-            m_launcher.speed -= 0.05;
+          if(m_launcher.launchSpeed >= -0.95) {
+            m_launcher.launchSpeed -= 0.05;
           } else {
             System.out.println("exceeded limit");
           }
-          System.out.println("speed:" + m_launcher.speed);
+          System.out.println("speed:" + m_launcher.feedSpeed);
       }
     
-      if(OI.m_controller_two.getBButton()){ //feed
+      if(OI.m_controller_two.getBButton()){ //intake
         m_launcher.isRunning = true;
-        m_launcher.speed = -0.5;
-        System.out.println("launcher intaking!!");
+        m_launcher.launchSpeed = -0.5;
+        m_launcher.feedSpeed = -0.5;
+        System.out.println("intaking!!");
       }
     
-      if(OI.m_controller_two.getXButtonPressed()){ //launch
+      if(OI.m_controller_two.getXButtonPressed()){ //set feed speed
         m_launcher.isRunning = true;
-        m_launcher.speed = 0.5;
-        System.out.println("launching!!");
+        m_launcher.feedSpeed = 0.5;
+        System.out.println("feeding!!");
       }
     
       if(OI.m_controller_two.getLeftBumperReleased()){ 

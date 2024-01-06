@@ -10,7 +10,8 @@ public class LauncherSubsystem {
     public TalonFX launchWheelMotor; 
     public TalonFX feedWheelMotor; 
     public boolean isRunning;
-    public double speed;
+    public double launchSpeed;
+    public double feedSpeed;
     public LauncherSubsystem(){
         launchWheelMotor = new TalonFX(Constants.LAUNCH_MOTOR_ID);
         feedWheelMotor = new TalonFX(Constants.FEED_MOTOR_ID);
@@ -19,13 +20,14 @@ public class LauncherSubsystem {
 
     public void init() {
         isRunning = false;
-        speed = 0;
+        launchSpeed = 0;
+        feedSpeed = 0;
     }
 
     public void periodic() {
         if(isRunning == true){
-            setLaunchWheel(this.speed);
-            setFeedWheel(this.speed);
+            setLaunchWheel(launchSpeed);
+            setFeedWheel(feedSpeed);
         }
         else {
             stop();
