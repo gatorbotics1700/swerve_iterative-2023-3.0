@@ -28,13 +28,7 @@ public final class Constants {
 
     public static final int DRIVETRAIN_PIGEON_ID = 6; 
 
-    //green
-    /*public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(193.36);
-    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(305.24);
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(276.86);
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(122.87); */
-
-    //swervo
+    //offsets
     public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(90+279.316); 
     public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(180+75.93);
     public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(180+320.098); 
@@ -65,7 +59,5 @@ public final class Constants {
     public static final double WHEEL_DIAMETER= 4; //inches
     public static final double TICKS_PER_REV = 2048;
     public static final double TICKS_PER_INCH = TICKS_PER_REV*GEAR_RATIO/WHEEL_DIAMETER/Math.PI; //talonfx drive encoder
-
-    public static final int INTAKE_SENSOR = 0;
 
 }

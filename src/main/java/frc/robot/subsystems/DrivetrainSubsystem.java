@@ -229,14 +229,6 @@ public class DrivetrainSubsystem {
   public void setSpeed(ChassisSpeeds chassisSpeeds) {
         m_chassisSpeeds = chassisSpeeds;
   }
-
-//   public Pose2d getCurrentPose(){
-//         return m_pose;
-//   }
-
-//   public SwerveDriveOdometry getOdometry(){
-//         return m_odometry;
-//   }
   
   public void driveTeleop(){
         DoubleSupplier m_translationXSupplier = () -> -modifyAxis(OI.m_controller.getLeftY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
@@ -257,9 +249,6 @@ public class DrivetrainSubsystem {
   }
 
   public void drive() { //runs periodically
-    //System.out.println("pose before update: " + m_pose.getX()/TICKS_PER_INCH + " and y: " + m_pose.getY()/TICKS_PER_INCH);
-
-        //System.out.println("inputs for the update: " + getGyroscopeRotation() + m_frontLeftModule.getSwerveModulePosition().distanceMeters + m_frontRightModule.getSwerveModulePosition().distanceMeters + m_backLeftModule.getSwerveModulePosition().distanceMeters + m_backRightModule.getSwerveModulePosition().distanceMeters);
     m_pose = m_odometry.update(getGyroscopeRotation(), new SwerveModulePosition[] {m_frontLeftModule.getSwerveModulePosition(), m_frontRightModule.getSwerveModulePosition(), m_backLeftModule.getSwerveModulePosition(), m_backRightModule.getSwerveModulePosition()});
     
     System.out.println("new pose after update: " + m_pose.getX()/TICKS_PER_INCH + " and y: " + m_pose.getY()/TICKS_PER_INCH);
