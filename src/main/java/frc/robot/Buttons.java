@@ -2,10 +2,6 @@ package frc.robot;
 
 import frc.robot.subsystems.Mechanisms;
 import frc.robot.subsystems.Mechanisms.MechanismStates;
-import frc.robot.subsystems.PneumaticIntakeSubsystem.PneumaticIntakeStates;
-import frc.robot.subsystems.PneumaticIntakeSubsystem;
-import frc.robot.subsystems.PneumaticArmPivot.PneumaticPivotStates;
-import frc.robot.subsystems.PneumaticArmPivot;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LauncherSubsystem;
 
@@ -13,73 +9,66 @@ public class Buttons {
     
   private DrivetrainSubsystem m_drivetrainSubsystem = Robot.m_drivetrainSubsystem;
   private Mechanisms m_mechanisms = Robot.m_mechanisms;
-  private PneumaticIntakeSubsystem pneumaticIntakeSubsystem = m_mechanisms.pneumaticIntakeSubsystem;
   private LauncherSubsystem m_launcher = m_mechanisms.launcherSubsystem;
   //private PneumaticArmPivot armPneumaticPivot = m_mechanisms.armPneumaticPivot;
   
   public void buttonsPeriodic(){
 
     //codriver
-      if(OI.m_controller_two.getYButton()){ 
-        System.out.println("xbox: shelf");
-        m_mechanisms.setState(MechanismStates.SHELF);
+      if(OI.m_controller_two.getYButton()){  
+        if(m_launcher.speed <= 0.95) {
+          m_launcher.speed += 0.05;
+        } else {
+          System.out.println("exceeded limit");
+        }
+        System.out.println("speed:" + m_launcher.speed);
       }
+
       if(OI.m_controller_two.getAButton()){ 
-          System.out.println("xbox: low node");
-          m_mechanisms.setState(MechanismStates.LOW_NODE);
+          if(m_launcher.speed >= -0.95) {
+            m_launcher.speed -= 0.05;
+          } else {
+            System.out.println("exceeded limit");
+          }
+          System.out.println("speed:" + m_launcher.speed);
       }
     
-      if(OI.m_controller_two.getBButton()){
-          System.out.println("xbox: mid");
-          m_mechanisms.setState(MechanismStates.MID_NODE); 
+      if(OI.m_controller_two.getBButton()){ //feed
+        m_launcher.isRunning = true;
+        m_launcher.speed = -0.5;
+        System.out.println("launcher intaking!!");
       }
     
-      if(OI.m_controller_two.getXButtonPressed()){ //used to be ground pickup button
-        if(m_launcher.isRunning == false) {
-          m_launcher.isRunning = true;
-        }
-        else {
-          m_launcher.isRunning = false;
-        }
+      if(OI.m_controller_two.getXButtonPressed()){ //launch
+        m_launcher.isRunning = true;
+        m_launcher.speed = 0.5;
+        System.out.println("launching!!");
       }
     
       if(OI.m_controller_two.getLeftBumperReleased()){ 
         System.out.println("intake");
-        if(pneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.PINCHING || 
-           pneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.OFF){
-          pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeSubsystem.PneumaticIntakeStates.RELEASING);
-        } else if(pneumaticIntakeSubsystem.pneumaticIntakeState==PneumaticIntakeSubsystem.PneumaticIntakeStates.RELEASING){
-          pneumaticIntakeSubsystem.setStatePneumaticIntake(PneumaticIntakeSubsystem.PneumaticIntakeStates.PINCHING); 
-        }
       }
     
       // if(OI.m_controller_two.getPOV() > 135 && OI.m_controller_two.getPOV() < 225){ //new pivot - south dpad
 
       if(OI.m_controller_two.getRightBumperReleased()){ 
-        System.out.println("xbox: single substation");
-        m_mechanisms.setState(MechanismStates.SUB);
+        m_launcher.isRunning = false;
+        System.out.println("stopping!");
       }
   
       if (OI.m_controller_two.getBackButton()){
         //this is the center button on left with 2 squares
-        System.out.println("back button: holding");
-        m_mechanisms.setState(MechanismStates.HOLDING);
       }
       
       if(OI.m_controller_two.getPOV() > 45 && OI.m_controller_two.getPOV() < 135){
-        m_mechanisms.setState(MechanismStates.MANUAL_TELESCOPE);
-        System.out.println("dpad: manual telescope");
       }
 
       if(OI.m_controller_two.getPOV() > 225 && OI.m_controller_two.getPOV() < 315){
-        m_mechanisms.setState(MechanismStates.MANUAL_ELEVATOR);
-        System.out.println("dpad: manual elevator");
       }
 
       //driver
       if (OI.m_controller.getBButton()){ //emergency stop EVERYTHING
         m_drivetrainSubsystem.stopDrive(); 
-        m_mechanisms.setState(MechanismStates.HOLDING);
       }
     
       if(OI.m_controller.getXButton()){
@@ -87,7 +76,6 @@ public class Buttons {
       }
 
       if(OI.m_controller.getAButton()){
-        m_mechanisms.setState(MechanismStates.AUTO_STARTING);
       }
 
         // System.out.println("pivot");

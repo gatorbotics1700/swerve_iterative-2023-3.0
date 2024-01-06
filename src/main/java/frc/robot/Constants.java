@@ -72,9 +72,11 @@ public final class Constants {
     //TELESCOPE
     public static final int TELESCOPING_MOTOR_ID = 31;
     //public static final double TELESCOPING_ARM_GEAR_RATIO = 36.0; //In case we need this later
-
-    //ELEVATOR
-    public static final int ELEVATOR_CAN_ID = 30;
+    
+    //LAUNCHER
+    public static final int LAUNCH_MOTOR_ID = 1; // change later and ask build
+    public static final int FEED_MOTOR_ID = 1; // change later and ask build
+   
 
     //INTAKE
     public static final int INTAKE_SENSOR = 0;
