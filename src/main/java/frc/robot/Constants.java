@@ -31,20 +31,13 @@ public final class Constants {
 
     public static final int DRIVETRAIN_PIGEON_ID = 6; 
 
-    //green
-    
+    //offsets
     public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(34.0137 + 180);
     public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(18.8086 + 180);
     public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(308.408203125 - 180);
     public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(196.435546875 - 180);
-    
-    //swervo
-    /*public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(164.00390625);   //281.07421875-90 //279.316-270
-    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(341.72149658203125); //343.828125+90 //75.938
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(278.5308837890625);  //231.6796875+90 //320.098
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(52.525390625);//343.828125-90 //250.183*/
 
-    //even can ids are drive, odd can ids are steer
+    //even can ids are steer, odd can ids are drive
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 21;
     public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 20; 
     public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 2;
@@ -68,19 +61,4 @@ public final class Constants {
 
     public static final double TICKS_PER_REV = 2048;
     public static final double METERS_PER_INCH = 0.0254;
-
-    //TELESCOPE
-    public static final int TELESCOPING_MOTOR_ID = 31;
-    //public static final double TELESCOPING_ARM_GEAR_RATIO = 36.0; //In case we need this later
-
-    //ELEVATOR
-    public static final int ELEVATOR_CAN_ID = 30;
-
-    //INTAKE
-    public static final int INTAKE_SENSOR = 0;
-    public static final int BEAM_BREAK_RECEIVER = 9;
-    public static final int BEAM_BREAK_SENDER = 10;
-   
-    public static final int kPIDLoopIdx = 0;
-    public static final int kTimeoutMs = 500;
 }

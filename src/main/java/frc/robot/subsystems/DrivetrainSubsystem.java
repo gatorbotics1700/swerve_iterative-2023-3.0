@@ -32,16 +32,11 @@ import frc.robot.Constants;
 import frc.robot.OI;
 
 public class DrivetrainSubsystem {
-   private static final double pitchKP = 0.027; //0.025; 0.035;
-   private static final double pitchKI = 0.0;
-   private static final double pitchKD = 0.005; //0.001;
-   private PIDController pitchController;
    private static final double MINOUTPUT = 0.2;
    private static final double SWERVE_GEAR_RATIO = 6.75;
    private static final double SWERVE_WHEEL_DIAMETER = 4.0;
    private static final double SWERVE_TICKS_PER_INCH = Constants.TICKS_PER_REV*SWERVE_GEAR_RATIO/SWERVE_WHEEL_DIAMETER/Math.PI; //talonfx drive encoder
    private static final double SWERVE_TICKS_PER_METER = SWERVE_TICKS_PER_INCH/Constants.METERS_PER_INCH;
-        
 
   /**`+
    * The maximum voltage that will be delivered to the motors.
@@ -155,7 +150,6 @@ public class DrivetrainSubsystem {
 
   public void init(){
         System.out.println("Initializing drivetrain subsystem vars");
-        pitchController = new PIDController(pitchKP, pitchKI, pitchKD);
         m_kinematics = new SwerveDriveKinematics(
           // Setting up location of modules relative to the center of the robot
           // Front left
@@ -290,24 +284,6 @@ public class DrivetrainSubsystem {
         drive();
    }
 
-   //TODO: look through this function
-   public void pitchBalance(double pitchSetpoint){
-        System.out.println("pitch: " + m_pigeon.getPitch());
-        double currPitch = m_pigeon.getPitch();
-        pitchController.setSetpoint(pitchSetpoint); 
-        double output = pitchController.calculate(currPitch, pitchSetpoint); 
-        
-        if (Math.abs(currPitch - pitchSetpoint) < 2.5){
-            System.out.println("BALANCED, SETTING PITCH SPEED TO ZERO");
-            setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0,getPoseRotation()));
-        } else{
-            output = -Math.signum(output) * Math.max(Math.abs(output), MINOUTPUT);
-            setSpeed(ChassisSpeeds.fromFieldRelativeSpeeds(output, 0, 0, getPoseRotation()));
-        }
-        System.out.println("output: " + output);
-        drive();
-    }
-
     public double getMPoseX(){
         return m_pose.getX();
     }
@@ -318,10 +294,6 @@ public class DrivetrainSubsystem {
 
     public double getMPoseDegrees(){
         return m_pose.getRotation().getDegrees();
-    }
-
-    public Pose2d getMPose(){ //TODO: do we need this?
-        return m_pose;
     }
 
     public double getPitch(){
