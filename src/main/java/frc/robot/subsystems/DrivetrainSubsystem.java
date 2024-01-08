@@ -140,7 +140,7 @@ public class DrivetrainSubsystem {
                 BACK_RIGHT_MODULE_STEER_OFFSET
         );
 
-        init();
+        init(); //why are we calling init here? shouldn't init run automatically? -Elise
   }
 
   public void init(){
