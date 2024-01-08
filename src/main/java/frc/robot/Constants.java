@@ -13,18 +13,13 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-
-    public static final double BUMPER_WIDTH = 0.0762;
-    public static final double DRIVETRAIN_WIDTH = 0.3175;
     /**
      * The left-to-right distance between the drivetrain wheels
-     *
      * Should be measured from center to center.
      */
     public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.4690872; //units = meters //previously 18.468
     /**
      * The front-to-back distance between the drivetrain wheels.
-     *
      * Should be measured from center to center.
      */
     public static final double DRIVETRAIN_WHEELBASE_METERS = 0.4690872; //units = meter //previously 18.468 
@@ -53,11 +48,6 @@ public final class Constants {
     public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 25; 
     public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 24; 
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 4; 
-
-    public static final double DRIVE_MOTOR_MIN_VOLTAGE = 0.19;
-    public static final double DRIVE_MOTOR_MAX_VOLTAGE = 0.8;
-    public static final double STEER_MOTOR_MIN_VOLTAGE = 0.525; 
-    public static final double STEER_MOTOR_MAX_VOLTAGE = 0.5;
 
     public static final double TICKS_PER_REV = 2048;
     public static final double METERS_PER_INCH = 0.0254;

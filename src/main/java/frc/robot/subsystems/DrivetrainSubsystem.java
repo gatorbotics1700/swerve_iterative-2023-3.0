@@ -19,10 +19,6 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.controller.PIDController;
-import com.ctre.phoenix.sensors.CANCoder;
-import frc.robot.Robot;
-
 
 import java.util.function.DoubleSupplier;
 
@@ -32,7 +28,6 @@ import frc.robot.Constants;
 import frc.robot.OI;
 
 public class DrivetrainSubsystem {
-   private static final double MINOUTPUT = 0.2;
    private static final double SWERVE_GEAR_RATIO = 6.75;
    private static final double SWERVE_WHEEL_DIAMETER = 4.0;
    private static final double SWERVE_TICKS_PER_INCH = Constants.TICKS_PER_REV*SWERVE_GEAR_RATIO/SWERVE_WHEEL_DIAMETER/Math.PI; //talonfx drive encoder
@@ -73,8 +68,8 @@ public class DrivetrainSubsystem {
   // By default we use a Pigeon for our gyroscope. But if you use another gyroscope, like a NavX, you can change this.
   // The important thing about how you configure your gyroscope is that rotating the robot counter-clockwise should
   // cause the angle reading to increase until it wraps back over to zero.
-
   private PigeonIMU m_pigeon;
+
   // These are our modules. We initialize them in the constructor.
   private SwerveModule m_frontLeftModule;
   private SwerveModule m_frontRightModule;
@@ -197,17 +192,10 @@ public class DrivetrainSubsystem {
                 new SwerveModulePosition(m_backLeftModule.getPosition()/SWERVE_TICKS_PER_METER, new Rotation2d(m_backLeftModule.getSteerAngle())),
                 new SwerveModulePosition(m_backRightModule.getPosition()/SWERVE_TICKS_PER_METER, new Rotation2d(m_backRightModule.getSteerAngle()))};
         m_pose = start; //TODO: taken from elsewhere, confirm why we do this
-        //System.out.println("position array: " + positionArray.toString());
-        //System.out.println("m_pose: " + m_pose.getX() + ", " + m_pose.getY() + ", " + m_pose.getRotation().getDegrees());
         m_odometry.resetPosition(getGyroscopeRotation(), positionArray, m_pose);
-        //System.out.println("#resetodometry! new pose: " + m_pose.getX() + " y: " + m_pose.getY());
         m_pose = m_odometry.update(getGyroscopeRotation(), positionArray);
-        //System.out.println("m_pose after update in odometry: " + m_pose.getX() + ", " + m_pose.getY() + ", " + m_pose.getRotation().getDegrees());
-        //System.out.println("inputs for the reset: " + getGyroscopeRotation() + " " + m_frontLeftModule.getSwerveModulePosition().distanceMeters + " " + m_frontRightModule.getSwerveModulePosition().distanceMeters + " " + m_backLeftModule.getSwerveModulePosition().distanceMeters + " " + m_backRightModule.getSwerveModulePosition().distanceMeters);
 }
-       // System.out.println("#resetodometry! new pose: " + m_pose.getX()/SWERVE_TICKS_PER_INCH + " y: " + m_pose.getY()/SWERVE_TICKS_PER_INCH);
-       // System.out.println("inputs for the reset: " + getGyroscopeRotation() + m_frontLeftModule.getSwerveModulePosition().distanceMeters + m_frontRightModule.getSwerveModulePosition().distanceMeters + m_backLeftModule.getSwerveModulePosition().distanceMeters + m_backRightModule.getSwerveModulePosition().distanceMeters);
-
+       
   public void setSpeed(ChassisSpeeds chassisSpeeds) {
         m_chassisSpeeds = chassisSpeeds;
   }
@@ -232,7 +220,6 @@ public class DrivetrainSubsystem {
   }
 
   public void drive() { //runs periodically
-        //System.out.println("pose before update: " + m_pose.getX()/TICKS_PER_INCH + " and y: " + m_pose.getY()/TICKS_PER_INCH);
         //TODO: check getSteerAngle() is correct and that we shouldn't be getting from cancoder
         SwerveModulePosition[] array =  {
                 new SwerveModulePosition(m_frontLeftModule.getPosition()/SWERVE_TICKS_PER_METER, new Rotation2d(m_frontLeftModule.getSteerAngle())), //from steer motor
@@ -251,9 +238,6 @@ public class DrivetrainSubsystem {
         m_frontRightModule.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());
         m_backLeftModule.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getRadians());
         m_backRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
-
-        // System.out.println("The angle of front left module: "+states[0].angle.getDegrees());
-        // System.out.println("The angle of front right module: "+states[1].angle.getDegrees());
 }
 
   private static double deadband(double value, double deadband) {
